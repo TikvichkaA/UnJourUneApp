@@ -295,17 +295,30 @@ async function saveCompanyInterests(politicianId, participations) {
                 companyId = inserted.id;
             }
 
+            // Vérifier si le lien existe déjà
+            const { data: existingLink } = await supabase
+                .from('politician_companies')
+                .select('id')
+                .eq('politician_id', politicianId)
+                .eq('company_id', companyId)
+                .limit(1);
+
+            if (existingLink && existingLink.length > 0) {
+                saved++; // Déjà existant, on compte comme succès
+                continue;
+            }
+
             const { error: linkError } = await supabase
                 .from('politician_companies')
-                .upsert({
+                .insert({
                     politician_id: politicianId,
                     company_id: companyId,
                     role: part.activite || 'Participation',
                     source: 'hatvp'
-                }, { onConflict: 'politician_id,company_id' });
+                });
 
             if (linkError && firstError) {
-                console.error(`  Erreur UPSERT politician_companies: ${linkError.message}`);
+                console.error(`  Erreur INSERT politician_companies: ${linkError.message}`);
                 firstError = false;
             }
 
