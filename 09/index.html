@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liens d'Intérêt - Politiciens Français</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Filtres -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Liens d'Intérêt</h1>
+                <p class="subtitle">Politiciens Français</p>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Rechercher un politicien..." autocomplete="off">
+                <div id="search-results" class="search-results"></div>
+            </div>
+
+            <div class="filters-section">
+                <h3>Partis Politiques</h3>
+                <div class="filter-group" id="party-filters">
+                    <!-- Généré dynamiquement -->
+                </div>
+            </div>
+
+            <div class="filters-section">
+                <h3>Types de Liens</h3>
+                <div class="filter-group" id="link-filters">
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="commission" checked>
+                        <span class="checkmark"></span>
+                        <span class="filter-label">Commissions</span>
+                        <span class="filter-color" style="background: var(--color-commission)"></span>
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="vote" checked>
+                        <span class="checkmark"></span>
+                        <span class="filter-label">Votes</span>
+                        <span class="filter-color" style="background: var(--color-vote)"></span>
+                    </label>
+                    <!-- Entreprises masquées (données HATVP non disponibles)
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="company" checked>
+                        <span class="checkmark"></span>
+                        <span class="filter-label">Entreprises</span>
+                        <span class="filter-color" style="background: var(--color-company)"></span>
+                    </label>
+                    -->
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="personal" checked>
+                        <span class="checkmark"></span>
+                        <span class="filter-label">Liens personnels</span>
+                        <span class="filter-color" style="background: var(--color-personal)"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filters-section">
+                <h3>Type de Commission</h3>
+                <div class="filter-group" id="commission-type-filter">
+                    <label class="filter-radio">
+                        <input type="radio" name="commissionType" value="" checked>
+                        <span class="radiomark"></span>
+                        <span class="filter-label">Toutes</span>
+                    </label>
+                    <label class="filter-radio">
+                        <input type="radio" name="commissionType" value="permanente">
+                        <span class="radiomark"></span>
+                        <span class="filter-label">Permanentes</span>
+                    </label>
+                    <label class="filter-radio">
+                        <input type="radio" name="commissionType" value="enquête">
+                        <span class="radiomark"></span>
+                        <span class="filter-label">Enquêtes</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filters-section">
+                <h3>Affichage</h3>
+                <div class="filter-group">
+                    <label class="filter-select-label">Nb. politiciens max</label>
+                    <select id="max-politicians" class="filter-select">
+                        <option value="50">50</option>
+                        <option value="100" selected>100</option>
+                        <option value="200">200</option>
+                        <option value="500">500</option>
+                        <option value="0">Tous (lent)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="legend">
+                <h3>Légende</h3>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <span class="legend-node politician"></span>
+                        <span>Politicien</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-node commission"></span>
+                        <span>Commission</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-node vote"></span>
+                        <span>Vote</span>
+                    </div>
+                </div>
+            </div>
+
+            <button id="reset-view" class="btn-reset">Réinitialiser la vue</button>
+        </aside>
+
+        <!-- Zone Graphe Principal -->
+        <main class="graph-container">
+            <div id="graph"></div>
+            <div class="graph-controls">
+                <button id="zoom-in" class="control-btn" title="Zoomer">+</button>
+                <button id="zoom-out" class="control-btn" title="Dézoomer">-</button>
+                <button id="zoom-reset" class="control-btn" title="Réinitialiser">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                        <path d="M3 3v5h5"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="tooltip" id="tooltip"></div>
+        </main>
+
+        <!-- Panneau Fiche Détaillée -->
+        <aside class="detail-panel" id="detail-panel">
+            <button class="close-panel" id="close-panel">&times;</button>
+            <div class="panel-content" id="panel-content">
+                <!-- Contenu généré dynamiquement -->
+            </div>
+        </aside>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="data.js"></script>
+    <script src="supabase-client.js"></script>
+    <script src="graph.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

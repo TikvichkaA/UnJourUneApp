@@ -1,0 +1,198 @@
+.tooltip-wrapper {
+  position: relative;
+  display: contents;
+}
+
+.action-tooltip {
+  position: fixed;
+  z-index: 1000;
+  background: #1c2128;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 0.75rem;
+  max-width: 280px;
+  min-width: 220px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  animation: tooltipFadeIn 0.15s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #30363d;
+}
+
+.tooltip-cat-icon {
+  font-size: 1rem;
+}
+
+.tooltip-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #e6edf3;
+  flex: 1;
+}
+
+.tooltip-cost {
+  font-size: 0.7rem;
+  color: #d29922;
+  font-weight: 500;
+  background: rgba(210, 153, 34, 0.15);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+.tooltip-recurring {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(248, 81, 73, 0.1);
+  border: 1px solid rgba(248, 81, 73, 0.3);
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tooltip-recurring .recurring-icon {
+  font-size: 0.8rem;
+}
+
+.tooltip-recurring span:last-child {
+  font-size: 0.7rem;
+  color: #f85149;
+  font-weight: 500;
+}
+
+.tooltip-desc {
+  font-size: 0.7rem;
+  color: #8b949e;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.tooltip-section {
+  margin-bottom: 0.5rem;
+}
+
+.tooltip-section-title {
+  display: block;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6e7681;
+  margin-bottom: 0.3rem;
+}
+
+.tooltip-effects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tooltip-effect {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  background: #21262d;
+}
+
+.tooltip-effect.positive {
+  color: #3fb950;
+  background: rgba(63, 185, 80, 0.1);
+}
+
+.tooltip-effect.negative {
+  color: #f85149;
+  background: rgba(248, 81, 73, 0.1);
+}
+
+.tooltip-section.delayed {
+  background: rgba(210, 153, 34, 0.08);
+  border-radius: 4px;
+  padding: 0.4rem;
+}
+
+.tooltip-delayed {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.65rem;
+  color: #8b949e;
+}
+
+.delayed-turns {
+  color: #d29922;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.delayed-reason {
+  color: #c9d1d9;
+}
+
+.tooltip-realworld {
+  background: linear-gradient(135deg, rgba(88, 166, 255, 0.08), rgba(139, 148, 158, 0.05));
+  border-left: 2px solid #58a6ff;
+  padding: 0.4rem 0.5rem;
+  border-radius: 0 4px 4px 0;
+  margin-top: 0.5rem;
+}
+
+.realworld-label {
+  display: block;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  color: #58a6ff;
+  margin-bottom: 0.15rem;
+}
+
+.realworld-text {
+  font-size: 0.68rem;
+  color: #c9d1d9;
+  line-height: 1.4;
+}
+
+.tooltip-branching {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #30363d;
+}
+
+.branching-item {
+  font-size: 0.6rem;
+  padding: 0.15rem 0.3rem;
+  border-radius: 3px;
+}
+
+.branching-item.requires {
+  color: #d29922;
+  background: rgba(210, 153, 34, 0.1);
+}
+
+.branching-item.unlocks {
+  color: #3fb950;
+  background: rgba(63, 185, 80, 0.1);
+}
+
+.branching-item.excludes {
+  color: #f85149;
+  background: rgba(248, 81, 73, 0.1);
+}

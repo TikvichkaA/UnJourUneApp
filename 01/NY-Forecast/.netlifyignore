@@ -1,0 +1,26 @@
+# Scripts Node.js de maintenance (non nécessaires pour le frontend)
+init-data.js
+check-duplicate-votes.js
+check-vote-issues.js
+copy-predictions-to-groups.js
+fix-duplicate-user-votes.js
+fix-old-format-votes.js
+inspect-votes.js
+remove-duplicates.js
+init-vote-history.js
+
+# Fichiers Firebase admin (backend)
+firebase-admin.js
+
+# Documentation
+README.md
+DEPLOIEMENT.md
+GUIDE-UTILISATION-CLAUDE.md
+
+# Fichiers système
+nul
+*.log
+.DS_Store
+Thumbs.db
+
+

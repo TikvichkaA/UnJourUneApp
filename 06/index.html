@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qui a dit ? - Le quiz des petites phrases politiques</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Marianne:wght@400;500;700&display=swap');
+
+        :root {
+            --blue-france: #000091;
+            --red-marianne: #e1000f;
+            --grey-950: #161616;
+            --grey-850: #3a3a3a;
+            --grey-625: #666666;
+            --grey-425: #929292;
+            --grey-200: #e5e5e5;
+            --grey-100: #f0f0f0;
+            --grey-50: #f6f6f6;
+            --success: #18753c;
+            --success-bg: #b8fec9;
+            --error: #ce0500;
+            --error-bg: #ffe9e9;
+            --info: #0063cb;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Marianne', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--grey-50);
+            min-height: 100vh;
+            color: var(--grey-950);
+            line-height: 1.5;
+        }
+
+        /* En-t&ecirc;te officiel */
+        .fr-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--grey-200);
+            padding: 0;
+        }
+
+        .fr-header-top {
+            background: var(--blue-france);
+            padding: 8px 0;
+        }
+
+        .fr-header-top-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .fr-flag {
+            display: flex;
+            height: 40px;
+            width: 56px;
+            flex-shrink: 0;
+        }
+
+        .fr-flag span {
+            flex: 1;
+        }
+
+        .fr-flag-blue { background: #0055a4; }
+        .fr-flag-white { background: #ffffff; }
+        .fr-flag-red { background: #ef4135; }
+
+        .fr-header-brand {
+            color: var(--white);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+        }
+
+        .fr-header-main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .fr-logo {
+            display: flex;
+            flex-direction: column;
+            border-left: 4px solid;
+            border-image: linear-gradient(to bottom, #0055a4 33%, #ffffff 33%, #ffffff 66%, #ef4135 66%) 1;
+            padding-left: 12px;
+        }
+
+        .fr-logo-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--grey-950);
+        }
+
+        .fr-logo-tagline {
+            font-size: 0.65rem;
+            color: var(--grey-625);
+        }
+
+        .fr-service {
+            border-left: 1px solid var(--grey-200);
+            padding-left: 24px;
+        }
+
+        .fr-service-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--grey-950);
+        }
+
+        .fr-service-tagline {
+            font-size: 0.875rem;
+            color: var(--grey-625);
+        }
+
+        /* Contenu principal */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .fr-card {
+            background: var(--white);
+            border: 1px solid var(--grey-200);
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .fr-card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--grey-950);
+            margin-bottom: 8px;
+        }
+
+        /* Barre de score */
+        .score-bar {
+            display: flex;
+            justify-content: space-between;
+            background: var(--white);
+            border: 1px solid var(--grey-200);
+            padding: 16px 24px;
+            margin-bottom: 24px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 0.75rem;
+            color: var(--grey-625);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .score-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--blue-france);
+        }
+
+        /* Citation */
+        .quote-container {
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 24px;
+            background: var(--grey-50);
+            border-left: 4px solid var(--blue-france);
+        }
+
+        .quote-marks {
+            font-size: 3rem;
+            color: var(--blue-france);
+            line-height: 0.5;
+            opacity: 0.3;
+        }
+
+        .quote-text {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            font-style: italic;
+            padding: 16px 0;
+            color: var(--grey-950);
+        }
+
+        /* Grille d'options */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .fr-header-main {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .fr-service {
+                border-left: none;
+                padding-left: 0;
+                border-top: 1px solid var(--grey-200);
+                padding-top: 16px;
+                margin-top: 8px;
+            }
+        }
+
+        .option-btn {
+            background: var(--white);
+            border: 1px solid var(--grey-200);
+            padding: 16px 20px;
+            color: var(--grey-950);
+            font-size: 1rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--grey-50);
+            border-color: var(--blue-france);
+            box-shadow: inset 0 0 0 1px var(--blue-france);
+        }
+
+        .option-btn:focus {
+            outline: 2px solid var(--blue-france);
+            outline-offset: 2px;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background: var(--success-bg);
+            border-color: var(--success);
+            box-shadow: inset 0 0 0 1px var(--success);
+        }
+
+        .option-btn.wrong {
+            background: var(--error-bg);
+            border-color: var(--error);
+            box-shadow: inset 0 0 0 1px var(--error);
+        }
+
+        .option-info {
+            text-align: left;
+        }
+
+        .option-name {
+            font-weight: 700;
+            margin-bottom: 2px;
+            color: var(--grey-950);
+        }
+
+        .option-party {
+            font-size: 0.8rem;
+            color: var(--grey-625);
+        }
+
+        /* R&eacute;sultat */
+        .result-container {
+            margin-top: 24px;
+            padding: 20px;
+            display: none;
+        }
+
+        .result-container.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .result-container.correct {
+            background: var(--success-bg);
+            border-left: 4px solid var(--success);
+        }
+
+        .result-container.wrong {
+            background: var(--error-bg);
+            border-left: 4px solid var(--error);
+        }
+
+        .result-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--grey-950);
+        }
+
+        .result-context {
+            color: var(--grey-850);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .result-source {
+            font-size: 0.8rem;
+            color: var(--grey-625);
+        }
+
+        .result-source a {
+            color: var(--blue-france);
+            text-decoration: underline;
+        }
+
+        .result-source a:hover {
+            text-decoration: none;
+        }
+
+        /* Boutons officiels */
+        .fr-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 24px;
+            min-height: 48px;
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            border: none;
+        }
+
+        .fr-btn--primary {
+            background: var(--blue-france);
+            color: var(--white);
+        }
+
+        .fr-btn--primary:hover {
+            background: #1212ff;
+        }
+
+        .fr-btn--secondary {
+            background: var(--white);
+            color: var(--blue-france);
+            box-shadow: inset 0 0 0 1px var(--blue-france);
+        }
+
+        .fr-btn--secondary:hover {
+            background: var(--grey-50);
+        }
+
+        .fr-btn--secondary.selected {
+            background: var(--blue-france);
+            color: var(--white);
+        }
+
+        .next-btn {
+            display: none;
+            margin-top: 24px;
+        }
+
+        .next-btn.show {
+            display: inline-flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* &Eacute;cran de d&eacute;marrage */
+        .start-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .start-screen h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--grey-950);
+            margin-bottom: 16px;
+        }
+
+        .start-screen p {
+            color: var(--grey-625);
+            font-size: 1rem;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .difficulty-select {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        /* &Eacute;cran final - Style Minist&egrave;re de la V&eacute;rit&eacute; */
+        .final-screen {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+        }
+
+        .final-screen.show {
+            display: block;
+        }
+
+        .attestation {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            border: 3px solid var(--blue-france);
+            padding: 40px;
+            position: relative;
+        }
+
+        .attestation::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border: 1px solid var(--grey-200);
+            pointer-events: none;
+        }
+
+        .attestation-header {
+            border-bottom: 2px solid var(--blue-france);
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+        }
+
+        .attestation-republic {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--grey-625);
+            margin-bottom: 8px;
+        }
+
+        .attestation-ministry {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--blue-france);
+            margin-bottom: 4px;
+        }
+
+        .attestation-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--grey-950);
+            margin: 24px 0 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .attestation-subtitle {
+            font-size: 0.9rem;
+            color: var(--grey-625);
+            font-style: italic;
+        }
+
+        .attestation-score {
+            margin: 32px 0;
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 6px solid var(--blue-france);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .score-circle::after {
+            content: '';
+            position: absolute;
+            width: 156px;
+            height: 156px;
+            border-radius: 50%;
+            border: 2px dashed var(--grey-200);
+        }
+
+        .score-value-big {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--blue-france);
+            line-height: 1;
+        }
+
+        .score-label-big {
+            font-size: 0.8rem;
+            color: var(--grey-625);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .niveau-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        .niveau-badge.excellent {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 2px solid var(--success);
+        }
+
+        .niveau-badge.bon {
+            background: #e8edff;
+            color: var(--blue-france);
+            border: 2px solid var(--blue-france);
+        }
+
+        .niveau-badge.moyen {
+            background: #fef3cd;
+            color: #856404;
+            border: 2px solid #856404;
+        }
+
+        .niveau-badge.insuffisant {
+            background: var(--error-bg);
+            color: var(--error);
+            border: 2px solid var(--error);
+        }
+
+        .niveau-badge.critique {
+            background: var(--grey-950);
+            color: var(--white);
+            border: 2px solid var(--grey-950);
+        }
+
+        .attestation-verdict {
+            font-size: 1.1rem;
+            color: var(--grey-950);
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .attestation-recommandation {
+            font-size: 0.9rem;
+            color: var(--grey-625);
+            font-style: italic;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: var(--grey-50);
+            border-left: 3px solid var(--blue-france);
+        }
+
+        .attestation-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+            padding: 16px 0;
+            border-top: 1px solid var(--grey-200);
+            border-bottom: 1px solid var(--grey-200);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--blue-france);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--grey-625);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .attestation-footer {
+            margin-top: 24px;
+            padding-top: 16px;
+        }
+
+        .tampon {
+            display: inline-block;
+            padding: 12px 24px;
+            border: 3px solid var(--red-marianne);
+            border-radius: 4px;
+            color: var(--red-marianne);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transform: rotate(-5deg);
+            opacity: 0.85;
+            margin-bottom: 24px;
+        }
+
+        .tampon.valide {
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .tampon.refuse {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .tampon.en-observation {
+            border-color: #856404;
+            color: #856404;
+        }
+
+        .attestation-date {
+            font-size: 0.8rem;
+            color: var(--grey-625);
+            margin-bottom: 24px;
+        }
+
+        .attestation-numero {
+            font-size: 0.7rem;
+            color: var(--grey-425);
+            font-family: monospace;
+        }
+
+        .final-score, .final-message, .final-stats {
+            display: none;
+        }
+
+        /* S&eacute;lection de mode */
+        .mode-section {
+            margin-bottom: 32px;
+        }
+
+        .mode-section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--grey-625);
+            margin-bottom: 16px;
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 500px) {
+            .mode-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mode-card {
+            background: var(--white);
+            border: 2px solid var(--grey-200);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .mode-card:hover {
+            border-color: var(--blue-france);
+            background: var(--grey-50);
+        }
+
+        .mode-card.selected {
+            border-color: var(--blue-france);
+            background: #e8edff;
+            box-shadow: inset 0 0 0 1px var(--blue-france);
+        }
+
+        .mode-card-title {
+            font-weight: 700;
+            color: var(--grey-950);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-card-desc {
+            font-size: 0.8rem;
+            color: var(--grey-625);
+        }
+
+        .mode-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Mode Duel */
+        .duel-scores {
+            display: flex;
+            justify-content: space-around;
+            background: var(--white);
+            border: 1px solid var(--grey-200);
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .duel-player {
+            text-align: center;
+            padding: 12px 24px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .duel-player.active {
+            background: var(--blue-france);
+            color: var(--white);
+        }
+
+        .duel-player.active .player-score {
+            color: var(--white);
+        }
+
+        .player-name {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 4px;
+        }
+
+        .player-score {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--blue-france);
+        }
+
+        .duel-vs {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            color: var(--grey-425);
+        }
+
+        .duel-turn-indicator {
+            text-align: center;
+            padding: 8px;
+            background: var(--grey-50);
+            border-left: 3px solid var(--blue-france);
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        /* Options pour mode chronologique */
+        .epoch-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .epoch-btn {
+            background: var(--white);
+            border: 1px solid var(--grey-200);
+            padding: 20px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .epoch-btn:hover:not(:disabled) {
+            border-color: var(--blue-france);
+            background: var(--grey-50);
+        }
+
+        .epoch-btn.correct {
+            background: var(--success-bg);
+            border-color: var(--success);
+        }
+
+        .epoch-btn.wrong {
+            background: var(--error-bg);
+            border-color: var(--error);
+        }
+
+        .epoch-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .epoch-decade {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--blue-france);
+        }
+
+        .epoch-label {
+            font-size: 0.75rem;
+            color: var(--grey-625);
+            margin-top: 4px;
+        }
+
+        /* Options pour mode contexte */
+        .context-btn {
+            background: var(--white);
+            border: 1px solid var(--grey-200);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-family: inherit;
+            display: block;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .context-btn:hover:not(:disabled) {
+            border-color: var(--blue-france);
+            background: var(--grey-50);
+        }
+
+        .context-btn.correct {
+            background: var(--success-bg);
+            border-color: var(--success);
+        }
+
+        .context-btn.wrong {
+            background: var(--error-bg);
+            border-color: var(--error);
+        }
+
+        /* Mode invers&eacute; - affichage auteur */
+        .author-display {
+            text-align: center;
+            padding: 24px;
+            background: var(--grey-50);
+            border-left: 4px solid var(--blue-france);
+            margin-bottom: 24px;
+        }
+
+        .author-name-big {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--grey-950);
+            margin-bottom: 4px;
+        }
+
+        .author-party-big {
+            font-size: 0.9rem;
+            color: var(--grey-625);
+        }
+
+        .author-instruction {
+            margin-top: 16px;
+            font-size: 0.85rem;
+            color: var(--blue-france);
+            font-style: italic;
+        }
+
+        .citation-option {
+            background: var(--white);
+            border: 1px solid var(--grey-200);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-style: italic;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .citation-option:hover:not(:disabled) {
+            border-color: var(--blue-france);
+            background: var(--grey-50);
+        }
+
+        .citation-option.correct {
+            background: var(--success-bg);
+            border-color: var(--success);
+        }
+
+        .citation-option.wrong {
+            background: var(--error-bg);
+            border-color: var(--error);
+        }
+
+        /* Duel final */
+        .duel-winner {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--blue-france);
+            margin: 24px 0;
+        }
+
+        .duel-final-scores {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-bottom: 24px;
+        }
+
+        .duel-final-player {
+            text-align: center;
+        }
+
+        .duel-final-player.winner {
+            color: var(--success);
+        }
+
+        .duel-final-player.loser {
+            color: var(--grey-625);
+        }
+
+        .duel-final-name {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .duel-final-score {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        /* Indicateur de s&eacute;rie */
+        .streak-indicator {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--blue-france);
+            color: var(--white);
+            padding: 12px 20px;
+            font-weight: 700;
+            display: none;
+            z-index: 100;
+        }
+
+        .streak-indicator.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Pied de page officiel */
+        .fr-footer {
+            background: var(--grey-100);
+            border-top: 1px solid var(--grey-200);
+            margin-top: 60px;
+        }
+
+        .fr-footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        .fr-footer-top {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--grey-200);
+            margin-bottom: 24px;
+        }
+
+        .fr-footer-brand {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fr-footer-brand-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .fr-footer-content {
+            font-size: 0.8rem;
+            color: var(--grey-625);
+            text-align: center;
+        }
+
+        .fr-footer-content a {
+            color: var(--grey-950);
+            text-decoration: none;
+        }
+
+        .fr-footer-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Badge / Tag */
+        .fr-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .fr-badge--info {
+            background: #e8edff;
+            color: var(--blue-france);
+        }
+
+        .fr-badge--success {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .fr-badge--error {
+            background: var(--error-bg);
+            color: var(--error);
+        }
+    </style>
+</head>
+<body>
+    <!-- En-t&ecirc;te officiel -->
+    <header class="fr-header">
+        <div class="fr-header-top">
+            <div class="fr-header-top-inner">
+                <div class="fr-flag">
+                    <span class="fr-flag-blue"></span>
+                    <span class="fr-flag-white"></span>
+                    <span class="fr-flag-red"></span>
+                </div>
+                <div class="fr-header-brand">R&eacute;publique Fran&ccedil;aise</div>
+            </div>
+        </div>
+        <div class="fr-header-main">
+            <div class="fr-logo">
+                <span class="fr-logo-title">Minist&egrave;re</span>
+                <span class="fr-logo-title">de la V&eacute;rit&eacute;</span>
+                <span class="fr-logo-tagline">Libert&eacute; &bull; &Eacute;galit&eacute; &bull; Fraternit&eacute;</span>
+            </div>
+            <div class="fr-service">
+                <p class="fr-service-title">Qui a dit ?</p>
+                <p class="fr-service-tagline">Service d'&eacute;ducation civique aux d&eacute;clarations politiques</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="streak-indicator" id="streakIndicator"></div>
+
+    <main class="container">
+        <div id="startScreen" class="fr-card start-screen">
+            <h2>Bienvenue sur le service national d'&eacute;valuation</h2>
+            <p>
+                Testez vos connaissances sur les d&eacute;clarations des responsables politiques fran&ccedil;ais.<br>
+                Toutes les citations pr&eacute;sent&eacute;es sont authentiques et v&eacute;rifiables.
+            </p>
+
+            <div class="mode-section">
+                <p class="mode-section-title">Mode de jeu</p>
+                <div class="mode-grid">
+                    <div class="mode-card selected" data-mode="classique">
+                        <div class="mode-card-title"><span class="mode-icon">&#128100;</span> Classique</div>
+                        <div class="mode-card-desc">Qui a dit cette phrase ?</div>
+                    </div>
+                    <div class="mode-card" data-mode="chrono">
+                        <div class="mode-card-title"><span class="mode-icon">&#128197;</span> Chronologique</div>
+                        <div class="mode-card-desc">Devinez l'&eacute;poque de la citation</div>
+                    </div>
+                    <div class="mode-card" data-mode="inverse">
+                        <div class="mode-card-title"><span class="mode-icon">&#128172;</span> Invers&eacute;</div>
+                        <div class="mode-card-desc">Retrouvez la citation de l'auteur</div>
+                    </div>
+                    <div class="mode-card" data-mode="contexte">
+                        <div class="mode-card-title"><span class="mode-icon">&#127915;</span> Contexte</div>
+                        <div class="mode-card-desc">Devinez o&ugrave; c'&eacute;tait dit</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mode-section" id="soloOptions">
+                <p class="mode-section-title">Nombre de questions</p>
+                <div class="difficulty-select">
+                    <button class="fr-btn fr-btn--secondary selected" data-count="10">10</button>
+                    <button class="fr-btn fr-btn--secondary" data-count="15">15</button>
+                    <button class="fr-btn fr-btn--secondary" data-count="20">20</button>
+                </div>
+            </div>
+
+            <div class="mode-section">
+                <button class="fr-btn fr-btn--primary" onclick="startGame()" style="margin-right: 12px;">D&eacute;marrer l'&eacute;valuation</button>
+                <button class="fr-btn fr-btn--secondary" onclick="startDuel()">Mode Duel (2 joueurs)</button>
+            </div>
+        </div>
+
+        <div id="gameScreen" class="hidden">
+            <!-- Score bar solo -->
+            <div class="score-bar" id="soloScoreBar">
+                <div class="score-item">
+                    <div class="score-label">Question</div>
+                    <div class="score-value"><span id="currentQuestion">1</span>/<span id="totalQuestions">10</span></div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Score</div>
+                    <div class="score-value" id="score">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">S&eacute;rie</div>
+                    <div class="score-value" id="streak">0</div>
+                </div>
+            </div>
+
+            <!-- Score bar duel -->
+            <div class="duel-scores hidden" id="duelScoreBar">
+                <div class="duel-player active" id="player1Box">
+                    <div class="player-name">Joueur 1</div>
+                    <div class="player-score" id="player1Score">0</div>
+                </div>
+                <div class="duel-vs">VS</div>
+                <div class="duel-player" id="player2Box">
+                    <div class="player-name">Joueur 2</div>
+                    <div class="player-score" id="player2Score">0</div>
+                </div>
+            </div>
+
+            <div id="duelTurnIndicator" class="duel-turn-indicator hidden">
+                Tour de <strong id="currentPlayerName">Joueur 1</strong> - Question <span id="duelQuestionNum">1</span>/<span id="duelTotalQuestions">10</span>
+            </div>
+
+            <div class="fr-card">
+                <!-- Mode classique / chrono / contexte : affichage citation -->
+                <div id="quoteDisplay">
+                    <div class="quote-container">
+                        <div class="quote-marks">&laquo;</div>
+                        <p class="quote-text" id="quoteText"></p>
+                        <div class="quote-marks">&raquo;</div>
+                    </div>
+                    <!-- Affichage auteur pour modes chrono/contexte -->
+                    <p id="quoteAuthorHint" class="hidden" style="text-align: center; color: var(--grey-625); margin-bottom: 24px;">
+                        &mdash; <span id="hintAuthorName"></span> (<span id="hintAuthorParty"></span>)
+                    </p>
+                </div>
+
+                <!-- Mode invers&eacute; : affichage auteur -->
+                <div id="authorDisplay" class="author-display hidden">
+                    <p class="author-name-big" id="displayAuthorName"></p>
+                    <p class="author-party-big" id="displayAuthorParty"></p>
+                    <p class="author-instruction">Quelle citation est de cet auteur ?</p>
+                </div>
+
+                <!-- Options selon le mode -->
+                <div class="options-grid" id="optionsGrid"></div>
+                <div id="epochGrid" class="epoch-grid hidden"></div>
+                <div id="contextOptions" class="hidden"></div>
+                <div id="citationOptions" class="hidden"></div>
+
+                <div class="result-container" id="resultContainer">
+                    <h3 class="result-title" id="resultTitle"></h3>
+                    <p class="result-context" id="resultContext"></p>
+                    <p class="result-source" id="resultSource"></p>
+                </div>
+
+                <div style="text-align: center;">
+                    <button class="fr-btn fr-btn--primary next-btn" id="nextBtn" onclick="nextQuestion()">Question suivante</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="finalScreen" class="final-screen hidden">
+            <div class="attestation" id="attestation">
+                <div class="attestation-header">
+                    <p class="attestation-republic">R&eacute;publique Fran&ccedil;aise</p>
+                    <p class="attestation-ministry">Minist&egrave;re de la V&eacute;rit&eacute;</p>
+                    <p class="attestation-ministry" style="font-size: 0.7rem; color: var(--grey-625);">Direction G&eacute;n&eacute;rale de la Vigilance Citoyenne</p>
+                </div>
+
+                <h2 class="attestation-title">Attestation d'&Eacute;valuation</h2>
+                <p class="attestation-subtitle">Connaissance des d&eacute;clarations publiques</p>
+
+                <div class="attestation-score">
+                    <div class="score-circle">
+                        <span class="score-value-big" id="scoreValueBig">0</span>
+                        <span class="score-label-big">points</span>
+                    </div>
+                    <div id="niveauBadge" class="niveau-badge"></div>
+                </div>
+
+                <p class="attestation-verdict" id="verdictText"></p>
+
+                <div class="attestation-recommandation" id="recommandation"></div>
+
+                <div class="attestation-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="statCorrect">0</div>
+                        <div class="stat-label">R&eacute;ponses correctes</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statTotal">0</div>
+                        <div class="stat-label">Questions pos&eacute;es</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statStreak">0</div>
+                        <div class="stat-label">Meilleure s&eacute;rie</div>
+                    </div>
+                </div>
+
+                <div class="attestation-footer">
+                    <div id="tampon" class="tampon"></div>
+                    <p class="attestation-date" id="attestationDate"></p>
+                    <p class="attestation-numero" id="attestationNumero"></p>
+                </div>
+
+                <button class="fr-btn fr-btn--primary" onclick="restartGame()" style="margin-top: 24px;">Nouvelle &eacute;valuation</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pied de page officiel -->
+    <footer class="fr-footer">
+        <div class="fr-footer-inner">
+            <div class="fr-footer-top">
+                <div class="fr-logo">
+                    <span class="fr-logo-title">Minist&egrave;re</span>
+                    <span class="fr-logo-title">de la V&eacute;rit&eacute;</span>
+                </div>
+            </div>
+            <div class="fr-footer-content">
+                <p>Toutes les citations pr&eacute;sent&eacute;es sont authentiques et issues de sources publiques v&eacute;rifiables.</p>
+                <p style="margin-top: 8px;">Ce service est propos&eacute; &agrave; titre &eacute;ducatif et satirique.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Base de donn&eacute;es des citations - 50+ citations v&eacute;rifiables
+        const quotes = [
+            // === CITATIONS CHOC / POL&Eacute;MIQUES ===
+            {
+                text: "Je leur ai balanc&eacute; ma grenade dans les jambes.",
+                author: "Emmanuel Macron",
+                party: "Renaissance",
+                context: "Apr&egrave;s avoir annonc&eacute; la dissolution de l'Assembl&eacute;e nationale le 9 juin 2024, Macron aurait prononc&eacute; cette phrase en priv&eacute;, semblant amus&eacute; par la panique provoqu&eacute;e.",
+                source: "D&eacute;cideurs Magazine",
+                sourceUrl: "https://www.decideurs-magazine.com/politique-societe/60059-politique-les-pires-petites-phrases-de-2024.html",
+                date: "Juin 2024",
+                difficulty: "medium"
+            },
+            {
+                text: "C'est parce que j'ai sauv&eacute; l'&eacute;conomie fran&ccedil;aise.",
+                author: "Bruno Le Maire",
+                party: "Renaissance",
+                context: "R&eacute;ponse du ministre de l'&Eacute;conomie sur BFM TV face &agrave; la d&eacute;gradation de la note de la France par Standard & Poor's et l'explosion du d&eacute;ficit.",
+                source: "BFM TV",
+                sourceUrl: "https://www.bfmtv.com",
+                date: "1er juin 2024",
+                difficulty: "easy"
+            },
+            {
+                text: "Les Fran&ccedil;ais non vaccin&eacute;s, j'ai tr&egrave;s envie de les emmerder.",
+                author: "Emmanuel Macron",
+                party: "Renaissance",
+                context: "Entretien avec Le Parisien concernant la politique sanitaire et les personnes refusant la vaccination.",
+                source: "Le Parisien",
+                sourceUrl: "https://www.leparisien.fr",
+                date: "4 janvier 2022",
+                difficulty: "easy"
+            },
+            {
+                text: "Je vais transformer ton chien en kebab.",
+                author: "Rachida Dati",
+                party: "Renaissance",
+                context: "SMS envoy&eacute; &agrave; Gabriel Attal alors qu'il cherchait &agrave; r&eacute;duire le budget du minist&egrave;re de la Culture.",
+                source: "D&eacute;cideurs Magazine",
+                sourceUrl: "https://www.decideurs-magazine.com/politique-societe/60059-politique-les-pires-petites-phrases-de-2024.html",
+                date: "Mars 2024",
+                difficulty: "hard"
+            },
+            {
+                text: "Je pr&eacute;f&egrave;re des femmes qui jettent des sorts plut&ocirc;t que des hommes qui construisent des EPR.",
+                author: "Sandrine Rousseau",
+                party: "EELV",
+                context: "Citation dans Charlie Hebdo exprimant sa vision &eacute;cof&eacute;ministe et sa critique du nucl&eacute;aire.",
+                source: "Charlie Hebdo",
+                sourceUrl: "https://www.terrafemina.com/article/sandrine-rousseau-les-references-ecofeministes-de-la-candidate-eelv-detonent_a359484/1",
+                date: "2021",
+                difficulty: "easy"
+            },
+            {
+                text: "J'en ai rien &agrave; p&eacute;ter de la rentabilit&eacute; des agriculteurs.",
+                author: "Sandrine Rousseau",
+                party: "EELV",
+                context: "D&eacute;claration dans l'&eacute;mission La Contre-matinale du M&eacute;dia, provoquant une vive pol&eacute;mique.",
+                source: "Le M&eacute;dia",
+                sourceUrl: "https://www.lejdd.fr/politique/nauseabond-bobo-privilegiee-la-charge-de-sandrine-rousseau-contre-les-agriculteurs-suscite-lindignation-160216",
+                date: "11 juillet 2024",
+                difficulty: "medium"
+            },
+            {
+                text: "Tu ne me fais pas les poches !",
+                author: "Fran&ccedil;ois Bayrou",
+                party: "MoDem",
+                context: "Phrase prononc&eacute;e en giflant un enfant qu'il accusait de pickpocket, devant les cam&eacute;ras.",
+                source: "France 2",
+                sourceUrl: "https://www.phrasitude.fr/2024/12/les-petites-phrases-de-francois-bayrou.html",
+                date: "2002",
+                difficulty: "medium"
+            },
+            {
+                text: "Quand j'entends le mot violences polici&egrave;res, moi, personnellement, je m'&eacute;touffe.",
+                author: "G&eacute;rald Darmanin",
+                party: "Renaissance",
+                context: "D&eacute;claration du ministre de l'Int&eacute;rieur niant l'existence de violences polici&egrave;res syst&eacute;miques.",
+                source: "France 2",
+                sourceUrl: "https://www.slate.fr/story/209432/top-10-pires-declarations-gerald-darmanin-demagogie-hypocrisie-homophobie-genre-violences-policieres-extreme-droite",
+                date: "Juillet 2020",
+                difficulty: "medium"
+            },
+            {
+                text: "La victime dans cette histoire, c'est moi.",
+                author: "G&eacute;rald Darmanin",
+                party: "Renaissance",
+                context: "D&eacute;claration apr&egrave;s avoir &eacute;t&eacute; vis&eacute; par une plainte pour viol.",
+                source: "Presse nationale",
+                sourceUrl: "https://www.slate.fr/story/209432/top-10-pires-declarations-gerald-darmanin-demagogie-hypocrisie-homophobie-genre-violences-policieres-extreme-droite",
+                date: "2020",
+                difficulty: "medium"
+            },
+            // === CITATIONS S&Eacute;RIEUSES / POLITIQUES ===
+            {
+                text: "Je ne me suis pas roul&eacute; par terre pour &ecirc;tre Premier ministre.",
+                author: "Michel Barnier",
+                party: "Les R&eacute;publicains",
+                context: "D&eacute;claration aux &eacute;lus locaux sur sa nomination inattendue &agrave; Matignon.",
+                source: "France Info",
+                sourceUrl: "https://www.franceinfo.fr/politique/michel-barnier/video-je-ne-me-suis-pas-roule-par-terre-pour-etre-premier-ministre-assure-michel-barnier-devant-des-elus-locaux_6899027.html",
+                date: "Novembre 2024",
+                difficulty: "medium"
+            },
+            {
+                text: "J'ai 73 ans aujourd'hui, j'en aurai 76 en 2027 : je n'ai pas besoin qu'on me rappelle mon &acirc;ge.",
+                author: "Michel Barnier",
+                party: "Les R&eacute;publicains",
+                context: "R&eacute;ponse sur ses ambitions futures lors des Assises des d&eacute;partements.",
+                source: "France Info",
+                sourceUrl: "https://www.franceinfo.fr/politique/michel-barnier/video-je-ne-me-suis-pas-roule-par-terre-pour-etre-premier-ministre-assure-michel-barnier-devant-des-elus-locaux_6899027.html",
+                date: "Novembre 2024",
+                difficulty: "hard"
+            },
+            {
+                text: "Le premier rem&egrave;de de la dette, c'est la r&eacute;duction des d&eacute;penses.",
+                author: "Michel Barnier",
+                party: "Les R&eacute;publicains",
+                context: "Lors de son discours de politique g&eacute;n&eacute;rale &agrave; l'Assembl&eacute;e nationale.",
+                source: "Assembl&eacute;e nationale",
+                sourceUrl: "https://www.vie-publique.fr/discours/295574-michel-barnier-01102024-declare-politique-generale-assemblee-nationale",
+                date: "1er octobre 2024",
+                difficulty: "medium"
+            },
+            {
+                text: "Nous sommes rendus les uns et les autres &agrave; un moment de v&eacute;rit&eacute; et de responsabilit&eacute;.",
+                author: "Michel Barnier",
+                party: "Les R&eacute;publicains",
+                context: "Face aux motions de censure qui allaient faire tomber son gouvernement.",
+                source: "Assembl&eacute;e nationale",
+                sourceUrl: "https://www.info.gouv.fr/actualite/motions-de-censure-discours-du-premier-ministre-a-lassemblee-nationale",
+                date: "4 d&eacute;cembre 2024",
+                difficulty: "hard"
+            },
+            {
+                text: "Nous ne participerons pas &agrave; des coalitions gouvernementales.",
+                author: "Laurent Wauquiez",
+                party: "Les R&eacute;publicains",
+                context: "Premi&egrave;re d&eacute;claration en tant que pr&eacute;sident du groupe LR &agrave; l'Assembl&eacute;e, rebaptis&eacute; 'La Droite r&eacute;publicaine'.",
+                source: "France Info",
+                sourceUrl: "https://www.franceinfo.fr/elections/legislatives/legislatives-2024-nous-ne-participerons-pas-a-des-coalitions-gouvernementales-annonce-laurent-wauquiez-elu-a-la-tete-des-deputes-les-republicains_6658425.html",
+                date: "Juillet 2024",
+                difficulty: "medium"
+            },
+            {
+                text: "Les Fran&ccedil;ais sont orphelins d'une offre positive. La droite r&eacute;publicaine n'est pas encore en mesure de l'incarner.",
+                author: "Laurent Wauquiez",
+                party: "Les R&eacute;publicains",
+                context: "Aveu de faiblesse lors de sa premi&egrave;re allocution comme pr&eacute;sident du groupe LR.",
+                source: "LCP",
+                sourceUrl: "https://lcp.fr/actualites/assemblee-nationale-laurent-wauquiez-ferme-la-porte-a-une-coalition-gouvernementale-mais",
+                date: "Juillet 2024",
+                difficulty: "hard"
+            },
+            {
+                text: "Notre ligne rouge absolue est : ni LFI au gouvernement, ni le programme du Nouveau Front populaire.",
+                author: "Laurent Wauquiez",
+                party: "Les R&eacute;publicains",
+                context: "Position ferme sur les conditions de soutien &agrave; un gouvernement.",
+                source: "Les R&eacute;publicains",
+                sourceUrl: "https://republicains.fr/actualites/2024/12/09/laurent-wauquiez-notre-preference-ira-a-un-premier-ministre-issu-des-lr/",
+                date: "D&eacute;cembre 2024",
+                difficulty: "hard"
+            },
+            {
+                text: "L'&Eacute;tat de droit, &ccedil;a n'est pas intangible ni sacr&eacute;.",
+                author: "Bruno Retailleau",
+                party: "Les R&eacute;publicains",
+                context: "D&eacute;claration controvers&eacute;e du ministre de l'Int&eacute;rieur sur la n&eacute;cessit&eacute; de faire &eacute;voluer le droit face &agrave; l'immigration.",
+                source: "JDD",
+                sourceUrl: "https://lcp.fr/actualites/etat-de-droit-immigration-securite-islam-politique-bruno-retailleau-offensif-pour-sa",
+                date: "Octobre 2024",
+                difficulty: "medium"
+            },
+            {
+                text: "Quand le droit ne prot&egrave;ge plus, il faut le changer.",
+                author: "Bruno Retailleau",
+                party: "Les R&eacute;publicains",
+                context: "Justification de sa politique s&eacute;curitaire et migratoire au minist&egrave;re de l'Int&eacute;rieur.",
+                source: "Les R&eacute;publicains",
+                sourceUrl: "https://republicains.fr/actualites/2024/10/04/bruno-retailleau-quand-le-droit-ne-protege-plus-il-faut-le-changer/",
+                date: "Octobre 2024",
+                difficulty: "medium"
+            },
+            {
+                text: "Les capacit&eacute;s d'accueil de la France sont satur&eacute;es.",
+                author: "Bruno Retailleau",
+                party: "Les R&eacute;publicains",
+                context: "Justification de sa politique restrictive en mati&egrave;re d'immigration.",
+                source: "Europe 1",
+                sourceUrl: "https://www.europe1.fr/politique/immigration-les-capacites-daccueil-de-la-france-sont-saturees-deplore-bruno-retailleau-745946",
+                date: "2024",
+                difficulty: "easy"
+            },
+            {
+                text: "Appelez-moi madame la Premi&egrave;re ministre, il n'y a aucun doute l&agrave;-dessus !",
+                author: "&Eacute;lisabeth Borne",
+                party: "Renaissance",
+                context: "R&eacute;ponse sur la f&eacute;minisation de son titre lors de sa nomination.",
+                source: "Presse nationale",
+                sourceUrl: "https://www.dicocitations.com/auteur/10368/Elisabeth_Borne.php",
+                date: "Mai 2022",
+                difficulty: "medium"
+            },
+            {
+                text: "Je suis peut-&ecirc;tre le prototype de la m&eacute;ritocratie r&eacute;publicaine.",
+                author: "&Eacute;lisabeth Borne",
+                party: "Renaissance",
+                context: "R&eacute;flexion sur son parcours personnel lors d'une interview.",
+                source: "Presse nationale",
+                sourceUrl: "https://www.dicocitations.com/auteur/10368/Elisabeth_Borne.php",
+                date: "2022",
+                difficulty: "hard"
+            },
+            {
+                text: "Je d&eacute;die cette nomination &agrave; toutes les petites filles.",
+                author: "&Eacute;lisabeth Borne",
+                party: "Renaissance",
+                context: "Lors de sa nomination comme Premi&egrave;re ministre, deuxi&egrave;me femme &agrave; occuper ce poste.",
+                source: "Gouvernement",
+                sourceUrl: "https://www.info.gouv.fr/discours/discours-de-la-premiere-ministre-elisabeth-borne-declaration-de-politique-generale-devant-le-senat",
+                date: "Mai 2022",
+                difficulty: "medium"
+            },
+            {
+                text: "Gouverner est un art. Et l'art &ccedil;a s'apprend.",
+                author: "&Eacute;douard Philippe",
+                party: "Horizons",
+                context: "Citation de son livre 'Impressions et lignes claires'.",
+                source: "Babelio",
+                sourceUrl: "https://www.babelio.com/auteur/douard-Philippe/141653/citations",
+                date: "2021",
+                difficulty: "hard"
+            },
+            {
+                text: "Il y a des Fran&ccedil;ais qui ne se reconnaissent pas dans le choix mortif&egrave;re entre LFI et le RN.",
+                author: "&Eacute;douard Philippe",
+                party: "Horizons",
+                context: "Plaidoyer pour un 'bloc central' face aux extr&ecirc;mes.",
+                source: "France 3",
+                sourceUrl: "https://france3-regions.franceinfo.fr/occitanie/herault/montpellier/legislatives-2024-edouard-philippe-ou-la-volonte-de-creer-un-bloc-central-pour-gouverner-la-france-en-2027-ou-avant-2994647.html",
+                date: "2024",
+                difficulty: "medium"
+            },
+            {
+                text: "Aucune voix ne doit aller au Rassemblement national.",
+                author: "&Eacute;douard Philippe",
+                party: "Horizons",
+                context: "Appel au barrage r&eacute;publicain apr&egrave;s le premier tour des l&eacute;gislatives 2024.",
+                source: "France Bleu",
+                sourceUrl: "https://www.francebleu.fr/infos/politique/legislatives-2024-edouard-philippe-appelle-a-faire-barrage-au-rn-et-au-retrait-des-candidats-horizons-arrives-3e-5995861",
+                date: "Juillet 2024",
+                difficulty: "easy"
+            },
+            {
+                text: "La puissance europ&eacute;enne sera &eacute;cologique ou ne sera pas.",
+                author: "Rapha&euml;l Glucksmann",
+                party: "Place Publique / PS",
+                context: "Lors de sa campagne pour les &eacute;lections europ&eacute;ennes 2024.",
+                source: "Public S&eacute;nat",
+                sourceUrl: "https://www.publicsenat.fr/actualites/politique/europeennes-2024-raphael-glucksmann-prone-dans-son-programme-une-revolution-ecologique",
+                date: "2024",
+                difficulty: "medium"
+            },
+            {
+                text: "La seule chose &agrave; faire, c'est l'union de la gauche.",
+                author: "Rapha&euml;l Glucksmann",
+                party: "Place Publique / PS",
+                context: "Apr&egrave;s l'annonce de la dissolution, appelant &agrave; la cr&eacute;ation du Nouveau Front populaire.",
+                source: "France 24",
+                sourceUrl: "https://www.france24.com/fr/france/20240614-l%C3%A9gislatives-la-seule-chose-%C3%A0-faire-c-est-l-union-de-la-gauche-d%C3%A9clare-rapha%C3%ABl-glucksmann",
+                date: "Juin 2024",
+                difficulty: "medium"
+            },
+            {
+                text: "Jean-Luc M&eacute;lenchon ne sera pas Premier ministre.",
+                author: "Rapha&euml;l Glucksmann",
+                party: "Place Publique / PS",
+                context: "Affirmation lors de la campagne des l&eacute;gislatives sur la composition d'un &eacute;ventuel gouvernement de gauche.",
+                source: "Europe 1",
+                sourceUrl: "https://www.europe1.fr/politique/legislatives-2024-jean-luc-melenchon-ne-sera-pas-ne-sera-pas-jean-luc-melenchon-declare-raphael-glucksmann-4252671",
+                date: "Juin 2024",
+                difficulty: "hard"
+            },
+            {
+                text: "La station d'essence est le seul endroit en France o&ugrave; celui qui tient le pistolet est aussi celui qui se fait braquer.",
+                author: "Fabien Roussel",
+                party: "PCF",
+                context: "Phrase humoristique r&eacute;compens&eacute;e par le Prix de l'humour politique 2022.",
+                source: "Prix de l'humour politique",
+                sourceUrl: "https://www.linfo.re/france/politique/prix-de-l-humour-en-politique-2023-decouvrez-les-petites-phrases-selectionnees",
+                date: "2022",
+                difficulty: "hard"
+            },
+            // === TENSIONS INTERNES / DUPLICIT&Eacute; ===
+            {
+                text: "Je ne suis pas s&ucirc;re que Jordan connaisse tr&egrave;s bien les probl&eacute;matiques de la Nouvelle-Cal&eacute;donie.",
+                author: "Marine Le Pen",
+                party: "Rassemblement National",
+                context: "Pique &agrave; peine voil&eacute;e contre Jordan Bardella, r&eacute;v&eacute;lant les tensions internes au RN.",
+                source: "France Info",
+                sourceUrl: "https://www.franceinfo.fr/politique/front-national/je-ne-suis-pas-sure-qu-il-connaisse-tres-bien-les-problematiques-de-la-nouvelle-caledonie-quand-marine-le-pen-tacle-jordan-bardella-sur-fond-de-presidentielle-2027_7279452.html",
+                date: "Mai 2025",
+                difficulty: "hard"
+            },
+            {
+                text: "Jordan Bardella peut gagner &agrave; ma place.",
+                author: "Marine Le Pen",
+                party: "Rassemblement National",
+                context: "D&eacute;claration apr&egrave;s sa condamnation &agrave; l'in&eacute;ligibilit&eacute;, passant le flambeau pour 2027.",
+                source: "Presse nationale",
+                sourceUrl: "https://sobusygirls.fr/2025/12/28/marine-le-pen-declaration-jordan-bardella-presidentielle-2027/",
+                date: "D&eacute;cembre 2025",
+                difficulty: "medium"
+            },
+            {
+                text: "Comme beaucoup de Fran&ccedil;ais, je ne comprends plus le pr&eacute;sident de la R&eacute;publique.",
+                author: "Gabriel Attal",
+                party: "Renaissance",
+                context: "Au 20h de TF1, l'ancien Premier ministre critique ouvertement Macron, lorgnant vers 2027.",
+                source: "TF1",
+                sourceUrl: "https://www.decideurs-magazine.com/politique-societe/63077-politique-voici-les-pires-petites-phrases-de-2025.html",
+                date: "Octobre 2025",
+                difficulty: "medium"
+            },
+            {
+                text: "Attal disait qu'il ne comprenait pas les d&eacute;cisions du pr&eacute;sident ; je n'ai pas compris pourquoi il l'avait nomm&eacute; Premier ministre.",
+                author: "Rachida Dati",
+                party: "Renaissance",
+                context: "Pique contre Gabriel Attal, poursuivant leur rivalit&eacute; ouverte.",
+                source: "D&eacute;cideurs Magazine",
+                sourceUrl: "https://www.decideurs-magazine.com/politique-societe/63077-politique-voici-les-pires-petites-phrases-de-2025.html",
+                date: "Octobre 2025",
+                difficulty: "hard"
+            },
+            {
+                text: "Il faut nouer une forme d'alliance avec le RN.",
+                author: "&Eacute;ric Ciotti",
+                party: "Les R&eacute;publicains",
+                context: "Annonce unilat&eacute;rale au 13h de TF1 provoquant l'implosion des R&eacute;publicains.",
+                source: "TF1",
+                sourceUrl: "https://www.tf1.fr",
+                date: "11 juin 2024",
+                difficulty: "easy"
+            },
+            // === ATTAQUES POLITIQUES ===
+            {
+                text: "Les programmes des deux extr&ecirc;mes m&egrave;nent &agrave; la guerre civile.",
+                author: "Emmanuel Macron",
+                party: "Renaissance",
+                context: "D&eacute;claration ciblant le RN et LFI pendant la campagne des l&eacute;gislatives 2024.",
+                source: "France Info",
+                sourceUrl: "https://www.ledevoir.com/monde/europe/815396/nous-sommes-prets-gouverner-assure-jordan-bardella",
+                date: "Juin 2024",
+                difficulty: "easy"
+            },
+            {
+                text: "Jean-Luc M&eacute;lenchon est un ing&eacute;nieur du chaos.",
+                author: "Jordan Bardella",
+                party: "Rassemblement National",
+                context: "Lors d'un meeting, attaquant le leader de La France Insoumise.",
+                source: "Meeting RN",
+                sourceUrl: "https://www.lapresse.ca/international/europe/2024-07-07/legislatives-francaises/le-choc-des-blocs.php",
+                date: "Juillet 2024",
+                difficulty: "medium"
+            },
+            {
+                text: "Cette gauche pr&eacute;f&egrave;re la bande de Gaza aux int&eacute;r&ecirc;ts fran&ccedil;ais.",
+                author: "Jordan Bardella",
+                party: "Rassemblement National",
+                context: "Attaque contre la gauche lors de la campagne des l&eacute;gislatives 2024.",
+                source: "Meeting RN",
+                sourceUrl: "https://www.lapresse.ca/international/europe/2024-07-07/legislatives-francaises/le-choc-des-blocs.php",
+                date: "Juillet 2024",
+                difficulty: "medium"
+            },
+            {
+                text: "Ils ont ruin&eacute; la France et menti aux Fran&ccedil;ais.",
+                author: "Marine Le Pen",
+                party: "Rassemblement National",
+                context: "Attaque contre l'ensemble de la classe politique, de M&eacute;lenchon &agrave; Macron.",
+                source: "France Info",
+                sourceUrl: "https://www.franceinfo.fr/politique/front-national/ils-ont-ruine-la-france-et-menti-aux-francais-a-nice-marine-le-pen-et-jordan-bardella-desormais-en-campagne-permanente_6822113.html",
+                date: "2024",
+                difficulty: "easy"
+            },
+            {
+                text: "Aujourd'hui, ce n'est pas seulement Marine Le Pen qui est condamn&eacute;e : c'est la d&eacute;mocratie fran&ccedil;aise qui est ex&eacute;cut&eacute;e.",
+                author: "Jordan Bardella",
+                party: "Rassemblement National",
+                context: "R&eacute;action sur X (Twitter) apr&egrave;s la condamnation de Marine Le Pen &agrave; l'in&eacute;ligibilit&eacute;.",
+                source: "X (Twitter)",
+                sourceUrl: "https://x.com/J_Bardella/status/1906659577174589915",
+                date: "Mars 2025",
+                difficulty: "medium"
+            },
+            {
+                text: "Accul&eacute;, Macron reconna&icirc;t lui-m&ecirc;me ce soir qu'il est le probl&egrave;me.",
+                author: "Manuel Bompard",
+                party: "La France Insoumise",
+                context: "R&eacute;action sur X aux voeux 2025 du pr&eacute;sident de la R&eacute;publique.",
+                source: "X (Twitter)",
+                sourceUrl: "https://www.franceinfo.fr/politique/emmanuel-macron/accule-dans-le-deni-loin-du-peuple-les-reactions-politiques-aux-v-ux-d-emmanuel-macron-pour-2025_6987368.html",
+                date: "31 d&eacute;cembre 2024",
+                difficulty: "medium"
+            },
+            {
+                text: "Macron se parle &agrave; lui-m&ecirc;me, pour se plaire &agrave; lui-m&ecirc;me. Loin du peuple.",
+                author: "Julien Odoul",
+                party: "Rassemblement National",
+                context: "R&eacute;action aux voeux 2025 du pr&eacute;sident de la R&eacute;publique.",
+                source: "France Info",
+                sourceUrl: "https://www.franceinfo.fr/politique/emmanuel-macron/accule-dans-le-deni-loin-du-peuple-les-reactions-politiques-aux-v-ux-d-emmanuel-macron-pour-2025_6987368.html",
+                date: "31 d&eacute;cembre 2024",
+                difficulty: "hard"
+            },
+            // === HUMOUR / SARCASME ===
+            {
+                text: "Si vous avez compris le NFP, c'est qu'on vous l'a mal expliqu&eacute;.",
+                author: "Claude Malhuret",
+                party: "Les Ind&eacute;pendants",
+                context: "Prise de parole caustique &agrave; l'occasion du discours de politique g&eacute;n&eacute;rale de Michel Barnier.",
+                source: "S&eacute;nat",
+                sourceUrl: "https://www.decideurs-magazine.com/politique-societe/60059-politique-les-pires-petites-phrases-de-2024.html",
+                date: "Octobre 2024",
+                difficulty: "hard"
+            },
+            {
+                text: "Le budget s'annonce encore plus difficile &agrave; monter qu'un meuble Ikea.",
+                author: "Claude Malhuret",
+                party: "Les Ind&eacute;pendants",
+                context: "Commentaire sarcastique sur la difficult&eacute; &agrave; faire passer le budget dans une Assembl&eacute;e fragment&eacute;e.",
+                source: "S&eacute;nat",
+                sourceUrl: "https://www.decideurs-magazine.com/politique-societe/63077-politique-voici-les-pires-petites-phrases-de-2025.html",
+                date: "Octobre 2025",
+                difficulty: "hard"
+            },
+            {
+                text: "84% des Fran&ccedil;ais jugent que le gouvernement ne passera pas l'ann&eacute;e. Je me demande o&ugrave; les 16% restants trouvent leur optimisme.",
+                author: "Fran&ccedil;ois Bayrou",
+                party: "MoDem",
+                context: "Autod&eacute;rision du Premier ministre sur la fragilit&eacute; de son gouvernement.",
+                source: "Assembl&eacute;e nationale",
+                sourceUrl: "https://www.zonebourse.com/actualite-bourse/Principales-citations-de-l-allocution-parlementaire-du-Premier-ministre-francais-M-Bayrou-48757828/",
+                date: "Janvier 2025",
+                difficulty: "hard"
+            },
+            {
+                text: "L'on demande &agrave; Lecornu de gagner une partie de poker avec un 2 de tr&egrave;fle.",
+                author: "Jean-Louis Bourlanges",
+                party: "MoDem",
+                context: "Commentaire sur la mission difficile du ministre des Arm&eacute;es.",
+                source: "D&eacute;cideurs Magazine",
+                sourceUrl: "https://www.decideurs-magazine.com/politique-societe/63077-politique-voici-les-pires-petites-phrases-de-2025.html",
+                date: "Septembre 2025",
+                difficulty: "hard"
+            },
+            {
+                text: "Si j'ai envie de vendre des rillettes sur la place Rouge, je vendrai des rillettes sur la place Rouge.",
+                author: "Fran&ccedil;ois Fillon",
+                party: "Les R&eacute;publicains",
+                context: "R&eacute;ponse lors de son audition sur ses liens avec le r&eacute;gime russe.",
+                source: "Assembl&eacute;e nationale",
+                sourceUrl: "https://www.decideurs-magazine.com/politique-societe/56995-politique-les-pires-petites-phrases-de-2023.html",
+                date: "Mai 2023",
+                difficulty: "hard"
+            },
+            // === CITATIONS DIVERSES ===
+            {
+                text: "M&eacute;lenchon, c'est Dieu, et moi je suis le fils de Dieu.",
+                author: "Manuel Bompard",
+                party: "La France Insoumise",
+                context: "Propos attribu&eacute;s au d&eacute;put&eacute; LFI de Marseille et coordinateur national du mouvement.",
+                source: "D&eacute;cideurs Magazine",
+                sourceUrl: "https://www.decideurs-magazine.com/politique-societe/63077-politique-voici-les-pires-petites-phrases-de-2025.html",
+                date: "2025",
+                difficulty: "hard"
+            },
+            {
+                text: "M. Benzema est en lien notoire avec les Fr&egrave;res musulmans.",
+                author: "G&eacute;rald Darmanin",
+                party: "Renaissance",
+                context: "D&eacute;claration sur CNEWS concernant le footballeur Karim Benzema.",
+                source: "CNEWS",
+                sourceUrl: "https://www.pluralisme.fr/citation/222211-gerald-darmanin-justice-",
+                date: "F&eacute;vrier 2024",
+                difficulty: "hard"
+            },
+            {
+                text: "Si je m'&eacute;tais appel&eacute; Moussa Darmanin, je n'aurais sans doute pas &eacute;t&eacute; ministre de l'Int&eacute;rieur.",
+                author: "G&eacute;rald Darmanin",
+                party: "Renaissance",
+                context: "R&eacute;flexion sur la discrimination en politique, en quittant le gouvernement.",
+                source: "Presse nationale",
+                sourceUrl: "https://www.phrasitude.fr/2024/10/gerald-darmanin-un-repertoire-de.html",
+                date: "Septembre 2024",
+                difficulty: "hard"
+            },
+            {
+                text: "Le but de cette &eacute;lection n'&eacute;tait pas de d&eacute;signer un vainqueur mais d'&eacute;carter des gens dont on ne voulait pas.",
+                author: "Fran&ccedil;ois Bayrou",
+                party: "MoDem",
+                context: "Sur BFM, &agrave; propos de la dissolution de l'Assembl&eacute;e nationale.",
+                source: "BFM TV",
+                sourceUrl: "https://reporterre.net/Discours-de-politique-generale-Bayrou-ignore-le-climat",
+                date: "Septembre 2024",
+                difficulty: "hard"
+            },
+            {
+                text: "On a le droit de rigoler.",
+                author: "Jean-Luc M&eacute;lenchon",
+                party: "La France Insoumise",
+                context: "&Agrave; l'&eacute;vocation du slogan 'Un flic mort, c'est un vote pour le RN en moins' scand&eacute; dans des manifestations.",
+                source: "CNEWS",
+                sourceUrl: "https://www.cnews.fr/france/2024-06-28/ces-14-phrases-choc-de-jean-luc-melenchon-qui-font-polemiques-1519546",
+                date: "28 juin 2024",
+                difficulty: "hard"
+            },
+            {
+                text: "Vous m'avez insult&eacute; quinze jours, personne n'a craqu&eacute; !",
+                author: "Olivier Dussopt",
+                party: "Renaissance",
+                context: "Cri dans l'h&eacute;micycle aux d&eacute;put&eacute;s Insoumis lors de l'adoption de la r&eacute;forme des retraites.",
+                source: "Assembl&eacute;e nationale",
+                sourceUrl: "https://www.decideurs-magazine.com/politique-societe/56995-politique-les-pires-petites-phrases-de-2023.html",
+                date: "F&eacute;vrier 2023",
+                difficulty: "hard"
+            },
+            {
+                text: "C'est une fois par si&egrave;cle qu'on accueille les Jeux Olympiques. C'est une fois par mill&eacute;naire qu'on reb&acirc;tit une cath&eacute;drale.",
+                author: "Emmanuel Macron",
+                party: "Renaissance",
+                context: "Voeux 2024 du pr&eacute;sident, &eacute;voquant Notre-Dame et les JO de Paris.",
+                source: "Vie publique",
+                sourceUrl: "https://www.vie-publique.fr/discours/292515-president-de-la-republique-31122023-voeux-du-president-de-la-republique",
+                date: "31 d&eacute;cembre 2023",
+                difficulty: "medium"
+            },
+            {
+                text: "Une alliance du d&eacute;shonneur.",
+                author: "Jordan Bardella",
+                party: "Rassemblement National",
+                context: "Qualification des d&eacute;sistements pour faire barrage au RN au second tour des l&eacute;gislatives.",
+                source: "France Info",
+                sourceUrl: "https://www.franceinfo.fr/elections/legislatives/direct-elections-legislatives-2024-resultats-definitifs-consignes-de-vote-desistements-suivez-les-reactions-au-lendemain-du-premier-tour_6637380.html",
+                date: "Juillet 2024",
+                difficulty: "medium"
+            },
+            // === CITATIONS HISTORIQUES ===
+            {
+                text: "Casse-toi, pauv' con !",
+                author: "Nicolas Sarkozy",
+                party: "UMP",
+                context: "Au Salon de l'Agriculture, en r&eacute;ponse &agrave; un passant qui lui avait dit 'Touche-moi pas, tu me salis'. La vid&eacute;o a fait le tour du monde.",
+                source: "Le Parisien / YouTube",
+                sourceUrl: "https://fr.wikipedia.org/wiki/Casse-toi,_pauv%27_con_!",
+                date: "23 f&eacute;vrier 2008",
+                difficulty: "easy"
+            },
+            {
+                text: "On va nettoyer au K&auml;rcher la cit&eacute;.",
+                author: "Nicolas Sarkozy",
+                party: "UMP",
+                context: "D&eacute;claration du ministre de l'Int&eacute;rieur &agrave; La Courneuve apr&egrave;s la mort d'un enfant tu&eacute; par balle, promettant de 'nettoyer' les quartiers.",
+                source: "INA",
+                sourceUrl: "https://www.ina.fr/ina-eclaire-actu/video/2951578001006/nicolas-sarkozy-a-la-courneuve",
+                date: "20 juin 2005",
+                difficulty: "easy"
+            },
+            {
+                text: "Travailler plus pour gagner plus.",
+                author: "Nicolas Sarkozy",
+                party: "UMP",
+                context: "Slogan de campagne pr&eacute;sidentielle 2007, devenu embl&eacute;matique de sa politique &eacute;conomique.",
+                source: "Campagne pr&eacute;sidentielle",
+                sourceUrl: "https://fr.wikipedia.org/wiki/Travailler_plus_pour_gagner_plus",
+                date: "2007",
+                difficulty: "easy"
+            },
+            {
+                text: "Je suis le chef, c'est moi qui d&eacute;cide.",
+                author: "Nicolas Sarkozy",
+                party: "UMP",
+                context: "R&eacute;ponse &agrave; un journaliste sur la r&eacute;partition des r&ocirc;les au sein de l'ex&eacute;cutif.",
+                source: "TF1",
+                sourceUrl: "https://www.tf1.fr",
+                date: "2007",
+                difficulty: "medium"
+            },
+            {
+                text: "Je serai un pr&eacute;sident normal.",
+                author: "Fran&ccedil;ois Hollande",
+                party: "PS",
+                context: "Promesse de campagne en r&eacute;action au style Sarkozy. Hollande regrettera plus tard cette formulation.",
+                source: "Campagne pr&eacute;sidentielle",
+                sourceUrl: "https://www.jeuneafrique.com/190510/politique/fran-ois-hollande-je-serai-un-pr-sident-normal-pas-un-pr-sident-ordinaire/",
+                date: "2012",
+                difficulty: "easy"
+            },
+            {
+                text: "Mon v&eacute;ritable adversaire, c'est le monde de la finance.",
+                author: "Fran&ccedil;ois Hollande",
+                party: "PS",
+                context: "D&eacute;claration au meeting du Bourget, moment cl&eacute; de sa campagne pr&eacute;sidentielle.",
+                source: "Meeting du Bourget",
+                sourceUrl: "https://www.lemonde.fr/election-presidentielle-2012/article/2012/01/22/hollande-au-bourget-mon-adversaire-c-est-le-monde-de-la-finance_1632867_1471069.html",
+                date: "22 janvier 2012",
+                difficulty: "medium"
+            },
+            {
+                text: "Les sans-dents.",
+                author: "Fran&ccedil;ois Hollande",
+                party: "PS",
+                context: "Expression attribu&eacute;e &agrave; Hollande par Val&eacute;rie Trierweiler dans son livre 'Merci pour ce moment', d&eacute;signant les pauvres. Hollande conteste le contexte.",
+                source: "Merci pour ce moment - Val&eacute;rie Trierweiler",
+                sourceUrl: "https://www.franceinfo.fr/culture/people/la-polemique-sur-les-sans-dents-en-cinq-actes_691461.html",
+                date: "2014",
+                difficulty: "medium"
+            },
+            {
+                text: "Les emmerdes, &ccedil;a vole toujours en escadrille.",
+                author: "Jacques Chirac",
+                party: "RPR",
+                context: "Expression popularis&eacute;e par Chirac pour d&eacute;crire l'accumulation des probl&egrave;mes.",
+                source: "Presse nationale",
+                sourceUrl: "https://www.publicsenat.fr/actualites/non-classe/les-phrases-cultes-de-jacques-chirac-145879",
+                date: "Ann&eacute;es 1990-2000",
+                difficulty: "medium"
+            },
+            {
+                text: "Si vous ajoutez &agrave; cela le bruit et l'odeur, le travailleur fran&ccedil;ais devient fou.",
+                author: "Jacques Chirac",
+                party: "RPR",
+                context: "Discours d'Orl&eacute;ans sur l'immigration. Cette phrase a fait scandale et a &eacute;t&eacute; reprise par le groupe Zebda.",
+                source: "INA",
+                sourceUrl: "https://www.ina.fr/ina-eclaire-actu/video/cab91027484/chirac-et-l-immigration-le-bruit-et-l-odeur",
+                date: "19 juin 1991",
+                difficulty: "medium"
+            },
+            {
+                text: "Notre maison br&ucirc;le et nous regardons ailleurs.",
+                author: "Jacques Chirac",
+                party: "RPR",
+                context: "Discours historique au Sommet de la Terre de Johannesburg sur l'urgence &eacute;cologique.",
+                source: "Sommet de la Terre",
+                sourceUrl: "https://www.vie-publique.fr/discours/132142-declaration-de-m-jacques-chirac-president-de-la-republique-sur-la-nece",
+                date: "2 septembre 2002",
+                difficulty: "easy"
+            },
+            {
+                text: "&Ccedil;a m'en touche une sans faire bouger l'autre.",
+                author: "Jacques Chirac",
+                party: "RPR",
+                context: "Expression familiale popularis&eacute;e (voire invent&eacute;e) par Chirac pour exprimer son indiff&eacute;rence.",
+                source: "Le Canard encha&icirc;n&eacute;",
+                sourceUrl: "https://www.publicsenat.fr/actualites/non-classe/les-phrases-cultes-de-jacques-chirac-145879",
+                date: "Ann&eacute;es 1990",
+                difficulty: "medium"
+            },
+            {
+                text: "Qui vient sur la Grande Muraille conquiert la bravitude.",
+                author: "S&eacute;gol&egrave;ne Royal",
+                party: "PS",
+                context: "En visite sur la Grande Muraille de Chine pendant la campagne pr&eacute;sidentielle. Ce n&eacute;ologisme lui a valu des moqueries durables.",
+                source: "INA",
+                sourceUrl: "https://www.ina.fr/ina-eclaire-actu/video/i09082529/segolene-royal-qui-vient-sur-la-grande-muraille-conquiert-la-bravitude",
+                date: "7 janvier 2007",
+                difficulty: "easy"
+            },
+            {
+                text: "Les chambres &agrave; gaz sont un point de d&eacute;tail de l'histoire de la Deuxi&egrave;me Guerre mondiale.",
+                author: "Jean-Marie Le Pen",
+                party: "Front National",
+                context: "D&eacute;claration au Grand Jury RTL-Le Monde. Ces propos lui ont valu plusieurs condamnations et ont contribu&eacute; &agrave; son exclusion du FN en 2015.",
+                source: "RTL / INA",
+                sourceUrl: "https://www.ina.fr/ina-eclaire-actu/video/cab87032378/jean-marie-le-pen-les-chambres-a-gaz-sont-un-point-de-detail-de-l-histoire-de-la-deuxieme-guerre-mondiale",
+                date: "13 septembre 1987",
+                difficulty: "medium"
+            },
+            {
+                text: "La route est droite, mais la pente est forte.",
+                author: "Jean-Pierre Raffarin",
+                party: "UMP",
+                context: "D&eacute;claration &agrave; l'Assembl&eacute;e nationale apr&egrave;s sa nomination &agrave; Matignon. Cette 'raffarinade' est rest&eacute;e c&eacute;l&egrave;bre.",
+                source: "Assembl&eacute;e nationale",
+                sourceUrl: "https://www.assemblee-nationale.fr",
+                date: "3 juillet 2002",
+                difficulty: "medium"
+            },
+            {
+                text: "Positive attitude.",
+                author: "Jean-Pierre Raffarin",
+                party: "UMP",
+                context: "Expression r&eacute;guli&egrave;rement utilis&eacute;e par le Premier ministre, devenue embl&eacute;matique des 'raffarinades'.",
+                source: "Presse nationale",
+                sourceUrl: "https://www.lemonde.fr/politique/article/2005/05/31/les-raffarinades_656084_823448.html",
+                date: "2002-2005",
+                difficulty: "medium"
+            },
+            {
+                text: "Au revoir.",
+                author: "Val&eacute;ry Giscard d'Estaing",
+                party: "UDF",
+                context: "Fin de son discours d'adieu t&eacute;l&eacute;vis&eacute; aux Fran&ccedil;ais. Il se l&egrave;ve ensuite, laissant une chaise vide, et sort sous La Marseillaise.",
+                source: "INA",
+                sourceUrl: "https://www.ina.fr/ina-eclaire-actu/video/i08358793/valery-giscard-d-estaing-au-revoir",
+                date: "19 mai 1981",
+                difficulty: "hard"
+            },
+            {
+                text: "Vous n'avez pas le monopole du c&oelig;ur.",
+                author: "Val&eacute;ry Giscard d'Estaing",
+                party: "UDF",
+                context: "Lors du d&eacute;bat pr&eacute;sidentiel face &agrave; Fran&ccedil;ois Mitterrand. R&eacute;plique rest&eacute;e c&eacute;l&egrave;bre.",
+                source: "D&eacute;bat pr&eacute;sidentiel",
+                sourceUrl: "https://www.france24.com/fr/france/20201203-le-monopole-du-c%C5%93ur-oui-mais-au-revoir-les-petites-phrases-de-val%C3%A9ry-giscard-d-estaing",
+                date: "10 mai 1974",
+                difficulty: "hard"
+            },
+            {
+                text: "Je suis le dernier des grands pr&eacute;sidents.",
+                author: "Fran&ccedil;ois Mitterrand",
+                party: "PS",
+                context: "Confidence au journaliste Georges-Marc Benamou vers la fin de sa vie.",
+                source: "Georges-Marc Benamou",
+                sourceUrl: "https://www.contrepoints.org/2021/05/10/288672-etaient-presidents-francois-mitterrand",
+                date: "1995",
+                difficulty: "hard"
+            },
+            {
+                text: "Je crois aux forces de l'esprit et je ne vous quitterai pas.",
+                author: "Fran&ccedil;ois Mitterrand",
+                party: "PS",
+                context: "Derni&egrave;re pr&eacute;sentation de v&oelig;ux aux Fran&ccedil;ais, alors qu'il &eacute;tait gravement malade.",
+                source: "V&oelig;ux pr&eacute;sidentiels",
+                sourceUrl: "https://www.ina.fr/ina-eclaire-actu/video/cab95002082/voeux-1995-de-francois-mitterrand",
+                date: "31 d&eacute;cembre 1994",
+                difficulty: "hard"
+            },
+            {
+                text: "La France a perdu une bataille, mais la France n'a pas perdu la guerre.",
+                author: "Charles de Gaulle",
+                party: "RPF",
+                context: "Appel du 18 juin depuis Londres, appelant &agrave; la R&eacute;sistance contre l'occupation nazie.",
+                source: "BBC Londres",
+                sourceUrl: "https://www.charles-de-gaulle.org/lhomme/dossiers-thematiques/lappel-du-18-juin/",
+                date: "18 juin 1940",
+                difficulty: "easy"
+            },
+            {
+                text: "Je vous ai compris !",
+                author: "Charles de Gaulle",
+                party: "RPF",
+                context: "Discours du Forum d'Alger. Phrase ambigu&euml; qui a pu &ecirc;tre interpr&eacute;t&eacute;e diff&eacute;remment par les partisans et adversaires de l'Alg&eacute;rie fran&ccedil;aise.",
+                source: "Forum d'Alger",
+                sourceUrl: "https://www.ina.fr/ina-eclaire-actu/video/afe85004128/je-vous-ai-compris",
+                date: "4 juin 1958",
+                difficulty: "medium"
+            },
+            {
+                text: "Vaste programme !",
+                author: "Charles de Gaulle",
+                party: "RPF",
+                context: "R&eacute;ponse laconique et ironique &agrave; quelqu'un qui criait 'Mort aux cons !' dans une manifestation.",
+                source: "Anecdote rapport&eacute;e",
+                sourceUrl: "https://www.lemonde.fr/les-decodeurs/article/2020/11/09/vaste-programme-retour-sur-une-citation-de-de-gaulle-jamais-verifiee_6059146_4355770.html",
+                date: "Ann&eacute;es 1960",
+                difficulty: "hard"
+            },
+            {
+                text: "Comment voulez-vous gouverner un pays qui a 246 vari&eacute;t&eacute;s de fromages ?",
+                author: "Charles de Gaulle",
+                party: "RPF",
+                context: "R&eacute;flexion sur la difficult&eacute; de gouverner la France, rapport&eacute;e par plusieurs sources.",
+                source: "Les Mots du G&eacute;n&eacute;ral",
+                sourceUrl: "https://fr.wikiquote.org/wiki/Charles_de_Gaulle",
+                date: "Ann&eacute;es 1960",
+                difficulty: "medium"
+            }
+        ];
+
+        // Liste des politiques pour les options
+        const politicians = [
+            // Actuels
+            { name: "Emmanuel Macron", party: "Renaissance" },
+            { name: "Marine Le Pen", party: "Rassemblement National" },
+            { name: "Jordan Bardella", party: "Rassemblement National" },
+            { name: "Jean-Luc M&eacute;lenchon", party: "La France Insoumise" },
+            { name: "G&eacute;rald Darmanin", party: "Renaissance" },
+            { name: "Bruno Le Maire", party: "Renaissance" },
+            { name: "Gabriel Attal", party: "Renaissance" },
+            { name: "Rachida Dati", party: "Renaissance" },
+            { name: "Fran&ccedil;ois Bayrou", party: "MoDem" },
+            { name: "&Eacute;ric Ciotti", party: "Les R&eacute;publicains" },
+            { name: "Sandrine Rousseau", party: "EELV" },
+            { name: "Manuel Bompard", party: "La France Insoumise" },
+            { name: "Claude Malhuret", party: "Les Ind&eacute;pendants" },
+            { name: "Julien Odoul", party: "Rassemblement National" },
+            { name: "Jean-Louis Bourlanges", party: "MoDem" },
+            { name: "Michel Barnier", party: "Les R&eacute;publicains" },
+            { name: "Laurent Wauquiez", party: "Les R&eacute;publicains" },
+            { name: "Bruno Retailleau", party: "Les R&eacute;publicains" },
+            { name: "&Eacute;lisabeth Borne", party: "Renaissance" },
+            { name: "&Eacute;douard Philippe", party: "Horizons" },
+            { name: "Rapha&euml;l Glucksmann", party: "Place Publique / PS" },
+            { name: "Fabien Roussel", party: "PCF" },
+            { name: "Fran&ccedil;ois Fillon", party: "Les R&eacute;publicains" },
+            { name: "Olivier Dussopt", party: "Renaissance" },
+            // Historiques
+            { name: "Nicolas Sarkozy", party: "UMP" },
+            { name: "Fran&ccedil;ois Hollande", party: "PS" },
+            { name: "Jacques Chirac", party: "RPR" },
+            { name: "S&eacute;gol&egrave;ne Royal", party: "PS" },
+            { name: "Jean-Marie Le Pen", party: "Front National" },
+            { name: "Jean-Pierre Raffarin", party: "UMP" },
+            { name: "Val&eacute;ry Giscard d'Estaing", party: "UDF" },
+            { name: "Fran&ccedil;ois Mitterrand", party: "PS" },
+            { name: "Charles de Gaulle", party: "RPF" }
+        ];
+
+        // Variables de jeu
+        let currentQuotes = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let maxStreak = 0;
+        let questionCount = 10;
+        let answered = false;
+        let gameMode = 'classique'; // classique, chrono, inverse, contexte
+        let isDuel = false;
+        let currentPlayer = 1;
+        let player1Score = 0;
+        let player2Score = 0;
+
+        // &Eacute;poques pour le mode chronologique
+        const epochs = [
+            { id: '1940-1960', label: '1940-1960', decades: [1940, 1950, 1960] },
+            { id: '1970-1980', label: '1970-1980', decades: [1970, 1980] },
+            { id: '1990-2000', label: '1990-2000', decades: [1990, 2000] },
+            { id: '2010-2025', label: '2010-2025', decades: [2010, 2020] }
+        ];
+
+        // Contextes types pour le mode contexte
+        const contextTypes = [
+            { id: 'tv', label: 'Interview TV / Radio', keywords: ['TF1', 'France 2', 'BFM', 'RTL', 'Europe 1', 'CNEWS', 'LCI', 'France Info', '20h', '13h', 'Grand Jury'] },
+            { id: 'assemblee', label: 'Assembl&eacute;e / S&eacute;nat', keywords: ['Assembl&eacute;e', 'S&eacute;nat', 'h&eacute;micycle', 'motion', 'politique g&eacute;n&eacute;rale'] },
+            { id: 'meeting', label: 'Meeting / Campagne', keywords: ['meeting', 'campagne', 'Bourget', 'militants', 'rassemblement'] },
+            { id: 'presse', label: 'Presse / D&eacute;claration', keywords: ['Parisien', 'Monde', 'Figaro', 'JDD', 'presse', 'interview', 'livre', 'Twitter', 'X ('] },
+            { id: 'terrain', label: 'Sur le terrain', keywords: ['Salon', 'visite', 'Courneuve', 'terrain', 'Muraille', 'Johannesburg', 'Orl&eacute;ans', 'Alger'] },
+            { id: 'officiel', label: 'Discours officiel', keywords: ['v&oelig;ux', 'adieu', '&Eacute;lys&eacute;e', 'BBC', 'Appel', 'Sommet'] }
+        ];
+
+        // S&eacute;lection du mode de jeu
+        document.querySelectorAll('.mode-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                gameMode = this.dataset.mode;
+            });
+        });
+
+        // S&eacute;lection du nombre de questions
+        document.querySelectorAll('.difficulty-select .fr-btn--secondary').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.difficulty-select .fr-btn--secondary').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                if (this.dataset.count) {
+                    questionCount = parseInt(this.dataset.count);
+                }
+            });
+        });
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function getYearFromDate(dateStr) {
+            const match = dateStr.match(/(\d{4})/);
+            if (match) return parseInt(match[1]);
+            if (dateStr.includes('1940')) return 1940;
+            if (dateStr.includes('1950')) return 1955;
+            if (dateStr.includes('1960')) return 1965;
+            if (dateStr.includes('1970')) return 1975;
+            if (dateStr.includes('1980')) return 1985;
+            if (dateStr.includes('1990')) return 1995;
+            if (dateStr.includes('2000')) return 2005;
+            return 2020;
+        }
+
+        function getEpochForYear(year) {
+            if (year < 1970) return '1940-1960';
+            if (year < 1990) return '1970-1980';
+            if (year < 2010) return '1990-2000';
+            return '2010-2025';
+        }
+
+        function getContextType(context, source) {
+            const combined = (context + ' ' + source).toLowerCase();
+            for (const ct of contextTypes) {
+                for (const kw of ct.keywords) {
+                    if (combined.includes(kw.toLowerCase())) {
+                        return ct.id;
+                    }
+                }
+            }
+            return 'presse';
+        }
+
+        function startGame() {
+            isDuel = false;
+            currentQuotes = shuffleArray(quotes).slice(0, questionCount);
+            currentQuestionIndex = 0;
+            score = 0;
+            streak = 0;
+            maxStreak = 0;
+
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('finalScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+
+            // Afficher la bonne barre de score
+            document.getElementById('soloScoreBar').classList.remove('hidden');
+            document.getElementById('duelScoreBar').classList.add('hidden');
+            document.getElementById('duelTurnIndicator').classList.add('hidden');
+
+            document.getElementById('totalQuestions').textContent = questionCount;
+            updateScoreDisplay();
+            showQuestion();
+        }
+
+        function startDuel() {
+            isDuel = true;
+            currentPlayer = 1;
+            player1Score = 0;
+            player2Score = 0;
+            currentQuotes = shuffleArray(quotes).slice(0, questionCount);
+            currentQuestionIndex = 0;
+            streak = 0;
+            maxStreak = 0;
+
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('finalScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+
+            // Afficher la barre de score duel
+            document.getElementById('soloScoreBar').classList.add('hidden');
+            document.getElementById('duelScoreBar').classList.remove('hidden');
+            document.getElementById('duelTurnIndicator').classList.remove('hidden');
+
+            updateDuelDisplay();
+            showQuestion();
+        }
+
+        function updateDuelDisplay() {
+            document.getElementById('player1Score').textContent = player1Score;
+            document.getElementById('player2Score').textContent = player2Score;
+            document.getElementById('currentPlayerName').textContent = `Joueur ${currentPlayer}`;
+            document.getElementById('duelQuestionNum').textContent = currentQuestionIndex + 1;
+            document.getElementById('duelTotalQuestions').textContent = questionCount;
+
+            document.getElementById('player1Box').classList.toggle('active', currentPlayer === 1);
+            document.getElementById('player2Box').classList.toggle('active', currentPlayer === 2);
+        }
+
+        function showQuestion() {
+            answered = false;
+            const quote = currentQuotes[currentQuestionIndex];
+
+            // Reset displays
+            document.getElementById('quoteDisplay').classList.remove('hidden');
+            document.getElementById('authorDisplay').classList.add('hidden');
+            document.getElementById('optionsGrid').classList.add('hidden');
+            document.getElementById('epochGrid').classList.add('hidden');
+            document.getElementById('contextOptions').classList.add('hidden');
+            document.getElementById('citationOptions').classList.add('hidden');
+            document.getElementById('quoteAuthorHint').classList.add('hidden');
+
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('quoteText').innerHTML = quote.text;
+
+            if (gameMode === 'classique') {
+                showClassicMode(quote);
+            } else if (gameMode === 'chrono') {
+                showChronoMode(quote);
+            } else if (gameMode === 'inverse') {
+                showInverseMode(quote);
+            } else if (gameMode === 'contexte') {
+                showContextMode(quote);
+            }
+
+            document.getElementById('resultContainer').classList.remove('show', 'correct', 'wrong');
+            document.getElementById('nextBtn').classList.remove('show');
+        }
+
+        function showClassicMode(quote) {
+            document.getElementById('optionsGrid').classList.remove('hidden');
+            const correctPolitician = politicians.find(p => p.name === quote.author);
+            let options = [correctPolitician];
+            const otherPoliticians = politicians.filter(p => p.name !== quote.author);
+            const shuffledOthers = shuffleArray(otherPoliticians);
+            options = options.concat(shuffledOthers.slice(0, 3));
+            options = shuffleArray(options);
+
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+
+            options.forEach(politician => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<div class="option-info"><div class="option-name">${politician.name}</div><div class="option-party">${politician.party}</div></div>`;
+                btn.onclick = () => checkClassicAnswer(politician.name, quote.author, btn);
+                optionsGrid.appendChild(btn);
+            });
+        }
+
+        function showChronoMode(quote) {
+            document.getElementById('epochGrid').classList.remove('hidden');
+            document.getElementById('quoteAuthorHint').classList.remove('hidden');
+            document.getElementById('hintAuthorName').textContent = quote.author;
+            document.getElementById('hintAuthorParty').textContent = quote.party;
+
+            const epochGrid = document.getElementById('epochGrid');
+            epochGrid.innerHTML = '';
+
+            const correctYear = getYearFromDate(quote.date);
+            const correctEpoch = getEpochForYear(correctYear);
+
+            epochs.forEach(epoch => {
+                const btn = document.createElement('button');
+                btn.className = 'epoch-btn';
+                btn.innerHTML = `<div class="epoch-decade">${epoch.label}</div>`;
+                btn.onclick = () => checkChronoAnswer(epoch.id, correctEpoch, btn, quote);
+                epochGrid.appendChild(btn);
+            });
+        }
+
+        function showInverseMode(quote) {
+            document.getElementById('quoteDisplay').classList.add('hidden');
+            document.getElementById('authorDisplay').classList.remove('hidden');
+            document.getElementById('citationOptions').classList.remove('hidden');
+
+            document.getElementById('displayAuthorName').textContent = quote.author;
+            document.getElementById('displayAuthorParty').textContent = quote.party;
+
+            // Trouver 3 autres citations d'autres auteurs
+            const otherQuotes = quotes.filter(q => q.author !== quote.author);
+            const shuffledOthers = shuffleArray(otherQuotes).slice(0, 3);
+            let options = [quote, ...shuffledOthers];
+            options = shuffleArray(options);
+
+            const citationOptions = document.getElementById('citationOptions');
+            citationOptions.innerHTML = '';
+
+            options.forEach(q => {
+                const btn = document.createElement('button');
+                btn.className = 'citation-option';
+                btn.innerHTML = `&laquo; ${q.text} &raquo;`;
+                btn.onclick = () => checkInverseAnswer(q.text, quote.text, btn, quote);
+                citationOptions.appendChild(btn);
+            });
+        }
+
+        function showContextMode(quote) {
+            document.getElementById('contextOptions').classList.remove('hidden');
+            document.getElementById('quoteAuthorHint').classList.remove('hidden');
+            document.getElementById('hintAuthorName').textContent = quote.author;
+            document.getElementById('hintAuthorParty').textContent = quote.party;
+
+            const correctContext = getContextType(quote.context, quote.source);
+            const contextOptions = document.getElementById('contextOptions');
+            contextOptions.innerHTML = '';
+
+            // M&eacute;langer les contextes
+            const shuffledContexts = shuffleArray([...contextTypes]);
+
+            shuffledContexts.forEach(ct => {
+                const btn = document.createElement('button');
+                btn.className = 'context-btn';
+                btn.innerHTML = ct.label;
+                btn.onclick = () => checkContextAnswer(ct.id, correctContext, btn, quote);
+                contextOptions.appendChild(btn);
+            });
+        }
+
+        function checkClassicAnswer(selected, correct, btn) {
+            if (answered) return;
+            answered = true;
+            const quote = currentQuotes[currentQuestionIndex];
+            const isCorrect = selected === correct;
+
+            document.querySelectorAll('.option-btn').forEach(b => {
+                b.disabled = true;
+                if (b.querySelector('.option-name').textContent === correct) {
+                    b.classList.add('correct');
+                }
+            });
+
+            handleAnswer(isCorrect, btn, `C'&eacute;tait ${correct}`, quote);
+        }
+
+        function checkChronoAnswer(selected, correct, btn, quote) {
+            if (answered) return;
+            answered = true;
+            const isCorrect = selected === correct;
+
+            document.querySelectorAll('.epoch-btn').forEach(b => {
+                b.disabled = true;
+                if (b.querySelector('.epoch-decade').textContent === epochs.find(e => e.id === correct)?.label) {
+                    b.classList.add('correct');
+                }
+            });
+
+            const correctLabel = epochs.find(e => e.id === correct)?.label || correct;
+            handleAnswer(isCorrect, btn, `C'&eacute;tait ${correctLabel} (${quote.date})`, quote);
+        }
+
+        function checkInverseAnswer(selected, correct, btn, quote) {
+            if (answered) return;
+            answered = true;
+            const isCorrect = selected === correct;
+
+            document.querySelectorAll('.citation-option').forEach(b => {
+                b.disabled = true;
+                if (b.innerHTML.includes(correct.substring(0, 30))) {
+                    b.classList.add('correct');
+                }
+            });
+
+            handleAnswer(isCorrect, btn, `La bonne citation &eacute;tait : &laquo; ${correct.substring(0, 50)}... &raquo;`, quote);
+        }
+
+        function checkContextAnswer(selected, correct, btn, quote) {
+            if (answered) return;
+            answered = true;
+            const isCorrect = selected === correct;
+
+            document.querySelectorAll('.context-btn').forEach(b => {
+                b.disabled = true;
+                const ctLabel = contextTypes.find(c => c.id === correct)?.label;
+                if (b.innerHTML === ctLabel) {
+                    b.classList.add('correct');
+                }
+            });
+
+            const correctLabel = contextTypes.find(c => c.id === correct)?.label || correct;
+            handleAnswer(isCorrect, btn, `C'&eacute;tait : ${correctLabel}`, quote);
+        }
+
+        function handleAnswer(isCorrect, btn, wrongMessage, quote) {
+            const resultContainer = document.getElementById('resultContainer');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultContext = document.getElementById('resultContext');
+            const resultSource = document.getElementById('resultSource');
+
+            if (isCorrect) {
+                if (isDuel) {
+                    if (currentPlayer === 1) player1Score++;
+                    else player2Score++;
+                } else {
+                    score++;
+                    streak++;
+                    if (streak > maxStreak) maxStreak = streak;
+                    if (streak >= 3) showStreakIndicator();
+                }
+
+                btn.classList.add('correct');
+                resultContainer.classList.add('correct');
+                resultTitle.textContent = 'Bravo !';
+            } else {
+                if (!isDuel) streak = 0;
+                btn.classList.add('wrong');
+                resultContainer.classList.add('wrong');
+                resultTitle.innerHTML = `Rat&eacute; ! ${wrongMessage}`;
+            }
+
+            resultContext.innerHTML = `<strong>${quote.date}</strong> - ${quote.context}`;
+            resultSource.innerHTML = `Source : <a href="${quote.sourceUrl}" target="_blank">${quote.source}</a>`;
+
+            resultContainer.classList.add('show');
+            document.getElementById('nextBtn').classList.add('show');
+
+            if (currentQuestionIndex === currentQuotes.length - 1) {
+                document.getElementById('nextBtn').textContent = 'Voir les r&eacute;sultats';
+            } else {
+                document.getElementById('nextBtn').textContent = 'Question suivante';
+            }
+
+            if (isDuel) {
+                updateDuelDisplay();
+            } else {
+                updateScoreDisplay();
+            }
+        }
+
+        function showStreakIndicator() {
+            const indicator = document.getElementById('streakIndicator');
+            indicator.textContent = `${streak} de suite !`;
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 2000);
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('streak').textContent = streak;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+
+            if (isDuel) {
+                currentPlayer = currentPlayer === 1 ? 2 : 1;
+                updateDuelDisplay();
+            }
+
+            if (currentQuestionIndex >= currentQuotes.length) {
+                if (isDuel) {
+                    showDuelFinalScreen();
+                } else {
+                    showFinalScreen();
+                }
+            } else {
+                showQuestion();
+            }
+        }
+
+        function showDuelFinalScreen() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('finalScreen').classList.remove('hidden');
+            document.getElementById('finalScreen').classList.add('show');
+
+            // Masquer l'attestation solo et afficher le r&eacute;sultat duel
+            document.getElementById('attestation').innerHTML = `
+                <div class="attestation-header">
+                    <p class="attestation-republic">R&eacute;publique Fran&ccedil;aise</p>
+                    <p class="attestation-ministry">Minist&egrave;re de la V&eacute;rit&eacute;</p>
+                    <p class="attestation-ministry" style="font-size: 0.7rem; color: var(--grey-625);">Bureau des Confrontations Civiques</p>
+                </div>
+                <h2 class="attestation-title">R&eacute;sultat du Duel</h2>
+                <div class="duel-final-scores">
+                    <div class="duel-final-player ${player1Score > player2Score ? 'winner' : player1Score < player2Score ? 'loser' : ''}">
+                        <div class="duel-final-name">Joueur 1</div>
+                        <div class="duel-final-score">${player1Score}</div>
+                    </div>
+                    <div class="duel-final-player ${player2Score > player1Score ? 'winner' : player2Score < player1Score ? 'loser' : ''}">
+                        <div class="duel-final-name">Joueur 2</div>
+                        <div class="duel-final-score">${player2Score}</div>
+                    </div>
+                </div>
+                <p class="duel-winner">${player1Score > player2Score ? 'Joueur 1 remporte le duel !' : player2Score > player1Score ? 'Joueur 2 remporte le duel !' : '&Eacute;galit&eacute; parfaite !'}</p>
+                <div class="tampon ${player1Score !== player2Score ? 'valide' : 'en-observation'}">${player1Score !== player2Score ? 'Victoire' : 'Match Nul'}</div>
+                <button class="fr-btn fr-btn--primary" onclick="restartGame()" style="margin-top: 24px;">Nouvelle partie</button>
+            `;
+        }
+
+        function showFinalScreen() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('finalScreen').classList.remove('hidden');
+            document.getElementById('finalScreen').classList.add('show');
+
+            const percentage = Math.round((score / questionCount) * 100);
+
+            // Score
+            document.getElementById('scoreValueBig').textContent = percentage;
+            document.getElementById('statCorrect').textContent = score;
+            document.getElementById('statTotal').textContent = questionCount;
+            document.getElementById('statStreak').textContent = maxStreak;
+
+            // Niveau, verdict, recommandation et tampon selon le score
+            const niveauBadge = document.getElementById('niveauBadge');
+            const verdictText = document.getElementById('verdictText');
+            const recommandation = document.getElementById('recommandation');
+            const tampon = document.getElementById('tampon');
+
+            if (percentage === 100) {
+                niveauBadge.textContent = "Niveau Excellent";
+                niveauBadge.className = "niveau-badge excellent";
+                verdictText.innerHTML = "Le Minist&egrave;re constate avec satisfaction que le citoyen &eacute;valu&eacute; d&eacute;montre une connaissance <strong>exemplaire</strong> des d&eacute;clarations de nos responsables politiques.";
+                recommandation.innerHTML = "<strong>Recommandation :</strong> Ce citoyen est jug&eacute; apte &agrave; exercer les fonctions de v&eacute;rificateur auxiliaire de la parole publique. Une convocation pour int&eacute;gration au corps des Gardiens de la V&eacute;rit&eacute; lui sera adress&eacute;e.";
+                tampon.textContent = "Citoyen Mod&egrave;le";
+                tampon.className = "tampon valide";
+            } else if (percentage >= 80) {
+                niveauBadge.textContent = "Niveau Bon";
+                niveauBadge.className = "niveau-badge bon";
+                verdictText.innerHTML = "Le Minist&egrave;re note que le citoyen &eacute;valu&eacute; fait preuve d'une vigilance <strong>satisfaisante</strong> quant aux communications officielles.";
+                recommandation.innerHTML = "<strong>Recommandation :</strong> Maintenir cette attention soutenue aux d&eacute;clarations publiques. Le citoyen est encourag&eacute; &agrave; poursuivre son &eacute;coute active des canaux d'information agr&eacute;&eacute;s.";
+                tampon.textContent = "Conforme";
+                tampon.className = "tampon valide";
+            } else if (percentage >= 60) {
+                niveauBadge.textContent = "Niveau Moyen";
+                niveauBadge.className = "niveau-badge moyen";
+                verdictText.innerHTML = "Le Minist&egrave;re observe que le citoyen &eacute;valu&eacute; pr&eacute;sente des <strong>lacunes notables</strong> dans sa connaissance du discours politique.";
+                recommandation.innerHTML = "<strong>Recommandation :</strong> Un suivi r&eacute;gulier des d&eacute;clarations minist&eacute;rielles est prescrit. Le citoyen devra se soumettre &agrave; une nouvelle &eacute;valuation dans un d&eacute;lai de 30 jours.";
+                tampon.textContent = "En Observation";
+                tampon.className = "tampon en-observation";
+            } else if (percentage >= 40) {
+                niveauBadge.textContent = "Niveau Insuffisant";
+                niveauBadge.className = "niveau-badge insuffisant";
+                verdictText.innerHTML = "Le Minist&egrave;re d&eacute;plore que le citoyen &eacute;valu&eacute; manifeste une <strong>m&eacute;connaissance pr&eacute;occupante</strong> de la parole de nos &eacute;lus.";
+                recommandation.innerHTML = "<strong>Recommandation :</strong> Stage obligatoire de r&eacute;&eacute;ducation civique. Le citoyen est pri&eacute; de consulter quotidiennement les communiqu&eacute;s officiels jusqu'&agrave; am&eacute;lioration constat&eacute;e.";
+                tampon.textContent = "Non Conforme";
+                tampon.className = "tampon refuse";
+            } else {
+                niveauBadge.textContent = "Niveau Critique";
+                niveauBadge.className = "niveau-badge critique";
+                verdictText.innerHTML = "Le Minist&egrave;re constate avec inqui&eacute;tude que le citoyen &eacute;valu&eacute; semble <strong>totalement d&eacute;connect&eacute;</strong> de la r&eacute;alit&eacute; politique nationale.";
+                recommandation.innerHTML = "<strong>Recommandation :</strong> Signalement imm&eacute;diat au Bureau de la R&eacute;insertion Informationnelle. Interdiction temporaire d'acc&egrave;s aux sources alternatives. R&eacute;&eacute;valuation obligatoire sous 15 jours.";
+                tampon.textContent = "Cas Prioritaire";
+                tampon.className = "tampon refuse";
+            }
+
+            // Date et num&eacute;ro d'attestation
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('attestationDate').textContent = `D&eacute;livr&eacute;e le ${dateStr}`;
+            document.getElementById('attestationDate').innerHTML = `D&eacute;livr&eacute;e le ${dateStr}`;
+
+            // Num&eacute;ro al&eacute;atoire style administratif
+            const numero = `MDV-${now.getFullYear()}-${String(Math.floor(Math.random() * 900000) + 100000)}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            document.getElementById('attestationNumero').textContent = `R&eacute;f. : ${numero}`;
+            document.getElementById('attestationNumero').innerHTML = `R&eacute;f. : ${numero}`;
+        }
+
+        function restartGame() {
+            document.getElementById('finalScreen').classList.add('hidden');
+            document.getElementById('finalScreen').classList.remove('show');
+            document.getElementById('startScreen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

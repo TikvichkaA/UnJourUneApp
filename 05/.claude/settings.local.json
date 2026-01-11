@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(if not exist \"C:\\\\Users\\\\Moi\\\\projets\\\\UnJourUneApp\\\\05\\\\images\" mkdir \"C:\\\\Users\\\\Moi\\\\projets\\\\UnJourUneApp\\\\05\\\\images\")"
+    ]
+  }
+}

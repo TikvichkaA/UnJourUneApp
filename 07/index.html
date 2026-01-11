@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shu le Chien qui Aboie !</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Decorations flottantes -->
+    <div class="floating-decorations" aria-hidden="true">
+      <span class="floating-item item-1">*</span>
+      <span class="floating-item item-2">*</span>
+      <span class="floating-item item-3">*</span>
+      <span class="floating-item item-4">*</span>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+      <h1 class="title" data-i18n="title">Shu le Chien qui Aboie</h1>
+      <p class="subtitle" data-i18n="subtitle">Petit chien, GRANDE voix ?</p>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- SHU SECTION -->
+      <section class="shu-section">
+        <div class="shu-container">
+          <div class="woof-text" id="woofText" aria-hidden="true">WOOF!</div>
+          <div class="shu-avatar" id="shu">
+            <img src="assets/images/shu.jpg" alt="Shu le petit chien blanc" class="shu-photo" id="shuImage" data-i18n-alt="shuAlt">
+            <video class="shu-video" id="shuVideo" muted playsinline>
+              <source src="" type="video/webm">
+              <source src="" type="video/mp4">
+            </video>
+          </div>
+          <p class="shu-name" data-i18n="shuName">Shu</p>
+          <p class="shu-description" data-i18n="shuDescription">Petit chien blanc, grande personnalite</p>
+        </div>
+      </section>
+
+      <!-- BARK BUTTON -->
+      <section class="action-section">
+        <button class="bark-button" id="barkBtn" aria-label="Faire aboyer Shu le chien" data-i18n-label="barkButtonLabel">
+          <span class="button-text" data-i18n="barkButtonText">Faire Aboyer Shu !</span>
+          <span class="button-icon">&#x1F50A;</span>
+        </button>
+      </section>
+
+      <!-- RESULT PANEL -->
+      <section class="result-panel hidden" id="resultPanel">
+
+        <!-- Comparaison cote a cote -->
+        <div class="comparison-container">
+
+          <!-- Cote Shu -->
+          <div class="comparison-side shu-side">
+            <img src="assets/images/shu.jpg" alt="Shu" class="side-photo">
+            <div class="side-name">Shu</div>
+            <div class="power-meter">
+              <div class="meter-bar">
+                <div class="meter-fill shu-meter" id="shuMeter"></div>
+              </div>
+              <div class="meter-value" id="shuValue">0 dB</div>
+            </div>
+          </div>
+
+          <!-- VS Badge -->
+          <div class="vs-badge" id="vsBadge">VS</div>
+
+          <!-- Cote Adversaire -->
+          <div class="comparison-side opponent-side">
+            <div class="side-emoji" id="opponentEmoji">&#x1F981;</div>
+            <div class="side-name" id="opponentName">Lion</div>
+            <div class="power-meter">
+              <div class="meter-bar">
+                <div class="meter-fill opponent-meter" id="opponentMeter"></div>
+              </div>
+              <div class="meter-value" id="opponentValue">0 dB</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Message Resultat -->
+        <div class="result-message" id="resultMessage">
+          <p class="message-text" id="messageText"></p>
+          <p class="fun-fact" id="funFact"></p>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-value" id="totalBarks">0</span>
+          <span class="stat-label" data-i18n="statBarks">Aboiements</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="wins">0</span>
+          <span class="stat-label" data-i18n="statWins">Victoires</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="winRate">0%</span>
+          <span class="stat-label" data-i18n="statRate">Taux</span>
+        </div>
+      </div>
+      <p class="credits" data-i18n-html="credits">Fait avec &#x1F495; pour Shu</p>
+    </footer>
+
+  </div>
+
+  <!-- Conteneur pour confettis -->
+  <div class="confetti-container" id="confettiContainer" aria-hidden="true"></div>
+
+  <!-- Annonces pour lecteurs d'ecran -->
+  <div aria-live="polite" id="announcer" class="sr-only"></div>
+
+  <script src="js/i18n.js?v=1"></script>
+  <script src="js/data.js?v=3"></script>
+  <script src="js/shu-animations.js?v=1"></script>
+  <script src="js/animations.js?v=2"></script>
+  <script src="js/app.js?v=4"></script>
+</body>
+</html>

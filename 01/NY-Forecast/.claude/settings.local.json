@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(node firebase-admin.js:*)",
+      "Bash(python -m http.server:*)"
+    ]
+  }
+}

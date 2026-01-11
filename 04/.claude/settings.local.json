@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "WebSearch",
+      "WebFetch(domain:www.insee.fr)",
+      "mcp__ide__getDiagnostics",
+      "Bash(timeout:*)"
+    ]
+  }
+}

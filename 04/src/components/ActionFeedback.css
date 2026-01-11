@@ -1,0 +1,117 @@
+.action-feedback {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #1c2128;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  min-width: 280px;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  z-index: 1500;
+  opacity: 0;
+  transition: all 0.3s ease-out;
+  pointer-events: none;
+}
+
+.action-feedback.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.feedback-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #30363d;
+}
+
+.feedback-action-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e6edf3;
+}
+
+.feedback-cost {
+  font-size: 0.8rem;
+  color: #f85149;
+  font-weight: 500;
+}
+
+.feedback-label {
+  display: block;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6e7681;
+  margin-bottom: 0.4rem;
+}
+
+.feedback-effects {
+  margin-bottom: 0.75rem;
+}
+
+.feedback-effect-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.feedback-effect {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.feedback-effect.positive {
+  background: rgba(63, 185, 80, 0.15);
+  color: #3fb950;
+}
+
+.feedback-effect.negative {
+  background: rgba(248, 81, 73, 0.15);
+  color: #f85149;
+}
+
+.feedback-delayed {
+  background: rgba(210, 153, 34, 0.08);
+  border-radius: 6px;
+  padding: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.feedback-delayed-item {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  margin-top: 0.3rem;
+}
+
+.feedback-delayed-item:first-of-type {
+  margin-top: 0;
+}
+
+.delayed-turn {
+  color: #d29922;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.delayed-reason {
+  color: #c9d1d9;
+}
+
+.feedback-budget {
+  font-size: 0.75rem;
+  color: #8b949e;
+  text-align: right;
+}
+
+.feedback-budget strong {
+  color: #d29922;
+}

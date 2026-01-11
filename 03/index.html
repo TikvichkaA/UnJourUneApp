@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03 — Résolutions 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .back {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            transition: color 0.2s;
+        }
+
+        .back:hover {
+            color: #fff;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 200;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .stat.kept .stat-number { color: #2ecc71; }
+        .stat.broken .stat-number { color: #e74c3c; }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .add-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .add-form input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .add-form input::placeholder {
+            color: #555;
+        }
+
+        .add-form input:focus {
+            outline: none;
+            border-color: #666;
+        }
+
+        .add-form button {
+            padding: 0 1.2rem;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .add-form button:hover {
+            background: #fff;
+            color: #1a1a2e;
+        }
+
+        .resolutions {
+            list-style: none;
+        }
+
+        .resolution {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .resolution-text {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .resolution.kept .resolution-text {
+            text-decoration: line-through;
+            color: #2ecc71;
+        }
+
+        .resolution.broken .resolution-text {
+            text-decoration: line-through;
+            color: #e74c3c;
+        }
+
+        .resolution-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .resolution-actions button {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background: transparent;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .resolution-actions button:hover {
+            border-color: #666;
+            color: #fff;
+        }
+
+        .resolution-actions .keep:hover {
+            border-color: #2ecc71;
+            color: #2ecc71;
+        }
+
+        .resolution-actions .break:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .empty {
+            text-align: center;
+            color: #444;
+            padding: 3rem;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #333;
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="../" class="back">← Retour</a>
+
+    <header>
+        <h1>Résolutions 2026</h1>
+        <p class="subtitle">On y croit (ou pas)</p>
+    </header>
+
+    <div class="stats">
+        <div class="stat kept">
+            <div class="stat-number" id="kept-count">0</div>
+            <div class="stat-label">Tenues</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number" id="total-count">0</div>
+            <div class="stat-label">Total</div>
+        </div>
+        <div class="stat broken">
+            <div class="stat-number" id="broken-count">0</div>
+            <div class="stat-label">Abandonnées</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <form class="add-form" id="add-form">
+            <input type="text" id="resolution-input" placeholder="Nouvelle résolution..." autocomplete="off">
+            <button type="submit">+</button>
+        </form>
+
+        <ul class="resolutions" id="resolutions-list">
+            <!-- Résolutions dynamiques -->
+        </ul>
+
+        <p class="empty" id="empty-message">Aucune résolution encore...<br>C'est le moment d'en ajouter !</p>
+    </div>
+
+    <footer>
+        Les données restent dans ton navigateur
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'resolutions2026';
+        let resolutions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+        const form = document.getElementById('add-form');
+        const input = document.getElementById('resolution-input');
+        const list = document.getElementById('resolutions-list');
+        const emptyMessage = document.getElementById('empty-message');
+        const keptCount = document.getElementById('kept-count');
+        const brokenCount = document.getElementById('broken-count');
+        const totalCount = document.getElementById('total-count');
+
+        function save() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(resolutions));
+        }
+
+        function updateStats() {
+            const kept = resolutions.filter(r => r.status === 'kept').length;
+            const broken = resolutions.filter(r => r.status === 'broken').length;
+            keptCount.textContent = kept;
+            brokenCount.textContent = broken;
+            totalCount.textContent = resolutions.length;
+        }
+
+        function render() {
+            list.innerHTML = '';
+            emptyMessage.style.display = resolutions.length ? 'none' : 'block';
+
+            resolutions.forEach((res, index) => {
+                const li = document.createElement('li');
+                li.className = `resolution ${res.status || ''}`;
+                li.innerHTML = `
+                    <span class="resolution-text">${escapeHtml(res.text)}</span>
+                    <div class="resolution-actions">
+                        ${res.status ? `
+                            <button class="reset" title="Réinitialiser">↺</button>
+                        ` : `
+                            <button class="keep" title="Tenue !">✓</button>
+                            <button class="break" title="Abandonnée...">✗</button>
+                        `}
+                        <button class="delete" title="Supprimer">🗑</button>
+                    </div>
+                `;
+
+                li.querySelector('.delete')?.addEventListener('click', () => deleteResolution(index));
+                li.querySelector('.keep')?.addEventListener('click', () => setStatus(index, 'kept'));
+                li.querySelector('.break')?.addEventListener('click', () => setStatus(index, 'broken'));
+                li.querySelector('.reset')?.addEventListener('click', () => setStatus(index, null));
+
+                list.appendChild(li);
+            });
+
+            updateStats();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function addResolution(text) {
+            resolutions.unshift({ text, status: null, createdAt: Date.now() });
+            save();
+            render();
+        }
+
+        function deleteResolution(index) {
+            resolutions.splice(index, 1);
+            save();
+            render();
+        }
+
+        function setStatus(index, status) {
+            resolutions[index].status = status;
+            save();
+            render();
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = input.value.trim();
+            if (text) {
+                addResolution(text);
+                input.value = '';
+            }
+        });
+
+        render();
+    </script>
+</body>
+</html>

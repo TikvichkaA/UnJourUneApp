@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédictions 2026</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div id="mascot-container" class="mascot-container"></div>
+            <h1>🔮 Prédictions 2026</h1>
+            <p class="subtitle">Que va-t-il se passer cette année ?</p>
+            <p style="color: rgba(255, 255, 255, 0.4); font-size: 0.85rem; margin-top: 10px;">Développé par Emmanuel Pinglier (Of course)</p>
+        </header>
+
+        <!-- Écran de sélection d'utilisateur -->
+        <section id="user-selection" class="screen">
+            <h2>Qui es-tu ?</h2>
+            <div id="user-list" class="user-list">
+                <!-- Les utilisateurs seront ajoutés ici dynamiquement -->
+            </div>
+            <div class="add-user-form">
+                <input type="text" id="new-user-name" placeholder="Ou ajoute ton prénom..." maxlength="20">
+                <button id="add-user-btn" class="btn btn-secondary">Ajouter</button>
+            </div>
+        </section>
+
+        <!-- Écran principal des prédictions -->
+        <section id="predictions-screen" class="screen hidden">
+            <div class="user-header">
+                <span>Connecté en tant que : <strong id="current-user-name"></strong></span>
+                <button id="change-user-btn" class="btn btn-small">Changer</button>
+            </div>
+
+            <div id="countdown-banner" class="countdown-banner"></div>
+
+            <div class="tabs">
+                <button class="tab active" data-tab="vote">Voter</button>
+                <button class="tab" data-tab="market">Marché</button>
+                <button class="tab" data-tab="results">Résultats</button>
+                <button class="tab" data-tab="resolutions">Résolutions</button>
+                <button class="tab" data-tab="add">+ Ajouter</button>
+            </div>
+
+            <!-- Onglet Vote -->
+            <div id="tab-vote" class="tab-content active">
+                <div class="category-filter">
+                    <button class="category-btn active" data-category="all">Toutes</button>
+                    <button class="category-btn" data-category="politique">Politique</button>
+                    <button class="category-btn" data-category="sport">Sport</button>
+                    <button class="category-btn" data-category="tech">Tech</button>
+                    <button class="category-btn" data-category="perso">Perso</button>
+                    <button class="category-btn" data-category="autre">Autre</button>
+                </div>
+                <div id="predictions-list" class="predictions-list">
+                    <!-- Les prédictions seront ajoutées ici -->
+                </div>
+                <p id="no-predictions" class="empty-message hidden">Aucune prédiction pour le moment. Ajoute-en une !</p>
+            </div>
+
+            <!-- Onglet Marché (Trading) -->
+            <div id="tab-market" class="tab-content hidden">
+                <div class="market-header">
+                    <div class="market-index">
+                        <span class="index-label">📊 INDICE GLOBAL</span>
+                        <span id="market-index-value" class="index-value">--</span>
+                        <span id="market-index-change" class="index-change">--</span>
+                    </div>
+                </div>
+
+                <div class="market-stats-row">
+                    <div class="market-stat">
+                        <span class="market-stat-value" id="stat-total-volume">--</span>
+                        <span class="market-stat-label">Volume total</span>
+                    </div>
+                    <div class="market-stat">
+                        <span class="market-stat-value" id="stat-avg-sentiment">--</span>
+                        <span class="market-stat-label">Sentiment</span>
+                    </div>
+                    <div class="market-stat">
+                        <span class="market-stat-value" id="stat-volatility">--</span>
+                        <span class="market-stat-label">Volatilité</span>
+                    </div>
+                </div>
+
+                <div class="market-section">
+                    <h3 class="market-section-title">🔥 Top Movers</h3>
+                    <div id="top-movers" class="top-movers">
+                        <!-- Rempli dynamiquement -->
+                    </div>
+                </div>
+
+                <div class="market-section">
+                    <h3 class="market-section-title">📈 Toutes les positions</h3>
+                    <div class="market-filter">
+                        <button class="market-filter-btn active" data-sort="price">Prix</button>
+                        <button class="market-filter-btn" data-sort="change">Variation</button>
+                        <button class="market-filter-btn" data-sort="volume">Volume</button>
+                        <button class="market-filter-btn" data-sort="volatility">Volatilité</button>
+                    </div>
+                    <div id="market-list" class="market-list">
+                        <!-- Liste des prédictions style trading -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Onglet Résultats -->
+            <div id="tab-results" class="tab-content hidden">
+                <div id="results-list" class="predictions-list">
+                    <!-- Les résultats seront affichés ici -->
+                </div>
+            </div>
+
+            <!-- Onglet Ajouter -->
+            <div id="tab-add" class="tab-content hidden">
+                <h3>Ajouter une prédiction</h3>
+                <p class="hint">Formule ta prédiction comme une affirmation (ex: "La France gagnera l'Euro 2026")</p>
+                <textarea id="new-prediction-text" placeholder="Ta prédiction..." maxlength="200"></textarea>
+                <div class="category-select">
+                    <label>Catégorie :</label>
+                    <select id="new-prediction-category">
+                        <option value="politique">Politique</option>
+                        <option value="sport">Sport</option>
+                        <option value="tech">Tech</option>
+                        <option value="perso">Perso</option>
+                        <option value="autre" selected>Autre</option>
+                    </select>
+                </div>
+                <button id="add-prediction-btn" class="btn btn-primary">Ajouter la prédiction</button>
+            </div>
+
+            <!-- Onglet Résolutions -->
+            <div id="tab-resolutions" class="tab-content hidden">
+                <div class="resolutions-header">
+                    <h3>🎯 Bonnes résolutions 2026</h3>
+                    <p class="hint">Ajoute tes bonnes résolutions pour l'année et découvre celles de tes amis !</p>
+                </div>
+
+                <div class="add-resolution-form">
+                    <input type="text" id="new-resolution-text" placeholder="Ma bonne résolution..." maxlength="150">
+                    <button id="add-resolution-btn" class="btn btn-primary">Ajouter</button>
+                </div>
+
+                <div id="resolutions-list" class="resolutions-list">
+                    <!-- Les résolutions seront affichées ici par utilisateur -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- Lottie Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+
+    <!-- Configuration Firebase (à remplacer) -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Mascotte Oracle -->
+    <script src="mascot.js"></script>
+
+    <!-- Application -->
+    <script src="app.js"></script>
+</body>
+</html>

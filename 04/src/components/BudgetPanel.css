@@ -1,0 +1,169 @@
+.budget-panel {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.budget-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.budget-main:hover {
+  background: #1c2128;
+}
+
+.budget-current {
+  display: flex;
+  flex-direction: column;
+}
+
+.budget-label {
+  font-size: 0.6rem;
+  color: #6e7681;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.budget-amount {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #d29922;
+}
+
+.budget-amount.warning {
+  color: #d29922;
+  animation: budgetPulse 1.5s ease-in-out infinite;
+}
+
+.budget-amount.danger {
+  color: #f85149;
+  animation: budgetPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes budgetPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.budget-toggle {
+  font-size: 0.7rem;
+  color: #6e7681;
+}
+
+.budget-details {
+  padding: 0.75rem;
+  border-top: 1px solid #21262d;
+  background: #0d1117;
+  animation: budgetExpand 0.2s ease-out;
+}
+
+@keyframes budgetExpand {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.budget-section {
+  margin-bottom: 0.75rem;
+}
+
+.budget-section:last-of-type {
+  margin-bottom: 0;
+}
+
+.budget-section h4 {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #8b949e;
+  margin: 0 0 0.4rem 0;
+  font-weight: 500;
+}
+
+.budget-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  padding: 0.2rem 0;
+  color: #c9d1d9;
+}
+
+.budget-line.total {
+  border-top: 1px solid #21262d;
+  margin-top: 0.3rem;
+  padding-top: 0.4rem;
+  font-weight: 500;
+}
+
+.budget-line .positive {
+  color: #3fb950;
+}
+
+.budget-line .negative {
+  color: #f85149;
+}
+
+.budget-repartition {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.repartition-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  color: #8b949e;
+}
+
+.bar-track {
+  height: 6px;
+  background: #21262d;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease-out;
+}
+
+.budget-warning {
+  display: flex;
+  gap: 0.4rem;
+  align-items: flex-start;
+  padding: 0.5rem;
+  background: rgba(210, 153, 34, 0.08);
+  border-radius: 6px;
+  margin-top: 0.75rem;
+}
+
+.warning-icon {
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.budget-warning span:last-child {
+  font-size: 0.6rem;
+  color: #8b949e;
+  line-height: 1.4;
+}

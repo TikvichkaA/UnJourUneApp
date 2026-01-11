@@ -1,0 +1,741 @@
+/* ============================================
+   STYLE.CSS - Styles Kawaii pour Shu
+   ============================================ */
+
+/* ============================================
+   VARIABLES CSS
+   ============================================ */
+:root {
+  /* Couleurs principales */
+  --pink-pastel: #FFB6C1;
+  --pink-light: #FFE4E9;
+  --pink-dark: #FF8FA3;
+  --blue-sky: #87CEEB;
+  --blue-light: #E0F4FF;
+  --lavender: #E6E6FA;
+  --lavender-dark: #B8A9C9;
+  --mint: #98FB98;
+  --mint-light: #E8FFF0;
+  --yellow-soft: #FFE066;
+  --peach: #FFDAB9;
+
+  /* Neutres */
+  --white-cream: #FFFEF9;
+  --white: #FFFFFF;
+  --shadow-soft: rgba(0, 0, 0, 0.08);
+  --shadow-medium: rgba(0, 0, 0, 0.12);
+  --text-dark: #5D5D5D;
+  --text-light: #8E8E8E;
+
+  /* Etats */
+  --win-color: #7FD8A6;
+  --win-bg: #E8FFF0;
+  --lose-color: #FFB3B3;
+  --lose-bg: #FFF0F0;
+  --draw-color: #FFE066;
+  --draw-bg: #FFFDE8;
+
+  /* Espacements */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+
+  /* Bordures */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 30px;
+  --radius-full: 50%;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, var(--pink-light) 0%, var(--lavender) 50%, var(--blue-light) 100%);
+  min-height: 100vh;
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   APP CONTAINER
+   ============================================ */
+.app-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ============================================
+   DECORATIONS FLOTTANTES
+   ============================================ */
+.floating-decorations {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floating-item {
+  position: absolute;
+  font-size: 2rem;
+  opacity: 0.3;
+  color: var(--pink-pastel);
+  animation: float 6s ease-in-out infinite;
+}
+
+.item-1 { top: 10%; left: 10%; animation-delay: 0s; }
+.item-2 { top: 20%; right: 15%; animation-delay: 1.5s; }
+.item-3 { bottom: 30%; left: 5%; animation-delay: 3s; }
+.item-4 { bottom: 15%; right: 10%; animation-delay: 4.5s; }
+
+/* ============================================
+   HEADER
+   ============================================ */
+.header {
+  text-align: center;
+  padding: var(--spacing-lg) 0;
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--pink-dark);
+  text-shadow: 2px 2px 0 var(--white), 4px 4px 0 var(--shadow-soft);
+  margin-bottom: var(--spacing-xs);
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================
+   SHU SECTION
+   ============================================ */
+.shu-section {
+  display: flex;
+  justify-content: center;
+}
+
+.shu-container {
+  text-align: center;
+  position: relative;
+}
+
+.shu-avatar {
+  width: 150px;
+  height: 150px;
+  background: var(--white);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-sm);
+  box-shadow:
+    0 10px 30px var(--shadow-medium),
+    0 0 0 5px var(--pink-light),
+    0 0 0 10px var(--white);
+  position: relative;
+  transition: transform var(--transition-normal);
+  overflow: hidden;
+}
+
+.shu-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-full);
+}
+
+.shu-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180%;
+  height: 180%;
+  object-fit: contain;
+  border-radius: 0;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.shu-video.playing {
+  opacity: 1;
+}
+
+.shu-avatar.video-mode .shu-photo {
+  opacity: 0;
+}
+
+.shu-emoji {
+  font-size: 5rem;
+  line-height: 1;
+}
+
+/* Etats de Shu */
+.shu-avatar.idle {
+  animation: shu-idle 3s ease-in-out infinite;
+}
+
+.shu-avatar.barking {
+  animation: shu-bark 0.6s ease-in-out;
+}
+
+.shu-avatar.victory {
+  animation: shu-victory 1s ease-in-out;
+}
+
+.shu-avatar.defeat {
+  animation: shu-defeat 1s ease-in-out;
+}
+
+/* Texte WOOF */
+.woof-text {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--pink-dark);
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 2px 2px 0 var(--white);
+}
+
+.woof-text.show {
+  animation: woof-appear 0.8s ease-out forwards;
+}
+
+.shu-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 0.25rem;
+}
+
+.shu-description {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+/* ============================================
+   ACTION SECTION (BOUTON)
+   ============================================ */
+.action-section {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-sm) 0;
+}
+
+.bark-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--pink-pastel) 0%, var(--pink-dark) 100%);
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  box-shadow:
+    0 6px 20px rgba(255, 182, 193, 0.5),
+    0 3px 0 var(--pink-dark);
+  transition: all var(--transition-fast);
+  animation: button-pulse 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.bark-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+.bark-button:hover::before {
+  left: 100%;
+}
+
+.bark-button:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 10px 30px rgba(255, 182, 193, 0.6),
+    0 5px 0 var(--pink-dark);
+}
+
+.bark-button:active {
+  transform: translateY(0);
+  box-shadow:
+    0 3px 10px rgba(255, 182, 193, 0.4),
+    0 1px 0 var(--pink-dark);
+}
+
+.bark-button.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  animation: none;
+}
+
+.bark-button.disabled:hover {
+  transform: none;
+}
+
+.button-icon {
+  font-size: 1.5rem;
+}
+
+/* ============================================
+   RESULT PANEL
+   ============================================ */
+.result-panel {
+  background: var(--white-cream);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: 0 10px 40px var(--shadow-medium);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all var(--transition-slow);
+}
+
+.result-panel.hidden {
+  display: none;
+}
+
+.result-panel.show {
+  opacity: 1;
+  transform: translateY(0);
+  animation: slide-up 0.5s ease-out;
+}
+
+.result-panel.win {
+  background: linear-gradient(135deg, var(--win-bg) 0%, var(--white-cream) 100%);
+  border: 2px solid var(--win-color);
+}
+
+.result-panel.lose {
+  background: linear-gradient(135deg, var(--lose-bg) 0%, var(--white-cream) 100%);
+  border: 2px solid var(--lose-color);
+}
+
+.result-panel.draw {
+  background: linear-gradient(135deg, var(--draw-bg) 0%, var(--white-cream) 100%);
+  border: 2px solid var(--draw-color);
+}
+
+/* ============================================
+   COMPARISON CONTAINER
+   ============================================ */
+.comparison-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.comparison-side {
+  flex: 1;
+  text-align: center;
+}
+
+.side-emoji {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-xs);
+}
+
+.side-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  margin-bottom: var(--spacing-xs);
+  box-shadow: 0 4px 10px var(--shadow-soft);
+  border: 3px solid var(--pink-light);
+}
+
+.side-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-sm);
+  min-height: 2.5em;
+}
+
+/* ============================================
+   POWER METER
+   ============================================ */
+.power-meter {
+  width: 100%;
+}
+
+.meter-bar {
+  height: 20px;
+  background: var(--lavender);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: var(--spacing-xs);
+}
+
+.meter-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: var(--radius-sm);
+  transition: width 0.1s linear;
+}
+
+.shu-meter {
+  background: linear-gradient(90deg, var(--pink-light) 0%, var(--pink-dark) 100%);
+}
+
+.opponent-meter {
+  background: linear-gradient(90deg, var(--blue-light) 0%, var(--blue-sky) 100%);
+}
+
+.meter-value {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+/* ============================================
+   VS BADGE
+   ============================================ */
+.vs-badge {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--yellow-soft) 0%, var(--peach) 100%);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  box-shadow: 0 4px 15px rgba(255, 224, 102, 0.4);
+  flex-shrink: 0;
+}
+
+.vs-badge.bounce {
+  animation: bounce-in 0.6s ease-out;
+}
+
+/* ============================================
+   RESULT MESSAGE
+   ============================================ */
+.result-message {
+  text-align: center;
+  padding-top: var(--spacing-md);
+  border-top: 2px dashed var(--lavender);
+}
+
+.message-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-xs);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all var(--transition-normal);
+}
+
+.message-text.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fun-fact {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  font-style: italic;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.fun-fact.show {
+  opacity: 1;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+  padding: var(--spacing-lg) 0 var(--spacing-md);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--white);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 15px var(--shadow-soft);
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--pink-dark);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.credits {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+/* ============================================
+   CONFETTI CONTAINER
+   ============================================ */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.confetti-particle {
+  position: absolute;
+  top: -20px;
+  opacity: 0;
+}
+
+.confetti-particle.falling {
+  animation: confetti-fall 3s ease-out forwards;
+}
+
+/* ============================================
+   KEYFRAMES - ANIMATIONS
+   ============================================ */
+
+/* Float - decorations */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-20px) rotate(2deg); }
+}
+
+/* Shu idle */
+@keyframes shu-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Shu bark */
+@keyframes shu-bark {
+  0% { transform: scale(1) rotate(0); }
+  20% { transform: scale(1.2) rotate(-8deg); }
+  40% { transform: scale(0.9) rotate(8deg); }
+  60% { transform: scale(1.15) rotate(-5deg); }
+  80% { transform: scale(1.05) rotate(3deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* Shu victory */
+@keyframes shu-victory {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  25% { transform: translateY(-20px) rotate(-10deg); }
+  50% { transform: translateY(0) rotate(10deg); }
+  75% { transform: translateY(-15px) rotate(-5deg); }
+}
+
+/* Shu defeat */
+@keyframes shu-defeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.9) translateY(5px); }
+}
+
+/* Woof text */
+@keyframes woof-appear {
+  0% { opacity: 0; transform: translateX(-50%) scale(0) rotate(-20deg); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.3) rotate(10deg); }
+  100% { opacity: 0; transform: translateX(-50%) scale(1) translateY(-40px); }
+}
+
+/* Button pulse */
+@keyframes button-pulse {
+  0%, 100% { box-shadow: 0 6px 20px rgba(255, 182, 193, 0.5), 0 3px 0 var(--pink-dark), 0 0 0 0 rgba(255, 182, 193, 0.4); }
+  50% { box-shadow: 0 6px 20px rgba(255, 182, 193, 0.5), 0 3px 0 var(--pink-dark), 0 0 0 15px rgba(255, 182, 193, 0); }
+}
+
+/* Slide up */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bounce in */
+@keyframes bounce-in {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.3); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* Confetti fall */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .shu-avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .shu-emoji {
+    font-size: 4rem;
+  }
+
+  .bark-button {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: 1.1rem;
+  }
+
+  .comparison-container {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .vs-badge {
+    order: 0;
+  }
+
+  .shu-side {
+    order: -1;
+  }
+
+  .stats {
+    gap: var(--spacing-sm);
+  }
+
+  .stat-item {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    padding: var(--spacing-xl);
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .shu-avatar {
+    width: 180px;
+    height: 180px;
+  }
+
+  .shu-emoji {
+    font-size: 6rem;
+  }
+}

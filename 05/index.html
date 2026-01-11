@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1">
+    <title>JB's Ultimate Mission</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-wrapper">
+        <!-- Écran titre animé -->
+        <div id="title-screen" class="screen active">
+            <div class="stars-bg"></div>
+            <div class="title-content">
+                <div class="logo-container">
+                    <h1 class="game-title">
+                        <span class="title-jb">JB's</span>
+                        <span class="title-ultimate">ULTIMATE</span>
+                        <span class="title-mission">MISSION</span>
+                    </h1>
+                    <p class="subtitle">Une soirée... compliquée</p>
+                </div>
+
+                <div class="mascot-container">
+                    <video id="jb-idle" autoplay loop muted playsinline>
+                        <source src="" type="">
+                    </video>
+                </div>
+
+                <button class="btn-play" onclick="startGame()">
+                    <span class="btn-text">JOUER</span>
+                    <span class="btn-icon">▶</span>
+                </button>
+
+                <div class="instructions">
+                    <p>🎯 Ramène Léa chez Abel</p>
+                    <p>💕 Garde son intérêt</p>
+                    <p>🤨 Ne sois pas bizarre</p>
+                </div>
+
+                <div class="level-select">
+                    <p class="level-select-title">🎮 Sélection rapide</p>
+                    <div class="level-buttons">
+                        <button class="level-btn" onclick="jumpToLevel('drunk')">🍺 Marche</button>
+                        <button class="level-btn" onclick="jumpToLevel('tea')">🍵 Thé</button>
+                        <button class="level-btn" onclick="jumpToLevel('memory')">📱 SMS</button>
+                        <button class="level-btn" onclick="jumpToLevel('stealth')">🤫 Stealth</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container principal du jeu -->
+        <div id="game-screen" class="screen">
+            <!-- HUD -->
+            <div id="hud">
+                <div class="hud-left">
+                    <div class="gauge interest-gauge">
+                        <span class="gauge-label">INTÉRÊT</span>
+                        <div class="hearts" id="hearts">
+                            <span class="heart">❤️</span>
+                            <span class="heart">❤️</span>
+                            <span class="heart">❤️</span>
+                            <span class="heart">❤️</span>
+                            <span class="heart">❤️</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hud-center">
+                    <div class="location-badge" id="location-badge">
+                        <span class="location-icon">📍</span>
+                        <span class="location-name" id="location-name">Le Tropical</span>
+                    </div>
+                </div>
+                <div class="hud-right">
+                    <div class="gauge weird-gauge">
+                        <span class="gauge-label">BIZARRERIE</span>
+                        <div class="weird-bar">
+                            <div class="weird-fill" id="weird-fill"></div>
+                            <div class="weird-glow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zone de jeu principale -->
+            <div id="game-canvas">
+                <!-- Scène du Bar -->
+                <div id="scene-bar" class="game-scene active">
+                    <div class="scene-background bar-background">
+                        <div class="neon-sign">
+                            <span class="neon-text">LE TROPICAL</span>
+                            <div class="neon-glow"></div>
+                        </div>
+                        <div class="bar-lights">
+                            <div class="disco-ball"></div>
+                        </div>
+                        <div class="bar-counter"></div>
+                        <div class="bar-stools">
+                            <div class="stool"></div>
+                            <div class="stool"></div>
+                            <div class="stool"></div>
+                        </div>
+                        <div class="bottles-shelf">
+                            <div class="bottle b1"></div>
+                            <div class="bottle b2"></div>
+                            <div class="bottle b3"></div>
+                            <div class="bottle b4"></div>
+                            <div class="bottle b5"></div>
+                        </div>
+                    </div>
+
+                    <div class="characters">
+                        <div class="character jb-character" id="jb-char">
+                            <video id="jb-sprite" autoplay loop muted playsinline>
+                                <source src="" type="">
+                            </video>
+                            <div class="character-shadow"></div>
+                        </div>
+                        <div class="character girl-character" id="girl-char">
+                            <div class="girl-sprite"></div>
+                            <div class="character-shadow"></div>
+                            <div class="reaction-bubble" id="girl-reaction"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scène de la Rue -->
+                <div id="scene-street" class="game-scene">
+                    <div class="scene-background street-background">
+                        <div class="night-sky">
+                            <div class="moon"></div>
+                            <div class="stars"></div>
+                        </div>
+                        <div class="buildings">
+                            <div class="building b1"></div>
+                            <div class="building b2"></div>
+                            <div class="building b3"></div>
+                        </div>
+                        <div class="street-lights">
+                            <div class="lamp"></div>
+                            <div class="lamp"></div>
+                        </div>
+                        <div class="sidewalk"></div>
+                    </div>
+                    <div class="characters">
+                        <div class="character jb-character">
+                            <video id="jb-sprite-street" autoplay loop muted playsinline>
+                                <source src="" type="">
+                            </video>
+                        </div>
+                        <div class="character girl-character">
+                            <div class="girl-sprite"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scène Salon de Thé -->
+                <div id="scene-salon" class="game-scene">
+                    <div class="scene-background salon-background">
+                        <div class="salon-sign">CHEZ MEHMET</div>
+                        <div class="salon-decor">
+                            <div class="tea-shelf"></div>
+                            <div class="turkish-lamp l1"></div>
+                            <div class="turkish-lamp l2"></div>
+                            <div class="turkish-carpet"></div>
+                        </div>
+                        <div class="salon-counter"></div>
+                    </div>
+                    <div class="characters">
+                        <div class="character jb-character">
+                            <video id="jb-sprite-salon" autoplay loop muted playsinline>
+                                <source src="" type="">
+                            </video>
+                        </div>
+                        <div class="character mehmet-character">
+                            <div class="mehmet-sprite"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scène Labyrinthe -->
+                <div id="scene-maze" class="game-scene">
+                    <div class="scene-background maze-background">
+                        <div class="night-sky">
+                            <div class="moon"></div>
+                        </div>
+                        <div class="apartment-buildings" id="buildings-container">
+                            <!-- Générés dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scène Couloir -->
+                <div id="scene-corridor" class="game-scene">
+                    <div class="scene-background corridor-background">
+                        <div class="corridor-perspective">
+                            <div class="corridor-floor"></div>
+                            <div class="corridor-ceiling"></div>
+                            <div class="corridor-walls"></div>
+                            <div class="doors-container" id="doors-container">
+                                <!-- Portes générées dynamiquement -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boîte de dialogue -->
+            <div id="dialogue-container">
+                <div class="dialogue-box">
+                    <div class="speaker-portrait" id="speaker-portrait">
+                        <video id="speaker-video" autoplay loop muted playsinline>
+                            <source src="" type="">
+                        </video>
+                    </div>
+                    <div class="dialogue-content">
+                        <div class="speaker-name" id="speaker-name">JB</div>
+                        <div class="dialogue-text" id="dialogue-text"></div>
+                    </div>
+                </div>
+                <div class="choices-container" id="choices-container">
+                    <!-- Choix générés dynamiquement -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Écran de mini-jeu Négociation -->
+        <div id="minigame-negotiate" class="screen minigame-screen">
+            <div class="minigame-overlay"></div>
+            <div class="minigame-content negotiate-content">
+                <div class="negotiate-header">
+                    <h2>NÉGOCIATION</h2>
+                    <div class="battery-status">
+                        <div class="battery-icon">
+                            <div class="battery-level"></div>
+                        </div>
+                        <span>2% - CRITIQUE</span>
+                    </div>
+                    <div class="timer-display">
+                        <span class="timer-icon">⏱️</span>
+                        <span class="timer-value" id="negotiate-timer">1:00</span>
+                    </div>
+                </div>
+
+                <div class="negotiate-characters">
+                    <div class="mehmet-portrait">
+                        <div class="mehmet-large"></div>
+                        <div class="mood-indicator" id="mehmet-mood">
+                            <span class="mood-emoji">😐</span>
+                        </div>
+                    </div>
+                    <div class="negotiate-dialogue">
+                        <p id="mehmet-text">On ferme là mon ami!</p>
+                    </div>
+                </div>
+
+                <div class="negotiate-choices" id="negotiate-choices">
+                    <!-- Choix générés dynamiquement -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Écran Sélection Étage -->
+        <div id="minigame-floor" class="screen minigame-screen">
+            <div class="minigame-overlay"></div>
+            <div class="minigame-content floor-content">
+                <h2>QUEL ÉTAGE ?</h2>
+                <p class="hint-text" id="floor-hint">Abel a dit quelque chose...</p>
+                <div class="floor-buttons" id="floor-buttons">
+                    <!-- Boutons générés dynamiquement -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Mini-jeu: Marche Sobre -->
+        <div id="minigame-drunk" class="screen minigame-screen">
+            <div class="minigame-overlay"></div>
+            <div class="minigame-content drunk-content">
+                <h2>🍺 MARCHE SOBRE 🍺</h2>
+                <p class="minigame-instruction">Utilise ← → ou A/D pour garder l'équilibre !</p>
+
+                <div class="drunk-game-area">
+                    <div class="street-view">
+                        <div class="street-lane left-danger">DANGER</div>
+                        <div class="street-lane safe-zone"></div>
+                        <div class="street-lane right-danger">DANGER</div>
+                    </div>
+
+                    <div class="balance-container">
+                        <div class="balance-bar">
+                            <div class="balance-zone danger-left"></div>
+                            <div class="balance-zone safe"></div>
+                            <div class="balance-zone danger-right"></div>
+                            <div class="balance-indicator" id="balance-indicator"></div>
+                        </div>
+                    </div>
+
+                    <div class="drunk-character" id="drunk-jb">
+                        <video id="jb-drunk-sprite" autoplay loop muted playsinline>
+                            <source src="" type="">
+                        </video>
+                    </div>
+
+                    <div class="drunk-companion">
+                        <div class="girl-sprite"></div>
+                        <div class="companion-bubble" id="drunk-bubble">Euh... ça va ?</div>
+                    </div>
+                </div>
+
+                <div class="drunk-progress">
+                    <div class="progress-label">Distance restante</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="drunk-progress"></div>
+                    </div>
+                </div>
+
+                <!-- Touch controls for mobile -->
+                <div class="drunk-touch-controls">
+                    <button class="touch-btn touch-left" id="drunk-btn-left">◀ GAUCHE</button>
+                    <button class="touch-btn touch-right" id="drunk-btn-right">DROITE ▶</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mini-jeu: Service Parfait (Thé) -->
+        <div id="minigame-tea" class="screen minigame-screen">
+            <div class="minigame-overlay"></div>
+            <div class="minigame-content tea-content">
+                <h2>🍵 SERVICE PARFAIT 🍵</h2>
+                <p class="minigame-instruction">Maintiens ESPACE ou CLIC pour verser, relâche au bon niveau !</p>
+
+                <div class="tea-game-area">
+                    <div class="tea-pot" id="tea-pot">
+                        <div class="tea-stream" id="tea-stream"></div>
+                    </div>
+
+                    <div class="tea-cup-container">
+                        <div class="tea-cup" id="tea-cup">
+                            <div class="tea-target-zone" id="tea-target"></div>
+                            <div class="tea-liquid" id="tea-liquid"></div>
+                            <div class="cup-pattern"></div>
+                        </div>
+                        <div class="cup-saucer"></div>
+                    </div>
+
+                    <div class="mehmet-reaction">
+                        <div class="mehmet-face" id="mehmet-face">😐</div>
+                        <div class="mehmet-comment" id="mehmet-comment">Vas-y, sers le thé...</div>
+                    </div>
+                </div>
+
+                <div class="tea-rounds">
+                    <span class="round-label">Tour</span>
+                    <span class="round-dots" id="tea-rounds">
+                        <span class="round-dot"></span>
+                        <span class="round-dot"></span>
+                        <span class="round-dot"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mini-jeu: Memory Indices -->
+        <div id="minigame-memory" class="screen minigame-screen">
+            <div class="minigame-overlay"></div>
+            <div class="minigame-content memory-content">
+                <h2>📱 SMS D'ABEL 📱</h2>
+                <p class="minigame-instruction" id="memory-instruction">Mémorise les indices !</p>
+
+                <div class="memory-game-area">
+                    <div class="phone-frame">
+                        <div class="phone-screen">
+                            <div class="sms-container" id="sms-container">
+                                <!-- SMS générés dynamiquement -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="memory-choices" id="memory-choices">
+                        <!-- Choix générés dynamiquement -->
+                    </div>
+                </div>
+
+                <div class="memory-timer">
+                    <div class="timer-bar">
+                        <div class="timer-fill" id="memory-timer-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mini-jeu: Stealth Mode -->
+        <div id="minigame-stealth" class="screen minigame-screen">
+            <div class="minigame-overlay"></div>
+            <div class="minigame-content stealth-content">
+                <h2>🤫 STEALTH MODE 🤫</h2>
+                <p class="minigame-instruction">Maintiens pour avancer, RELÂCHE quand une porte s'ouvre !</p>
+
+                <div class="stealth-game-area">
+                    <div class="corridor-view">
+                        <div class="corridor-floor-3d"></div>
+                        <div class="corridor-walls-3d"></div>
+
+                        <div class="stealth-doors" id="stealth-doors">
+                            <div class="stealth-door" data-index="0">
+                                <div class="door-frame">
+                                    <div class="door-panel"></div>
+                                </div>
+                                <div class="neighbor" id="neighbor-0">👴</div>
+                            </div>
+                            <div class="stealth-door" data-index="1">
+                                <div class="door-frame">
+                                    <div class="door-panel"></div>
+                                </div>
+                                <div class="neighbor" id="neighbor-1">👵</div>
+                            </div>
+                            <div class="stealth-door" data-index="2">
+                                <div class="door-frame">
+                                    <div class="door-panel"></div>
+                                </div>
+                                <div class="neighbor" id="neighbor-2">😠</div>
+                            </div>
+                            <div class="stealth-door goal-door" data-index="3">
+                                <div class="door-frame">
+                                    <div class="door-panel"></div>
+                                    <div class="door-label">ABEL</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stealth-jb" id="stealth-jb">
+                            <video id="jb-stealth-sprite" autoplay loop muted playsinline>
+                                <source src="" type="">
+                            </video>
+                        </div>
+                    </div>
+
+                    <div class="noise-meter">
+                        <span class="noise-label">BRUIT</span>
+                        <div class="noise-bar">
+                            <div class="noise-fill" id="noise-fill"></div>
+                        </div>
+                        <span class="noise-icon">🔊</span>
+                    </div>
+                </div>
+
+                <div class="stealth-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="stealth-progress"></div>
+                        <div class="progress-marker" id="stealth-marker">🚶</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over -->
+        <div id="game-over-screen" class="screen">
+            <div class="game-over-content">
+                <h1 class="game-over-title">GAME OVER</h1>
+                <div class="game-over-mascot">
+                    <video id="jb-defeated" autoplay loop muted playsinline>
+                        <source src="" type="">
+                    </video>
+                </div>
+                <p class="game-over-reason" id="game-over-reason">Elle est partie...</p>
+                <button class="btn-retry" onclick="restartGame()">RÉESSAYER</button>
+            </div>
+        </div>
+
+        <!-- Victory -->
+        <div id="victory-screen" class="screen">
+            <div class="victory-content">
+                <div class="confetti-container" id="confetti"></div>
+                <h1 class="victory-title">MISSION ACCOMPLIE!</h1>
+                <div class="victory-mascot">
+                    <video id="jb-victory" autoplay loop muted playsinline>
+                        <source src="" type="">
+                    </video>
+                </div>
+                <p class="victory-text">JB a réussi à ramener Léa chez Abel!<br><br>...Maintenant il doit juste trouver l'interrupteur.</p>
+                <button class="btn-replay" onclick="restartGame()">REJOUER</button>
+            </div>
+        </div>
+
+        <!-- Transition -->
+        <div id="transition-screen" class="screen">
+            <div class="transition-content">
+                <div class="transition-mascot">
+                    <video id="jb-running" autoplay loop muted playsinline>
+                        <source src="" type="">
+                    </video>
+                </div>
+                <p class="transition-text" id="transition-text">En route...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+</html>

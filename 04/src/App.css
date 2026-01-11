@@ -1,0 +1,100 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.app {
+  height: 100%;
+  width: 100%;
+  background: #1a1a2e;
+}
+
+.back-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  color: #484f58;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: 0.05em;
+  z-index: 100;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #c9d1d9;
+}
+
+.top-buttons {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 100;
+}
+
+.council-toggle,
+.help-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #8b949e;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.council-toggle:hover,
+.help-toggle:hover {
+  background: #30363d;
+  color: #e6edf3;
+  border-color: #484f58;
+}
+
+.council-toggle {
+  font-size: 1.1rem;
+}
+
+.game-container {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  height: 100%;
+  width: 100%;
+}
+
+.city-view {
+  position: relative;
+  background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 60%, #228B22 60%, #228B22 100%);
+  overflow: hidden;
+}
+
+.panel-view {
+  border-left: 1px solid #21262d;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .game-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 50vh 1fr;
+  }
+
+  .panel-view {
+    border-left: none;
+    border-top: 1px solid #21262d;
+  }
+}

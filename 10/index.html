@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SubVeille - Appels a projets pour associations</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-top">
+        <div class="logo">
+          <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+            <rect x="4" y="8" width="32" height="24" rx="3" stroke="currentColor" stroke-width="2"/>
+            <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+            <circle cx="10" cy="11" r="1.5" fill="currentColor"/>
+            <circle cx="15" cy="11" r="1.5" fill="currentColor"/>
+            <circle cx="20" cy="11" r="1.5" fill="currentColor"/>
+            <path d="M10 20h12M10 25h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h1 class="title">SubVeille</h1>
+        </div>
+
+        <!-- User Menu -->
+        <div class="user-menu" id="userMenu">
+          <!-- Non connecte -->
+          <button class="btn-login" id="btnLogin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            Connexion
+          </button>
+
+          <!-- Connecte (cache par defaut) -->
+          <div class="user-logged hidden" id="userLogged">
+            <button class="btn-my-aaps" id="btnMyAaps">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+              </svg>
+              Mes AAP
+              <span class="badge-count hidden" id="badgeCount">0</span>
+            </button>
+            <div class="user-dropdown">
+              <button class="btn-user" id="btnUser">
+                <span class="user-avatar" id="userAvatar">U</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </button>
+              <div class="dropdown-menu hidden" id="dropdownMenu">
+                <button class="dropdown-item" id="btnProfile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  Mon profil
+                </button>
+                <button class="dropdown-item" id="btnLogout">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                  </svg>
+                  Deconnexion
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="subtitle">Trouvez les appels a projets pour votre association</p>
+    </header>
+
+    <!-- SEARCH & FILTERS -->
+    <section class="search-section">
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Rechercher par mot-cle, secteur, territoire..."
+            autocomplete="off"
+          >
+          <button class="search-btn" id="searchBtn" aria-label="Rechercher">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtres -->
+      <div class="filters-bar">
+        <!-- Recommandations IA -->
+        <div class="filter-group filter-reco hidden" id="filterRecoGroup">
+          <button class="btn-reco" id="btnReco">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <span>Pour moi</span>
+          </button>
+          <button class="btn-ai" id="btnSmartReco">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a4 4 0 0 1 4 4c0 1.1-.9 2-2 2h-4a2 2 0 0 1-2-2 4 4 0 0 1 4-4z"/>
+              <path d="M8 8v8a4 4 0 0 0 8 0V8"/>
+              <path d="M12 16v6"/>
+            </svg>
+            <span>Top 10 IA</span>
+          </button>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Secteur</label>
+          <select id="filterSecteur" class="filter-select">
+            <option value="">Tous les secteurs</option>
+            <option value="culture">Culture</option>
+            <option value="environnement">Environnement</option>
+            <option value="social">Action sociale</option>
+            <option value="education">Education</option>
+            <option value="sante">Sante</option>
+            <option value="sport">Sport</option>
+            <option value="solidarite">Solidarite internationale</option>
+            <option value="insertion">Insertion professionnelle</option>
+            <option value="numerique">Numerique</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Financeur</label>
+          <select id="filterFinanceur" class="filter-select">
+            <option value="">Tous</option>
+            <option value="etat">Etat</option>
+            <option value="region">Region</option>
+            <option value="departement">Departement</option>
+            <option value="commune">Commune</option>
+            <option value="europe">Europe</option>
+            <option value="fondation">Fondation</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Statut</label>
+          <select id="filterStatut" class="filter-select">
+            <option value="ouvert">Ouverts</option>
+            <option value="bientot">Bientot clos</option>
+            <option value="tous">Tous</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Montant min</label>
+          <select id="filterMontant" class="filter-select">
+            <option value="">Tous montants</option>
+            <option value="1000">+ de 1 000 EUR</option>
+            <option value="5000">+ de 5 000 EUR</option>
+            <option value="10000">+ de 10 000 EUR</option>
+            <option value="50000">+ de 50 000 EUR</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABS -->
+    <div class="tabs-container hidden" id="tabsContainer">
+      <button class="tab active" data-tab="search" id="tabSearch">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+        Recherche
+      </button>
+      <button class="tab" data-tab="saved" id="tabSaved">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+        </svg>
+        Mes AAP
+        <span class="tab-badge hidden" id="tabBadge">0</span>
+      </button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- Results List -->
+      <div class="results-container">
+        <div class="results-header">
+          <h2 class="results-title">Appels a projets</h2>
+          <span class="results-count" id="resultsCount">-</span>
+        </div>
+
+        <div class="results-list" id="resultsList">
+          <!-- Placeholder -->
+          <div class="results-placeholder" id="resultsPlaceholder">
+            <svg class="placeholder-icon" viewBox="0 0 80 80" fill="none">
+              <rect x="10" y="15" width="60" height="50" rx="4" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+              <path d="M10 28h60" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+              <path d="M20 38h30M20 46h20M20 54h25" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.2"/>
+            </svg>
+            <p class="placeholder-text">Lancez une recherche pour trouver des appels a projets</p>
+            <p class="placeholder-subtext">ou explorez par secteur avec les filtres</p>
+          </div>
+
+          <!-- Results will be inserted here -->
+        </div>
+      </div>
+
+      <!-- Detail Panel -->
+      <aside class="detail-panel hidden" id="detailPanel">
+        <button class="detail-close" id="detailPanelClose" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+        <div class="detail-content" id="detailPanelContent">
+          <!-- Dynamic content -->
+        </div>
+      </aside>
+
+      <!-- Saved AAPs View (hidden by default) -->
+      <div class="saved-container hidden" id="savedContainer">
+        <div class="saved-header">
+          <h2 class="saved-title">Mes appels a projets</h2>
+          <div class="saved-filters">
+            <select id="filterSavedStatus" class="filter-select">
+              <option value="">Tous les statuts</option>
+              <option value="saved">Sauvegardes</option>
+              <option value="applied">Candidatures envoyees</option>
+              <option value="accepted">Acceptes</option>
+              <option value="rejected">Rejetes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="saved-stats" id="savedStats">
+          <div class="stat-item">
+            <span class="stat-value" id="statTotal">0</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat-item stat-saved">
+            <span class="stat-value" id="statSaved">0</span>
+            <span class="stat-label">Sauvegardes</span>
+          </div>
+          <div class="stat-item stat-applied">
+            <span class="stat-value" id="statApplied">0</span>
+            <span class="stat-label">Candidatures</span>
+          </div>
+          <div class="stat-item stat-accepted">
+            <span class="stat-value" id="statAccepted">0</span>
+            <span class="stat-label">Acceptes</span>
+          </div>
+        </div>
+
+        <div class="saved-list" id="savedList">
+          <!-- Saved AAPs will be inserted here -->
+          <div class="saved-placeholder" id="savedPlaceholder">
+            <svg class="placeholder-icon" viewBox="0 0 80 80" fill="none">
+              <path d="M40 15l-20 15v35l20-15 20 15V30L40 15z" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+            </svg>
+            <p class="placeholder-text">Aucun appel sauvegarde</p>
+            <p class="placeholder-subtext">Cliquez sur le coeur pour sauvegarder un AAP</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- SOURCES INFO -->
+    <section class="sources-section">
+      <h3 class="sources-title">Sources de donnees</h3>
+      <div class="sources-list">
+        <a href="https://aides-territoires.beta.gouv.fr" target="_blank" rel="noopener" class="source-item">
+          <span class="source-name">Aides-territoires</span>
+          <span class="source-type">API gouvernementale</span>
+        </a>
+        <a href="https://www.data.gouv.fr" target="_blank" rel="noopener" class="source-item">
+          <span class="source-name">data.gouv.fr</span>
+          <span class="source-type">Subventions publiques</span>
+        </a>
+        <a href="https://www.fondationdefrance.org" target="_blank" rel="noopener" class="source-item">
+          <span class="source-name">Fondation de France</span>
+          <span class="source-type">Fondations</span>
+        </a>
+        <a href="https://www.europe-en-france.gouv.fr" target="_blank" rel="noopener" class="source-item">
+          <span class="source-name">Europe en France</span>
+          <span class="source-type">Fonds europeens</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p class="footer-text">
+        Outil de veille pour associations et acteurs de l'ESS
+      </p>
+      <p class="footer-credit">UnJourUneApp #10</p>
+    </footer>
+
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay hidden" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Recherche en cours...</p>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- AUTH MODAL -->
+  <div class="modal-overlay hidden" id="authModal">
+    <div class="modal">
+      <button class="modal-close" id="authModalClose">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <div class="modal-header">
+        <h2 class="modal-title" id="authModalTitle">Connexion</h2>
+        <p class="modal-subtitle">Accedez a vos appels sauvegardes</p>
+      </div>
+
+      <form class="auth-form" id="authForm">
+        <div class="form-group">
+          <label class="form-label" for="authEmail">Email</label>
+          <input type="email" id="authEmail" class="form-input" placeholder="votre@email.fr" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="authPassword">Mot de passe</label>
+          <input type="password" id="authPassword" class="form-input" placeholder="••••••••" required minlength="6">
+        </div>
+
+        <div class="form-error hidden" id="authError"></div>
+
+        <button type="submit" class="btn-primary" id="authSubmit">Se connecter</button>
+      </form>
+
+      <div class="auth-switch">
+        <span id="authSwitchText">Pas encore de compte ?</span>
+        <button type="button" class="auth-link" id="authSwitchBtn">Creer un compte</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE MODAL -->
+  <div class="modal-overlay hidden" id="profileModal">
+    <div class="modal modal-large">
+      <button class="modal-close" id="profileModalClose">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <div class="modal-header">
+        <h2 class="modal-title">Profil de l'association</h2>
+        <p class="modal-subtitle">Ces informations seront reutilisables pour vos candidatures</p>
+      </div>
+
+      <form class="profile-form" id="profileForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="profileNom">Nom de l'association</label>
+            <input type="text" id="profileNom" class="form-input" placeholder="Mon Association">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="profileSiret">SIRET</label>
+            <input type="text" id="profileSiret" class="form-input" placeholder="123 456 789 00012">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="profileDescription">Description de l'association (pour l'IA)</label>
+          <textarea id="profileDescription" class="form-textarea" rows="3" placeholder="Decrivez les activites, la mission et les projets de votre association..."></textarea>
+          <span class="form-hint">Cette description aide l'IA a trouver les AAP les plus pertinents et a generer des brouillons de candidature</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="profileAdresse">Adresse</label>
+          <input type="text" id="profileAdresse" class="form-input" placeholder="1 rue de la Paix">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="profileCP">Code postal</label>
+            <input type="text" id="profileCP" class="form-input" placeholder="75001">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="profileVille">Ville</label>
+            <input type="text" id="profileVille" class="form-input" placeholder="Paris">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="profileEmail">Email de contact</label>
+            <input type="email" id="profileEmail" class="form-input" placeholder="contact@association.fr">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="profileTel">Telephone</label>
+            <input type="tel" id="profileTel" class="form-input" placeholder="01 23 45 67 89">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Secteurs d'activite</label>
+          <div class="checkbox-group" id="profileSecteurs">
+            <label class="checkbox-item"><input type="checkbox" value="culture"> Culture</label>
+            <label class="checkbox-item"><input type="checkbox" value="environnement"> Environnement</label>
+            <label class="checkbox-item"><input type="checkbox" value="social"> Action sociale</label>
+            <label class="checkbox-item"><input type="checkbox" value="education"> Education</label>
+            <label class="checkbox-item"><input type="checkbox" value="sante"> Sante</label>
+            <label class="checkbox-item"><input type="checkbox" value="sport"> Sport</label>
+            <label class="checkbox-item"><input type="checkbox" value="insertion"> Insertion</label>
+            <label class="checkbox-item"><input type="checkbox" value="numerique"> Numerique</label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="profileBudget">Budget annuel (EUR)</label>
+            <input type="number" id="profileBudget" class="form-input" placeholder="50000">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="profileSalaries">Nombre de salaries</label>
+            <input type="number" id="profileSalaries" class="form-input" placeholder="0">
+          </div>
+        </div>
+
+        <div class="form-error hidden" id="profileError"></div>
+
+        <button type="submit" class="btn-primary">Enregistrer</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/supabase-config.js"></script>
+  <script src="js/supabase-auth.js"></script>
+  <script src="js/supabase-aaps.js"></script>
+  <script src="js/sources.js"></script>
+  <script src="js/recommendation.js"></script>
+  <script src="js/ai-service.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

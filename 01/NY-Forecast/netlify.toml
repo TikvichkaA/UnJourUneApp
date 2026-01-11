@@ -1,0 +1,11 @@
+[build]
+  # Pas de build nécessaire, c'est une app statique
+  publish = "."
+
+[[redirects]]
+  # Rediriger seulement les routes 404 vers index.html (pour les query params)
+  # Ne pas utiliser force = true pour que les fichiers statiques (CSS, JS) soient servis normalement
+  from = "/*"
+  to = "/index.html"
+  status = 200
+

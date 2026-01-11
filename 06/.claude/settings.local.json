@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.cnews.fr)",
+      "WebFetch(domain:www.linternaute.fr)",
+      "WebFetch(domain:fr.wikiquote.org)"
+    ]
+  }
+}

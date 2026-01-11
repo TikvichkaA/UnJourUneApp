@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:aides-territoires.beta.gouv.fr)",
+      "WebSearch",
+      "WebFetch(domain:api.gouv.fr)",
+      "Bash(python -m http.server:*)"
+    ]
+  }
+}

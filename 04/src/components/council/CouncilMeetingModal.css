@@ -1,0 +1,636 @@
+/* ============================================
+   COUNCIL MEETING MODAL
+   ============================================ */
+
+.council-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.council-modal {
+  background: #161b22;
+  border: 2px solid #30363d;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 95%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.council-header {
+  background: #0d1117;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #30363d;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.council-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.council-icon {
+  font-size: 1.5rem;
+}
+
+.council-title h2 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #e6edf3;
+  margin: 0;
+}
+
+/* Progress indicator */
+.council-progress {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.progress-dot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.progress-dot .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #30363d;
+  transition: all 0.3s;
+}
+
+.progress-dot.active .dot {
+  background: #58a6ff;
+}
+
+.progress-dot.current .dot {
+  background: #58a6ff;
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+}
+
+.phase-label {
+  font-size: 0.65rem;
+  color: #6e7681;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.progress-dot.active .phase-label {
+  color: #8b949e;
+}
+
+.progress-dot.current .phase-label {
+  color: #58a6ff;
+}
+
+/* ============================================
+   BODY LAYOUT
+   ============================================ */
+
+.council-body {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.council-main {
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+/* ============================================
+   SIDEBAR - Councilors List
+   ============================================ */
+
+.council-sidebar {
+  background: #0d1117;
+  border-left: 1px solid #30363d;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.council-sidebar h3 {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 0.75rem 0;
+}
+
+.councilors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.councilor-mini {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  background: #161b22;
+  border: 1px solid #21262d;
+  transition: all 0.2s;
+}
+
+.councilor-mini:hover {
+  border-color: #30363d;
+}
+
+/* Alignment colors */
+.councilor-mini.gauche {
+  border-left: 3px solid #E63946;
+}
+
+.councilor-mini.droite {
+  border-left: 3px solid #1E3A5F;
+}
+
+.councilor-mini.extreme_droite {
+  border-left: 3px solid #4A2C2A;
+}
+
+.councilor-mini.centre {
+  border-left: 3px solid #F0A500;
+}
+
+.councilor-emoji {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.councilor-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.councilor-name {
+  display: block;
+  font-size: 0.72rem;
+  color: #c9d1d9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.councilor-support-bar {
+  height: 3px;
+  background: #21262d;
+  border-radius: 2px;
+  margin-top: 0.25rem;
+  overflow: hidden;
+}
+
+.support-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f85149, #d29922 40%, #3fb950);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.support-indicator {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.support-indicator.favorable {
+  color: #3fb950;
+}
+
+.support-indicator.opposed {
+  color: #f85149;
+}
+
+/* Vote summary */
+.council-summary {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid #21262d;
+}
+
+.vote-preview {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.vote-count {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.vote-count.favorable {
+  color: #3fb950;
+}
+
+.vote-count.opposed {
+  color: #f85149;
+}
+
+.majority-indicator {
+  font-size: 0.68rem;
+  color: #6e7681;
+  text-align: center;
+}
+
+/* ============================================
+   PHASE CONTENT COMMON STYLES
+   ============================================ */
+
+.phase-content {
+  animation: fadeInPhase 0.3s ease;
+}
+
+@keyframes fadeInPhase {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Proposal card */
+.proposal-card {
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.proposal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.proposal-category {
+  font-size: 0.68rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: #0d1117;
+  color: #8b949e;
+}
+
+.proposal-cost {
+  font-size: 0.75rem;
+  color: #d29922;
+  margin-left: auto;
+}
+
+.proposal-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #e6edf3;
+  margin: 0 0 0.5rem 0;
+}
+
+.proposal-desc {
+  font-size: 0.82rem;
+  color: #8b949e;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.proposal-realworld {
+  font-size: 0.75rem;
+  color: #6e7681;
+  font-style: italic;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #30363d;
+}
+
+/* Arguments */
+.argument-bubble {
+  padding: 0.85rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  position: relative;
+}
+
+.argument-bubble.pro {
+  background: rgba(63, 185, 80, 0.1);
+  border: 1px solid rgba(63, 185, 80, 0.3);
+}
+
+.argument-bubble.con {
+  background: rgba(248, 81, 73, 0.1);
+  border: 1px solid rgba(248, 81, 73, 0.3);
+}
+
+.argument-speaker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.speaker-emoji {
+  font-size: 1.1rem;
+}
+
+.speaker-name {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #c9d1d9;
+}
+
+.speaker-alignment {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  margin-left: auto;
+}
+
+.speaker-alignment.gauche { background: rgba(230, 57, 70, 0.2); color: #E63946; }
+.speaker-alignment.droite { background: rgba(30, 58, 95, 0.3); color: #5e8bc7; }
+.speaker-alignment.extreme_droite { background: rgba(74, 44, 42, 0.3); color: #8b6b68; }
+.speaker-alignment.centre { background: rgba(240, 165, 0, 0.2); color: #F0A500; }
+
+.argument-text {
+  font-size: 0.85rem;
+  color: #e6edf3;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.argument-source {
+  font-size: 0.68rem;
+  color: #6e7681;
+  margin-top: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.argument-source::before {
+  content: '📊';
+  font-size: 0.7rem;
+}
+
+/* Strength indicator */
+.strength-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.6rem;
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.strength-badge.strong {
+  background: rgba(63, 185, 80, 0.2);
+  color: #3fb950;
+}
+
+.strength-badge.medium {
+  background: rgba(210, 153, 34, 0.2);
+  color: #d29922;
+}
+
+.strength-badge.weak {
+  background: rgba(139, 148, 158, 0.2);
+  color: #8b949e;
+}
+
+.strength-badge.critical {
+  background: rgba(248, 81, 73, 0.2);
+  color: #f85149;
+}
+
+/* Buttons */
+.council-btn {
+  background: #21262d;
+  border: 1px solid #363b42;
+  color: #c9d1d9;
+  padding: 0.65rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.council-btn:hover {
+  background: #30363d;
+  border-color: #484f58;
+}
+
+.council-btn.primary {
+  background: #238636;
+  border-color: #238636;
+  color: #fff;
+}
+
+.council-btn.primary:hover {
+  background: #2ea043;
+}
+
+.council-btn.danger {
+  background: #da3633;
+  border-color: #da3633;
+  color: #fff;
+}
+
+.council-btn.danger:hover {
+  background: #f85149;
+}
+
+.council-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+/* ============================================
+   VOTING ANIMATION
+   ============================================ */
+
+.voting-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.vote-card {
+  background: #21262d;
+  border: 2px solid #30363d;
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+  transition: all 0.5s ease;
+}
+
+.vote-card.voting {
+  animation: voting 1s ease infinite;
+}
+
+@keyframes voting {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.vote-card.pour {
+  border-color: #3fb950;
+  background: rgba(63, 185, 80, 0.1);
+}
+
+.vote-card.contre {
+  border-color: #f85149;
+  background: rgba(248, 81, 73, 0.1);
+}
+
+.vote-card.abstention {
+  border-color: #d29922;
+  background: rgba(210, 153, 34, 0.1);
+}
+
+.vote-card .councilor-emoji {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.vote-card .councilor-name {
+  font-size: 0.7rem;
+}
+
+.vote-card .vote-result {
+  font-size: 1.2rem;
+  margin-top: 0.3rem;
+}
+
+/* Result display */
+.result-banner {
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.result-banner.passed {
+  background: rgba(63, 185, 80, 0.15);
+  border: 2px solid #3fb950;
+}
+
+.result-banner.rejected {
+  background: rgba(248, 81, 73, 0.15);
+  border: 2px solid #f85149;
+}
+
+.result-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.result-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #e6edf3;
+  margin: 0 0 0.3rem 0;
+}
+
+.result-subtitle {
+  font-size: 0.85rem;
+  color: #8b949e;
+}
+
+.vote-breakdown {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.breakdown-item {
+  text-align: center;
+}
+
+.breakdown-count {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.breakdown-count.pour { color: #3fb950; }
+.breakdown-count.contre { color: #f85149; }
+.breakdown-count.abstention { color: #d29922; }
+
+.breakdown-label {
+  font-size: 0.75rem;
+  color: #6e7681;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 700px) {
+  .council-body {
+    grid-template-columns: 1fr;
+  }
+
+  .council-sidebar {
+    display: none;
+  }
+
+  .council-progress {
+    gap: 0.75rem;
+  }
+
+  .phase-label {
+    display: none;
+  }
+}

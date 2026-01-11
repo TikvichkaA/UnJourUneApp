@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JB vs la vie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="../" class="back-home">← Retour</a>
+    <div class="scanlines"></div>
+
+    <header>
+        <h1 class="glitch" data-text="JB vs la vie">JB vs la vie</h1>
+        <p class="subtitle">~ L'aide à la décision qui ne décide rien ~</p>
+    </header>
+
+    <main>
+        <!-- Écran d'accueil -->
+        <section id="home" class="screen active">
+            <div class="pixel-box">
+                <p class="intro-text">Tu dois prendre une décision ?</p>
+                <p class="intro-subtext">Pas de panique. On va pas t'aider.<br>Mais on va t'aider à t'aider.</p>
+
+                <div class="decision-input">
+                    <label for="decision">C'est quoi le dilemme ?</label>
+                    <input type="text" id="decision" placeholder="Ex: Changer de job ? Adopter un alpaga ?">
+                    <div class="options-container">
+                        <input type="text" id="option-a" placeholder="Option A">
+                        <span class="vs">VS</span>
+                        <input type="text" id="option-b" placeholder="Option B">
+                    </div>
+                </div>
+
+                <nav class="menu">
+                    <button class="pixel-btn" data-screen="tirage">
+                        <span class="icon">🎲</span> Le Tirage Décalé
+                    </button>
+                    <button class="pixel-btn" data-screen="conseil">
+                        <span class="icon">👥</span> Le Conseil des Sages
+                    </button>
+                    <button class="pixel-btn" data-screen="scenario">
+                        <span class="icon">🌀</span> Scénario Absurde
+                    </button>
+                    <button class="pixel-btn" data-screen="miroir">
+                        <span class="icon">🪞</span> Le Miroir Bienveillant
+                    </button>
+                    <button class="pixel-btn" data-screen="tribunal">
+                        <span class="icon">⚖️</span> Le Tribunal des Toi
+                    </button>
+                    <button class="pixel-btn" data-screen="excuses">
+                        <span class="icon">🎭</span> Générateur d'Excuses
+                    </button>
+                    <button class="pixel-btn" data-screen="roue">
+                        <span class="icon">🎡</span> La Roue du Chaos
+                    </button>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Module 1: Le Tirage Décalé -->
+        <section id="tirage" class="screen">
+            <div class="pixel-box">
+                <h2>🎲 Le Tirage Décalé</h2>
+                <p class="module-desc">Le hasard ne décide pas. Il révèle.</p>
+
+                <div class="coin-container">
+                    <div class="coin" id="coin">
+                        <div class="coin-face front">A</div>
+                        <div class="coin-face back">B</div>
+                    </div>
+                </div>
+
+                <button class="pixel-btn big" id="flip-btn">LANCER</button>
+
+                <div class="result-zone" id="tirage-result">
+                    <!-- Résultat dynamique -->
+                </div>
+
+                <div class="reaction-zone hidden" id="reaction-zone">
+                    <p class="reaction-question">Et là, tu ressens quoi ?</p>
+                    <div class="reaction-btns">
+                        <button class="pixel-btn small reaction-btn" data-reaction="soulage">😌 Soulagé</button>
+                        <button class="pixel-btn small reaction-btn" data-reaction="decu">😕 Déçu</button>
+                        <button class="pixel-btn small reaction-btn" data-reaction="neutre">😐 Bof</button>
+                        <button class="pixel-btn small reaction-btn" data-reaction="panique">😰 Panique</button>
+                    </div>
+                </div>
+
+                <div class="insight-zone hidden" id="tirage-insight">
+                    <!-- Insight dynamique -->
+                </div>
+
+                <button class="pixel-btn back-btn" data-screen="home">← Retour</button>
+            </div>
+        </section>
+
+        <!-- Module 2: Le Conseil des Sages -->
+        <section id="conseil" class="screen">
+            <div class="pixel-box">
+                <h2>👥 Le Conseil des Sages</h2>
+                <p class="module-desc">Des avis que tu n'as pas demandés, de gens qui n'existent pas.</p>
+
+                <div class="council-container" id="council">
+                    <!-- Personnages générés dynamiquement -->
+                </div>
+
+                <button class="pixel-btn" id="new-council-btn">Nouveau Conseil</button>
+                <button class="pixel-btn back-btn" data-screen="home">← Retour</button>
+            </div>
+        </section>
+
+        <!-- Module 3: Scénarios Absurdes -->
+        <section id="scenario" class="screen">
+            <div class="pixel-box">
+                <h2>🌀 Scénario Absurde</h2>
+                <p class="module-desc">Parfois, l'absurde éclaire mieux que la logique.</p>
+
+                <div class="scenario-container" id="scenario-container">
+                    <div class="scenario-text" id="scenario-text">
+                        <!-- Scénario généré dynamiquement -->
+                    </div>
+                </div>
+
+                <div class="scenario-reaction hidden" id="scenario-reaction">
+                    <p>Face à ce scénario improbable...</p>
+                    <div class="reaction-btns">
+                        <button class="pixel-btn small scenario-react" data-choice="a">Je préfère quand même A</button>
+                        <button class="pixel-btn small scenario-react" data-choice="b">Finalement, B</button>
+                        <button class="pixel-btn small scenario-react" data-choice="fuite">Je déménage au Tibet</button>
+                    </div>
+                </div>
+
+                <div class="scenario-insight hidden" id="scenario-insight">
+                    <!-- Insight dynamique -->
+                </div>
+
+                <button class="pixel-btn" id="new-scenario-btn">Autre Scénario</button>
+                <button class="pixel-btn back-btn" data-screen="home">← Retour</button>
+            </div>
+        </section>
+
+        <!-- Module 4: Le Miroir Bienveillant -->
+        <section id="miroir" class="screen">
+            <div class="pixel-box">
+                <h2>🪞 Le Miroir Bienveillant</h2>
+                <p class="module-desc">Des questions bizarres pour des réponses vraies.</p>
+
+                <div class="mirror-container">
+                    <div class="mirror-question" id="mirror-question">
+                        <!-- Question générée dynamiquement -->
+                    </div>
+
+                    <textarea id="mirror-answer" placeholder="Tape ta réponse ici... ou pas. C'est toi qui vois."></textarea>
+
+                    <div class="mirror-reflection hidden" id="mirror-reflection">
+                        <!-- Réflexion générée -->
+                    </div>
+                </div>
+
+                <button class="pixel-btn" id="next-question-btn">Autre Question</button>
+                <button class="pixel-btn" id="reflect-btn">Réfléchir</button>
+                <button class="pixel-btn back-btn" data-screen="home">← Retour</button>
+            </div>
+        </section>
+
+        <!-- Module 5: Le Tribunal des Toi -->
+        <section id="tribunal" class="screen">
+            <div class="pixel-box">
+                <h2>⚖️ Le Tribunal des Toi</h2>
+                <p class="module-desc">Différentes versions de toi débattent. Qui l'emporte ?</p>
+
+                <div class="tribunal-arena" id="tribunal-arena">
+                    <div class="tribunal-character left" id="char-left">
+                        <!-- Personnage gauche -->
+                    </div>
+                    <div class="tribunal-vs">VS</div>
+                    <div class="tribunal-character right" id="char-right">
+                        <!-- Personnage droite -->
+                    </div>
+                </div>
+
+                <div class="tribunal-debate" id="tribunal-debate">
+                    <!-- Débat généré dynamiquement -->
+                </div>
+
+                <div class="tribunal-vote">
+                    <p>Qui te convainc le plus ?</p>
+                    <div class="vote-btns">
+                        <button class="pixel-btn vote-btn" data-vote="left" id="vote-left">Voter Gauche</button>
+                        <button class="pixel-btn vote-btn" data-vote="draw">Match nul</button>
+                        <button class="pixel-btn vote-btn" data-vote="right" id="vote-right">Voter Droite</button>
+                    </div>
+                </div>
+
+                <div class="tribunal-verdict hidden" id="tribunal-verdict">
+                    <!-- Verdict -->
+                </div>
+
+                <button class="pixel-btn" id="new-tribunal-btn">Nouveau Débat</button>
+                <button class="pixel-btn back-btn" data-screen="home">← Retour</button>
+            </div>
+        </section>
+
+        <!-- Module 6: Générateur d'Excuses -->
+        <section id="excuses" class="screen">
+            <div class="pixel-box">
+                <h2>🎭 Générateur d'Excuses</h2>
+                <p class="module-desc">Des excuses absurdes pour justifier tes choix. Laquelle défends-tu le mieux ?</p>
+
+                <div class="excuses-container">
+                    <div class="excuse-card" id="excuse-a">
+                        <div class="excuse-label">Pour choisir <span class="option-name-a">A</span></div>
+                        <div class="excuse-text" id="excuse-text-a"></div>
+                        <button class="pixel-btn small defend-btn" data-option="a">Je défends cette excuse !</button>
+                    </div>
+                    <div class="excuse-card" id="excuse-b">
+                        <div class="excuse-label">Pour choisir <span class="option-name-b">B</span></div>
+                        <div class="excuse-text" id="excuse-text-b"></div>
+                        <button class="pixel-btn small defend-btn" data-option="b">Je défends cette excuse !</button>
+                    </div>
+                </div>
+
+                <div class="excuse-insight hidden" id="excuse-insight">
+                    <!-- Insight -->
+                </div>
+
+                <button class="pixel-btn" id="new-excuses-btn">Nouvelles Excuses</button>
+                <button class="pixel-btn back-btn" data-screen="home">← Retour</button>
+            </div>
+        </section>
+
+        <!-- Module 7: La Roue du Chaos -->
+        <section id="roue" class="screen">
+            <div class="pixel-box">
+                <h2>🎡 La Roue du Chaos</h2>
+                <p class="module-desc">Tourne la roue. Accomplis le défi. Découvre ce que tu ressens.</p>
+
+                <div class="wheel-container">
+                    <div class="wheel" id="wheel">
+                        <div class="wheel-segment" data-segment="0">🎭</div>
+                        <div class="wheel-segment" data-segment="1">📞</div>
+                        <div class="wheel-segment" data-segment="2">✍️</div>
+                        <div class="wheel-segment" data-segment="3">🔮</div>
+                        <div class="wheel-segment" data-segment="4">🎲</div>
+                        <div class="wheel-segment" data-segment="5">💭</div>
+                        <div class="wheel-segment" data-segment="6">⏰</div>
+                        <div class="wheel-segment" data-segment="7">🪙</div>
+                    </div>
+                    <div class="wheel-pointer">▼</div>
+                </div>
+
+                <button class="pixel-btn big" id="spin-btn">TOURNER</button>
+
+                <div class="wheel-challenge hidden" id="wheel-challenge">
+                    <!-- Défi -->
+                </div>
+
+                <div class="wheel-response hidden" id="wheel-response">
+                    <textarea id="challenge-answer" placeholder="Ta réponse au défi..."></textarea>
+                    <button class="pixel-btn" id="submit-challenge">J'ai fait le défi</button>
+                </div>
+
+                <div class="wheel-insight hidden" id="wheel-insight">
+                    <!-- Insight -->
+                </div>
+
+                <button class="pixel-btn back-btn" data-screen="home">← Retour</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Fait avec 🎮 et un peu de chaos bienveillant</p>
+        <p class="disclaimer">Cette app ne donne aucun conseil. Elle t'aide juste à t'écouter.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

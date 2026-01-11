@@ -1,0 +1,21 @@
+{
+  "name": "politiciens-import-scripts",
+  "version": "1.0.0",
+  "description": "Scripts d'import des données des politiciens français",
+  "type": "module",
+  "scripts": {
+    "import:all": "node import-all.js",
+    "import:deputes": "node import-deputes.js",
+    "import:votes": "node import-votes.js",
+    "import:commissions": "node import-commissions.js",
+    "import:hatvp": "node import-hatvp-v2.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.2",
+    "sax": "^1.4.1",
+    "unzipper": "^0.12.3",
+    "xml2js": "^0.6.2"
+  }
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EntreGraphe - Visualisation des liens d'entreprises</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+          <circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="2"/>
+          <circle cx="28" cy="12" r="6" stroke="currentColor" stroke-width="2"/>
+          <circle cx="20" cy="28" r="6" stroke="currentColor" stroke-width="2"/>
+          <line x1="16" y1="15" x2="18" y2="23" stroke="currentColor" stroke-width="2"/>
+          <line x1="24" y1="15" x2="22" y2="23" stroke="currentColor" stroke-width="2"/>
+          <line x1="18" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <h1 class="title">EntreGraphe</h1>
+      </div>
+      <p class="subtitle">Explorez les liens entre entreprises francaises</p>
+    </header>
+
+    <!-- SEARCH SECTION -->
+    <section class="search-section">
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Rechercher une entreprise (nom ou SIREN)..."
+            autocomplete="off"
+          >
+          <button class="search-btn" id="searchBtn" aria-label="Rechercher">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+        <div class="search-suggestions" id="searchSuggestions"></div>
+      </div>
+
+      <!-- API Key Input -->
+      <div class="api-key-section">
+        <button class="api-key-toggle" id="apiKeyToggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+          </svg>
+          <span>Configurer API Pappers</span>
+        </button>
+        <div class="api-key-form hidden" id="apiKeyForm">
+          <input
+            type="password"
+            id="apiKeyInput"
+            class="api-key-input"
+            placeholder="Votre cle API Pappers..."
+          >
+          <button class="api-key-save" id="apiKeySave">Sauvegarder</button>
+          <p class="api-key-hint">
+            Obtenez votre cle API sur <a href="https://www.pappers.fr/api" target="_blank" rel="noopener">pappers.fr/api</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- Graph Container -->
+      <div class="graph-container" id="graphContainer">
+        <div class="graph-placeholder" id="graphPlaceholder">
+          <svg class="placeholder-icon" viewBox="0 0 80 80" fill="none">
+            <circle cx="20" cy="20" r="8" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+            <circle cx="60" cy="20" r="8" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+            <circle cx="40" cy="50" r="8" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+            <circle cx="15" cy="60" r="8" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+            <circle cx="65" cy="60" r="8" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+            <line x1="26" y1="24" x2="34" y2="44" stroke="currentColor" stroke-width="1.5" opacity="0.2"/>
+            <line x1="54" y1="24" x2="46" y2="44" stroke="currentColor" stroke-width="1.5" opacity="0.2"/>
+            <line x1="22" y1="54" x2="33" y2="52" stroke="currentColor" stroke-width="1.5" opacity="0.2"/>
+            <line x1="47" y1="52" x2="58" y2="54" stroke="currentColor" stroke-width="1.5" opacity="0.2"/>
+          </svg>
+          <p class="placeholder-text">Recherchez une entreprise pour visualiser ses liens</p>
+          <p class="placeholder-subtext">Dirigeants, beneficiaires, filiales et participations</p>
+        </div>
+        <svg id="graphSvg" class="graph-svg"></svg>
+      </div>
+
+      <!-- Info Panel -->
+      <aside class="info-panel hidden" id="infoPanel">
+        <button class="info-close" id="infoPanelClose" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+        <div class="info-content" id="infoPanelContent">
+          <!-- Dynamic content -->
+        </div>
+      </aside>
+
+    </main>
+
+    <!-- LEGEND -->
+    <section class="legend-section">
+      <div class="legend-header">
+        <h3 class="legend-title">Legende</h3>
+        <div class="stats-panel" id="statsPanel"></div>
+      </div>
+      <div class="legend-items">
+        <div class="legend-item">
+          <span class="legend-node node-company"></span>
+          <span>Entreprise</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-node node-person"></span>
+          <span>Personne</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-node node-bridge"></span>
+          <span>Noeud-pont</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-line line-dirigeant"></span>
+          <span>Dirigeant</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-line line-beneficiaire"></span>
+          <span>Beneficiaire</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-line line-actionnaire"></span>
+          <span>Actionnaire</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-expand"></span>
+          <span>Etendre (clic +)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p class="footer-text">
+        Donnees fournies par <a href="https://www.pappers.fr" target="_blank" rel="noopener">Pappers</a>
+      </p>
+      <p class="footer-credit">UnJourUneApp #08</p>
+    </footer>
+
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay hidden" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Chargement des donnees...</p>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/graph.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

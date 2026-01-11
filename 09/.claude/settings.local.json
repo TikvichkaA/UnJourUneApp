@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.hatvp.fr)",
+      "Bash(curl:*)",
+      "Bash(unzip:*)"
+    ]
+  }
+}
