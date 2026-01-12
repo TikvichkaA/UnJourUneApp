@@ -17,15 +17,13 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY ||
 // Import des connecteurs
 const AidesTerritoiresConnector = require('./connectors/aides-territoires');
 const FondationFranceConnector = require('./connectors/fondation-france');
+const RegionIdfConnector = require('./connectors/region-idf');
 
 // Registry des connecteurs disponibles
 const CONNECTORS = {
   'aides-territoires': AidesTerritoiresConnector,
   'fondation-france': FondationFranceConnector,
-  // Ajouter d'autres connecteurs ici:
-  // 'europe-en-france': EuropeEnFranceConnector,
-  // 'boamp': BoampConnector,
-  // 'region-idf': RegionIdfConnector,
+  'region-idf': RegionIdfConnector,
 };
 
 // Parse arguments

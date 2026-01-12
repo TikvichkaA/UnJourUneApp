@@ -5,7 +5,7 @@ class App {
         this.graph = null;
         this.currentFilters = {
             parties: [],
-            linkTypes: ['commission', 'vote', 'personal'],
+            linkTypes: ['commission', 'vote', 'company', 'personal'],
             commissionType: null,  // null = toutes, 'permanente', 'enquête'
             maxPoliticians: 100
         };
@@ -205,7 +205,7 @@ class App {
 
         this.currentFilters = {
             parties: parties,
-            linkTypes: ['commission', 'vote', 'personal'],
+            linkTypes: ['commission', 'vote', 'company', 'personal'],
             commissionType: null,
             maxPoliticians: 100
         };

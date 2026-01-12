@@ -132,6 +132,49 @@
             font-size: 0.75rem;
         }
 
+        .contact {
+            max-width: 500px;
+            margin: 3rem auto 0;
+            padding: 2rem;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #333;
+            margin-bottom: 0.75rem;
+        }
+
+        .contact p {
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .contact a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #0077b5;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border: 1px solid #0077b5;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .contact a:hover {
+            background: #0077b5;
+            color: white;
+        }
+
         @media (max-width: 500px) {
             .calendar {
                 gap: 0.3rem;
@@ -207,10 +250,16 @@
             <span class="day-number">10</span>
             <span class="day-name">SubVeille</span>
         </a>
-        <div class="day upcoming"><span class="day-number">11</span></div>
+        <a href="./11/" class="day available">
+            <span class="day-number">11</span>
+            <span class="day-name">Dreamhouse</span>
+        </a>
 
         <!-- Semaine 3 -->
-        <div class="day upcoming"><span class="day-number">12</span></div>
+        <a href="./12/" class="day available">
+            <span class="day-number">12</span>
+            <span class="day-name">Planning</span>
+        </a>
         <div class="day upcoming"><span class="day-number">13</span></div>
         <div class="day upcoming"><span class="day-number">14</span></div>
         <div class="day upcoming"><span class="day-number">15</span></div>
@@ -236,6 +285,14 @@
         <div class="day upcoming"><span class="day-number">31</span></div>
         <div class="day empty"></div>
     </main>
+
+    <section class="contact">
+        <h2>Besoin d'une app sur mesure ?</h2>
+        <p>Apparemment maintenant je fais des apps - s'il vous en faut une aussi, contactez-moi.</p>
+        <a href="https://www.linkedin.com/in/emmanuel-pinglier-449988151/" target="_blank" rel="noopener">
+            Me contacter sur LinkedIn
+        </a>
+    </section>
 
     <footer>
         31 jours, 31 apps

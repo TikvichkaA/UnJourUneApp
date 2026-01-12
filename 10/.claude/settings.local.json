@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.fondationdefrance.org)",
+      "WebFetch(domain:datasubvention.beta.gouv.fr)",
+      "WebFetch(domain:www.data.gouv.fr)",
+      "WebFetch(domain:data.iledefrance.fr)"
+    ]
+  }
+}

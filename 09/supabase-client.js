@@ -587,6 +587,55 @@ class DataService {
             }
         }
 
+        // Ajouter les entreprises (participations HATVP)
+        if (!filters.linkTypes || filters.linkTypes.includes('company')) {
+            const polCompanies = await this.client.query('politician_companies', {
+                select: 'politician_id,company_id,role,companies(id,name,sector)'
+            });
+
+            const companyMembers = new Map();
+
+            for (const pc of polCompanies) {
+                if (!nodeMap.has(pc.politician_id)) continue;
+                if (!pc.companies) continue;
+
+                if (!companyMembers.has(pc.company_id)) {
+                    companyMembers.set(pc.company_id, {
+                        company: pc.companies,
+                        politicians: []
+                    });
+                }
+                companyMembers.get(pc.company_id).politicians.push({
+                    id: pc.politician_id,
+                    role: pc.role
+                });
+            }
+
+            // Limiter aux entreprises avec au moins 1 politicien visible
+            for (const [companyId, data] of companyMembers) {
+                if (data.politicians.length === 0) continue;
+
+                if (!nodeMap.has(companyId)) {
+                    nodes.push({
+                        id: companyId,
+                        name: data.company.name,
+                        type: 'company',
+                        sector: data.company.sector,
+                        radius: 15
+                    });
+                    nodeMap.set(companyId, true);
+                }
+
+                for (const pol of data.politicians) {
+                    links.push({
+                        source: pol.id,
+                        target: companyId,
+                        type: 'company'
+                    });
+                }
+            }
+        }
+
         return { nodes, links };
     }
 }

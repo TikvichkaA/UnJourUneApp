@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#FF1493" id="theme-color">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Dreamhouse">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Dreamhouse Quest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
+</head>
+<body>
+    <a href="../" class="back-home">← Retour</a>
+
+    <!-- Toggle mode sombre -->
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Mode sombre">
+        <span id="dark-mode-icon">🌙</span>
+    </button>
+
+    <!-- Bandeau des rappels permanents -->
+    <div class="reminders-sidebar" id="reminders-sidebar">
+        <button class="reminders-toggle" id="reminders-toggle" onclick="toggleRemindersSidebar()">
+            <span>📌</span>
+        </button>
+        <div class="reminders-content">
+            <h4>📌 Rappels</h4>
+            <div class="reminders-list" id="reminders-list">
+                <!-- Généré par JS -->
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Header avec stats -->
+        <header class="game-header">
+            <h1>🏠 Jewtown Barbie Dreamhouse</h1>
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-value" id="points">0</span>
+                    <span class="stat-label">points</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-icon">✅</span>
+                    <span class="stat-value" id="completed">0</span>
+                    <span class="stat-label">missions</span>
+                </div>
+                <div class="level-badge" id="level-badge">
+                    <span class="badge-icon">🌱</span>
+                    <span class="badge-name">Rookie</span>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+                <span class="progress-text" id="progress-text">0%</span>
+            </div>
+        </header>
+
+        <!-- Message motivant -->
+        <div class="motivation-bubble" id="motivation">
+            Bienvenue ! Prêt·e à faire briller la Dreamhouse ? ✨
+        </div>
+
+        <!-- Modes activité rapides -->
+        <div class="activity-modes">
+            <button class="activity-btn" onclick="startActivity('cooking')">
+                <span>🍳</span> Je cuisine
+            </button>
+            <button class="activity-btn" onclick="startActivity('shower')">
+                <span>🚿</span> Je me douche
+            </button>
+            <button class="activity-btn departure" onclick="startActivity('departure')">
+                <span>✈️</span> Je pars
+            </button>
+        </div>
+
+        <!-- Timer machine à laver -->
+        <div class="timer-section" id="timer-section">
+            <div class="timer-header">
+                <h3>🧺 Machine à laver</h3>
+                <button class="timer-close" onclick="cancelTimer()">✕</button>
+            </div>
+            <div class="timer-display" id="timer-display">--:--</div>
+            <div class="timer-controls">
+                <button class="timer-btn" onclick="startLaundryTimer(60)">1h</button>
+                <button class="timer-btn" onclick="startLaundryTimer(90)">1h30</button>
+                <button class="timer-btn" onclick="startLaundryTimer(120)">2h</button>
+            </div>
+            <div class="timer-status" id="timer-status"></div>
+        </div>
+
+        <!-- Priorités / Tâches urgentes -->
+        <div class="priorities-section" id="priorities-section">
+            <h3>🔥 À faire maintenant</h3>
+            <div class="priorities-list" id="priorities-list">
+                <!-- Généré par JS -->
+            </div>
+        </div>
+
+        <!-- Zones de la maison -->
+        <div class="zones-grid">
+            <button class="zone-card" data-zone="kitchen" onclick="showZone('kitchen')">
+                <span class="zone-emoji">👩🏻‍🍳</span>
+                <span class="zone-name">Cuisine</span>
+                <span class="zone-progress" id="kitchen-progress">0/12</span>
+            </button>
+            <button class="zone-card" data-zone="bathroom" onclick="showZone('bathroom')">
+                <span class="zone-emoji">🚿</span>
+                <span class="zone-name">Salle de bain</span>
+                <span class="zone-progress" id="bathroom-progress">0/3</span>
+            </button>
+            <button class="zone-card" data-zone="laundry" onclick="showZone('laundry')">
+                <span class="zone-emoji">🧺</span>
+                <span class="zone-name">Linge</span>
+                <span class="zone-progress" id="laundry-progress">0/5</span>
+            </button>
+            <button class="zone-card" data-zone="general" onclick="showZone('general')">
+                <span class="zone-emoji">🏠</span>
+                <span class="zone-name">Rangement</span>
+                <span class="zone-progress" id="general-progress">0/6</span>
+            </button>
+        </div>
+
+        <!-- Panel des missions (caché par défaut) -->
+        <div class="missions-panel" id="missions-panel">
+            <button class="close-panel" onclick="closePanel()">✕</button>
+            <h2 class="panel-title" id="panel-title">Missions</h2>
+            <div class="missions-list" id="missions-list">
+                <!-- Missions générées par JS -->
+            </div>
+        </div>
+
+        <!-- Panel statistiques -->
+        <div class="missions-panel" id="stats-panel">
+            <button class="close-panel" onclick="closeStatsPanel()">✕</button>
+            <h2 class="panel-title">📊 Statistiques</h2>
+            <div class="stats-content" id="stats-content">
+                <!-- Généré par JS -->
+            </div>
+        </div>
+
+        <!-- Panel photo aide -->
+        <div class="photo-modal" id="photo-modal" onclick="closePhotoModal()">
+            <div class="photo-modal-content" onclick="event.stopPropagation()">
+                <button class="close-panel" onclick="closePhotoModal()">✕</button>
+                <h3 id="photo-title">Aide</h3>
+                <div class="photo-placeholder" id="photo-placeholder">
+                    <span>📷</span>
+                    <p>Photo à venir</p>
+                </div>
+                <p class="photo-desc" id="photo-desc"></p>
+            </div>
+        </div>
+
+        <!-- Info box -->
+        <div class="info-box">
+            <h3>📍 Infos pratiques</h3>
+            <p><strong>Adresse :</strong> 131 rue Youri Gagarine, 94800 Villejuif</p>
+            <p><strong>Métro :</strong> 7 Villejuif Louis Aragon ou 14 L'Haÿ-les-Roses</p>
+            <p><strong>Accès :</strong> Bât 2 • Digicode 97A6 • Interphone Pham • 7e étage</p>
+            <p>🚪 Appartement avec paillasson gris à rayures</p>
+        </div>
+
+        <!-- Boutons d'action -->
+        <div class="action-buttons">
+            <button class="action-btn stats" onclick="showStats()">
+                <span>📊</span> Statistiques
+            </button>
+            <button class="action-btn custom" onclick="showCustomTasks()">
+                <span>➕</span> Tâches custom
+            </button>
+        </div>
+
+        <!-- Badges de progression -->
+        <div class="badges-section">
+            <h3>🏆 Progression</h3>
+            <div class="badges-grid" id="badges-grid">
+                <div class="badge unlocked" data-badge="rookie" title="Rookie - Premier pas !">
+                    <span>🌱</span>
+                </div>
+                <div class="badge locked" data-badge="helper" title="Helper - 25% complété">
+                    <span>🧹</span>
+                </div>
+                <div class="badge locked" data-badge="cleaner" title="Cleaner - 50% complété">
+                    <span>🧽</span>
+                </div>
+                <div class="badge locked" data-badge="pro" title="Pro - 75% complété">
+                    <span>💫</span>
+                </div>
+                <div class="badge locked" data-badge="legend" title="Legend - 100% complété !">
+                    <span>👑</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges d'accomplissement -->
+        <div class="badges-section achievements">
+            <h3>🎖️ Accomplissements</h3>
+            <div class="badges-grid" id="achievements-grid">
+                <div class="badge locked" data-achievement="early_bird" title="Early Bird - Tâche avant 9h">
+                    <span>🌅</span>
+                </div>
+                <div class="badge locked" data-achievement="night_owl" title="Night Owl - Tâche après 21h">
+                    <span>🦉</span>
+                </div>
+                <div class="badge locked" data-achievement="late_cleaner" title="Late Cleaner - Rattraper du retard">
+                    <span>😅</span>
+                </div>
+                <div class="badge locked" data-achievement="kitchen_master" title="Chef de Cuisine - Zone cuisine 100%">
+                    <span>👩‍🍳</span>
+                </div>
+                <div class="badge locked" data-achievement="bathroom_pro" title="Salle de Bain Pro - Zone SdB 100%">
+                    <span>🛁</span>
+                </div>
+                <div class="badge locked" data-achievement="laundry_expert" title="Maître du Linge - Zone linge 100%">
+                    <span>🧺</span>
+                </div>
+                <div class="badge locked" data-achievement="tidy_freak" title="Maniaque du Rangement - Zone rangement 100%">
+                    <span>🏠</span>
+                </div>
+                <div class="badge locked" data-achievement="centurion" title="Centurion - 100 points">
+                    <span>💯</span>
+                </div>
+                <div class="badge locked" data-achievement="superstar" title="Superstar - 500 points">
+                    <span>⭐</span>
+                </div>
+                <div class="badge locked" data-achievement="legendary" title="Légendaire - 1000 points">
+                    <span>🌟</span>
+                </div>
+                <div class="badge locked" data-achievement="streak_3" title="On Fire - 3 jours parfaits d'affilée">
+                    <span>🔥</span>
+                </div>
+                <div class="badge locked" data-achievement="streak_7" title="Inarrêtable - 7 jours parfaits d'affilée">
+                    <span>⚡</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tâches custom -->
+        <div class="custom-tasks-section" id="custom-tasks-section" style="display: none;">
+            <h3>📝 Mes tâches personnalisées</h3>
+            <div class="custom-tasks-list" id="custom-tasks-list"></div>
+            <div class="add-custom-task">
+                <input type="text" id="custom-task-input" placeholder="Nouvelle tâche..." maxlength="50">
+                <button onclick="addCustomTask()">+</button>
+            </div>
+        </div>
+
+        <!-- Bouton reset -->
+        <button class="reset-btn" onclick="resetProgress()">🔄 Recommencer</button>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Audio pour le son de complétion -->
+    <audio id="complete-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRl9vT19teleXhBQEBARERERzBISEREREF" type="audio/wav">
+    </audio>
+
+    <script src="app.js"></script>
+</body>
+</html>

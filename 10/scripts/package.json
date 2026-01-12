@@ -1,0 +1,14 @@
+{
+  "name": "subveille-scripts",
+  "version": "1.0.0",
+  "description": "Scripts de synchronisation des sources AAP",
+  "type": "commonjs",
+  "scripts": {
+    "sync": "node aggregator.js",
+    "sync:dry": "node aggregator.js --dry-run",
+    "sync:fdf": "node aggregator.js --source=fondation-france --verbose"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  }
+}
