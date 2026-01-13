@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="veille-ars.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔔</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <a href="./" class="back-home">← SubVeille</a>
@@ -22,6 +23,16 @@
                 <span class="subtitle">Appels à projets - Toutes les ARS de France</span>
             </div>
             <div class="header-controls">
+                <!-- Bouton login (visible si deconnecte) -->
+                <button class="btn-login-prompt" id="btnLoginPrompt" onclick="showAuthModal()">
+                    <span>🔔</span>
+                    <span>Recevoir les alertes</span>
+                </button>
+                <!-- Bouton abonnement (visible si connecte) -->
+                <button class="btn-subscribe hidden" id="btnSubscribe" onclick="toggleSubscription()">
+                    <span id="subscribe-icon">📧</span>
+                    <span id="subscribe-text">S'abonner</span>
+                </button>
                 <button class="btn-icon" onclick="toggleDarkMode()" title="Mode sombre">
                     <span id="dark-mode-icon">🌙</span>
                 </button>
@@ -143,10 +154,39 @@
             </div>
         </div>
 
+        <!-- Modal authentification -->
+        <div class="modal" id="auth-modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeAuthModal()">✕</button>
+                <h2 id="auth-modal-title">Connexion</h2>
+                <p class="auth-subtitle">Connectez-vous pour recevoir les alertes email quotidiennes</p>
+                <form id="auth-form" onsubmit="handleAuth(event)">
+                    <div class="form-group">
+                        <label for="auth-email">Email</label>
+                        <input type="email" id="auth-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="auth-password">Mot de passe</label>
+                        <input type="password" id="auth-password" required minlength="6">
+                    </div>
+                    <div class="form-error hidden" id="auth-error"></div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="auth-submit">Se connecter</button>
+                    </div>
+                </form>
+                <div class="auth-switch">
+                    <span id="auth-switch-text">Pas de compte ?</span>
+                    <button type="button" onclick="toggleAuthMode()" id="auth-switch-btn">Creer un compte</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Toast -->
         <div class="toast" id="toast"></div>
     </div>
 
+    <script src="js/supabase-config.js"></script>
+    <script src="js/supabase-auth.js"></script>
     <script src="veille-ars.js"></script>
 </body>
 </html>

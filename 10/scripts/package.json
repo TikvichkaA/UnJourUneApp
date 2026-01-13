@@ -10,6 +10,7 @@
     "veille-ars": "node veille-ars-mailer.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
     "@xmldom/xmldom": "^0.8.10",
     "cheerio": "^1.0.0",
     "dotenv": "^16.3.1"

@@ -55,6 +55,218 @@ let state = {
     newSinceLastVisit: 0
 };
 
+// ============================================
+// Abonnement aux alertes email
+// ============================================
+
+const SUBSCRIPTION_TYPE = 'veille_ars';
+let isSubscribed = false;
+let subscriptionLoading = false;
+let authMode = 'login';
+
+// Initialiser l'authentification
+async function initAuth() {
+    // Verifier si Auth est disponible (supabase-auth.js charge)
+    if (typeof Auth === 'undefined') {
+        console.log('Auth module not loaded');
+        return;
+    }
+
+    try {
+        await Auth.init();
+        Auth.onAuthChange((user, profile) => {
+            updateAuthUI(user);
+            if (user) {
+                checkSubscription();
+            } else {
+                isSubscribed = false;
+                updateSubscribeButton();
+            }
+        });
+    } catch (error) {
+        console.error('Erreur init auth:', error);
+    }
+}
+
+function updateAuthUI(user) {
+    const loginPrompt = document.getElementById('btnLoginPrompt');
+    const subscribeBtn = document.getElementById('btnSubscribe');
+
+    if (user) {
+        loginPrompt.classList.add('hidden');
+        subscribeBtn.classList.remove('hidden');
+    } else {
+        loginPrompt.classList.remove('hidden');
+        subscribeBtn.classList.add('hidden');
+    }
+}
+
+async function checkSubscription() {
+    if (typeof Auth === 'undefined') return;
+
+    const user = Auth.getUser();
+    if (!user) return;
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('subscriptions')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('type', SUBSCRIPTION_TYPE)
+            .eq('is_active', true)
+            .maybeSingle();
+
+        isSubscribed = !error && data;
+        updateSubscribeButton();
+    } catch (error) {
+        console.error('Erreur check subscription:', error);
+    }
+}
+
+function updateSubscribeButton() {
+    const btn = document.getElementById('btnSubscribe');
+    const icon = document.getElementById('subscribe-icon');
+    const text = document.getElementById('subscribe-text');
+
+    if (subscriptionLoading) {
+        icon.textContent = '...';
+        text.textContent = 'Chargement...';
+        btn.disabled = true;
+        return;
+    }
+
+    btn.disabled = false;
+
+    if (isSubscribed) {
+        btn.classList.add('subscribed');
+        icon.textContent = '✅';
+        text.textContent = 'Abonne';
+    } else {
+        btn.classList.remove('subscribed');
+        icon.textContent = '📧';
+        text.textContent = "S'abonner";
+    }
+}
+
+async function toggleSubscription() {
+    if (typeof Auth === 'undefined') {
+        showAuthModal();
+        return;
+    }
+
+    const user = Auth.getUser();
+    if (!user) {
+        showAuthModal();
+        return;
+    }
+
+    subscriptionLoading = true;
+    updateSubscribeButton();
+
+    try {
+        if (isSubscribed) {
+            // Desabonner
+            const { error } = await supabaseClient
+                .from('subscriptions')
+                .delete()
+                .eq('user_id', user.id)
+                .eq('type', SUBSCRIPTION_TYPE);
+
+            if (error) throw error;
+            isSubscribed = false;
+            showToast('Desabonne des alertes email');
+        } else {
+            // Abonner
+            const { error } = await supabaseClient
+                .from('subscriptions')
+                .upsert({
+                    user_id: user.id,
+                    type: SUBSCRIPTION_TYPE,
+                    is_active: true
+                }, { onConflict: 'user_id,type' });
+
+            if (error) throw error;
+            isSubscribed = true;
+            showToast('Abonne aux alertes email quotidiennes');
+        }
+    } catch (error) {
+        console.error('Erreur subscription:', error);
+        showToast('Erreur: ' + error.message);
+    }
+
+    subscriptionLoading = false;
+    updateSubscribeButton();
+}
+
+// ============================================
+// Modal authentification
+// ============================================
+
+function showAuthModal() {
+    document.getElementById('auth-modal').classList.add('active');
+    document.getElementById('auth-email').focus();
+}
+
+function closeAuthModal() {
+    document.getElementById('auth-modal').classList.remove('active');
+    document.getElementById('auth-form').reset();
+    document.getElementById('auth-error').classList.add('hidden');
+}
+
+function toggleAuthMode() {
+    authMode = authMode === 'login' ? 'signup' : 'login';
+    const title = document.getElementById('auth-modal-title');
+    const submit = document.getElementById('auth-submit');
+    const switchText = document.getElementById('auth-switch-text');
+    const switchBtn = document.getElementById('auth-switch-btn');
+
+    if (authMode === 'login') {
+        title.textContent = 'Connexion';
+        submit.textContent = 'Se connecter';
+        switchText.textContent = 'Pas de compte ?';
+        switchBtn.textContent = 'Creer un compte';
+    } else {
+        title.textContent = 'Inscription';
+        submit.textContent = 'Creer un compte';
+        switchText.textContent = 'Deja un compte ?';
+        switchBtn.textContent = 'Se connecter';
+    }
+}
+
+async function handleAuth(event) {
+    event.preventDefault();
+
+    if (typeof Auth === 'undefined') {
+        showToast('Erreur: module auth non charge');
+        return;
+    }
+
+    const email = document.getElementById('auth-email').value;
+    const password = document.getElementById('auth-password').value;
+    const errorEl = document.getElementById('auth-error');
+    const submitBtn = document.getElementById('auth-submit');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Chargement...';
+
+    try {
+        if (authMode === 'login') {
+            await Auth.signIn(email, password);
+            showToast('Connecte !');
+        } else {
+            await Auth.signUp(email, password);
+            showToast('Compte cree ! Verifiez votre email.');
+        }
+        closeAuthModal();
+    } catch (error) {
+        errorEl.textContent = error.message || 'Erreur de connexion';
+        errorEl.classList.remove('hidden');
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = authMode === 'login' ? 'Se connecter' : 'Creer un compte';
+}
+
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
     initApp();
@@ -86,6 +298,9 @@ function initApp() {
     renderKeywords();
     populateRegionFilter();
     renderARSGrid();
+
+    // Initialiser l'authentification (pour les abonnements email)
+    initAuth();
 
     // Lancer le scan
     refreshFeeds();
@@ -529,10 +744,11 @@ function showToast(message) {
     setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-// Fermer modal avec Escape
+// Fermer modals avec Escape
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeKeywordModal();
+        closeAuthModal();
     }
 });
 

@@ -653,6 +653,113 @@ body {
     background: var(--border);
 }
 
+/* Subscription button */
+.btn-login-prompt {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-login-prompt:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.btn-subscribe {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    color: var(--text);
+}
+
+.btn-subscribe:hover {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
+}
+
+.btn-subscribe.subscribed {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+}
+
+.btn-subscribe.subscribed:hover {
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+.btn-subscribe:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Auth modal extras */
+.auth-subtitle {
+    color: var(--text-light);
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.auth-switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.auth-switch button {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.auth-switch button:hover {
+    text-decoration: underline;
+}
+
+.form-error {
+    background: #fef2f2;
+    color: var(--danger);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+[data-theme="dark"] .form-error {
+    background: #450a0a;
+}
+
 /* Toast */
 .toast {
     position: fixed;

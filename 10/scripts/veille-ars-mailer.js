@@ -3,35 +3,97 @@
  *
  * Ce script scanne les flux RSS de toutes les ARS de France,
  * filtre les appels à projets liés aux soins palliatifs,
- * et envoie un digest par email avec les nouveautés.
+ * et envoie un digest par email aux abonnés SubVeille.
  *
  * Configuration requise:
  * - RESEND_API_KEY: clé API Resend (gratuit: https://resend.com)
- * - ALERT_EMAIL: adresse email destinataire
+ * - SUPABASE_SERVICE_KEY: clé service Supabase (pour récupérer les abonnés)
+ * - ALERT_EMAIL: adresse email de fallback si pas d'abonnés
  *
  * Utilisation:
  * - Manuellement: node veille-ars-mailer.js
- * - Automatiquement: ajouter au cron (Linux) ou Task Scheduler (Windows)
- *   Exemple cron: 0 8 * * * cd /path/to/scripts && node veille-ars-mailer.js
+ * - Via GitHub Actions: automatique chaque jour à 8h
  */
 
 require('dotenv').config({ path: '../server/.env' });
 const https = require('https');
 const http = require('http');
 const { DOMParser } = require('@xmldom/xmldom');
+const { createClient } = require('@supabase/supabase-js');
 
 // Configuration
 const CONFIG = {
     resendApiKey: process.env.RESEND_API_KEY,
     alertEmail: process.env.ALERT_EMAIL || 'votre@email.com',
-    fromEmail: 'Veille ARS <veille@resend.dev>', // Email par défaut Resend
+    fromEmail: 'Veille ARS <veille@resend.dev>',
+    supabaseUrl: process.env.SUPABASE_URL || 'https://zstisdptwxynshftqdln.supabase.co',
+    supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
     keywords: [
         'palliatif', 'palliative', 'fin de vie', 'accompagnement',
         'soins de support', 'douleur chronique', 'HAD', 'EMSP', 'USP', 'LISP',
         'soins palliatifs', 'unité de soins palliatifs', 'équipe mobile'
     ],
-    maxAgeDays: 7 // Ne récupérer que les AAP des 7 derniers jours
+    maxAgeDays: 7
 };
+
+// Client Supabase admin (avec service key pour bypass RLS)
+let supabaseAdmin = null;
+if (CONFIG.supabaseServiceKey) {
+    supabaseAdmin = createClient(CONFIG.supabaseUrl, CONFIG.supabaseServiceKey, {
+        auth: { persistSession: false }
+    });
+}
+
+/**
+ * Récupère tous les abonnés actifs à la veille ARS
+ */
+async function fetchSubscribers() {
+    if (!supabaseAdmin) {
+        console.log('   ⚠️  Pas de SUPABASE_SERVICE_KEY - envoi à ALERT_EMAIL uniquement');
+        return [{ email: CONFIG.alertEmail }];
+    }
+
+    try {
+        // Récupérer les subscriptions actives
+        const { data: subscriptions, error: subError } = await supabaseAdmin
+            .from('subscriptions')
+            .select('user_id')
+            .eq('type', 'veille_ars')
+            .eq('is_active', true);
+
+        if (subError) throw subError;
+
+        if (!subscriptions || subscriptions.length === 0) {
+            console.log('   Aucun abonné actif - envoi à ALERT_EMAIL');
+            return [{ email: CONFIG.alertEmail }];
+        }
+
+        // Récupérer les emails des utilisateurs via l'API admin
+        const subscribers = [];
+        for (const sub of subscriptions) {
+            try {
+                const { data: { user }, error: userError } = await supabaseAdmin.auth.admin.getUserById(sub.user_id);
+                if (!userError && user?.email) {
+                    subscribers.push({ email: user.email });
+                }
+            } catch (e) {
+                console.log(`   ⚠️  Impossible de récupérer l'email pour user ${sub.user_id}`);
+            }
+        }
+
+        if (subscribers.length === 0) {
+            console.log('   Aucun email récupéré - envoi à ALERT_EMAIL');
+            return [{ email: CONFIG.alertEmail }];
+        }
+
+        console.log(`   ${subscribers.length} abonné(s) trouvé(s)`);
+        return subscribers;
+
+    } catch (error) {
+        console.error('   Erreur fetch subscribers:', error.message);
+        return [{ email: CONFIG.alertEmail }];
+    }
+}
 
 // Liste des ARS
 const ARS_LIST = [
@@ -219,7 +281,7 @@ function generateEmailHTML(items, stats) {
 }
 
 // Envoyer l'email via Resend
-async function sendEmail(html, itemCount) {
+async function sendEmail(html, itemCount, recipientEmail) {
     if (!CONFIG.resendApiKey) {
         console.log('\n⚠️  Pas de clé API Resend configurée.');
         console.log('   Pour activer les emails, ajoutez RESEND_API_KEY dans .env');
@@ -233,7 +295,7 @@ async function sendEmail(html, itemCount) {
 
     const payload = JSON.stringify({
         from: CONFIG.fromEmail,
-        to: CONFIG.alertEmail,
+        to: recipientEmail,
         subject,
         html
     });
@@ -253,17 +315,17 @@ async function sendEmail(html, itemCount) {
             res.on('data', chunk => data += chunk);
             res.on('end', () => {
                 if (res.statusCode === 200) {
-                    console.log(`✅ Email envoyé à ${CONFIG.alertEmail}`);
+                    console.log(`   ✅ Email envoyé à ${recipientEmail}`);
                     resolve(true);
                 } else {
-                    console.log(`❌ Erreur envoi email: ${data}`);
+                    console.log(`   ❌ Erreur envoi à ${recipientEmail}: ${data}`);
                     resolve(false);
                 }
             });
         });
 
         req.on('error', (err) => {
-            console.log(`❌ Erreur réseau: ${err.message}`);
+            console.log(`   ❌ Erreur réseau: ${err.message}`);
             resolve(false);
         });
 
@@ -278,9 +340,13 @@ async function main() {
     console.log('  🔔 Veille ARS - Soins Palliatifs');
     console.log('========================================\n');
     console.log(`📅 ${new Date().toLocaleString('fr-FR')}`);
-    console.log(`📧 Destinataire: ${CONFIG.alertEmail}`);
     console.log(`🔍 Mots-clés: ${CONFIG.keywords.length}`);
     console.log(`📆 Période: ${CONFIG.maxAgeDays} derniers jours\n`);
+
+    // Récupérer les abonnés
+    console.log('Récupération des abonnés...');
+    const subscribers = await fetchSubscribers();
+    console.log(`📧 Destinataires: ${subscribers.length}\n`);
 
     console.log('Scan des ARS en cours...\n');
 
@@ -308,10 +374,24 @@ async function main() {
         console.log('');
     }
 
-    // Générer et envoyer l'email
+    // Générer l'email
     const emailHTML = generateEmailHTML(allItems, { scanned: scannedCount });
-    await sendEmail(emailHTML, allItems.length);
 
+    if (!emailHTML) {
+        console.log('Aucun résultat - pas d\'email envoyé');
+        console.log('\n========================================\n');
+        return;
+    }
+
+    // Envoyer aux abonnés
+    console.log('Envoi des emails...');
+    let successCount = 0;
+    for (const subscriber of subscribers) {
+        const success = await sendEmail(emailHTML, allItems.length, subscriber.email);
+        if (success) successCount++;
+    }
+
+    console.log(`\n✅ ${successCount}/${subscribers.length} email(s) envoyé(s)`);
     console.log('\n========================================\n');
 }
 
