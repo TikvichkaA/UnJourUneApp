@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a56db">
+    <title>Suivi Hébergés - CHU Babinski</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="heberges.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👥</text></svg>">
+</head>
+<body>
+    <a href="./" class="back-home">← Accueil CHU</a>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-top">
+                <h1>👥 Suivi des Hébergés</h1>
+                <span class="subtitle">CHU Babinski - SAMU Social de Paris</span>
+            </div>
+            <div class="header-controls">
+                <button class="btn-icon" onclick="toggleDarkMode()" title="Mode sombre">
+                    <span id="dark-mode-icon">🌙</span>
+                </button>
+                <button class="btn-icon" onclick="exportData()" title="Exporter">
+                    <span>📤</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Statistiques principales -->
+        <div class="stats-grid">
+            <div class="stat-card stat-primary">
+                <div class="stat-icon">🏠</div>
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-total">114</span>
+                    <span class="stat-label">Total hébergés</span>
+                </div>
+            </div>
+            <div class="stat-card stat-women">
+                <div class="stat-icon">👩</div>
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-femmes">62</span>
+                    <span class="stat-label">Femmes</span>
+                    <span class="stat-sub">dont <strong id="stat-isolees">45</strong> isolées</span>
+                </div>
+            </div>
+            <div class="stat-card stat-men">
+                <div class="stat-icon">👨</div>
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-hommes">12</span>
+                    <span class="stat-label">Hommes</span>
+                </div>
+            </div>
+            <div class="stat-card stat-children">
+                <div class="stat-icon">👶</div>
+                <div class="stat-content">
+                    <span class="stat-value" id="stat-enfants">40</span>
+                    <span class="stat-label">Enfants</span>
+                    <span class="stat-sub">âge moyen: <strong>6.5</strong> ans</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistiques secondaires -->
+        <div class="stats-secondary">
+            <div class="stat-item">
+                <span class="stat-icon-small">📆</span>
+                <span class="stat-info">
+                    <strong>56 mois</strong>
+                    <span>Durée moyenne séjour</span>
+                </span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon-small">🎂</span>
+                <span class="stat-info">
+                    <strong>32 ans</strong>
+                    <span>Âge moyen total</span>
+                </span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon-small">💼</span>
+                <span class="stat-info">
+                    <strong id="stat-travail">14</strong>
+                    <span>Personnes en emploi</span>
+                </span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon-small">🏥</span>
+                <span class="stat-info">
+                    <strong id="stat-ame">44</strong>
+                    <span>Avec AME</span>
+                </span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon-small">🍽️</span>
+                <span class="stat-info">
+                    <strong id="stat-ssp">49</strong>
+                    <span>Aide alimentaire SSP</span>
+                </span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon-small">🏡</span>
+                <span class="stat-info">
+                    <strong id="stat-logement">9</strong>
+                    <span>Demandes logement</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Onglets -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab active" data-tab="femmes" onclick="switchTab('femmes')">
+                    👩 Femmes isolées
+                    <span class="tab-count" id="tab-count-femmes">45</span>
+                </button>
+                <button class="tab" data-tab="familles" onclick="switchTab('familles')">
+                    👨‍👩‍👧 Familles
+                    <span class="tab-count" id="tab-count-familles">17</span>
+                </button>
+                <button class="tab" data-tab="enfants" onclick="switchTab('enfants')">
+                    👶 Enfants
+                    <span class="tab-count" id="tab-count-enfants">40</span>
+                </button>
+            </div>
+
+            <!-- Filtres -->
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label>Rechercher:</label>
+                    <input type="text" id="search" placeholder="Nom, prénom, chambre..." oninput="applyFilters()">
+                </div>
+                <div class="filter-group">
+                    <label>Nationalité:</label>
+                    <select id="filter-nationalite" onchange="applyFilters()">
+                        <option value="all">Toutes</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Statut:</label>
+                    <select id="filter-statut" onchange="applyFilters()">
+                        <option value="all">Tous</option>
+                        <option value="reguliere">Régulière</option>
+                        <option value="irreguliere">Irrégulière</option>
+                        <option value="demande">Demande en cours</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>TS Référente:</label>
+                    <select id="filter-ts" onchange="applyFilters()">
+                        <option value="all">Toutes</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des hébergés -->
+        <div class="list-container">
+            <div class="list-header" id="list-header">
+                <!-- Généré par JS -->
+            </div>
+            <div class="list-body" id="list-body">
+                <!-- Généré par JS -->
+            </div>
+        </div>
+
+        <!-- Modal détail -->
+        <div class="modal" id="detail-modal">
+            <div class="modal-content modal-large">
+                <button class="modal-close" onclick="closeDetailModal()">✕</button>
+                <div id="detail-content">
+                    <!-- Généré par JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script src="heberges.js"></script>
+</body>
+</html>

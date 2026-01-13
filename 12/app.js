@@ -68,6 +68,48 @@ const SHIFT_CODES = {
     'tp': { desc: 'Temps partiel', hours: 0, type: 'repos', category: 'repos' }
 };
 
+// Besoins en effectifs par poste (contrôle staffing)
+const STAFFING_REQUIREMENTS = {
+    'accueil_matin': { label: 'Accueil matin', icon: '🌅', default: 1 },
+    'accueil_aprem': { label: 'Accueil après-midi', icon: '☀️', default: 1 },
+    'accueil_nuit': { label: 'Accueil nuit', icon: '🌙', default: 1 },
+    'restauration_matin': { label: 'Restauration matin', icon: '🍳', default: 2 },
+    'restauration_soir': { label: 'Restauration soir', icon: '🍽️', default: 2 },
+    'entretien': { label: 'Entretien', icon: '🧹', default: 4 }
+};
+
+// Mapping des codes de shift vers les postes de staffing
+const SHIFT_TO_STAFFING = {
+    // Accueil matin
+    '7,5a': 'accueil_matin',
+    '7a': 'accueil_matin',
+    // Accueil après-midi/jour
+    '9,2j': 'accueil_aprem',
+    '12j': 'accueil_aprem',
+    // Accueil nuit
+    '12n': 'accueil_nuit',
+    '8,2n': 'accueil_nuit',
+    // Restauration matin (codes avec a, b, c, d)
+    '8,5ra': 'restauration_matin',
+    '8,5rb': 'restauration_matin',
+    '7rc': 'restauration_matin',
+    '7rd': 'restauration_matin',
+    // Restauration soir (codes avec m, s)
+    '8,5rm': 'restauration_soir',
+    '9rs': 'restauration_soir',
+    '10,5rm': 'restauration_soir',
+    // Entretien
+    '8ea': 'entretien',
+    '8eb': 'entretien',
+    '8ec': 'entretien',
+    '8ed': 'entretien',
+    '8e.1': 'entretien',
+    '8e.2': 'entretien',
+    '8w': 'entretien',
+    '8W': 'entretien',
+    '8T': 'entretien'
+};
+
 // Catégories d'employés
 const CATEGORIES = {
     responsables: { name: 'Responsables Site/CHU', icon: '👔', color: '#1a56db' },
@@ -570,6 +612,9 @@ function renderBody(monthKey, daysInMonth, year, month) {
         html += '</div>';
     });
 
+    // Ajouter les lignes de contrôle des effectifs
+    html += renderStaffingControl(monthKey, daysInMonth, year, month);
+
     body.innerHTML = html;
 }
 
@@ -580,6 +625,53 @@ function toggleCategory(catKey) {
         state.collapsedCategories.add(catKey);
     }
     renderPlanning();
+}
+
+// Rendu du contrôle des effectifs
+function renderStaffingControl(monthKey, daysInMonth, year, month) {
+    const staffing = calculateStaffingByDay(monthKey, daysInMonth);
+    const today = new Date();
+    const isStaffingCollapsed = state.collapsedCategories.has('staffing-control');
+
+    let html = `
+        <div class="category-group staffing-control" data-category="staffing-control">
+            <div class="category-header staffing-header ${isStaffingCollapsed ? 'collapsed' : ''}" onclick="toggleCategory('staffing-control')">
+                <span><span class="toggle-icon">▼</span> 📊 Contrôle des effectifs</span>
+            </div>
+    `;
+
+    Object.entries(STAFFING_REQUIREMENTS).forEach(([postKey, postInfo]) => {
+        html += `
+            <div class="employee-row staffing-row ${isStaffingCollapsed ? 'hidden' : ''}" data-post="${postKey}">
+                <div class="employee-name staffing-label">
+                    <span class="staffing-icon">${postInfo.icon}</span>
+                    <span>${postInfo.label}</span>
+                    <span class="staffing-required">(min: ${postInfo.default})</span>
+                </div>
+        `;
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const date = new Date(year, month, day);
+            const isToday = date.toDateString() === today.toDateString();
+            const actual = staffing[day][postKey];
+            const required = postInfo.default;
+            const status = checkStaffingStatus(actual, required);
+
+            let classes = ['shift-cell', 'staffing-cell', `staffing-${status}`];
+            if (isToday) classes.push('today');
+
+            html += `
+                <div class="${classes.join(' ')}" title="${postInfo.label}: ${actual}/${required}">
+                    ${actual}
+                </div>
+            `;
+        }
+
+        html += '</div>';
+    });
+
+    html += '</div>';
+    return html;
 }
 
 // Statistiques
@@ -613,6 +705,40 @@ function updateStats() {
     document.getElementById('stat-absent').textContent = absent;
     document.getElementById('stat-conge').textContent = conge;
     document.getElementById('stat-total').textContent = total;
+}
+
+// Calcul des effectifs par poste et par jour
+function calculateStaffingByDay(monthKey, daysInMonth) {
+    const staffing = {};
+
+    // Initialiser les compteurs pour chaque jour et chaque poste
+    for (let day = 1; day <= daysInMonth; day++) {
+        staffing[day] = {};
+        Object.keys(STAFFING_REQUIREMENTS).forEach(post => {
+            staffing[day][post] = 0;
+        });
+    }
+
+    // Compter les effectifs
+    EMPLOYEES.forEach(emp => {
+        const planning = emp.planning[monthKey] || [];
+        for (let day = 1; day <= daysInMonth; day++) {
+            const shift = planning[day];
+            if (shift && SHIFT_TO_STAFFING[shift]) {
+                const post = SHIFT_TO_STAFFING[shift];
+                staffing[day][post]++;
+            }
+        }
+    });
+
+    return staffing;
+}
+
+// Vérifier si les besoins sont satisfaits pour un jour donné
+function checkStaffingStatus(actual, required) {
+    if (actual >= required) return 'ok';
+    if (actual > 0) return 'warning';
+    return 'critical';
 }
 
 // Légende

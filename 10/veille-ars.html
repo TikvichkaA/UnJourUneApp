@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#7c3aed">
+    <title>Veille Soins Palliatifs - ARS France</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="veille-ars.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔔</text></svg>">
+</head>
+<body>
+    <a href="./" class="back-home">← SubVeille</a>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-top">
+                <h1>🔔 Veille Soins Palliatifs</h1>
+                <span class="subtitle">Appels à projets - Toutes les ARS de France</span>
+            </div>
+            <div class="header-controls">
+                <button class="btn-icon" onclick="toggleDarkMode()" title="Mode sombre">
+                    <span id="dark-mode-icon">🌙</span>
+                </button>
+                <button class="btn-icon" onclick="refreshFeeds()" title="Actualiser">
+                    <span id="refresh-icon">🔄</span>
+                </button>
+                <button class="btn-icon" onclick="exportResults()" title="Exporter">
+                    <span>📤</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Statistiques -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-value" id="stat-total">-</span>
+                <span class="stat-label">Résultats</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="stat-ars">0</span>
+                <span class="stat-label">ARS scannées</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="stat-recent">-</span>
+                <span class="stat-label">Cette semaine</span>
+            </div>
+            <div class="stat-item status-indicator">
+                <span class="status-dot" id="status-dot"></span>
+                <span class="stat-label" id="status-text">Prêt</span>
+            </div>
+        </div>
+
+        <!-- Filtres -->
+        <div class="filters-bar">
+            <div class="filter-group">
+                <label>Période:</label>
+                <select id="filter-period" onchange="applyFilters()">
+                    <option value="all">Toutes</option>
+                    <option value="week" selected>7 derniers jours</option>
+                    <option value="month">30 derniers jours</option>
+                    <option value="quarter">3 derniers mois</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Région:</label>
+                <select id="filter-region" onchange="applyFilters()">
+                    <option value="all">Toutes les ARS</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Statut:</label>
+                <select id="filter-status" onchange="applyFilters()">
+                    <option value="all">Tous</option>
+                    <option value="open">En cours</option>
+                    <option value="closed">Clôturés</option>
+                </select>
+            </div>
+            <div class="filter-group search-group">
+                <label>Recherche:</label>
+                <input type="text" id="search" placeholder="Mots-clés..." oninput="applyFilters()">
+            </div>
+        </div>
+
+        <!-- Mots-clés de veille -->
+        <div class="keywords-bar">
+            <span class="keywords-label">Mots-clés surveillés:</span>
+            <div class="keywords-list" id="keywords-list">
+                <!-- Généré par JS -->
+            </div>
+            <button class="btn-add-keyword" onclick="showAddKeywordModal()">+ Ajouter</button>
+        </div>
+
+        <!-- Zone de résultats -->
+        <div class="results-container">
+            <div class="results-header">
+                <h2>Appels à projets trouvés</h2>
+                <div class="sort-controls">
+                    <label>Trier par:</label>
+                    <select id="sort-by" onchange="applyFilters()">
+                        <option value="date-desc">Date (récent)</option>
+                        <option value="date-asc">Date (ancien)</option>
+                        <option value="region">Région</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="results-list" id="results-list">
+                <div class="loading-state" id="loading-state">
+                    <div class="spinner"></div>
+                    <p>Chargement des flux RSS...</p>
+                    <p class="loading-detail" id="loading-detail">Initialisation...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section ARS -->
+        <div class="ars-section">
+            <h3>État des flux ARS</h3>
+            <div class="ars-grid" id="ars-grid">
+                <!-- Généré par JS -->
+            </div>
+        </div>
+
+        <!-- Modal ajout mot-clé -->
+        <div class="modal" id="keyword-modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeKeywordModal()">✕</button>
+                <h2>Ajouter un mot-clé</h2>
+                <form onsubmit="addKeyword(event)">
+                    <div class="form-group">
+                        <label for="new-keyword">Mot-clé à surveiller</label>
+                        <input type="text" id="new-keyword" placeholder="Ex: palliatif, fin de vie..." required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeKeywordModal()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script src="veille-ars.js"></script>
+</body>
+</html>

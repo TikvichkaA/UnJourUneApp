@@ -1,0 +1,36 @@
+name: Veille ARS - Alertes quotidiennes
+
+on:
+  # Exécution quotidienne à 7h UTC (8h Paris heure d'hiver, 9h été)
+  schedule:
+    - cron: '0 7 * * *'
+
+  # Permet aussi de lancer manuellement depuis GitHub
+  workflow_dispatch:
+
+jobs:
+  veille-ars:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ./10/scripts
+        run: npm install
+
+      - name: Run Veille ARS Scanner
+        working-directory: ./10/scripts
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: node veille-ars-mailer.js
+
+      - name: Log completion
+        run: echo "✅ Veille ARS terminée - $(date)"

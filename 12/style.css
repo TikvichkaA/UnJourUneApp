@@ -990,6 +990,96 @@ body {
     background: var(--text-muted);
 }
 
+/* Staffing control */
+.staffing-control {
+    background: linear-gradient(to bottom, #f0f9ff, #e0f2fe);
+    border-top: 3px solid var(--primary);
+}
+
+[data-theme="dark"] .staffing-control {
+    background: linear-gradient(to bottom, #1e3a5f, #172554);
+}
+
+.staffing-header {
+    background: var(--primary) !important;
+    color: white !important;
+}
+
+.staffing-header:hover {
+    background: var(--primary-dark) !important;
+}
+
+.staffing-row {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] .staffing-row {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.staffing-label {
+    font-weight: 500;
+    gap: 0.5rem;
+    cursor: default;
+}
+
+.staffing-icon {
+    font-size: 1.1rem;
+}
+
+.staffing-required {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+.staffing-cell {
+    font-weight: 600;
+    cursor: default;
+}
+
+.staffing-cell:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Staffing status colors */
+.staffing-ok {
+    background: #d1fae5 !important;
+    color: #065f46 !important;
+}
+
+.staffing-warning {
+    background: #fef3c7 !important;
+    color: #92400e !important;
+}
+
+.staffing-critical {
+    background: #fee2e2 !important;
+    color: #991b1b !important;
+    animation: pulse-critical 2s infinite;
+}
+
+@keyframes pulse-critical {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+[data-theme="dark"] .staffing-ok {
+    background: #064e3b !important;
+    color: #6ee7b7 !important;
+}
+
+[data-theme="dark"] .staffing-warning {
+    background: #451a03 !important;
+    color: #fcd34d !important;
+}
+
+[data-theme="dark"] .staffing-critical {
+    background: #450a0a !important;
+    color: #fca5a5 !important;
+}
+
 /* Print styles */
 @media print {
     .back-home,

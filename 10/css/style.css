@@ -1996,3 +1996,67 @@ input, select {
   flex-shrink: 0;
   opacity: 0.7;
 }
+
+/* ============================================
+   Veille ARS Button
+   ============================================ */
+
+.btn-veille-ars {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+  color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+  transition: all var(--transition-normal);
+  text-decoration: none;
+  max-width: 400px;
+}
+
+.btn-veille-ars:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+  color: white;
+}
+
+.btn-veille-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.btn-veille-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+}
+
+.btn-veille-text strong {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.btn-veille-text small {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.btn-veille-arrow {
+  font-size: 1.25rem;
+  opacity: 0.7;
+  transition: transform var(--transition-fast);
+}
+
+.btn-veille-ars:hover .btn-veille-arrow {
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .btn-veille-ars {
+    max-width: 100%;
+  }
+}

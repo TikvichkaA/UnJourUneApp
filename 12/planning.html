@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a56db">
+    <title>Planning Babinski - SAMU Social</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📅</text></svg>">
+</head>
+<body>
+    <a href="./" class="back-home">← Accueil CHU</a>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-top">
+                <h1>📅 Planning Babinski</h1>
+                <span class="subtitle">Centre d'Hébergement - SAMU Social</span>
+            </div>
+            <div class="header-controls">
+                <button class="btn-icon" onclick="toggleDarkMode()" title="Mode sombre">
+                    <span id="dark-mode-icon">🌙</span>
+                </button>
+                <button class="btn-icon" onclick="showLegend()" title="Légende">
+                    <span>📋</span>
+                </button>
+                <button class="btn-icon" onclick="exportPlanning()" title="Exporter">
+                    <span>📤</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation mensuelle -->
+        <nav class="month-nav">
+            <button class="nav-btn" onclick="previousMonth()">◀</button>
+            <div class="month-display">
+                <span class="month-name" id="month-name">Janvier</span>
+                <span class="year" id="year">2026</span>
+            </div>
+            <button class="nav-btn" onclick="nextMonth()">▶</button>
+            <button class="btn-today" onclick="goToToday()">Aujourd'hui</button>
+        </nav>
+
+        <!-- Filtres -->
+        <div class="filters-bar">
+            <div class="filter-group">
+                <label>Catégorie:</label>
+                <select id="filter-category" onchange="applyFilters()">
+                    <option value="all">Toutes</option>
+                    <option value="responsables">Responsables</option>
+                    <option value="coordination">Coordination</option>
+                    <option value="maintenance">Maintenance/Log</option>
+                    <option value="administratif">Administratif</option>
+                    <option value="restauration">Restauration</option>
+                    <option value="accueil">Accueil</option>
+                    <option value="entretien">Entretien</option>
+                    <option value="polyvalent">Polyvalent</option>
+                    <option value="vacataire">Vacataires</option>
+                    <option value="interimaire">Intérimaires</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Type:</label>
+                <select id="filter-type" onchange="applyFilters()">
+                    <option value="all">Tous</option>
+                    <option value="permanent">Permanents</option>
+                    <option value="vacataire">Vacataires</option>
+                    <option value="interimaire">Intérimaires</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Rechercher:</label>
+                <input type="text" id="search-employee" placeholder="Nom de l'employé..." oninput="applyFilters()">
+            </div>
+            <div class="filter-group" style="margin-left: auto;">
+                <button class="btn-add-employee" onclick="showAddEmployeeModal()">
+                    <span>➕</span> Nouvel employé
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats rapides -->
+        <div class="quick-stats" id="quick-stats">
+            <div class="stat-card">
+                <span class="stat-value" id="stat-present">0</span>
+                <span class="stat-label">Présents aujourd'hui</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="stat-absent">0</span>
+                <span class="stat-label">Absents</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="stat-conge">0</span>
+                <span class="stat-label">En congé</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="stat-total">0</span>
+                <span class="stat-label">Total employés</span>
+            </div>
+        </div>
+
+        <!-- Planning principal -->
+        <div class="planning-wrapper">
+            <div class="planning-container">
+                <!-- En-tête des jours -->
+                <div class="planning-header" id="planning-header">
+                    <div class="employee-header">Employé</div>
+                    <!-- Jours générés par JS -->
+                </div>
+
+                <!-- Corps du planning -->
+                <div class="planning-body" id="planning-body">
+                    <!-- Généré par JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Légende -->
+        <div class="modal" id="legend-modal">
+            <div class="modal-content legend-content">
+                <button class="modal-close" onclick="closeLegend()">✕</button>
+                <h2>📋 Légende des codes</h2>
+
+                <div class="legend-sections">
+                    <div class="legend-section">
+                        <h3>🌞 Horaires de jour</h3>
+                        <div class="legend-items" id="legend-jour"></div>
+                    </div>
+
+                    <div class="legend-section">
+                        <h3>🌙 Horaires de nuit</h3>
+                        <div class="legend-items" id="legend-nuit"></div>
+                    </div>
+
+                    <div class="legend-section">
+                        <h3>🍽️ Restauration</h3>
+                        <div class="legend-items" id="legend-restauration"></div>
+                    </div>
+
+                    <div class="legend-section">
+                        <h3>🧹 Entretien</h3>
+                        <div class="legend-items" id="legend-entretien"></div>
+                    </div>
+
+                    <div class="legend-section">
+                        <h3>📌 Statuts spéciaux</h3>
+                        <div class="legend-items" id="legend-special"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Détail employé -->
+        <div class="modal" id="employee-modal">
+            <div class="modal-content employee-detail">
+                <button class="modal-close" onclick="closeEmployeeModal()">✕</button>
+                <h2 id="employee-name">Nom de l'employé</h2>
+                <p class="employee-category" id="employee-category">Catégorie</p>
+
+                <div class="employee-stats">
+                    <div class="emp-stat">
+                        <span class="emp-stat-value" id="emp-heures">0</span>
+                        <span class="emp-stat-label">Heures ce mois</span>
+                    </div>
+                    <div class="emp-stat">
+                        <span class="emp-stat-value" id="emp-jours">0</span>
+                        <span class="emp-stat-label">Jours travaillés</span>
+                    </div>
+                    <div class="emp-stat">
+                        <span class="emp-stat-value" id="emp-nuits">0</span>
+                        <span class="emp-stat-label">Nuits</span>
+                    </div>
+                </div>
+
+                <div class="employee-calendar" id="employee-calendar">
+                    <!-- Mini calendrier généré par JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal édition shift -->
+        <div class="modal" id="edit-modal">
+            <div class="modal-content edit-shift">
+                <button class="modal-close" onclick="closeEditModal()">✕</button>
+                <h2>Modifier le shift</h2>
+                <p id="edit-info">Employé - Date</p>
+
+                <div class="shift-options">
+                    <div class="shift-category">
+                        <h4>Jour</h4>
+                        <div class="shift-buttons" id="shift-jour"></div>
+                    </div>
+                    <div class="shift-category">
+                        <h4>Nuit</h4>
+                        <div class="shift-buttons" id="shift-nuit"></div>
+                    </div>
+                    <div class="shift-category">
+                        <h4>Spécial</h4>
+                        <div class="shift-buttons" id="shift-special"></div>
+                    </div>
+                </div>
+
+                <div class="edit-actions">
+                    <button class="btn btn-secondary" onclick="closeEditModal()">Annuler</button>
+                    <button class="btn btn-danger" onclick="clearShift()">Effacer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal ajout employé -->
+        <div class="modal" id="add-employee-modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeAddEmployeeModal()">✕</button>
+                <h2>➕ Nouvel employé</h2>
+
+                <form class="add-employee-form" onsubmit="addEmployee(event)">
+                    <div class="form-group">
+                        <label for="emp-name">Nom complet *</label>
+                        <input type="text" id="emp-name" required placeholder="Prénom Nom">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="emp-category">Catégorie *</label>
+                            <select id="emp-category" required>
+                                <option value="">Sélectionner...</option>
+                                <option value="responsables">Responsables Site/CHU</option>
+                                <option value="coordination">Coordination Site/CHU</option>
+                                <option value="maintenance">Agent Maintenance/Log</option>
+                                <option value="administratif">Agent Administratif</option>
+                                <option value="restauration">Agent de Restauration</option>
+                                <option value="accueil">Agent d'Accueil</option>
+                                <option value="entretien">Agent d'Entretien</option>
+                                <option value="polyvalent">Agent Polyvalent</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-type">Type de contrat *</label>
+                            <select id="emp-type" required>
+                                <option value="permanent">Permanent</option>
+                                <option value="vacataire">Vacataire</option>
+                                <option value="interimaire">Intérimaire</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="emp-start">Date de début</label>
+                            <input type="date" id="emp-start">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-end">Date de fin (si applicable)</label>
+                            <input type="date" id="emp-end">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeAddEmployeeModal()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Toast notification -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

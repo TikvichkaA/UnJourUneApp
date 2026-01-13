@@ -6,9 +6,12 @@
   "scripts": {
     "sync": "node aggregator.js",
     "sync:dry": "node aggregator.js --dry-run",
-    "sync:fdf": "node aggregator.js --source=fondation-france --verbose"
+    "sync:fdf": "node aggregator.js --source=fondation-france --verbose",
+    "veille-ars": "node veille-ars-mailer.js"
   },
   "dependencies": {
-    "cheerio": "^1.0.0"
+    "@xmldom/xmldom": "^0.8.10",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.3.1"
   }
 }
