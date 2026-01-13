@@ -1,0 +1,60 @@
+{
+  "manifest_version": 3,
+  "name": "SecondMain - Trouve en occasion",
+  "short_name": "SecondMain",
+  "version": "1.0.0",
+  "description": "Compare les prix avec les annonces seconde main sur Le Bon Coin, Vinted, et plus encore !",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.leboncoin.fr/*",
+    "https://www.vinted.fr/*",
+    "https://www.leroymerlin.fr/*",
+    "https://www.castorama.fr/*",
+    "https://www.bricomarche.com/*",
+    "https://www.ikea.com/*",
+    "https://www.amazon.fr/*",
+    "https://www.cdiscount.com/*",
+    "https://www.fnac.com/*",
+    "https://www.darty.com/*",
+    "https://www.boulanger.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "SecondMain - Chercher en occasion"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.leroymerlin.fr/*",
+        "https://www.castorama.fr/*",
+        "https://www.bricomarche.com/*",
+        "https://www.ikea.com/fr/*",
+        "https://www.amazon.fr/*",
+        "https://www.cdiscount.com/*",
+        "https://www.fnac.com/*",
+        "https://www.darty.com/*",
+        "https://www.boulanger.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

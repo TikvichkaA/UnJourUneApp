@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecondMain</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <span class="logo-icon">&#9851;</span>
+        <h1>SecondMain</h1>
+      </div>
+      <p class="tagline">Trouve moins cher en seconde main</p>
+    </header>
+
+    <main>
+      <!-- Section de recherche -->
+      <section class="search-section">
+        <div class="input-group">
+          <input
+            type="text"
+            id="product-search"
+            placeholder="Ex: Carrelage metro blanc 10x20"
+            autocomplete="off"
+          >
+          <button id="search-btn" class="btn-primary">
+            <span class="search-icon">&#128269;</span>
+          </button>
+        </div>
+
+        <div class="detected-product" id="detected-product" style="display: none;">
+          <span class="detected-label">Produit détecté :</span>
+          <span class="detected-name" id="detected-name"></span>
+          <button class="btn-use" id="use-detected">Utiliser</button>
+        </div>
+      </section>
+
+      <!-- Filtres -->
+      <section class="filters-section">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="location">Localisation</label>
+            <select id="location">
+              <option value="idf">Île-de-France</option>
+              <option value="75">Paris (75)</option>
+              <option value="92">Hauts-de-Seine (92)</option>
+              <option value="93">Seine-Saint-Denis (93)</option>
+              <option value="94">Val-de-Marne (94)</option>
+              <option value="77">Seine-et-Marne (77)</option>
+              <option value="78">Yvelines (78)</option>
+              <option value="91">Essonne (91)</option>
+              <option value="95">Val-d'Oise (95)</option>
+              <option value="france">France entière</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="radius">Rayon</label>
+            <select id="radius">
+              <option value="10">10 km</option>
+              <option value="20">20 km</option>
+              <option value="30" selected>30 km</option>
+              <option value="50">50 km</option>
+              <option value="100">100 km</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="max-price">Prix max</label>
+            <div class="price-input">
+              <input type="number" id="max-price" placeholder="Illimité">
+              <span class="currency">€</span>
+            </div>
+          </div>
+          <div class="filter-group">
+            <label for="min-savings">Économie min.</label>
+            <div class="price-input">
+              <input type="number" id="min-savings" placeholder="0" value="20">
+              <span class="currency">%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sources -->
+      <section class="sources-section">
+        <label>Rechercher sur :</label>
+        <div class="sources-grid">
+          <label class="source-checkbox">
+            <input type="checkbox" value="leboncoin" checked>
+            <span class="source-name">Le Bon Coin</span>
+          </label>
+          <label class="source-checkbox">
+            <input type="checkbox" value="vinted" checked>
+            <span class="source-name">Vinted</span>
+          </label>
+          <label class="source-checkbox">
+            <input type="checkbox" value="facebook">
+            <span class="source-name">FB Marketplace</span>
+          </label>
+          <label class="source-checkbox">
+            <input type="checkbox" value="paruvendu">
+            <span class="source-name">ParuVendu</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Résultats -->
+      <section class="results-section" id="results-section" style="display: none;">
+        <div class="results-header">
+          <h2>Résultats</h2>
+          <span class="results-count" id="results-count">0 annonces</span>
+        </div>
+
+        <div class="results-list" id="results-list">
+          <!-- Les résultats seront injectés ici -->
+        </div>
+
+        <div class="no-results" id="no-results" style="display: none;">
+          <span class="no-results-icon">&#128533;</span>
+          <p>Aucune annonce trouvée pour ces critères.</p>
+          <p class="suggestion">Essayez d'élargir votre recherche ou le rayon.</p>
+        </div>
+      </section>
+
+      <!-- État de chargement -->
+      <section class="loading-section" id="loading-section" style="display: none;">
+        <div class="loader"></div>
+        <p>Recherche en cours sur les sites d'occasion...</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>Un Jour Une App - Jour 13</p>
+      <a href="https://www.linkedin.com/in/emmanuel-pinglier-449988151/" target="_blank" class="author">
+        Emmanuel Pinglier
+      </a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
