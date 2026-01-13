@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generateur d'icones SecondMain</title>
+  <style>
+    body {
+      font-family: -apple-system, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 { color: #10b981; }
+    .icons { display: flex; gap: 20px; justify-content: center; margin: 30px 0; }
+    canvas { border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    button {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    button:hover { background: #059669; }
+    .instructions {
+      background: #f0fdf4;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 30px;
+      text-align: left;
+    }
+    .done { color: #10b981; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>♻️ SecondMain - Icones</h1>
+  <p>Clique sur le bouton pour generer et telecharger les icones PNG</p>
+
+  <div class="icons" id="icons"></div>
+
+  <button onclick="downloadAll()">Telecharger toutes les icones</button>
+
+  <p id="status"></p>
+
+  <div class="instructions">
+    <strong>Instructions :</strong>
+    <ol>
+      <li>Clique sur "Telecharger toutes les icones"</li>
+      <li>4 fichiers PNG seront telecharges</li>
+      <li>Deplace-les dans le dossier <code>chrome-extension/icons/</code></li>
+      <li>L'extension est prete !</li>
+    </ol>
+  </div>
+
+  <script>
+    const sizes = [16, 32, 48, 128];
+
+    function drawIcon(ctx, size) {
+      // Fond vert avec degrade
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#10b981');
+      gradient.addColorStop(1, '#059669');
+
+      // Rectangle arrondi
+      const radius = size * 0.18;
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, radius);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // Cercle avec pointilles (symbole recyclage)
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.lineWidth = Math.max(2, size * 0.06);
+      ctx.setLineDash([size * 0.12, size * 0.06]);
+      ctx.beginPath();
+      ctx.arc(size / 2, size / 2, size * 0.3, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Symbole Euro au centre
+      ctx.fillStyle = 'white';
+      ctx.font = `bold ${size * 0.4}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('€', size / 2, size / 2 + size * 0.02);
+    }
+
+    // Generer les previews
+    const container = document.getElementById('icons');
+    const canvases = {};
+
+    sizes.forEach(size => {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      drawIcon(ctx, size);
+      container.appendChild(canvas);
+      canvases[size] = canvas;
+    });
+
+    function downloadAll() {
+      sizes.forEach((size, i) => {
+        setTimeout(() => {
+          const link = document.createElement('a');
+          link.download = `icon${size}.png`;
+          link.href = canvases[size].toDataURL('image/png');
+          link.click();
+        }, i * 300);
+      });
+
+      document.getElementById('status').innerHTML =
+        '<span class="done">✓ 4 icones telechargees ! Place-les dans le dossier icons/</span>';
+    }
+  </script>
+</body>
+</html>
