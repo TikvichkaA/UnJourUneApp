@@ -149,14 +149,37 @@ async function scanARS(ars) {
 // URL de la veille ARS (à adapter selon le déploiement)
 const VEILLE_URL = 'https://music2music.music2music.workers.dev/10/veille-ars.html';
 
-// Générer le HTML de l'email (version simple)
+// Générer le HTML de l'email (version détaillée)
 function generateEmailHTML(items, stats) {
     if (items.length === 0) {
         return null; // Pas d'email si rien de nouveau
     }
 
-    // Liste des régions concernées
-    const regions = [...new Set(items.map(i => i.ars.name))];
+    const itemsHTML = items.map(item => {
+        const dateStr = item.pubDate
+            ? item.pubDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+            : '';
+        const keywords = item.matchedKeywords.slice(0, 3).join(', ');
+
+        return `
+        <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 12px; background: #fafafa;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                <span style="background: #7c3aed; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+                    ${item.ars.name}
+                </span>
+                <span style="color: #666; font-size: 12px;">${dateStr}</span>
+            </div>
+            <h3 style="margin: 0 0 8px; font-size: 14px; color: #1a1a1a; line-height: 1.4;">
+                <a href="${item.link}" style="color: #1a1a1a; text-decoration: none;">${item.title}</a>
+            </h3>
+            <p style="margin: 0 0 8px; font-size: 13px; color: #666; line-height: 1.5;">
+                ${item.description}...
+            </p>
+            <div style="font-size: 11px; color: #7c3aed;">
+                🏷️ ${keywords}
+            </div>
+        </div>`;
+    }).join('');
 
     return `
 <!DOCTYPE html>
@@ -165,23 +188,30 @@ function generateEmailHTML(items, stats) {
     <meta charset="utf-8">
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; background: #f5f5f5;">
-    <div style="max-width: 500px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
         <div style="background: linear-gradient(135deg, #7c3aed, #5b21b6); color: white; padding: 24px; text-align: center;">
             <h1 style="margin: 0; font-size: 20px;">🔔 Veille Soins Palliatifs</h1>
-        </div>
-        <div style="padding: 24px; text-align: center;">
-            <p style="font-size: 18px; margin: 0 0 8px; color: #1a1a1a;">
-                <strong>${items.length}</strong> nouvelle${items.length > 1 ? 's' : ''} mise${items.length > 1 ? 's' : ''} à jour
+            <p style="margin: 8px 0 0; opacity: 0.9; font-size: 14px;">
+                ${items.length} appel${items.length > 1 ? 's' : ''} à projets détecté${items.length > 1 ? 's' : ''}
             </p>
-            <p style="color: #666; margin: 0 0 20px; font-size: 14px;">
-                ${regions.join(', ')}
-            </p>
-            <a href="${VEILLE_URL}" style="display: inline-block; background: #7c3aed; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
-                Consulter les appels →
-            </a>
         </div>
+
+        <div style="padding: 24px;">
+            <p style="margin: 0 0 16px; color: #666; font-size: 14px;">
+                📊 ${stats.scanned} ARS scannées • 🔍 ${CONFIG.keywords.length} mots-clés surveillés
+            </p>
+
+            ${itemsHTML}
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="${VEILLE_URL}" style="display: inline-block; background: #7c3aed; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                    Voir tous les appels →
+                </a>
+            </div>
+        </div>
+
         <div style="padding: 16px; background: #f9fafb; text-align: center; font-size: 12px; color: #999;">
-            Veille automatique SubVeille
+            Veille automatique SubVeille • <a href="${VEILLE_URL}" style="color: #7c3aed;">Gérer mes alertes</a>
         </div>
     </div>
 </body>
