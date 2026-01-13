@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>SecondMain - Build pour Chrome Web Store</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container { max-width: 700px; margin: 0 auto; }
+    h1 { text-align: center; color: #10b981; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #64748b; margin-bottom: 40px; }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .card h2 { font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .card h2 .num { background: #10b981; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+    .icons-preview { display: flex; gap: 16px; align-items: center; margin: 16px 0; }
+    .icons-preview canvas { border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn:hover { background: #059669; transform: translateY(-1px); }
+    .btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+    .btn.success { background: #059669; }
+
+    .status { margin-top: 16px; padding: 12px; background: #f0fdf4; border-radius: 8px; color: #059669; display: none; }
+    .status.show { display: block; }
+    .status.error { background: #fef2f2; color: #dc2626; }
+
+    .checklist { list-style: none; }
+    .checklist li { padding: 10px 0; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 10px; }
+    .checklist li:last-child { border-bottom: none; }
+    .check { width: 20px; height: 20px; border: 2px solid #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+    .check.done { background: #10b981; border-color: #10b981; color: white; }
+
+    .store-info { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 16px; margin-top: 20px; }
+    .store-info h3 { font-size: 14px; color: #92400e; margin-bottom: 8px; }
+    .store-info p { font-size: 13px; color: #a16207; line-height: 1.5; }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      resize: vertical;
+      margin-top: 8px;
+    }
+    textarea:focus { outline: none; border-color: #10b981; }
+
+    .copy-btn {
+      background: #e2e8f0;
+      color: #64748b;
+      padding: 6px 12px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    .copy-btn:hover { background: #cbd5e1; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>♻️ SecondMain</h1>
+    <p class="subtitle">Generateur de package Chrome Web Store</p>
+
+    <!-- Etape 1: Generer le ZIP -->
+    <div class="card">
+      <h2><span class="num">1</span> Generer le ZIP</h2>
+      <p style="color: #64748b; margin-bottom: 16px;">
+        Clique sur le bouton pour generer le fichier ZIP pret a uploader sur le Chrome Web Store.
+      </p>
+
+      <div class="icons-preview" id="icons-preview"></div>
+
+      <button class="btn" id="generate-btn" onclick="generateZip()">
+        📦 Generer SecondMain.zip
+      </button>
+
+      <div class="status" id="status"></div>
+    </div>
+
+    <!-- Etape 2: Description -->
+    <div class="card">
+      <h2><span class="num">2</span> Description pour le Store</h2>
+      <p style="color: #64748b; font-size: 13px;">Copie ce texte dans le champ "Description" du Chrome Web Store :</p>
+      <textarea id="description" readonly>♻️ SecondMain - Trouve moins cher en seconde main !
+
+Tu fais du shopping sur Leroy Merlin, IKEA, Amazon ou Fnac ? SecondMain detecte automatiquement les produits et cherche s'ils existent en occasion sur Le Bon Coin, Vinted et autres.
+
+🔍 FONCTIONNALITES
+• Detection automatique du produit sur la page
+• Recherche en arriere-plan sur les sites d'occasion
+• Notification si une bonne affaire est trouvee (20%+ d'economie)
+• Liens directs vers Le Bon Coin, Vinted, Facebook Marketplace, eBay
+
+🛒 SITES SUPPORTES
+Leroy Merlin, Castorama, IKEA, Amazon, Fnac, Darty, Boulanger, Cdiscount, ManoMano, BUT, Conforama
+
+💰 ECONOMISE ET RECYCLE
+Donne une seconde vie aux produits ! Beaucoup de materiaux de bricolage (carrelage, peinture, parquet) sont vendus en reste de chantier a prix reduit.
+
+🔒 RESPECT DE LA VIE PRIVEE
+Aucune donnee personnelle collectee. Tout reste sur ton navigateur.</textarea>
+      <button class="btn copy-btn" onclick="copyText('description')">Copier</button>
+    </div>
+
+    <!-- Etape 3: Checklist -->
+    <div class="card">
+      <h2><span class="num">3</span> Checklist Chrome Web Store</h2>
+      <ul class="checklist">
+        <li><span class="check" id="check-zip">✓</span> ZIP genere</li>
+        <li><span class="check">○</span> Captures d'ecran (1280x800 ou 640x400) - a faire</li>
+        <li><span class="check">○</span> Icone promotionnelle (440x280) - optionnel</li>
+        <li><span class="check">○</span> Categorie: "Productivite" ou "Shopping"</li>
+        <li><span class="check">○</span> Langue: Francais</li>
+      </ul>
+
+      <div class="store-info">
+        <h3>📸 Pour les captures d'ecran</h3>
+        <p>
+          Va sur leroymerlin.fr, ouvre une page produit, clique sur l'icone SecondMain
+          et fais une capture (Windows + Shift + S). Dimensions recommandees : 1280x800px.
+        </p>
+      </div>
+    </div>
+
+    <!-- Privacy Policy -->
+    <div class="card">
+      <h2><span class="num">4</span> Privacy Policy</h2>
+      <p style="color: #64748b; font-size: 13px;">Si demande, utilise cette politique de confidentialite :</p>
+      <textarea id="privacy" readonly>Privacy Policy for SecondMain
+
+Last updated: January 2026
+
+SecondMain is a browser extension that helps users find second-hand alternatives when shopping online.
+
+DATA COLLECTION
+SecondMain does NOT collect any personal data. All processing happens locally in your browser.
+
+WHAT WE ACCESS
+- Product names and prices on supported e-commerce websites (only when you visit them)
+- Your search preferences (stored locally in your browser)
+
+WHAT WE DO NOT COLLECT
+- Personal information
+- Browsing history
+- Cookies or tracking data
+- Any data sent to external servers (except search queries to second-hand marketplaces)
+
+THIRD-PARTY SERVICES
+When you click to search on Le Bon Coin, Vinted, or other marketplaces, you are redirected to their websites which have their own privacy policies.
+
+CONTACT
+For questions about this privacy policy, contact: music music</textarea>
+      <button class="btn copy-btn" onclick="copyText('privacy')">Copier</button>
+    </div>
+  </div>
+
+  <script>
+    const sizes = [16, 32, 48, 128];
+    const canvases = {};
+
+    // Dessiner l'icone
+    function drawIcon(ctx, size) {
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#10b981');
+      gradient.addColorStop(1, '#059669');
+
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, size * 0.18);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.lineWidth = Math.max(2, size * 0.06);
+      ctx.setLineDash([size * 0.12, size * 0.06]);
+      ctx.beginPath();
+      ctx.arc(size / 2, size / 2, size * 0.3, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = 'white';
+      ctx.font = `bold ${size * 0.4}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('€', size / 2, size / 2 + size * 0.02);
+    }
+
+    // Generer les previews
+    const preview = document.getElementById('icons-preview');
+    sizes.forEach(size => {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      drawIcon(canvas.getContext('2d'), size);
+      preview.appendChild(canvas);
+      canvases[size] = canvas;
+    });
+
+    // Convertir canvas en blob
+    function canvasToBlob(canvas) {
+      return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    }
+
+    // Charger un fichier texte
+    async function loadFile(path) {
+      const response = await fetch(path);
+      return response.text();
+    }
+
+    // Generer le ZIP
+    async function generateZip() {
+      const btn = document.getElementById('generate-btn');
+      const status = document.getElementById('status');
+
+      btn.disabled = true;
+      btn.textContent = '⏳ Generation en cours...';
+      status.className = 'status show';
+      status.textContent = 'Chargement des fichiers...';
+
+      try {
+        const zip = new JSZip();
+
+        // Ajouter les icones
+        status.textContent = 'Generation des icones...';
+        const iconsFolder = zip.folder('icons');
+        for (const size of sizes) {
+          const blob = await canvasToBlob(canvases[size]);
+          iconsFolder.file(`icon${size}.png`, blob);
+        }
+
+        // Charger et ajouter les fichiers
+        status.textContent = 'Ajout des fichiers...';
+
+        const files = [
+          'manifest.json',
+          'background.js',
+          'content.js',
+          'popup.html',
+          'popup.js'
+        ];
+
+        for (const file of files) {
+          try {
+            const content = await loadFile(file);
+            zip.file(file, content);
+          } catch (e) {
+            console.error(`Erreur chargement ${file}:`, e);
+          }
+        }
+
+        // Ajouter les locales
+        const localesFolder = zip.folder('_locales').folder('fr');
+        try {
+          const messages = await loadFile('_locales/fr/messages.json');
+          localesFolder.file('messages.json', messages);
+        } catch (e) {
+          // Creer le fichier si pas trouve
+          localesFolder.file('messages.json', JSON.stringify({
+            "appName": { "message": "SecondMain - Trouve en occasion" },
+            "appDescription": { "message": "Compare automatiquement les prix avec Le Bon Coin, Vinted et autres sites de seconde main." }
+          }, null, 2));
+        }
+
+        // Generer le ZIP
+        status.textContent = 'Creation du ZIP...';
+        const blob = await zip.generateAsync({ type: 'blob' });
+
+        // Telecharger
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'SecondMain.zip';
+        a.click();
+        URL.revokeObjectURL(url);
+
+        // Succes
+        btn.textContent = '✓ ZIP telecharge !';
+        btn.classList.add('success');
+        status.textContent = '✅ SecondMain.zip telecharge ! Tu peux maintenant l\'uploader sur le Chrome Web Store.';
+        document.getElementById('check-zip').classList.add('done');
+
+      } catch (error) {
+        status.className = 'status show error';
+        status.textContent = '❌ Erreur: ' + error.message;
+        btn.textContent = '📦 Reessayer';
+        btn.disabled = false;
+      }
+    }
+
+    // Copier texte
+    function copyText(id) {
+      const textarea = document.getElementById(id);
+      textarea.select();
+      document.execCommand('copy');
+
+      const btn = textarea.nextElementSibling;
+      btn.textContent = 'Copie !';
+      setTimeout(() => btn.textContent = 'Copier', 2000);
+    }
+  </script>
+</body>
+</html>

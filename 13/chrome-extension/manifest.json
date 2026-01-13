@@ -1,29 +1,27 @@
 {
   "manifest_version": 3,
-  "name": "SecondMain",
+  "name": "__MSG_appName__",
   "short_name": "SecondMain",
   "version": "1.0.0",
-  "description": "Trouve moins cher en seconde main - Compare automatiquement avec Le Bon Coin, Vinted, etc.",
+  "description": "__MSG_appDescription__",
+  "default_locale": "fr",
   "permissions": [
     "activeTab",
     "storage",
     "notifications"
   ],
   "host_permissions": [
-    "https://www.leboncoin.fr/*",
-    "https://www.leroymerlin.fr/*",
-    "https://www.castorama.fr/*",
-    "https://www.ikea.com/*",
-    "https://www.amazon.fr/*",
-    "https://www.fnac.com/*",
-    "https://www.darty.com/*",
-    "https://www.boulanger.com/*",
-    "https://www.cdiscount.com/*",
-    "https://www.manomano.fr/*"
+    "https://www.leboncoin.fr/*"
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "SecondMain - Chercher en occasion"
+    "default_title": "SecondMain - Chercher en occasion",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
   "content_scripts": [
     {
@@ -36,7 +34,9 @@
         "https://www.darty.com/*",
         "https://www.boulanger.com/*",
         "https://www.cdiscount.com/*",
-        "https://www.manomano.fr/*"
+        "https://www.manomano.fr/*",
+        "https://www.but.fr/*",
+        "https://www.conforama.fr/*"
       ],
       "js": ["content.js"],
       "run_at": "document_idle"

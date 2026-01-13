@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "SecondMain - Trouve en occasion",
+    "description": "Nom de l'extension"
+  },
+  "appDescription": {
+    "message": "Compare automatiquement les prix avec Le Bon Coin, Vinted et autres sites de seconde main quand tu fais du shopping en ligne.",
+    "description": "Description de l'extension"
+  }
+}
