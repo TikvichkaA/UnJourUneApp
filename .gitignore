@@ -28,3 +28,7 @@ npm-debug.log*
 # Build cache
 .cache/
 .vite/
+
+# Backups avec données personnelles
+11-backup/
+12-backup/
