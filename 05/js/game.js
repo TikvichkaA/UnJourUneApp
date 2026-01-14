@@ -1,5 +1,5 @@
 /**
- * JB's Ultimate Mission - Game Engine
+ * Ultimate Mission - Game Engine
  * A dating simulation mini-game with pixel art vibes
  */
 
@@ -43,7 +43,7 @@ const GameState = {
     negotiateTimeLeft: 60,
     negotiationPhase: 0,
 
-    // JB Mascot animations - transparent versions (webm/mov)
+    // Hero Mascot animations - transparent versions (webm/mov)
     mascotAnimations: {
         idle: {
             webm: 'https://assets.masco.dev/7fced6/jb-mascot-2a60/salute-pose-059fa47e.webm',
@@ -136,14 +136,14 @@ const Dialogues = {
     bar_intro: [
         { speaker: 'Narrateur', text: '~ Le Tropical, 23h47 ~', portrait: null },
         { speaker: 'Narrateur', text: 'La musique pulse, les néons clignotent...', portrait: null },
-        { speaker: 'JB', text: '*repère une fille seule au bar*', portrait: 'inBar' },
-        { speaker: 'JB', text: '*inspire un grand coup* C\'est parti.', portrait: 'inBar' },
+        { speaker: 'Alex', text: '*repère une fille seule au bar*', portrait: 'inBar' },
+        { speaker: 'Alex', text: '*inspire un grand coup* C\'est parti.', portrait: 'inBar' },
         { speaker: 'Léa', text: '*scroll sur Insta, un Mojito à la main*', portrait: null },
-        { speaker: 'JB', text: 'Hey ! Ce Mojito a l\'air presque aussi frais que toi...', portrait: 'talkToGirl' },
+        { speaker: 'Alex', text: 'Hey ! Ce Mojito a l\'air presque aussi frais que toi...', portrait: 'talkToGirl' },
         { speaker: 'Léa', text: '*lève les yeux, sourire en coin* Oh wow. C\'est ta phrase d\'accroche ?', portrait: null },
-        { speaker: 'JB', text: '*légèrement déstabilisé*', portrait: 'damage' },
+        { speaker: 'Alex', text: '*légèrement déstabilisé*', portrait: 'damage' },
         {
-            speaker: 'JB',
+            speaker: 'Alex',
             text: 'Euh...',
             portrait: 'talkToGirl',
             choices: [
@@ -156,38 +156,38 @@ const Dialogues = {
 
     bar_intro_name: [
         { speaker: 'Léa', text: 'Léa. T\'es tout seul ?', portrait: null },
-        { speaker: 'JB', text: 'Mes potes m\'ont lâché... La loose.', portrait: 'damage' },
+        { speaker: 'Alex', text: 'Mes potes m\'ont lâché... La loose.', portrait: 'damage' },
         { speaker: 'Léa', text: '*rit* Pareil pour moi ! Ma coloc a choppé la grippe.', portrait: null },
-        { speaker: 'JB', text: 'On est deux rescapés alors ! Un verre ?', portrait: 'thumbsUp' },
+        { speaker: 'Alex', text: 'On est deux rescapés alors ! Un verre ?', portrait: 'thumbsUp' },
         { speaker: 'Léa', text: 'Allez, je dis pas non.', portrait: null, next: 'bar_chat' }
     ],
 
     bar_flirt: [
         { speaker: 'Léa', text: '*range son téléphone* Ok, je t\'écoute. T\'as quoi de mieux ?', portrait: null },
-        { speaker: 'JB', text: 'Hmm... Est-ce que ton père est terroriste ?', portrait: 'talkToGirl' },
+        { speaker: 'Alex', text: 'Hmm... Est-ce que ton père est terroriste ?', portrait: 'talkToGirl' },
         { speaker: 'Léa', text: '... Pardon ?!', portrait: null },
-        { speaker: 'JB', text: 'Parce que t\'es une bombe ! ... Ok celle-là est nulle aussi.', portrait: 'damage' },
+        { speaker: 'Alex', text: 'Parce que t\'es une bombe ! ... Ok celle-là est nulle aussi.', portrait: 'damage' },
         { speaker: 'Léa', text: '*éclate de rire* T\'es con ! Mais ça me fait marrer.', portrait: null },
         { speaker: 'Léa', text: 'Moi c\'est Léa. Et oui pour le verre !', portrait: null, next: 'bar_chat' }
     ],
 
     bar_awkward: [
         { speaker: 'Léa', text: '*le dévisage* Euh... ouais vas-y.', portrait: null },
-        { speaker: 'JB', text: '*s\'assoit maladroitement, renverse presque son verre*', portrait: 'damage' },
+        { speaker: 'Alex', text: '*s\'assoit maladroitement, renverse presque son verre*', portrait: 'damage' },
         { speaker: 'Léa', text: 'Wow, détends-toi ! Je vais pas te manger.', portrait: null },
-        { speaker: 'JB', text: 'Désolé c\'est juste que... t\'es vraiment jolie.', portrait: 'talkToGirl' },
+        { speaker: 'Alex', text: 'Désolé c\'est juste que... t\'es vraiment jolie.', portrait: 'talkToGirl' },
         { speaker: 'Léa', text: '*sourit* Bon, c\'est mignon ça. Moi c\'est Léa.', portrait: null, next: 'bar_chat' }
     ],
 
     bar_chat: [
         { speaker: 'Narrateur', text: '~ 45 minutes et 3 verres plus tard ~', portrait: null },
         { speaker: 'Léa', text: 'Attends attends... T\'as VRAIMENT fait ça à ton entretien ?!', portrait: null },
-        { speaker: 'JB', text: 'Je te jure ! J\'ai appelé le DRH "Maman" par accident.', portrait: 'drinking' },
+        { speaker: 'Alex', text: 'Je te jure ! J\'ai appelé le DRH "Maman" par accident.', portrait: 'drinking' },
         { speaker: 'Léa', text: '*pleure de rire* NON ! Et t\'as eu le job ?', portrait: null },
-        { speaker: 'JB', text: '... Non. Bizarrement.', portrait: 'talkToGirl' },
+        { speaker: 'Alex', text: '... Non. Bizarrement.', portrait: 'talkToGirl' },
         { speaker: 'Léa', text: '*s\'essuie les yeux* Ahah t\'es trop drôle ! Du coup tu fais quoi après ?', portrait: null },
         {
-            speaker: 'JB',
+            speaker: 'Alex',
             text: '*moment de vérité*',
             portrait: 'talkToGirl',
             choices: [
@@ -200,10 +200,10 @@ const Dialogues = {
 
     propose_direct: [
         { speaker: 'Léa', text: '*hausse un sourcil* Netflix hein ? Original...', portrait: null },
-        { speaker: 'JB', text: 'J\'ai aussi Disney+ !', portrait: 'idle' },
+        { speaker: 'Alex', text: 'J\'ai aussi Disney+ !', portrait: 'idle' },
         { speaker: 'Léa', text: '*rit* T\'habites où alors ?', portrait: null },
         {
-            speaker: 'JB',
+            speaker: 'Alex',
             text: '*réalise le problème*',
             portrait: 'damage',
             choices: [
@@ -216,17 +216,17 @@ const Dialogues = {
     propose_smooth: [
         { speaker: 'Léa', text: '*se rapproche* Pareil... Cette soirée est nulle sans ma coloc.', portrait: null },
         { speaker: 'Léa', text: 'On pourrait aller ailleurs non ?', portrait: null },
-        { speaker: 'JB', text: '*essaie de pas trop sourire* J\'ai les clés de l\'appart d\'un pote !', portrait: 'levelUp' },
-        { speaker: 'JB', text: 'Il est en vacances, l\'endroit est libre.', portrait: 'thumbsUp' },
+        { speaker: 'Alex', text: '*essaie de pas trop sourire* J\'ai les clés de l\'appart d\'un pote !', portrait: 'levelUp' },
+        { speaker: 'Alex', text: 'Il est en vacances, l\'endroit est libre.', portrait: 'thumbsUp' },
         { speaker: 'Léa', text: 'Hmm... C\'est loin ?', portrait: null },
-        { speaker: 'JB', text: 'Quinze minutes max ! Allez viens.', portrait: 'talkToGirl' },
+        { speaker: 'Alex', text: 'Quinze minutes max ! Allez viens.', portrait: 'talkToGirl' },
         { speaker: 'Léa', text: '*attrape sa veste* Ok, mais si c\'est un piège je te préviens, j\'ai fait du self-défense.', portrait: null },
-        { speaker: 'JB', text: 'Noté ! *stresse un peu*', portrait: 'damage', next: 'leaving_bar' }
+        { speaker: 'Alex', text: 'Noté ! *stresse un peu*', portrait: 'damage', next: 'leaving_bar' }
     ],
 
     explain_abel: [
         { speaker: 'Léa', text: 'Chez un pote ? Genre... il sera là ?', portrait: null },
-        { speaker: 'JB', text: 'Non non ! Il est à Barcelone pour 2 semaines !', portrait: 'idle' },
+        { speaker: 'Alex', text: 'Non non ! Il est à Barcelone pour 2 semaines !', portrait: 'idle' },
         {
             speaker: 'Léa',
             text: '*pas totalement convaincue*',
@@ -240,15 +240,15 @@ const Dialogues = {
 
     explain_abel_2: [
         { speaker: 'Léa', text: 'QUOI ?! On va chez quelqu\'un qui DORT ?', portrait: null },
-        { speaker: 'JB', text: 'JE DÉCONNE ! Il est vraiment pas là je te jure !', portrait: 'damage' },
+        { speaker: 'Alex', text: 'JE DÉCONNE ! Il est vraiment pas là je te jure !', portrait: 'damage' },
         { speaker: 'Léa', text: '*le fixe* ... T\'es bizarre comme mec.', portrait: null },
-        { speaker: 'JB', text: 'On me le dit souvent oui.', portrait: 'damage' },
+        { speaker: 'Alex', text: 'On me le dit souvent oui.', portrait: 'damage' },
         { speaker: 'Léa', text: '*soupire* Bon allez, on y va. Mais t\'as intérêt à pas être un psychopathe.', portrait: null, next: 'leaving_bar' }
     ],
 
     serpent: [
         { speaker: 'Léa', text: '... Tu viens de dire serpent là ?', portrait: null },
-        { speaker: 'JB', text: '*réalise sa connerie*', portrait: 'damage' },
+        { speaker: 'Alex', text: '*réalise sa connerie*', portrait: 'damage' },
         {
             speaker: 'Léa',
             text: 'Genre un vrai serpent ? Vivant ?',
@@ -262,10 +262,10 @@ const Dialogues = {
 
     bar_chat_recovery: [
         { speaker: 'Léa', text: '*rit nerveusement* Ok t\'as un humour spécial toi.', portrait: null },
-        { speaker: 'JB', text: 'C\'est mon charme ! Bon, tu fais quoi après du coup ?', portrait: 'levelUp' },
+        { speaker: 'Alex', text: 'C\'est mon charme ! Bon, tu fais quoi après du coup ?', portrait: 'levelUp' },
         { speaker: 'Léa', text: 'Hmm... Je sais pas, t\'as une idée ?', portrait: null },
         {
-            speaker: 'JB',
+            speaker: 'Alex',
             text: '*deuxième chance*',
             portrait: 'idle',
             choices: [
@@ -278,16 +278,16 @@ const Dialogues = {
     bar_last_drink: [
         { speaker: 'Narrateur', text: '~ 20 minutes plus tard ~', portrait: null },
         { speaker: 'Léa', text: 'Bon, le bar va fermer... On fait quoi ?', portrait: null },
-        { speaker: 'JB', text: 'J\'ai les clés de chez un pote ! Il est en vacances.', portrait: 'idle' },
+        { speaker: 'Alex', text: 'J\'ai les clés de chez un pote ! Il est en vacances.', portrait: 'idle' },
         { speaker: 'Léa', text: 'Oh ? Allez pourquoi pas ! C\'est où ?', portrait: null, next: 'leaving_bar' }
     ],
 
     serpent_2: [
         { speaker: 'Léa', text: '... Saucisse. Tu as appelé ton serpent... Saucisse.', portrait: null },
-        { speaker: 'JB', text: 'C\'est parce qu\'il est long et fin ! Logique non ?', portrait: 'idle' },
+        { speaker: 'Alex', text: 'C\'est parce qu\'il est long et fin ! Logique non ?', portrait: 'idle' },
         { speaker: 'Léa', text: '*expression indéchiffrable*', portrait: null },
         {
-            speaker: 'JB',
+            speaker: 'Alex',
             text: '*sent que ça part mal*',
             portrait: 'damage',
             choices: [
@@ -300,16 +300,16 @@ const Dialogues = {
     leaving_bar: [
         { speaker: 'Narrateur', text: '~ Devant Le Tropical, 1h12 ~', portrait: null },
         { speaker: 'Léa', text: '*frissonne* Il fait froid ! On appelle un Uber ?', portrait: null },
-        { speaker: 'JB', text: 'Yep ! Deux secondes...', portrait: 'idle' },
-        { speaker: 'JB', text: '*sort son téléphone*', portrait: 'idle' },
-        { speaker: 'JB', text: '*l\'écran reste noir*', portrait: 'damage' },
-        { speaker: 'JB', text: '*appuie frénétiquement sur le bouton*', portrait: 'damage' },
-        { speaker: 'JB', text: '... Non. Non non non.', portrait: 'damage' },
+        { speaker: 'Alex', text: 'Yep ! Deux secondes...', portrait: 'idle' },
+        { speaker: 'Alex', text: '*sort son téléphone*', portrait: 'idle' },
+        { speaker: 'Alex', text: '*l\'écran reste noir*', portrait: 'damage' },
+        { speaker: 'Alex', text: '*appuie frénétiquement sur le bouton*', portrait: 'damage' },
+        { speaker: 'Alex', text: '... Non. Non non non.', portrait: 'damage' },
         { speaker: 'Léa', text: 'Quoi ? Qu\'est-ce qui se passe ?', portrait: null },
-        { speaker: 'JB', text: 'Plus de batterie. Et... j\'ai pas noté l\'adresse d\'Abel.', portrait: 'damage' },
+        { speaker: 'Alex', text: 'Plus de batterie. Et... j\'ai pas noté l\'adresse d\'Abel.', portrait: 'damage' },
         { speaker: 'Léa', text: '... T\'es sérieux là ?', portrait: null },
         {
-            speaker: 'JB',
+            speaker: 'Alex',
             text: '*cherche une solution*',
             portrait: 'damage',
             choices: [
@@ -321,14 +321,14 @@ const Dialogues = {
 
     no_data: [
         { speaker: 'Léa', text: '*check son tel* J\'ai plus de 4G... Forfait grillé.', portrait: null },
-        { speaker: 'JB', text: 'On est vraiment dans la merde.', portrait: 'damage' },
+        { speaker: 'Alex', text: 'On est vraiment dans la merde.', portrait: 'damage' },
         { speaker: 'Léa', text: '*regarde autour* Y\'a une lumière là-bas !', portrait: null },
-        { speaker: 'JB', text: '*voit l\'enseigne* Un salon de thé turc ! Ils ont sûrement un chargeur !', portrait: 'levelUp', next: 'go_to_salon' }
+        { speaker: 'Alex', text: '*voit l\'enseigne* Un salon de thé turc ! Ils ont sûrement un chargeur !', portrait: 'levelUp', next: 'go_to_salon' }
     ],
 
     find_charger: [
         { speaker: 'Léa', text: 'Bonne idée ! *regarde autour* Là ! Un salon de thé !', portrait: null },
-        { speaker: 'JB', text: 'Yes ! Allez viens, ils vont nous sauver !', portrait: 'running', next: 'go_to_salon' }
+        { speaker: 'Alex', text: 'Yes ! Allez viens, ils vont nous sauver !', portrait: 'running', next: 'go_to_salon' }
     ],
 
     go_to_salon: [
@@ -338,7 +338,7 @@ const Dialogues = {
     salon_intro: [
         { speaker: 'Narrateur', text: '~ Salon de Thé "Chez Mehmet" - 1h23 ~', portrait: null },
         { speaker: 'Narrateur', text: 'Un homme moustachu range les tables, l\'air fatigué.', portrait: null },
-        { speaker: 'JB', text: '*entre en trombe* BONSOIR ! Vous auriez un chargeur iPhone ?!', portrait: 'angryYell' },
+        { speaker: 'Alex', text: '*entre en trombe* BONSOIR ! Vous auriez un chargeur iPhone ?!', portrait: 'angryYell' },
         { speaker: 'Mehmet', text: '*sursaute* Hé ! Du calme !', portrait: null },
         { speaker: 'Mehmet', text: '*regarde sa montre* On ferme là mon ami. Il est tard.', portrait: null },
         { speaker: 'Léa', text: '*chuchote* Vas-y, négocie...', portrait: null, next: 'start_negotiate' }
@@ -348,40 +348,40 @@ const Dialogues = {
         { speaker: 'Mehmet', text: '*sourit largement* Ah, quelqu\'un qui apprécie le vrai thé !', portrait: null },
         { speaker: 'Mehmet', text: 'Allez, installez-vous ! Le chargeur est là-bas.', portrait: null },
         { speaker: 'Léa', text: '*impressionnée, chuchote* T\'as géré !', portrait: null },
-        { speaker: 'JB', text: '*fier de lui*', portrait: 'thumbsUp' },
+        { speaker: 'Alex', text: '*fier de lui*', portrait: 'thumbsUp' },
         { speaker: 'Narrateur', text: '~ 15 minutes et un excellent thé plus tard ~', portrait: null },
         { speaker: 'Mehmet', text: 'Vous revenez quand vous voulez ! Et bonne fin de soirée...', portrait: null },
-        { speaker: 'JB', text: '*récupère son tel* J\'ai l\'adresse ! Let\'s go !', portrait: 'levelUp', next: 'to_maze' }
+        { speaker: 'Alex', text: '*récupère son tel* J\'ai l\'adresse ! Let\'s go !', portrait: 'levelUp', next: 'to_maze' }
     ],
 
     negotiate_fail: [
         { speaker: 'Mehmet', text: '*croise les bras* Non non, je suis fatigué. Bonne nuit !', portrait: null },
-        { speaker: 'JB', text: 'S\'il vous plaît...', portrait: 'damage' },
+        { speaker: 'Alex', text: 'S\'il vous plaît...', portrait: 'damage' },
         { speaker: 'Léa', text: '*lui donne un coup de coude* Essaye autre chose !', portrait: null, next: 'start_negotiate' }
     ],
 
     negotiate_angry: [
         { speaker: 'Mehmet', text: '*s\'énerve* Tu te fous de moi ?! DEHORS !', portrait: null },
-        { speaker: 'JB', text: '*se fait virer*', portrait: 'crying' },
+        { speaker: 'Alex', text: '*se fait virer*', portrait: 'crying' },
         { speaker: 'Léa', text: '*morte de honte* Bravo champion...', portrait: null },
         { speaker: 'Narrateur', text: '~ Après 20 minutes à chercher ~', portrait: null },
-        { speaker: 'JB', text: '*trouve un McDo* Un McDo 24h ! Sauvés !', portrait: 'levelUp' },
+        { speaker: 'Alex', text: '*trouve un McDo* Un McDo 24h ! Sauvés !', portrait: 'levelUp' },
         { speaker: 'Léa', text: 'Tu m\'offres des nuggets pour compenser.', portrait: null },
-        { speaker: 'JB', text: 'Deal.', portrait: 'kebab', next: 'to_maze' }
+        { speaker: 'Alex', text: 'Deal.', portrait: 'kebab', next: 'to_maze' }
     ],
 
     to_maze: [
         { speaker: 'Narrateur', text: '*Téléphone chargé, adresse récupérée...*', portrait: null },
-        { speaker: 'JB', text: 'C\'est à 5 min à pied ! On y va !', portrait: 'running', next: 'maze_intro' }
+        { speaker: 'Alex', text: 'C\'est à 5 min à pied ! On y va !', portrait: 'running', next: 'maze_intro' }
     ],
 
     maze_intro: [
         { speaker: 'Narrateur', text: '~ Quartier résidentiel - 2h01 ~', portrait: null },
         { speaker: 'Léa', text: 'Bon, c\'est où ton fameux appart ?', portrait: null },
-        { speaker: 'JB', text: '*regarde les trois immeubles identiques*', portrait: 'checkMap' },
-        { speaker: 'JB', text: '...', portrait: 'checkMap' },
-        { speaker: 'Léa', text: 'JB ? C\'est lequel ?', portrait: null },
-        { speaker: 'JB', text: '*transpire*', portrait: 'damage' },
+        { speaker: 'Alex', text: '*regarde les trois immeubles identiques*', portrait: 'checkMap' },
+        { speaker: 'Alex', text: '...', portrait: 'checkMap' },
+        { speaker: 'Léa', text: 'Alex ? C\'est lequel ?', portrait: null },
+        { speaker: 'Alex', text: '*transpire*', portrait: 'damage' },
         {
             speaker: 'Léa',
             text: 'Me dis pas que tu sais pas...',
@@ -395,27 +395,27 @@ const Dialogues = {
 
     building_confused: [
         { speaker: 'Léa', text: 'Attends. Tu m\'as traînée jusqu\'ici sans savoir OÙ c\'est ?!', portrait: null },
-        { speaker: 'JB', text: 'Je SAIS où c\'est ! C\'est juste que... la nuit tout se ressemble !', portrait: 'checkMap' },
+        { speaker: 'Alex', text: 'Je SAIS où c\'est ! C\'est juste que... la nuit tout se ressemble !', portrait: 'checkMap' },
         { speaker: 'Léa', text: '*soupir profond* ...Bon. On essaye.', portrait: null, next: 'building_select' }
     ],
 
     wrong_building: [
-        { speaker: 'JB', text: '*essaye la clé* Ça tourne pas...', portrait: 'openDoor' },
+        { speaker: 'Alex', text: '*essaye la clé* Ça tourne pas...', portrait: 'openDoor' },
         { speaker: 'Léa', text: 'Donc c\'est pas celui-là.', portrait: null },
-        { speaker: 'JB', text: 'C\'est forcément un des deux autres !', portrait: 'checkMap' },
+        { speaker: 'Alex', text: 'C\'est forcément un des deux autres !', portrait: 'checkMap' },
         { speaker: 'Léa', text: '*lève les yeux au ciel* Quelle soirée...', portrait: null, next: 'building_select' }
     ],
 
     right_building: [
-        { speaker: 'JB', text: '*la clé tourne* YES !', portrait: 'openDoor' },
+        { speaker: 'Alex', text: '*la clé tourne* YES !', portrait: 'openDoor' },
         { speaker: 'Léa', text: 'Miracle ! Bon, c\'est quel étage maintenant ?', portrait: null },
-        { speaker: 'JB', text: 'Attends... je me souviens du SMS !', portrait: 'checkMap', next: 'start_memory_floor' }
+        { speaker: 'Alex', text: 'Attends... je me souviens du SMS !', portrait: 'checkMap', next: 'start_memory_floor' }
     ],
 
     wrong_floor: [
-        { speaker: 'JB', text: '*essaye la clé sur une porte* ...Nope.', portrait: 'openDoor' },
+        { speaker: 'Alex', text: '*essaye la clé sur une porte* ...Nope.', portrait: 'openDoor' },
         { speaker: 'Léa', text: 'C\'est une blague ? C\'est pas le bon étage ?!', portrait: null },
-        { speaker: 'JB', text: 'Abel m\'a dit un truc genre "au milieu"...', portrait: 'checkMap' },
+        { speaker: 'Alex', text: 'Abel m\'a dit un truc genre "au milieu"...', portrait: 'checkMap' },
         {
             speaker: 'Léa',
             text: '*commence à perdre patience*',
@@ -428,24 +428,24 @@ const Dialogues = {
     ],
 
     right_floor: [
-        { speaker: 'JB', text: 'Ok on y est !', portrait: 'thumbsUp' },
+        { speaker: 'Alex', text: 'Ok on y est !', portrait: 'thumbsUp' },
         { speaker: 'Léa', text: '...Y\'a 4 portes. C\'est laquelle ?', portrait: null, next: 'door_select' }
     ],
 
     wrong_door: [
         { speaker: 'Narrateur', text: '*Un voisin ouvre* QU\'EST-CE QUE VOUS FOUTEZ ?!', portrait: null },
         { speaker: 'Léa', text: '*gênée* Désolé ! On s\'est trompés !', portrait: null },
-        { speaker: 'JB', text: '*s\'enfuit vers une autre porte*', portrait: 'running', next: 'door_select' }
+        { speaker: 'Alex', text: '*s\'enfuit vers une autre porte*', portrait: 'running', next: 'door_select' }
     ],
 
     victory_door: [
-        { speaker: 'JB', text: '*la clé tourne* YESSS !', portrait: 'openDoor' },
+        { speaker: 'Alex', text: '*la clé tourne* YESSS !', portrait: 'openDoor' },
         { speaker: 'Léa', text: 'Enfin ! J\'y croyais plus.', portrait: null, next: 'victory' }
     ],
 
     game_over_weird: [
         { speaker: 'Léa', text: 'Ok là c\'est trop bizarre pour moi... Salut !', portrait: null },
-        { speaker: 'JB', text: '*se prend une gifle mentale*', portrait: 'slapped' },
+        { speaker: 'Alex', text: '*se prend une gifle mentale*', portrait: 'slapped' },
         { speaker: 'Narrateur', text: '*elle appelle un Uber... sans toi*', portrait: null, next: 'game_over' }
     ],
 
@@ -453,34 +453,34 @@ const Dialogues = {
     drunk_intro: [
         { speaker: 'Narrateur', text: '~ Sur le chemin... ~', portrait: null },
         { speaker: 'Léa', text: 'Euh... T\'es sûr que ça va ? Tu tangues un peu là.', portrait: null },
-        { speaker: 'JB', text: 'Moi ? Nan nan, c\'est les... les pavés qui bougent !', portrait: 'damage' },
+        { speaker: 'Alex', text: 'Moi ? Nan nan, c\'est les... les pavés qui bougent !', portrait: 'damage' },
         { speaker: 'Léa', text: '*soupir* Essaie au moins de marcher droit...', portrait: null, next: 'start_drunk_game' }
     ],
 
     drunk_success: [
         { speaker: 'Léa', text: 'Bon finalement t\'assures ! J\'ai cru que tu allais tomber.', portrait: null },
-        { speaker: 'JB', text: '*fier de lui* Je gère ! C\'est l\'adrenaline.', portrait: 'thumbsUp' },
+        { speaker: 'Alex', text: '*fier de lui* Je gère ! C\'est l\'adrenaline.', portrait: 'thumbsUp' },
         { speaker: 'Léa', text: '*rit* Ok champion. On continue !', portrait: null, next: 'find_charger' }
     ],
 
     drunk_fail: [
-        { speaker: 'Narrateur', text: '*JB s\'étale sur le trottoir*', portrait: null },
+        { speaker: 'Narrateur', text: '*Alex s\'étale sur le trottoir*', portrait: null },
         { speaker: 'Léa', text: 'Oh mon dieu ! Ça va ?!', portrait: null },
-        { speaker: 'JB', text: '*se relève tant bien que mal* Ça va ça va... C\'est rien !', portrait: 'damage' },
+        { speaker: 'Alex', text: '*se relève tant bien que mal* Ça va ça va... C\'est rien !', portrait: 'damage' },
         { speaker: 'Léa', text: '*gênée* On va peut-être ralentir...', portrait: null, next: 'find_charger' }
     ],
 
     tea_intro: [
         { speaker: 'Mehmet', text: 'Tu veux charger ton téléphone ? D\'accord...', portrait: null },
         { speaker: 'Mehmet', text: 'Mais d\'abord, montre-moi que tu respectes le thé turc !', portrait: null },
-        { speaker: 'JB', text: 'Euh... comment ça ?', portrait: 'damage' },
+        { speaker: 'Alex', text: 'Euh... comment ça ?', portrait: 'damage' },
         { speaker: 'Mehmet', text: '*lui tend une théière* Sers-moi trois tasses. PARFAITEMENT.', portrait: null, next: 'start_tea_game' }
     ],
 
     stealth_intro: [
         { speaker: 'Narrateur', text: '~ Couloir de l\'immeuble - 2h34 ~', portrait: null },
         { speaker: 'Léa', text: '*chuchote* Il est super tard, fais pas de bruit !', portrait: null },
-        { speaker: 'JB', text: '*chuchote* T\'inquiète, je suis discret comme une...', portrait: 'idle' },
+        { speaker: 'Alex', text: '*chuchote* T\'inquiète, je suis discret comme une...', portrait: 'idle' },
         { speaker: 'Narrateur', text: '*Une porte grince quelque part*', portrait: null },
         { speaker: 'Léa', text: '*chuchote* CHUT ! Avance doucement !', portrait: null, next: 'start_stealth_game' }
     ],
@@ -489,19 +489,19 @@ const Dialogues = {
         { speaker: 'Narrateur', text: '*Un voisin ouvre sa porte*', portrait: null },
         { speaker: 'Narrateur', text: 'VOUS FOUTEZ QUOI À CETTE HEURE ?!', portrait: null },
         { speaker: 'Léa', text: '*morte de honte* Pardon pardon pardon !', portrait: null },
-        { speaker: 'JB', text: '*se cache le visage*', portrait: 'crying' },
+        { speaker: 'Alex', text: '*se cache le visage*', portrait: 'crying' },
         { speaker: 'Narrateur', text: '*Ils attendent que le voisin rentre...*', portrait: null, next: 'stealth_retry' }
     ],
 
     stealth_retry: [
         { speaker: 'Léa', text: 'Ok... On réessaye. DOUCEMENT cette fois.', portrait: null },
-        { speaker: 'JB', text: 'Promis promis !', portrait: 'thumbsUp', next: 'start_stealth_game' }
+        { speaker: 'Alex', text: 'Promis promis !', portrait: 'thumbsUp', next: 'start_stealth_game' }
     ],
 
     memory_intro: [
-        { speaker: 'JB', text: 'Attends je check les SMS d\'Abel...', portrait: 'checkMap' },
+        { speaker: 'Alex', text: 'Attends je check les SMS d\'Abel...', portrait: 'checkMap' },
         { speaker: 'Léa', text: 'Il t\'a envoyé l\'adresse ?', portrait: null },
-        { speaker: 'JB', text: 'Ouais mais... mon tel va s\'éteindre ! Faut que je mémorise vite !', portrait: 'damage' },
+        { speaker: 'Alex', text: 'Ouais mais... mon tel va s\'éteindre ! Faut que je mémorise vite !', portrait: 'damage' },
         { speaker: 'Narrateur', text: '*L\'écran clignote dangereusement...*', portrait: null, next: 'start_memory_game' }
     ]
 };
@@ -689,7 +689,7 @@ const UI = {
     // Initialize all video elements with the correct format
     initAllVideos() {
         const videoMappings = {
-            'jb-idle': 'inBar',           // Title screen - JB at bar
+            'jb-idle': 'inBar',           // Title screen - Hero at bar
             'jb-sprite': 'talkToGirl',    // Bar scene - talking to Léa
             'jb-sprite-street': 'running', // Street scene - running
             'jb-sprite-salon': 'kebab',    // Salon scene - eating kebab
@@ -2238,7 +2238,7 @@ const StealthGame = {
 // =====================================================
 document.addEventListener('DOMContentLoaded', () => {
     // Log browser detection
-    console.log(`🎮 JB's Ultimate Mission loaded!`);
+    console.log(`🎮 Ultimate Mission loaded!`);
     console.log(`📱 Browser: ${BrowserDetect.isSafari ? 'Safari' : 'Other'}, Using: ${BrowserDetect.getVideoFormat().toUpperCase()}`);
 
     // Initialize all videos with correct format (webm/mov based on browser)

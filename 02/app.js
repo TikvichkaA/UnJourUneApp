@@ -1,5 +1,5 @@
 /**
- * JB vs la vie
+ * Toi vs la vie
  * L'aide à la décision qui ne décide rien
  */
 
