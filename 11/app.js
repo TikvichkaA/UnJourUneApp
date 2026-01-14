@@ -151,13 +151,6 @@ const MISSIONS = {
         emoji: "🧺",
         missions: [
             {
-                id: "l1",
-                title: "Trouver les produits",
-                desc: "Lessive, Calgon, lingettes anti-décoloration → sous l'évier cuisine",
-                points: 5,
-                frequency: "reminder"
-            },
-            {
                 id: "l2",
                 title: "Doser la lessive correctement",
                 desc: "UN bouchon OU 3 petites feuilles de lessive dans le bac tout à gauche",
@@ -287,13 +280,6 @@ const MISSIONS = {
                 desc: "Serpillère avec Savon de Marseille (bouteille dans placard WC)",
                 points: 25,
                 frequency: "monthly"
-            },
-            {
-                id: "g13",
-                title: "Sacs poubelle = sous l'évier 🗑️",
-                desc: "Les sacs poubelle sont sous l'évier. Extras dans les boîtes vertes à gauche",
-                points: 5,
-                frequency: "reminder"
             }
         ]
     }
@@ -902,12 +888,14 @@ function showZone(zoneId) {
     title.textContent = zone.name;
     list.innerHTML = '';
 
-    // Trier : à faire d'abord, puis faits
-    const sortedMissions = [...zone.missions].sort((a, b) => {
-        const aDue = isMissionDue(a) ? 0 : 1;
-        const bDue = isMissionDue(b) ? 0 : 1;
-        return aDue - bDue;
-    });
+    // Filtrer les reminders (ils sont dans la sidebar) et trier : à faire d'abord
+    const sortedMissions = [...zone.missions]
+        .filter(m => m.frequency !== 'reminder')
+        .sort((a, b) => {
+            const aDue = isMissionDue(a) ? 0 : 1;
+            const bDue = isMissionDue(b) ? 0 : 1;
+            return aDue - bDue;
+        });
 
     sortedMissions.forEach(mission => {
         const isCompleted = isMissionCompleted(mission);

@@ -23,6 +23,9 @@
             padding: 20px;
             text-align: center;
             border-bottom: 2px solid #fef783;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .header h1 {
@@ -30,34 +33,122 @@
             margin-bottom: 8px;
         }
 
-        .header p {
-            color: #aaa;
-            font-size: 0.9rem;
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
         }
 
-        .source-link {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 16px;
+        .header-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-btn.primary {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .header-btn.secondary {
             background: #1d4eff;
             color: white;
-            text-decoration: none;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            transition: all 0.3s;
         }
 
-        .source-link:hover {
-            background: #3d6eff;
+        .header-btn.success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .header-btn:hover {
             transform: scale(1.05);
+            filter: brightness(1.1);
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 20px;
         }
 
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            background: rgba(0,0,0,0.2);
+            padding: 5px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            color: #888;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: #e4e4e4;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .tab.active {
+            background: #1d4eff;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fef783;
+        }
+
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        /* Filters */
         .filters {
             display: flex;
             gap: 10px;
@@ -107,35 +198,10 @@
             color: #888;
         }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: rgba(255,255,255,0.05);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .stat-card .number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #fef783;
-        }
-
-        .stat-card .label {
-            font-size: 0.85rem;
-            color: #aaa;
-            margin-top: 5px;
-        }
-
+        /* Grid */
         .communes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: 20px;
         }
 
@@ -157,6 +223,7 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
         }
 
         .commune-name {
@@ -204,67 +271,412 @@
             color: #e4e4e4;
         }
 
-        .candidat-ed {
-            background: rgba(231, 76, 60, 0.2);
+        /* Candidats section */
+        .candidats-section {
+            margin-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+        }
+
+        .candidats-section h4 {
+            font-size: 0.9rem;
+            color: #e74c3c;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .add-candidat-btn {
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            background: rgba(231, 76, 60, 0.3);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .candidat-item {
+            background: rgba(231, 76, 60, 0.15);
             border-left: 3px solid #e74c3c;
             padding: 10px;
-            margin-top: 10px;
+            margin-bottom: 8px;
             border-radius: 0 8px 8px 0;
         }
 
-        .candidat-ed .name {
+        .candidat-item .name {
+            font-weight: bold;
+            color: #e74c3c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .candidat-item .role {
+            font-size: 0.8rem;
+            color: #f39c12;
+            margin-top: 2px;
+        }
+
+        .candidat-item .detail {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .candidat-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        .candidat-action-btn {
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .candidat-action-btn.search { background: #3498db; color: white; }
+        .candidat-action-btn.twitter { background: #1da1f2; color: white; }
+        .candidat-action-btn.dinguerie { background: #9b59b6; color: white; }
+
+        /* Dingueries */
+        .dingueries-list {
+            margin-top: 10px;
+        }
+
+        .dinguerie-item {
+            background: rgba(155, 89, 182, 0.2);
+            border-left: 3px solid #9b59b6;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.85rem;
+        }
+
+        .dinguerie-item .quote {
+            font-style: italic;
+            color: #e4e4e4;
+            margin-bottom: 5px;
+        }
+
+        .dinguerie-item .meta {
+            font-size: 0.75rem;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dinguerie-item .source-link {
+            color: #9b59b6;
+            text-decoration: none;
+        }
+
+        .dinguerie-item .source-link:hover {
+            text-decoration: underline;
+        }
+
+        .dinguerie-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            border-radius: 10px;
+            margin-right: 5px;
+        }
+
+        .tag-racisme { background: #e74c3c; }
+        .tag-islamophobie { background: #e67e22; }
+        .tag-homophobie { background: #9b59b6; }
+        .tag-sexisme { background: #e91e63; }
+        .tag-antisemitisme { background: #795548; }
+        .tag-autre { background: #607d8b; }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #1a1a2e;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.2rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary { background: #1d4eff; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: #e4e4e4; }
+
+        .btn:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        /* Search Panel */
+        .search-panel {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .search-panel h3 {
+            margin-bottom: 15px;
+        }
+
+        .search-results {
+            display: grid;
+            gap: 15px;
+        }
+
+        .search-result-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .search-result-item h4 {
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+        .search-result-item p {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .search-result-item a {
+            color: #1d4eff;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        /* Dingueries Tab */
+        .dingueries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .dinguerie-card {
+            background: rgba(155, 89, 182, 0.1);
+            border: 1px solid rgba(155, 89, 182, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .dinguerie-card .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .dinguerie-card .author {
             font-weight: bold;
             color: #e74c3c;
         }
 
-        .candidat-ed .detail {
+        .dinguerie-card .commune {
             font-size: 0.85rem;
-            color: #aaa;
-            margin-top: 3px;
+            color: #888;
         }
 
-        .actions {
+        .dinguerie-card .quote {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: #e4e4e4;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+
+        .dinguerie-card .meta {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .action-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 5px;
+            font-size: 0.85rem;
+            color: #888;
         }
 
-        .action-btn.google {
-            background: #4285f4;
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 0.8rem;
+        }
+
+        /* Export */
+        .export-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .export-card {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .export-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .export-card .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .export-card h4 {
+            margin-bottom: 5px;
+        }
+
+        .export-card p {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Iframe search */
+        .iframe-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 500px;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .quick-search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quick-search-bar input {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
             color: white;
+            font-size: 1rem;
         }
 
-        .action-btn.twitter {
-            background: #1da1f2;
+        .quick-search-bar button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            background: #1d4eff;
             color: white;
+            cursor: pointer;
+            font-size: 0.95rem;
         }
 
-        .action-btn.news {
-            background: #27ae60;
-            color: white;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.05);
-            filter: brightness(1.1);
-        }
-
+        /* Legend */
         .legend {
             background: rgba(255,255,255,0.05);
             padding: 15px;
@@ -301,21 +713,6 @@
             font-size: 0.8rem;
         }
 
-        .methodology {
-            background: rgba(29, 78, 255, 0.1);
-            border: 1px solid #1d4eff;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        .methodology h3 {
-            color: #1d4eff;
-            margin-bottom: 10px;
-        }
-
         footer {
             text-align: center;
             padding: 30px;
@@ -328,12 +725,16 @@
         }
 
         @media (max-width: 600px) {
-            .communes-grid {
+            .communes-grid, .dingueries-grid {
                 grid-template-columns: 1fr;
             }
 
             .header h1 {
                 font-size: 1.4rem;
+            }
+
+            .tabs {
+                flex-wrap: nowrap;
             }
         }
     </style>
@@ -342,80 +743,311 @@
     <div class="header">
         <h1>Veille Municipales 2026</h1>
         <p>Communes à risque de basculer à l'extrême droite</p>
-        <a href="https://municipales.streetpress.com/" target="_blank" class="source-link">
-            Carte interactive StreetPress
-        </a>
+        <div class="header-actions">
+            <button class="header-btn primary" onclick="openAddDinguerieModal()">
+                + Ajouter une dinguerie
+            </button>
+            <button class="header-btn secondary" onclick="openAddCandidatModal()">
+                + Ajouter un·e candidat·e
+            </button>
+            <a href="https://municipales.streetpress.com/" target="_blank" class="header-btn success">
+                Carte StreetPress
+            </a>
+        </div>
     </div>
 
     <div class="container">
-        <div class="methodology">
-            <h3>Methodologie</h3>
-            <p>
-                Données issues du travail de <strong>StreetPress</strong> et du chercheur <strong>Alessio Motta</strong> (docteur en sciences politiques).
-                Le simulateur prend en compte les résultats des européennes et législatives 2024, les municipales 2020, et l'étiquette des maires sortants.
-                <strong>52 communes parmi les 500 plus peuplées</strong> présentent un risque significatif.
+        <div class="tabs">
+            <button class="tab active" data-tab="communes">Communes à risque</button>
+            <button class="tab" data-tab="dingueries">Dingueries collectées</button>
+            <button class="tab" data-tab="recherche">Recherche intégrée</button>
+            <button class="tab" data-tab="export">Export & Partage</button>
+        </div>
+
+        <!-- TAB: Communes -->
+        <div id="tab-communes" class="tab-content active">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="number" id="total-communes">0</div>
+                    <div class="label">Communes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="score-e">0</div>
+                    <div class="label">Score E</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="score-d">0</div>
+                    <div class="label">Score D</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="total-candidats">0</div>
+                    <div class="label">Candidat·es ED</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="total-dingueries">0</div>
+                    <div class="label">Dingueries</div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <h3>Echelle de risque</h3>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-color score-E">E</div>
+                        <span>Victoire probable 1er tour</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color score-D">D</div>
+                        <span>Risque élevé</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color score-C">C</div>
+                        <span>Risque modéré</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" data-score="all">Toutes</button>
+                <button class="filter-btn" data-score="E">Score E</button>
+                <button class="filter-btn" data-score="D">Score D</button>
+                <button class="filter-btn" data-score="C">Score C</button>
+                <div class="search-box">
+                    <input type="text" id="search" placeholder="Rechercher une commune, un candidat...">
+                </div>
+            </div>
+
+            <div class="communes-grid" id="communes-grid"></div>
+        </div>
+
+        <!-- TAB: Dingueries -->
+        <div id="tab-dingueries" class="tab-content">
+            <div class="filters">
+                <button class="filter-btn active" data-tag="all">Toutes</button>
+                <button class="filter-btn" data-tag="racisme">Racisme</button>
+                <button class="filter-btn" data-tag="islamophobie">Islamophobie</button>
+                <button class="filter-btn" data-tag="homophobie">Homophobie</button>
+                <button class="filter-btn" data-tag="sexisme">Sexisme</button>
+                <button class="filter-btn" data-tag="antisemitisme">Antisémitisme</button>
+                <div class="search-box">
+                    <input type="text" id="search-dingueries" placeholder="Rechercher dans les dingueries...">
+                </div>
+            </div>
+            <div class="dingueries-grid" id="dingueries-grid"></div>
+            <p id="no-dingueries" style="text-align: center; color: #888; padding: 40px;">
+                Aucune dinguerie collectée. Cliquez sur "+ Ajouter une dinguerie" pour commencer.
             </p>
         </div>
 
-        <div class="legend">
-            <h3>Echelle de risque (Nutri-score)</h3>
-            <div class="legend-items">
-                <div class="legend-item">
-                    <div class="legend-color score-E">E</div>
-                    <span>Victoire probable dès le 1er tour</span>
+        <!-- TAB: Recherche -->
+        <div id="tab-recherche" class="tab-content">
+            <div class="search-panel">
+                <h3>Recherche rapide de déclarations</h3>
+                <div class="quick-search-bar">
+                    <input type="text" id="quick-search-input" placeholder="Nom du candidat ou de la commune...">
+                    <select id="search-type">
+                        <option value="all">Tout</option>
+                        <option value="news">Actualités</option>
+                        <option value="polemique">Polémiques</option>
+                        <option value="twitter">Twitter/X</option>
+                    </select>
+                    <button onclick="performSearch()">Rechercher</button>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color score-D">D</div>
-                    <span>Risque élevé</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color score-C">C</div>
-                    <span>Risque modéré</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color score-B">B</div>
-                    <span>Risque faible</span>
+                <p style="color: #888; font-size: 0.85rem; margin-top: 10px;">
+                    La recherche ouvrira les résultats dans de nouveaux onglets pour contourner les limitations CORS.
+                </p>
+            </div>
+
+            <div class="search-panel">
+                <h3>Recherches suggérées</h3>
+                <div id="suggested-searches" class="search-results"></div>
+            </div>
+
+            <div class="search-panel">
+                <h3>Sources utiles</h3>
+                <div class="search-results">
+                    <div class="search-result-item">
+                        <h4>StreetPress - La bataille des municipales</h4>
+                        <p>Carte interactive et articles sur les communes à risque</p>
+                        <a href="https://municipales.streetpress.com/" target="_blank">municipales.streetpress.com</a>
+                    </div>
+                    <div class="search-result-item">
+                        <h4>Basta! - Carte des 50 villes</h4>
+                        <p>Analyse des communes susceptibles de basculer</p>
+                        <a href="https://basta.media/La-carte-des-cinquante-villes-qui-pourraient-basculer-extreme-droite-elections-municipales" target="_blank">basta.media</a>
+                    </div>
+                    <div class="search-result-item">
+                        <h4>Regards Citoyens - NosDéputés</h4>
+                        <p>Activité parlementaire des député·es RN</p>
+                        <a href="https://www.nosdeputes.fr/" target="_blank">nosdeputes.fr</a>
+                    </div>
+                    <div class="search-result-item">
+                        <h4>CheckNews (Libération)</h4>
+                        <p>Fact-checking et vérification</p>
+                        <a href="https://www.liberation.fr/checknews/" target="_blank">liberation.fr/checknews</a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="stats">
-            <div class="stat-card">
-                <div class="number" id="total-communes">0</div>
-                <div class="label">Communes à risque</div>
+        <!-- TAB: Export -->
+        <div id="tab-export" class="tab-content">
+            <h3 style="margin-bottom: 20px;">Exporter les données</h3>
+            <div class="export-options">
+                <div class="export-card" onclick="exportJSON()">
+                    <div class="icon">{ }</div>
+                    <h4>Export JSON</h4>
+                    <p>Données brutes réutilisables</p>
+                </div>
+                <div class="export-card" onclick="exportCSV()">
+                    <div class="icon">📊</div>
+                    <h4>Export CSV</h4>
+                    <p>Compatible Excel/Sheets</p>
+                </div>
+                <div class="export-card" onclick="exportMarkdown()">
+                    <div class="icon">📝</div>
+                    <h4>Export Markdown</h4>
+                    <p>Pour articles/documentation</p>
+                </div>
+                <div class="export-card" onclick="generateShareText()">
+                    <div class="icon">📱</div>
+                    <h4>Texte de partage</h4>
+                    <p>Pour réseaux sociaux</p>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="number" id="score-e">0</div>
-                <div class="label">Score E (critique)</div>
+
+            <div class="search-panel" style="margin-top: 30px;">
+                <h3>Importer des données</h3>
+                <p style="color: #888; margin-bottom: 15px;">Restaurer des données précédemment exportées</p>
+                <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importJSON(event)">
+                <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">
+                    Importer un fichier JSON
+                </button>
             </div>
-            <div class="stat-card">
-                <div class="number" id="score-d">0</div>
-                <div class="label">Score D (élevé)</div>
-            </div>
-            <div class="stat-card">
-                <div class="number" id="candidats-identifies">0</div>
-                <div class="label">Candidats ED identifiés</div>
+
+            <div id="export-preview" class="search-panel" style="margin-top: 30px; display: none;">
+                <h3>Aperçu</h3>
+                <textarea id="export-content" style="width: 100%; height: 300px; background: #0a0a15; color: #e4e4e4; border: none; border-radius: 8px; padding: 15px; font-family: monospace; font-size: 0.85rem;"></textarea>
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="btn btn-primary" onclick="downloadExport()">Télécharger</button>
+                    <button class="btn btn-secondary" onclick="copyExport()">Copier</button>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="filters">
-            <button class="filter-btn active" data-score="all">Toutes</button>
-            <button class="filter-btn" data-score="E">Score E</button>
-            <button class="filter-btn" data-score="D">Score D</button>
-            <button class="filter-btn" data-score="C">Score C</button>
-            <div class="search-box">
-                <input type="text" id="search" placeholder="Rechercher une commune, un département, un candidat...">
+    <!-- Modal: Ajouter dinguerie -->
+    <div class="modal-overlay" id="modal-dinguerie">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Ajouter une dinguerie</h2>
+                <button class="modal-close" onclick="closeModal('modal-dinguerie')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-dinguerie" onsubmit="saveDinguerie(event)">
+                    <div class="form-group">
+                        <label>Auteur·e de la déclaration *</label>
+                        <input type="text" id="ding-auteur" required placeholder="Prénom Nom">
+                    </div>
+                    <div class="form-group">
+                        <label>Commune</label>
+                        <select id="ding-commune">
+                            <option value="">-- Sélectionner --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Citation / Déclaration *</label>
+                        <textarea id="ding-citation" required placeholder="La citation exacte..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Type de propos</label>
+                        <select id="ding-type">
+                            <option value="racisme">Racisme</option>
+                            <option value="islamophobie">Islamophobie</option>
+                            <option value="homophobie">Homophobie</option>
+                            <option value="sexisme">Sexisme</option>
+                            <option value="antisemitisme">Antisémitisme</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date (approximative)</label>
+                        <input type="date" id="ding-date">
+                    </div>
+                    <div class="form-group">
+                        <label>Source (URL) *</label>
+                        <input type="url" id="ding-source" required placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Contexte / Notes</label>
+                        <textarea id="ding-contexte" placeholder="Contexte de la déclaration, circonstances..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-dinguerie')">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="communes-grid" id="communes-grid">
-            <!-- Communes seront injectées ici -->
+    <!-- Modal: Ajouter candidat -->
+    <div class="modal-overlay" id="modal-candidat">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Ajouter un·e candidat·e</h2>
+                <button class="modal-close" onclick="closeModal('modal-candidat')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-candidat" onsubmit="saveCandidat(event)">
+                    <div class="form-group">
+                        <label>Commune *</label>
+                        <select id="cand-commune" required>
+                            <option value="">-- Sélectionner --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nom complet *</label>
+                        <input type="text" id="cand-nom" required placeholder="Prénom Nom">
+                    </div>
+                    <div class="form-group">
+                        <label>Rôle sur la liste</label>
+                        <select id="cand-role">
+                            <option value="tete">Tête de liste</option>
+                            <option value="colistier">Colistier·e</option>
+                            <option value="soutien">Soutien</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Parti / Mouvement</label>
+                        <select id="cand-parti">
+                            <option value="RN">Rassemblement National</option>
+                            <option value="Reconquete">Reconquête</option>
+                            <option value="UDR">Union des Droites</option>
+                            <option value="DLF">Debout la France</option>
+                            <option value="autre">Autre / Sans étiquette ED</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Informations complémentaires</label>
+                        <textarea id="cand-detail" placeholder="Mandat actuel, historique politique..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Compte Twitter/X</label>
+                        <input type="text" id="cand-twitter" placeholder="@pseudo">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-candidat')">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <footer>
         <p>
-            Outil de veille citoyenne - Données:
+            Sources:
             <a href="https://www.streetpress.com/sujet/1758557171-municipales-dix-villes-pourraient-basculer-extreme-droite-electionsmunicipales2026-france" target="_blank">StreetPress</a> |
             <a href="https://basta.media/La-carte-des-cinquante-villes-qui-pourraient-basculer-extreme-droite-elections-municipales" target="_blank">Basta!</a>
         </p>
@@ -423,435 +1055,899 @@
     </footer>
 
     <script>
-        // Base de données des communes à risque
-        const communes = [
-            // === SCORE E - Déjà RN ou victoire quasi-certaine ===
-            {
-                nom: "Hénin-Beaumont",
-                departement: "Pas-de-Calais (62)",
-                score: "E",
-                maireActuel: "Steeve Briois (RN)",
-                population: "27 000",
-                candidatED: null,
-                detail: "Fief historique du RN depuis 2014"
-            },
-            {
-                nom: "Perpignan",
-                departement: "Pyrénées-Orientales (66)",
-                score: "E",
-                maireActuel: "Louis Aliot (RN)",
-                population: "120 000",
-                candidatED: null,
-                detail: "RN depuis 2020"
-            },
-            {
-                nom: "Fréjus",
-                departement: "Var (83)",
-                score: "E",
-                maireActuel: "David Rachline (RN)",
-                population: "54 000",
-                candidatED: null,
-                detail: "RN depuis 2014"
-            },
-            {
-                nom: "Orange",
-                departement: "Vaucluse (84)",
-                score: "E",
-                maireActuel: "Yann Bompard (RN)",
-                population: "30 000",
-                candidatED: null,
-                detail: "Historique FN/RN depuis 1995"
-            },
-            {
-                nom: "Béziers",
-                departement: "Hérault (34)",
-                score: "E",
-                maireActuel: "Robert Ménard (proche RN)",
-                population: "78 000",
-                candidatED: null,
-                detail: "Robert Ménard depuis 2014"
-            },
-            {
-                nom: "Marignane",
-                departement: "Bouches-du-Rhône (13)",
-                score: "E",
-                maireActuel: "Eric Le Dissès (RN)",
-                population: "34 000",
-                candidatED: null,
-                detail: "RN depuis 2014"
-            },
-            {
-                nom: "Bruay-la-Buissière",
-                departement: "Pas-de-Calais (62)",
-                score: "E",
-                maireActuel: "Ludovic Pajot (RN)",
-                population: "22 000",
-                candidatED: null,
-                detail: "RN depuis 2020"
-            },
+        // ============ DATA ============
+        let communes = [
+            // SCORE E
+            { id: 1, nom: "Hénin-Beaumont", departement: "Pas-de-Calais (62)", score: "E", maireActuel: "Steeve Briois (RN)", population: "27 000", detail: "Fief historique du RN depuis 2014", candidats: [] },
+            { id: 2, nom: "Perpignan", departement: "Pyrénées-Orientales (66)", score: "E", maireActuel: "Louis Aliot (RN)", population: "120 000", detail: "RN depuis 2020", candidats: [] },
+            { id: 3, nom: "Fréjus", departement: "Var (83)", score: "E", maireActuel: "David Rachline (RN)", population: "54 000", detail: "RN depuis 2014", candidats: [] },
+            { id: 4, nom: "Orange", departement: "Vaucluse (84)", score: "E", maireActuel: "Yann Bompard (RN)", population: "30 000", detail: "Historique FN/RN depuis 1995", candidats: [] },
+            { id: 5, nom: "Béziers", departement: "Hérault (34)", score: "E", maireActuel: "Robert Ménard (proche RN)", population: "78 000", detail: "Robert Ménard depuis 2014", candidats: [] },
+            { id: 6, nom: "Marignane", departement: "Bouches-du-Rhône (13)", score: "E", maireActuel: "Eric Le Dissès (RN)", population: "34 000", detail: "RN depuis 2014", candidats: [] },
+            { id: 7, nom: "Bruay-la-Buissière", departement: "Pas-de-Calais (62)", score: "E", maireActuel: "Ludovic Pajot (RN)", population: "22 000", detail: "RN depuis 2020", candidats: [] },
 
-            // === SCORE D - Risque élevé ===
-            {
-                nom: "Toulon",
-                departement: "Var (83)",
-                score: "D",
-                maireActuel: "Hubert Falco (DVD)",
-                population: "180 000",
-                candidatED: {
-                    nom: "Inconnu - à surveiller",
-                    detail: "Plus grande ville à risque. Ancien fief FN (1995-2001)"
-                },
-                detail: "Plus grande ville à risque de basculer"
-            },
-            {
-                nom: "Calais",
-                departement: "Pas-de-Calais (62)",
-                score: "D",
-                maireActuel: "Natacha Bouchart (LR)",
-                population: "73 000",
-                candidatED: {
-                    nom: "Marc de Fleurian",
-                    detail: "Député RN. Marine Le Pen élue dans le département"
-                },
-                detail: "Forte implantation RN dans le département"
-            },
-            {
-                nom: "Agde",
-                departement: "Hérault (34)",
-                score: "D",
-                maireActuel: "Vacant (Gilles d'Ettore démissionné)",
-                population: "29 000",
-                candidatED: {
-                    nom: "Aurélien Lopez-Liguori",
-                    detail: "Député RN élu au 1er tour. Possible candidature dissidente RN"
-                },
-                detail: "Maire sortant mis en examen, situation instable"
-            },
-            {
-                nom: "Allauch",
-                departement: "Bouches-du-Rhône (13)",
-                score: "D",
-                maireActuel: "Lionel de Cala (DVD)",
-                population: "21 000",
-                candidatED: {
-                    nom: "Christelle Varnier",
-                    detail: "Candidate RN. José Gonzalez (député RN) a fait 60%+ en 2024"
-                },
-                detail: "50 ans de mairie socialiste avant bascule à droite"
-            },
-            {
-                nom: "Les Pennes-Mirabeau",
-                departement: "Bouches-du-Rhône (13)",
-                score: "D",
-                maireActuel: "Michel Amiel (ex-PS, macroniste)",
-                population: "22 000",
-                candidatED: {
-                    nom: "À identifier",
-                    detail: "67,76% pour le RN aux législatives 2024"
-                },
-                detail: "Score RN très élevé aux législatives"
-            },
-            {
-                nom: "Fos-sur-Mer",
-                departement: "Bouches-du-Rhône (13)",
-                score: "D",
-                maireActuel: "René Raimondi (DVG)",
-                population: "16 000",
-                candidatED: {
-                    nom: "Emmanuel Fouquart",
-                    detail: "62,78% aux législatives 2024. Top 5 réservoir de voix RN"
-                },
-                detail: "Bassin industriel, fort vote RN"
-            },
-            {
-                nom: "Vitrolles",
-                departement: "Bouches-du-Rhône (13)",
-                score: "D",
-                maireActuel: "Loïc Gachon (DVG)",
-                population: "35 000",
-                candidatED: {
-                    nom: "À identifier",
-                    detail: "Première commune conquise par le FN en 1997 (Mégret)"
-                },
-                detail: "Historique FN, symbolique pour l'ED"
-            },
-            {
-                nom: "Roquebrune-sur-Argens",
-                departement: "Var (83)",
-                score: "D",
-                maireActuel: "Luc Jousse (DVD)",
-                population: "14 000",
-                candidatED: {
-                    nom: "Julie Lechanteux",
-                    detail: "Députée RN élue au 1er tour 2024"
-                },
-                detail: "Députée RN très implantée"
-            },
-            {
-                nom: "Menton",
-                departement: "Alpes-Maritimes (06)",
-                score: "D",
-                maireActuel: "Yves Juhel (DVD - ne se représente pas)",
-                population: "30 000",
-                candidatED: {
-                    nom: "Alexandra Masson",
-                    detail: "Députée RN élue au 1er tour 2024"
-                },
-                detail: "Maire sortant ne se représente pas, opportunité ED"
-            },
-            {
-                nom: "Montauban",
-                departement: "Tarn-et-Garonne (82)",
-                score: "D",
-                maireActuel: "Brigitte Barèges (LR→UDR, inéligible)",
-                population: "62 000",
-                candidatED: {
-                    nom: "À identifier (Marie-Claude Berly UDR en lice)",
-                    detail: "Exception dans le Sud-Ouest pour le RN"
-                },
-                detail: "Maire inéligible, succession incertaine"
-            },
-            {
-                nom: "Liévin",
-                departement: "Pas-de-Calais (62)",
-                score: "D",
-                maireActuel: "Laurent Duporge (PS)",
-                population: "30 000",
-                candidatED: {
-                    nom: "Dany Paiva",
-                    detail: "Trentenaire originaire du Gard, parachuté"
-                },
-                detail: "PS réélu à 73% en 2020 mais contexte changé"
-            },
-            {
-                nom: "Lens",
-                departement: "Pas-de-Calais (62)",
-                score: "D",
-                maireActuel: "Sylvain Robert (PS)",
-                population: "32 000",
-                candidatED: {
-                    nom: "À identifier",
-                    detail: "Bassin minier historiquement à gauche"
-                },
-                detail: "Ancien bastion PS menacé"
-            },
-            {
-                nom: "Hyères",
-                departement: "Var (83)",
-                score: "D",
-                maireActuel: "Jean-Pierre Giran (LR)",
-                population: "56 000",
-                candidatED: {
-                    nom: "À identifier",
-                    detail: "Var = département le plus RN de France"
-                },
-                detail: "Fort potentiel RN dans le Var"
-            },
-            {
-                nom: "Martigues",
-                departement: "Bouches-du-Rhône (13)",
-                score: "D",
-                maireActuel: "Gaby Charroux (PCF)",
-                population: "49 000",
-                candidatED: {
-                    nom: "À identifier",
-                    detail: "Bastion communiste historique sous pression"
-                },
-                detail: "Fief PCF menacé"
-            },
-            {
-                nom: "Narbonne",
-                departement: "Aude (11)",
-                score: "D",
-                maireActuel: "Didier Mouly (DVD)",
-                population: "55 000",
-                candidatED: {
-                    nom: "À identifier",
-                    detail: "Sud avec forte implantation RN"
-                },
-                detail: "Région à forte pression RN"
-            },
-            {
-                nom: "Boulogne-sur-Mer",
-                departement: "Pas-de-Calais (62)",
-                score: "D",
-                maireActuel: "Frédéric Cuvillier (PS)",
-                population: "41 000",
-                candidatED: {
-                    nom: "À identifier",
-                    detail: "Côte d'Opale, tensions migratoires instrumentalisées"
-                },
-                detail: "Port de pêche, thématiques RN"
-            },
-            {
-                nom: "Carpentras",
-                departement: "Vaucluse (84)",
-                score: "D",
-                maireActuel: "Serge Andrieu (DVG)",
-                population: "30 000",
-                candidatED: {
-                    nom: "À identifier",
-                    detail: "Vaucluse historiquement FN"
-                },
-                detail: "Département historique du FN"
-            },
+            // SCORE D
+            { id: 8, nom: "Toulon", departement: "Var (83)", score: "D", maireActuel: "Hubert Falco (DVD)", population: "180 000", detail: "Plus grande ville à risque. Ancien fief FN (1995-2001)", candidats: [] },
+            { id: 9, nom: "Calais", departement: "Pas-de-Calais (62)", score: "D", maireActuel: "Natacha Bouchart (LR)", population: "73 000", detail: "Forte implantation RN dans le département", candidats: [{ nom: "Marc de Fleurian", role: "tete", parti: "RN", detail: "Député RN. Marine Le Pen élue dans le département", twitter: "" }] },
+            { id: 10, nom: "Agde", departement: "Hérault (34)", score: "D", maireActuel: "Vacant (démission)", population: "29 000", detail: "Maire sortant mis en examen", candidats: [{ nom: "Aurélien Lopez-Liguori", role: "tete", parti: "RN", detail: "Député RN élu au 1er tour", twitter: "@ALopezLiguworry" }] },
+            { id: 11, nom: "Allauch", departement: "Bouches-du-Rhône (13)", score: "D", maireActuel: "Lionel de Cala (DVD)", population: "21 000", detail: "50 ans de mairie socialiste avant bascule", candidats: [{ nom: "Christelle Varnier", role: "tete", parti: "RN", detail: "José Gonzalez (député RN) a fait 60%+ en 2024", twitter: "" }] },
+            { id: 12, nom: "Les Pennes-Mirabeau", departement: "Bouches-du-Rhône (13)", score: "D", maireActuel: "Michel Amiel (ex-PS)", population: "22 000", detail: "67,76% pour le RN aux législatives 2024", candidats: [] },
+            { id: 13, nom: "Fos-sur-Mer", departement: "Bouches-du-Rhône (13)", score: "D", maireActuel: "René Raimondi (DVG)", population: "16 000", detail: "Top 5 réservoir de voix RN", candidats: [{ nom: "Emmanuel Fouquart", role: "tete", parti: "RN", detail: "62,78% aux législatives 2024", twitter: "" }] },
+            { id: 14, nom: "Vitrolles", departement: "Bouches-du-Rhône (13)", score: "D", maireActuel: "Loïc Gachon (DVG)", population: "35 000", detail: "1ère commune FN en 1997 (Mégret)", candidats: [] },
+            { id: 15, nom: "Roquebrune-sur-Argens", departement: "Var (83)", score: "D", maireActuel: "Luc Jousse (DVD)", population: "14 000", detail: "Députée RN très implantée", candidats: [{ nom: "Julie Lechanteux", role: "tete", parti: "RN", detail: "Députée RN élue au 1er tour 2024", twitter: "@music_juls" }] },
+            { id: 16, nom: "Menton", departement: "Alpes-Maritimes (06)", score: "D", maireActuel: "Yves Juhel (ne se représente pas)", population: "30 000", detail: "Opportunité ED, maire sortant part", candidats: [{ nom: "Alexandra Masson", role: "tete", parti: "RN", detail: "Députée RN élue au 1er tour 2024", twitter: "@AMasson_RN" }] },
+            { id: 17, nom: "Montauban", departement: "Tarn-et-Garonne (82)", score: "D", maireActuel: "Brigitte Barèges (inéligible)", population: "62 000", detail: "Exception dans le Sud-Ouest", candidats: [] },
+            { id: 18, nom: "Liévin", departement: "Pas-de-Calais (62)", score: "D", maireActuel: "Laurent Duporge (PS)", population: "30 000", detail: "PS à 73% en 2020 mais contexte changé", candidats: [{ nom: "Dany Paiva", role: "tete", parti: "RN", detail: "Trentenaire originaire du Gard", twitter: "" }] },
+            { id: 19, nom: "Lens", departement: "Pas-de-Calais (62)", score: "D", maireActuel: "Sylvain Robert (PS)", population: "32 000", detail: "Ancien bastion PS menacé", candidats: [] },
+            { id: 20, nom: "Hyères", departement: "Var (83)", score: "D", maireActuel: "Jean-Pierre Giran (LR)", population: "56 000", detail: "Var = département le plus RN", candidats: [] },
+            { id: 21, nom: "Martigues", departement: "Bouches-du-Rhône (13)", score: "D", maireActuel: "Gaby Charroux (PCF)", population: "49 000", detail: "Fief PCF menacé", candidats: [] },
+            { id: 22, nom: "Narbonne", departement: "Aude (11)", score: "D", maireActuel: "Didier Mouly (DVD)", population: "55 000", detail: "Région à forte pression RN", candidats: [] },
+            { id: 23, nom: "Boulogne-sur-Mer", departement: "Pas-de-Calais (62)", score: "D", maireActuel: "Frédéric Cuvillier (PS)", population: "41 000", detail: "Port de pêche, thématiques RN", candidats: [] },
+            { id: 24, nom: "Carpentras", departement: "Vaucluse (84)", score: "D", maireActuel: "Serge Andrieu (DVG)", population: "30 000", detail: "Département historique du FN", candidats: [] },
 
-            // === SCORE C - Risque modéré ===
+            // SCORE C
+            { id: 25, nom: "Romorantin-Lanthenay", departement: "Loir-et-Cher (41)", score: "C", maireActuel: "Jeanny Lorgeoux (PS)", population: "17 000", detail: "Territoire rural, vote RN en hausse", candidats: [] }
+        ];
+
+        // Base de données pré-remplie avec des dingueries documentées et sourcées
+        let dingueriesPreRemplies = [
             {
-                nom: "Romorantin-Lanthenay",
-                departement: "Loir-et-Cher (41)",
-                score: "C",
-                maireActuel: "Jeanny Lorgeoux (PS)",
-                population: "17 000",
-                candidatED: {
-                    nom: "À identifier",
-                    detail: "Sologne, territoire rural en mutation"
-                },
-                detail: "Territoire rural, vote RN en hausse"
+                auteur: "Daniel Grenon",
+                communeId: null,
+                circonscription: "Yonne (89)",
+                citation: "Les Maghrébins ne devraient pas se trouver dans les positions élevées",
+                type: "racisme",
+                date: "2024-07",
+                source: "https://42mag.fr/2025/05/condamnation-de-11-000e-pour-propos-racistes-daniel-grenon-ex-rn-depute-de-lyonne/",
+                contexte: "Lors d'un débat législatif. Condamné à 11 000€ d'amende en mai 2025. Exclu du RN en octobre 2024.",
+                condamnation: true
+            },
+            {
+                auteur: "Gilles Bourdouleix",
+                communeId: null,
+                circonscription: "Maine-et-Loire (49)",
+                citation: "Hitler n'en a peut-être pas tué assez",
+                type: "racisme",
+                date: "2013-07",
+                source: "https://www.streetpress.com/",
+                contexte: "Propos visant les gens du voyage. Allié RN aux municipales.",
+                condamnation: false
+            },
+            {
+                auteur: "Frédéric Boccaletti",
+                communeId: null,
+                circonscription: "Var (83)",
+                citation: "Violence en réunion avec arme contre des jeunes noirs",
+                type: "racisme",
+                date: "2000",
+                source: "https://www.streetpress.com/",
+                contexte: "Condamné à 1 an de prison. Député RN sortant. Fondateur de la librairie d'extrême droite 'Anthinéa' (référence à Maurras).",
+                condamnation: true
+            },
+            {
+                auteur: "Sophie Dumont",
+                communeId: null,
+                circonscription: "Côte-d'Or (21)",
+                citation: "Le petit geste qui trahit l'origine des fonds qui alimentent Reconquête",
+                type: "antisemitisme",
+                date: "2024",
+                source: "https://www.liberation.fr/",
+                contexte: "Insinuation antisémite visant Sarah Knafo. Également complotiste (Brigitte Macron serait un homme).",
+                condamnation: false
+            },
+            {
+                auteur: "Marie-Christine Sorin",
+                communeId: null,
+                circonscription: "Hautes-Pyrénées (65)",
+                citation: "Civilisations n'ayant aucun humanisme restées au-dessous de la bestialité",
+                type: "racisme",
+                date: "2024",
+                source: "https://www.liberation.fr/",
+                contexte: "Propos suprémacistes publiés sur Twitter.",
+                condamnation: false
+            },
+            {
+                auteur: "Caroline Parmentier",
+                communeId: null,
+                circonscription: "Pas-de-Calais (62)",
+                citation: "Avortement génocide français remplacés par migrants",
+                type: "autre",
+                date: "2018-05",
+                source: "https://basta.media/racistes-homophobes-complotistes-pro-poutine-antisemites-candidats-rn",
+                contexte: "Défense du 'grand remplacement' dans le journal Présent.",
+                condamnation: false
+            },
+            {
+                auteur: "Louis-Joseph Gannat Peche",
+                communeId: null,
+                circonscription: "Meurthe-et-Moselle (54)",
+                citation: "Juif qui parle bouche qui ment",
+                type: "antisemitisme",
+                date: "2024",
+                source: "https://www.streetpress.com/",
+                contexte: "Tweet antisémite. A aussi insulté Franck Riester pour son homosexualité.",
+                condamnation: false
+            },
+            {
+                auteur: "Pierre-Nicolas Nups",
+                communeId: null,
+                circonscription: "Meurthe-et-Moselle (54)",
+                citation: "On va casser du PD",
+                type: "homophobie",
+                date: "2013-05",
+                source: "https://tetu.com/",
+                contexte: "Vidéo appelant à la violence homophobe. Ancien membre du GUD.",
+                condamnation: false
+            },
+            {
+                auteur: "Hervé de Lépinau",
+                communeId: 24,
+                circonscription: "Vaucluse (84)",
+                citation: "IVG assimilée aux génocides arménien, rwandais, à la Shoah et Daesh",
+                type: "autre",
+                date: "2020-10",
+                source: "https://www.lejdd.fr/",
+                contexte: "Opposition radicale à l'IVG. Député de Carpentras.",
+                condamnation: false
+            },
+            {
+                auteur: "Joseph Martin",
+                communeId: null,
+                circonscription: "Morbihan (56)",
+                citation: "Le gaz a rendu justice aux victimes de la Shoah",
+                type: "antisemitisme",
+                date: "2018-10",
+                source: "https://fr.timesofisrael.com/les-candidats-du-rn-qui-font-tache-leurs-propos-antisemites-racistes-et-complotistes/",
+                contexte: "Tweet concernant la mort de Robert Faurisson. Réinvesti malgré la polémique.",
+                condamnation: false
+            },
+            {
+                auteur: "Françoise Billaud",
+                communeId: null,
+                circonscription: "Côtes-d'Armor (22)",
+                citation: "Hommage à Philippe Pétain et l'abbé Perrot (figure de la collaboration)",
+                type: "autre",
+                date: "2024-05",
+                source: "https://fr.timesofisrael.com/",
+                contexte: "Partages Facebook pro-Vichy. Aussi homophobe (soutenir 'l'hétérosexualité pendant qu'elle est encore légale').",
+                condamnation: false
+            },
+            {
+                auteur: "Agnès Pageard",
+                communeId: null,
+                circonscription: "Paris (75)",
+                citation: "Invitait à relire Henry Coston (collaborateur antisémite 1910-2001)",
+                type: "antisemitisme",
+                date: "2021-02",
+                source: "https://fr.timesofisrael.com/",
+                contexte: "A promu Cassandre Fristot, condamnée en 2021 pour gestes antisémites.",
+                condamnation: false
+            },
+            {
+                auteur: "Paule Veyre de Soras",
+                communeId: null,
+                circonscription: "Mayenne (53)",
+                citation: "J'ai comme ophtalmo un juif. Et j'ai comme dentiste un musulman",
+                type: "racisme",
+                date: "2024-06",
+                source: "https://www.franceinfo.fr/",
+                contexte: "Réponse aux accusations de racisme du RN lors d'un débat législatives 2024.",
+                condamnation: false
+            },
+            {
+                auteur: "Rody Tolassy",
+                communeId: null,
+                circonscription: "Guadeloupe (971)",
+                citation: "Violence filmée contre une opposante politique",
+                type: "autre",
+                date: "2022-03",
+                source: "https://www.politis.fr/",
+                contexte: "Filmé frappant une femme. Candidat RN.",
+                condamnation: false
             }
         ];
 
-        // Fonction pour générer les liens de recherche
-        function generateSearchLinks(commune, candidat) {
-            const communeQuery = encodeURIComponent(commune.nom);
-            const candidatQuery = candidat ? encodeURIComponent(candidat.nom) : null;
+        let dingueries = [];
+        let currentExportData = null;
+        let currentExportType = null;
 
-            let links = [];
+        // Load from localStorage
+        function loadData() {
+            const savedCandidats = localStorage.getItem('municipales_candidats');
+            const savedDingueries = localStorage.getItem('municipales_dingueries');
 
-            // Recherche générale sur la commune + municipales
-            links.push({
-                type: 'google',
-                label: 'Actualités',
-                url: `https://www.google.com/search?q=${communeQuery}+municipales+2026+extrême+droite&tbm=nws`
-            });
-
-            if (candidatQuery && candidat.nom !== "À identifier" && candidat.nom !== "Inconnu - à surveiller") {
-                // Recherche sur le candidat
-                links.push({
-                    type: 'google',
-                    label: 'Candidat',
-                    url: `https://www.google.com/search?q="${candidatQuery}"+RN+déclarations`
-                });
-
-                // Twitter/X
-                links.push({
-                    type: 'twitter',
-                    label: 'X/Twitter',
-                    url: `https://x.com/search?q=${candidatQuery}&f=live`
+            if (savedCandidats) {
+                const candidatsData = JSON.parse(savedCandidats);
+                candidatsData.forEach(c => {
+                    const commune = communes.find(comm => comm.id === c.communeId);
+                    if (commune) {
+                        commune.candidats.push(c);
+                    }
                 });
             }
 
-            // Recherche déclarations polémiques
-            links.push({
-                type: 'news',
-                label: 'Polémiques',
-                url: `https://www.google.com/search?q=${communeQuery}+RN+polémique+racisme+OR+islamophobie+OR+condamnation`
+            // Charger les dingueries pré-remplies + celles de l'utilisateur
+            dingueries = [...dingueriesPreRemplies];
+
+            if (savedDingueries) {
+                const userDingueries = JSON.parse(savedDingueries);
+                // Ajouter les dingueries utilisateur qui ne sont pas des doublons
+                userDingueries.forEach(ud => {
+                    if (!dingueries.find(d => d.citation === ud.citation && d.auteur === ud.auteur)) {
+                        dingueries.push(ud);
+                    }
+                });
+            }
+        }
+
+        function saveData() {
+            // Flatten all candidats with their communeId
+            const allCandidats = [];
+            communes.forEach(c => {
+                c.candidats.forEach(cand => {
+                    if (cand.custom) {
+                        allCandidats.push({ ...cand, communeId: c.id });
+                    }
+                });
             });
-
-            return links;
+            localStorage.setItem('municipales_candidats', JSON.stringify(allCandidats));
+            localStorage.setItem('municipales_dingueries', JSON.stringify(dingueries));
         }
 
-        // Fonction pour créer une carte de commune
-        function createCommuneCard(commune) {
-            const card = document.createElement('div');
-            card.className = 'commune-card';
-            card.dataset.score = commune.score;
-            card.dataset.search = `${commune.nom} ${commune.departement} ${commune.candidatED?.nom || ''}`.toLowerCase();
-
-            const searchLinks = generateSearchLinks(commune, commune.candidatED);
-
-            card.innerHTML = `
-                <div class="commune-header">
-                    <div>
-                        <div class="commune-name">${commune.nom}</div>
-                        <div class="commune-dept">${commune.departement}</div>
-                    </div>
-                    <div class="score-badge score-${commune.score}">${commune.score}</div>
-                </div>
-                <div class="commune-body">
-                    <div class="info-row">
-                        <span class="info-label">Population</span>
-                        <span class="info-value">${commune.population} hab.</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Maire actuel</span>
-                        <span class="info-value">${commune.maireActuel}</span>
-                    </div>
-                    ${commune.detail ? `
-                    <div class="info-row">
-                        <span class="info-label">Contexte</span>
-                        <span class="info-value">${commune.detail}</span>
-                    </div>
-                    ` : ''}
-                    ${commune.candidatED ? `
-                    <div class="candidat-ed">
-                        <div class="name">${commune.candidatED.nom}</div>
-                        <div class="detail">${commune.candidatED.detail}</div>
-                    </div>
-                    ` : ''}
-                    <div class="actions">
-                        ${searchLinks.map(link => `
-                            <a href="${link.url}" target="_blank" class="action-btn ${link.type}">
-                                ${link.label}
-                            </a>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-
-            return card;
-        }
-
-        // Initialisation
-        function init() {
+        // ============ RENDERING ============
+        function renderCommunes() {
             const grid = document.getElementById('communes-grid');
+            grid.innerHTML = '';
 
-            // Afficher toutes les communes
             communes.forEach(commune => {
-                grid.appendChild(createCommuneCard(commune));
+                const card = document.createElement('div');
+                card.className = 'commune-card';
+                card.dataset.score = commune.score;
+                card.dataset.search = `${commune.nom} ${commune.departement} ${commune.candidats.map(c => c.nom).join(' ')}`.toLowerCase();
+
+                const communeDingueries = dingueries.filter(d => d.communeId === commune.id);
+
+                card.innerHTML = `
+                    <div class="commune-header" onclick="toggleCommune(${commune.id})">
+                        <div>
+                            <div class="commune-name">${commune.nom}</div>
+                            <div class="commune-dept">${commune.departement}</div>
+                        </div>
+                        <div class="score-badge score-${commune.score}">${commune.score}</div>
+                    </div>
+                    <div class="commune-body">
+                        <div class="info-row">
+                            <span class="info-label">Population</span>
+                            <span class="info-value">${commune.population} hab.</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Maire actuel</span>
+                            <span class="info-value">${commune.maireActuel}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Contexte</span>
+                            <span class="info-value">${commune.detail}</span>
+                        </div>
+
+                        <div class="candidats-section">
+                            <h4>
+                                Candidat·es ED (${commune.candidats.length})
+                                <button class="add-candidat-btn" onclick="openAddCandidatModal(${commune.id})">+ Ajouter</button>
+                            </h4>
+                            ${commune.candidats.length === 0 ? '<p style="color: #888; font-size: 0.85rem;">Aucun·e candidat·e identifié·e</p>' : ''}
+                            ${commune.candidats.map((c, idx) => `
+                                <div class="candidat-item">
+                                    <div class="name">
+                                        ${c.nom}
+                                        ${c.custom ? `<button class="delete-btn" onclick="deleteCandidat(${commune.id}, ${idx})">Supprimer</button>` : ''}
+                                    </div>
+                                    <div class="role">${getRoleLabel(c.role)} - ${c.parti}</div>
+                                    <div class="detail">${c.detail}</div>
+                                    <div class="candidat-actions">
+                                        <button class="candidat-action-btn search" onclick="searchCandidat('${c.nom}')">Rechercher</button>
+                                        ${c.twitter ? `<button class="candidat-action-btn twitter" onclick="window.open('https://x.com/${c.twitter.replace('@','')}', '_blank')">Twitter</button>` : `<button class="candidat-action-btn twitter" onclick="window.open('https://x.com/search?q=${encodeURIComponent(c.nom)}', '_blank')">Chercher X</button>`}
+                                        <button class="candidat-action-btn dinguerie" onclick="openAddDinguerieModal(${commune.id}, '${c.nom}')">+ Dinguerie</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        ${communeDingueries.length > 0 ? `
+                        <div class="dingueries-list">
+                            <h4 style="color: #9b59b6; margin: 15px 0 10px;">Dingueries (${communeDingueries.length})</h4>
+                            ${communeDingueries.slice(0, 3).map(d => `
+                                <div class="dinguerie-item">
+                                    <span class="dinguerie-tag tag-${d.type}">${d.type}</span>
+                                    <div class="quote">"${truncate(d.citation, 100)}"</div>
+                                    <div class="meta">
+                                        <span>${d.auteur}</span>
+                                        <a href="${d.source}" target="_blank" class="source-link">Source</a>
+                                    </div>
+                                </div>
+                            `).join('')}
+                            ${communeDingueries.length > 3 ? `<p style="color: #888; font-size: 0.8rem; text-align: center;">+ ${communeDingueries.length - 3} autres</p>` : ''}
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+
+                grid.appendChild(card);
             });
 
-            // Mettre à jour les stats
+            updateStats();
+        }
+
+        function renderDingueries() {
+            const grid = document.getElementById('dingueries-grid');
+            const noMsg = document.getElementById('no-dingueries');
+
+            if (dingueries.length === 0) {
+                grid.innerHTML = '';
+                noMsg.style.display = 'block';
+                return;
+            }
+
+            noMsg.style.display = 'none';
+            grid.innerHTML = dingueries.map((d, idx) => {
+                const commune = communes.find(c => c.id === d.communeId);
+                const localisation = commune ? `${commune.nom} (${commune.departement})` : (d.circonscription || 'Non spécifiée');
+                return `
+                    <div class="dinguerie-card" data-tag="${d.type}" data-search="${d.auteur} ${d.citation} ${localisation}".toLowerCase()>
+                        <div class="header">
+                            <div>
+                                <div class="author">${d.auteur} ${d.condamnation ? '<span style="background:#e74c3c;color:white;padding:2px 6px;border-radius:8px;font-size:0.7rem;margin-left:5px;">CONDAMNE</span>' : ''}</div>
+                                <div class="commune">${localisation}</div>
+                            </div>
+                            <div>
+                                <span class="dinguerie-tag tag-${d.type}">${d.type}</span>
+                                ${!d.condamnation && idx >= dingueriesPreRemplies.length ? `<button class="delete-btn" onclick="deleteDinguerie(${idx})">Supprimer</button>` : ''}
+                            </div>
+                        </div>
+                        <div class="quote">"${d.citation}"</div>
+                        ${d.contexte ? `<p style="font-size: 0.85rem; color: #888; margin-bottom: 15px;">${d.contexte}</p>` : ''}
+                        <div class="meta">
+                            <span>${d.date || 'Date inconnue'}</span>
+                            <a href="${d.source}" target="_blank" style="color: #9b59b6;">Voir la source</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderSuggestedSearches() {
+            const container = document.getElementById('suggested-searches');
+            const candidatsWithNames = [];
+
+            communes.forEach(c => {
+                c.candidats.forEach(cand => {
+                    candidatsWithNames.push({ ...cand, commune: c.nom });
+                });
+            });
+
+            container.innerHTML = candidatsWithNames.slice(0, 10).map(c => `
+                <div class="search-result-item">
+                    <h4>${c.nom}</h4>
+                    <p>${c.commune} - ${c.parti}</p>
+                    <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+                        <a href="https://www.google.com/search?q=${encodeURIComponent(c.nom + ' RN déclaration polémique')}&tbm=nws" target="_blank" style="padding: 4px 10px; background: #4285f4; color: white; border-radius: 12px; font-size: 0.8rem; text-decoration: none;">Actualités</a>
+                        <a href="https://www.google.com/search?q=${encodeURIComponent(c.nom + ' racisme OR islamophobie OR condamnation')}" target="_blank" style="padding: 4px 10px; background: #e74c3c; color: white; border-radius: 12px; font-size: 0.8rem; text-decoration: none;">Polémiques</a>
+                        <a href="https://x.com/search?q=${encodeURIComponent(c.nom)}&f=live" target="_blank" style="padding: 4px 10px; background: #1da1f2; color: white; border-radius: 12px; font-size: 0.8rem; text-decoration: none;">Twitter/X</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
             document.getElementById('total-communes').textContent = communes.length;
             document.getElementById('score-e').textContent = communes.filter(c => c.score === 'E').length;
             document.getElementById('score-d').textContent = communes.filter(c => c.score === 'D').length;
-            document.getElementById('candidats-identifies').textContent = communes.filter(c => c.candidatED && c.candidatED.nom !== "À identifier" && c.candidatED.nom !== "Inconnu - à surveiller").length;
+            document.getElementById('total-candidats').textContent = communes.reduce((acc, c) => acc + c.candidats.length, 0);
+            document.getElementById('total-dingueries').textContent = dingueries.length;
+        }
 
-            // Filtres
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
+        // ============ HELPERS ============
+        function truncate(str, len) {
+            return str.length > len ? str.substring(0, len) + '...' : str;
+        }
 
-                    const score = btn.dataset.score;
-                    document.querySelectorAll('.commune-card').forEach(card => {
-                        if (score === 'all' || card.dataset.score === score) {
-                            card.style.display = 'block';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-                });
-            });
+        function getRoleLabel(role) {
+            const labels = { tete: 'Tête de liste', colistier: 'Colistier·e', soutien: 'Soutien' };
+            return labels[role] || role;
+        }
 
-            // Recherche
-            document.getElementById('search').addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                document.querySelectorAll('.commune-card').forEach(card => {
-                    if (card.dataset.search.includes(query)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-
-                // Reset filter buttons
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                document.querySelector('.filter-btn[data-score="all"]').classList.add('active');
+        function populateCommuneSelects() {
+            const selects = ['ding-commune', 'cand-commune'];
+            selects.forEach(id => {
+                const select = document.getElementById(id);
+                if (!select) return;
+                select.innerHTML = '<option value="">-- Sélectionner --</option>' +
+                    communes.map(c => `<option value="${c.id}">${c.nom} (${c.departement.split(' ')[0]})</option>`).join('');
             });
         }
 
-        document.addEventListener('DOMContentLoaded', init);
+        // ============ MODALS ============
+        function openAddDinguerieModal(communeId = null, auteur = '') {
+            document.getElementById('form-dinguerie').reset();
+            if (communeId) document.getElementById('ding-commune').value = communeId;
+            if (auteur) document.getElementById('ding-auteur').value = auteur;
+            document.getElementById('modal-dinguerie').classList.add('active');
+        }
+
+        function openAddCandidatModal(communeId = null) {
+            document.getElementById('form-candidat').reset();
+            if (communeId) document.getElementById('cand-commune').value = communeId;
+            document.getElementById('modal-candidat').classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // ============ CRUD ============
+        function saveDinguerie(e) {
+            e.preventDefault();
+            const dinguerie = {
+                auteur: document.getElementById('ding-auteur').value,
+                communeId: parseInt(document.getElementById('ding-commune').value) || null,
+                citation: document.getElementById('ding-citation').value,
+                type: document.getElementById('ding-type').value,
+                date: document.getElementById('ding-date').value,
+                source: document.getElementById('ding-source').value,
+                contexte: document.getElementById('ding-contexte').value,
+                createdAt: new Date().toISOString()
+            };
+            dingueries.push(dinguerie);
+            saveData();
+            closeModal('modal-dinguerie');
+            renderCommunes();
+            renderDingueries();
+        }
+
+        function saveCandidat(e) {
+            e.preventDefault();
+            const communeId = parseInt(document.getElementById('cand-commune').value);
+            const candidat = {
+                nom: document.getElementById('cand-nom').value,
+                role: document.getElementById('cand-role').value,
+                parti: document.getElementById('cand-parti').value,
+                detail: document.getElementById('cand-detail').value,
+                twitter: document.getElementById('cand-twitter').value,
+                custom: true
+            };
+            const commune = communes.find(c => c.id === communeId);
+            if (commune) {
+                commune.candidats.push(candidat);
+                saveData();
+                closeModal('modal-candidat');
+                renderCommunes();
+                renderSuggestedSearches();
+            }
+        }
+
+        function deleteCandidat(communeId, idx) {
+            if (!confirm('Supprimer ce·tte candidat·e ?')) return;
+            const commune = communes.find(c => c.id === communeId);
+            if (commune) {
+                commune.candidats.splice(idx, 1);
+                saveData();
+                renderCommunes();
+            }
+        }
+
+        function deleteDinguerie(idx) {
+            if (!confirm('Supprimer cette dinguerie ?')) return;
+            dingueries.splice(idx, 1);
+            saveData();
+            renderCommunes();
+            renderDingueries();
+        }
+
+        // ============ SEARCH ============
+        function searchCandidat(name) {
+            const query = encodeURIComponent(name + ' RN déclaration');
+            window.open(`https://www.google.com/search?q=${query}&tbm=nws`, '_blank');
+        }
+
+        function performSearch() {
+            const query = document.getElementById('quick-search-input').value;
+            const type = document.getElementById('search-type').value;
+
+            if (!query.trim()) return;
+
+            let url;
+            switch (type) {
+                case 'news':
+                    url = `https://www.google.com/search?q=${encodeURIComponent(query + ' municipales 2026')}&tbm=nws`;
+                    break;
+                case 'polemique':
+                    url = `https://www.google.com/search?q=${encodeURIComponent(query + ' polémique OR racisme OR condamnation')}`;
+                    break;
+                case 'twitter':
+                    url = `https://x.com/search?q=${encodeURIComponent(query)}&f=live`;
+                    break;
+                default:
+                    url = `https://www.google.com/search?q=${encodeURIComponent(query + ' extrême droite municipales')}`;
+            }
+            window.open(url, '_blank');
+        }
+
+        // ============ TABS ============
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // ============ FILTERS ============
+        document.querySelectorAll('#tab-communes .filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#tab-communes .filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const score = btn.dataset.score;
+                document.querySelectorAll('.commune-card').forEach(card => {
+                    card.style.display = (score === 'all' || card.dataset.score === score) ? 'block' : 'none';
+                });
+            });
+        });
+
+        document.getElementById('search').addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase();
+            document.querySelectorAll('.commune-card').forEach(card => {
+                card.style.display = card.dataset.search.includes(q) ? 'block' : 'none';
+            });
+        });
+
+        document.querySelectorAll('#tab-dingueries .filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#tab-dingueries .filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const tag = btn.dataset.tag;
+                document.querySelectorAll('.dinguerie-card').forEach(card => {
+                    card.style.display = (tag === 'all' || card.dataset.tag === tag) ? 'block' : 'none';
+                });
+            });
+        });
+
+        // ============ EXPORT ============
+        function exportJSON() {
+            const data = {
+                exportDate: new Date().toISOString(),
+                communes: communes,
+                dingueries: dingueries
+            };
+            currentExportData = JSON.stringify(data, null, 2);
+            currentExportType = 'json';
+            showExportPreview();
+        }
+
+        function exportCSV() {
+            let csv = 'Commune,Département,Score,Population,Maire,Candidat ED,Parti,Nb Dingueries\n';
+            communes.forEach(c => {
+                const nbDing = dingueries.filter(d => d.communeId === c.id).length;
+                if (c.candidats.length === 0) {
+                    csv += `"${c.nom}","${c.departement}","${c.score}","${c.population}","${c.maireActuel}","","","${nbDing}"\n`;
+                } else {
+                    c.candidats.forEach(cand => {
+                        csv += `"${c.nom}","${c.departement}","${c.score}","${c.population}","${c.maireActuel}","${cand.nom}","${cand.parti}","${nbDing}"\n`;
+                    });
+                }
+            });
+            currentExportData = csv;
+            currentExportType = 'csv';
+            showExportPreview();
+        }
+
+        function exportMarkdown() {
+            let md = `# Veille Municipales 2026 - Communes à risque ED\n\n`;
+            md += `*Export du ${new Date().toLocaleDateString('fr-FR')}*\n\n`;
+            md += `## Statistiques\n`;
+            md += `- **${communes.length}** communes surveillées\n`;
+            md += `- **${communes.reduce((a,c) => a + c.candidats.length, 0)}** candidat·es ED identifié·es\n`;
+            md += `- **${dingueries.length}** dingueries documentées\n\n`;
+
+            ['E', 'D', 'C'].forEach(score => {
+                const filtered = communes.filter(c => c.score === score);
+                if (filtered.length === 0) return;
+                md += `## Score ${score}\n\n`;
+                filtered.forEach(c => {
+                    md += `### ${c.nom} (${c.departement})\n`;
+                    md += `- **Population:** ${c.population}\n`;
+                    md += `- **Maire:** ${c.maireActuel}\n`;
+                    md += `- **Contexte:** ${c.detail}\n`;
+                    if (c.candidats.length > 0) {
+                        md += `- **Candidat·es ED:**\n`;
+                        c.candidats.forEach(cand => {
+                            md += `  - ${cand.nom} (${cand.parti}) - ${cand.detail}\n`;
+                        });
+                    }
+                    const dings = dingueries.filter(d => d.communeId === c.id);
+                    if (dings.length > 0) {
+                        md += `- **Dingueries documentées:**\n`;
+                        dings.forEach(d => {
+                            md += `  - "${d.citation.substring(0, 80)}..." - ${d.auteur} ([source](${d.source}))\n`;
+                        });
+                    }
+                    md += '\n';
+                });
+            });
+
+            currentExportData = md;
+            currentExportType = 'md';
+            showExportPreview();
+        }
+
+        function generateShareText() {
+            const scoreD = communes.filter(c => c.score === 'D');
+            let text = `🗳️ Municipales 2026 : ${scoreD.length} communes à risque élevé de basculer à l'extrême droite\n\n`;
+            text += `Parmi elles : ${scoreD.slice(0, 5).map(c => c.nom).join(', ')}...\n\n`;
+            text += `${dingueries.length} déclarations problématiques documentées.\n\n`;
+            text += `Plus d'infos : municipales.streetpress.com`;
+
+            currentExportData = text;
+            currentExportType = 'txt';
+            showExportPreview();
+        }
+
+        function showExportPreview() {
+            document.getElementById('export-preview').style.display = 'block';
+            document.getElementById('export-content').value = currentExportData;
+        }
+
+        function downloadExport() {
+            const blob = new Blob([currentExportData], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `veille-municipales-2026.${currentExportType}`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function copyExport() {
+            navigator.clipboard.writeText(currentExportData);
+            alert('Copié dans le presse-papier !');
+        }
+
+        function importJSON(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (data.dingueries) {
+                        dingueries = data.dingueries;
+                    }
+                    if (data.communes) {
+                        // Merge custom candidats
+                        data.communes.forEach(imported => {
+                            const local = communes.find(c => c.id === imported.id);
+                            if (local && imported.candidats) {
+                                imported.candidats.forEach(cand => {
+                                    if (cand.custom && !local.candidats.find(c => c.nom === cand.nom)) {
+                                        local.candidats.push(cand);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    saveData();
+                    renderCommunes();
+                    renderDingueries();
+                    alert('Import réussi !');
+                } catch (err) {
+                    alert('Erreur lors de l\'import : ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ============ SUPABASE ============
+        const SUPABASE_URL = 'https://hwunkojdzodcutewkfet.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3dW5rb2pkem9kY3V0ZXdrZmV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzOTMzNTAsImV4cCI6MjA4Mzk2OTM1MH0.Zpe-QqzKDIpx3pTa6_e9ysfI-Rprl3SXANM8b2pqXU0';
+
+        const supabaseHeaders = {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+        };
+
+        let useSupabase = true; // Toggle pour activer/désactiver Supabase
+
+        // Charger les données depuis Supabase
+        async function loadFromSupabase() {
+            try {
+                console.log('Chargement depuis Supabase...');
+
+                // Charger les communes
+                const communesRes = await fetch(`${SUPABASE_URL}/rest/v1/communes?select=*&order=score.asc,nom.asc`, {
+                    headers: supabaseHeaders
+                });
+
+                if (communesRes.ok) {
+                    const communesDB = await communesRes.json();
+                    if (communesDB.length > 0) {
+                        // Mapper les données Supabase vers le format local
+                        communes = communesDB.map(c => ({
+                            id: c.id,
+                            nom: c.nom,
+                            departement: `${c.departement} (${c.code_dept || ''})`,
+                            score: c.score,
+                            maireActuel: c.maire_actuel,
+                            population: c.population,
+                            detail: c.detail,
+                            candidats: []
+                        }));
+                        console.log(`  ${communes.length} communes chargées`);
+                    }
+                }
+
+                // Charger les candidats
+                const candidatsRes = await fetch(`${SUPABASE_URL}/rest/v1/candidats?select=*`, {
+                    headers: supabaseHeaders
+                });
+
+                if (candidatsRes.ok) {
+                    const candidatsDB = await candidatsRes.json();
+                    candidatsDB.forEach(c => {
+                        const commune = communes.find(comm => comm.id === c.commune_id);
+                        if (commune) {
+                            commune.candidats.push({
+                                nom: `${c.prenom || ''} ${c.nom}`.trim(),
+                                role: c.role,
+                                parti: c.parti,
+                                detail: c.detail,
+                                twitter: c.twitter,
+                                fromDB: true
+                            });
+                        }
+                    });
+                    console.log(`  ${candidatsDB.length} candidats chargés`);
+                }
+
+                // Charger les dingueries
+                const dingueriesRes = await fetch(`${SUPABASE_URL}/rest/v1/dingueries?select=*&order=created_at.desc`, {
+                    headers: supabaseHeaders
+                });
+
+                if (dingueriesRes.ok) {
+                    const dingueriesDB = await dingueriesRes.json();
+                    if (dingueriesDB.length > 0) {
+                        dingueries = dingueriesDB.map(d => ({
+                            id: d.id,
+                            auteur: d.auteur,
+                            communeId: d.commune_id,
+                            citation: d.citation,
+                            type: d.type,
+                            date: d.date_declaration,
+                            source: d.source_url,
+                            contexte: d.contexte,
+                            condamnation: d.est_condamnation,
+                            montant: d.montant_condamnation,
+                            fromDB: true
+                        }));
+                        console.log(`  ${dingueries.length} dingueries chargées`);
+                    }
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Erreur Supabase:', error);
+                return false;
+            }
+        }
+
+        // Sauvegarder une dinguerie dans Supabase
+        async function saveToSupabase(table, data) {
+            if (!useSupabase) return null;
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+                    method: 'POST',
+                    headers: supabaseHeaders,
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    return await response.json();
+                }
+                console.error('Erreur sauvegarde:', await response.text());
+                return null;
+            } catch (error) {
+                console.error('Erreur Supabase:', error);
+                return null;
+            }
+        }
+
+        // Modifier saveDinguerie pour sauvegarder dans Supabase
+        const originalSaveDinguerie = saveDinguerie;
+        saveDinguerie = async function(e) {
+            e.preventDefault();
+
+            const dinguerie = {
+                auteur: document.getElementById('ding-auteur').value,
+                commune_id: parseInt(document.getElementById('ding-commune').value) || null,
+                citation: document.getElementById('ding-citation').value,
+                type: document.getElementById('ding-type').value,
+                date_declaration: document.getElementById('ding-date').value || null,
+                source_url: document.getElementById('ding-source').value,
+                contexte: document.getElementById('ding-contexte').value
+            };
+
+            // Sauvegarder dans Supabase
+            const saved = await saveToSupabase('dingueries', dinguerie);
+
+            if (saved && saved[0]) {
+                dingueries.push({
+                    id: saved[0].id,
+                    auteur: dinguerie.auteur,
+                    communeId: dinguerie.commune_id,
+                    citation: dinguerie.citation,
+                    type: dinguerie.type,
+                    date: dinguerie.date_declaration,
+                    source: dinguerie.source_url,
+                    contexte: dinguerie.contexte,
+                    fromDB: true
+                });
+            } else {
+                // Fallback localStorage
+                dingueries.push({
+                    auteur: dinguerie.auteur,
+                    communeId: dinguerie.commune_id,
+                    citation: dinguerie.citation,
+                    type: dinguerie.type,
+                    date: dinguerie.date_declaration,
+                    source: dinguerie.source_url,
+                    contexte: dinguerie.contexte
+                });
+                saveData();
+            }
+
+            closeModal('modal-dinguerie');
+            renderCommunes();
+            renderDingueries();
+        };
+
+        // Indicateur de connexion Supabase
+        function showSupabaseStatus(connected) {
+            const header = document.querySelector('.header p');
+            if (header) {
+                header.innerHTML = `Communes à risque de basculer à l'extrême droite ${connected ? '<span style="color:#27ae60;font-size:0.8rem;">● Supabase connecté</span>' : '<span style="color:#e74c3c;font-size:0.8rem;">● Mode local</span>'}`;
+            }
+        }
+
+        // ============ INIT ============
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Essayer de charger depuis Supabase d'abord
+            const supabaseLoaded = await loadFromSupabase();
+
+            if (!supabaseLoaded || communes.length === 0) {
+                // Fallback sur les données locales
+                console.log('Fallback sur données locales...');
+                loadData();
+                useSupabase = false;
+            }
+
+            showSupabaseStatus(supabaseLoaded && communes.length > 0);
+            populateCommuneSelects();
+            renderCommunes();
+            renderDingueries();
+            renderSuggestedSearches();
+        });
+
+        // Close modals on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+        });
     </script>
 </body>
 </html>
