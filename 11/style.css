@@ -1411,3 +1411,165 @@ body.dark-mode .priority-meta {
     background: var(--pink-medium);
     color: white;
 }
+
+/* ========== WHERE TO FIND BUTTON ========== */
+.where-to-find-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
+    border: none;
+    border-radius: 0.75rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    margin-bottom: 0.75rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.where-to-find-btn:active {
+    transform: scale(0.98);
+}
+
+.where-to-find-btn span {
+    font-size: 1.1rem;
+}
+
+/* ========== WHERE TO FIND GUIDE ========== */
+.where-category {
+    background: var(--pink-light);
+    border-radius: 0.75rem;
+    margin-bottom: 0.6rem;
+    overflow: hidden;
+}
+
+.where-category-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem;
+    cursor: pointer;
+    background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+    transition: background 0.2s;
+}
+
+.where-category-header:active {
+    background: linear-gradient(135deg, #BBDEFB, #90CAF9);
+}
+
+.where-category-icon {
+    font-size: 1.3rem;
+}
+
+.where-category-title {
+    flex: 1;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1565C0;
+}
+
+.where-category-arrow {
+    font-size: 0.7rem;
+    color: #1565C0;
+    transition: transform 0.2s;
+}
+
+.where-category-items {
+    padding: 0.5rem 0.85rem;
+    background: var(--white);
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    max-height: 500px;
+    overflow: hidden;
+}
+
+.where-category-items.collapsed {
+    max-height: 0;
+    padding: 0 0.85rem;
+}
+
+.where-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--pink-light);
+}
+
+.where-item:last-child {
+    border-bottom: none;
+}
+
+.where-item-emoji {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.where-item-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.where-item-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    margin-bottom: 0.15rem;
+}
+
+.where-item-location {
+    font-size: 0.75rem;
+    color: #4CAF50;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+/* ========== DEEP CLEAN BUTTON ========== */
+.activity-btn.deep-clean {
+    border-color: #9C27B0;
+    color: #7B1FA2;
+}
+
+body.dark-mode .activity-btn.deep-clean {
+    border-color: #CE93D8;
+    color: #CE93D8;
+}
+
+/* Dark mode for Where to Find */
+body.dark-mode .where-to-find-btn {
+    background: linear-gradient(135deg, #2E7D32, #388E3C);
+}
+
+body.dark-mode .where-category {
+    background: #2D2D4A;
+}
+
+body.dark-mode .where-category-header {
+    background: linear-gradient(135deg, #1A237E, #283593);
+}
+
+body.dark-mode .where-category-title {
+    color: #90CAF9;
+}
+
+body.dark-mode .where-category-arrow {
+    color: #90CAF9;
+}
+
+body.dark-mode .where-category-items {
+    background: #252540;
+}
+
+body.dark-mode .where-item {
+    border-bottom-color: #3D3D5C;
+}
+
+body.dark-mode .where-item-location {
+    color: #81C784;
+}

@@ -1,5 +1,5 @@
 // Données des missions avec fréquences de reset
-// frequency: 'daily' (chaque jour), 'weekly' (chaque semaine), 'days' (tous les X jours), 'reminder' (rappel permanent)
+// frequency: 'daily' (chaque jour), 'weekly' (chaque semaine), 'biweekly' (tous les ~3-4 jours), 'days' (tous les X jours), 'monthly' (chaque mois), 'reminder' (rappel permanent)
 const MISSIONS = {
     kitchen: {
         name: "Cuisine 👩🏻‍🍳",
@@ -36,14 +36,14 @@ const MISSIONS = {
             {
                 id: "k5",
                 title: "Prendre soin des ustensiles 💅🏻",
-                desc: "Pas de grattage agressif ! Utiliser et laver délicatement",
+                desc: "Pas de grattage ! Utiliser et laver délicatement. Extra doux avec les Staub !",
                 points: 10,
                 frequency: "daily"
             },
             {
                 id: "k6",
                 title: "Laver les couteaux délicatement 🔪",
-                desc: "Nettoyage doux et séchage à plat pour ne pas émousser les lames",
+                desc: "Éponge douce ou brosse uniquement, puis séchage à plat. Jamais de côté !",
                 points: 10,
                 frequency: "daily"
             },
@@ -71,7 +71,7 @@ const MISSIONS = {
             {
                 id: "k10",
                 title: "Nettoyer les surfaces 💦",
-                desc: "Pas de taches ! Spray vinaigre pour surfaces, antibactérien si nourriture crue",
+                desc: "Nourriture crue → antibactérien. Reste → spray eau/vinaigre. Pas de taches !",
                 points: 15,
                 frequency: "daily"
             },
@@ -85,9 +85,23 @@ const MISSIONS = {
             {
                 id: "k12",
                 title: "Stocker dans les contenants",
-                desc: "Utiliser les boîtes sous l'évier pour conserver. NE PAS les jeter !",
+                desc: "Utiliser les boîtes sous l'évier. NE PAS jeter les bons contenants épais !",
                 points: 10,
                 frequency: "daily"
+            },
+            {
+                id: "k13",
+                title: "Bambou laqué = pas de trempage 🎋",
+                desc: "Ne JAMAIS laisser tremper les objets en bambou laqué dans l'eau",
+                points: 10,
+                frequency: "reminder"
+            },
+            {
+                id: "k14",
+                title: "Deep clean évier cuisine 🧼",
+                desc: "Nettoyer en profondeur avec du liquide vaisselle",
+                points: 15,
+                frequency: "weekly"
             }
         ]
     },
@@ -98,21 +112,35 @@ const MISSIONS = {
             {
                 id: "b1",
                 title: "Essuyer la douche après utilisation",
-                desc: "Sécher les parois et la robinetterie. Les traces d'eau c'est beurk !",
+                desc: "Sécher parois, carrelage et robinetterie. Évite les traces de calcaire !",
                 points: 15,
                 frequency: "daily"
             },
             {
                 id: "b2",
-                title: "Essuyer lavabo et miroir",
-                desc: "Pas d'éclaboussures ! Nettoyer les projections d'eau",
+                title: "Essuyer lavabo, robinets et miroir",
+                desc: "Après chaque utilisation. Pas d'éclaboussures !",
                 points: 10,
                 frequency: "daily"
             },
             {
                 id: "b3",
                 title: "Changer le tapis de bain",
-                desc: "Trouver les tapis propres dans le meuble de salle de bain",
+                desc: "Tapis propres dans le meuble SdB. Serviettes propres : 3e tiroir commode chambre",
+                points: 10,
+                frequency: "weekly"
+            },
+            {
+                id: "b4",
+                title: "Deep clean SdB avec liquide vaisselle 🧴",
+                desc: "Nettoyer l'évier en profondeur avec du liquide vaisselle",
+                points: 15,
+                frequency: "weekly"
+            },
+            {
+                id: "b5",
+                title: "Laver tapis de bain (cycle 15min) 🧺",
+                desc: "Passer le tapis en machine sur le cycle court 15 minutes",
                 points: 10,
                 frequency: "weekly"
             }
@@ -125,14 +153,14 @@ const MISSIONS = {
             {
                 id: "l1",
                 title: "Trouver les produits",
-                desc: "Tout est sous l'évier de la cuisine !",
+                desc: "Lessive, Calgon, lingettes anti-décoloration → sous l'évier cuisine",
                 points: 5,
                 frequency: "reminder"
             },
             {
                 id: "l2",
                 title: "Doser la lessive correctement",
-                desc: "UN bouchon de lessive dans le bac tout à gauche",
+                desc: "UN bouchon OU 3 petites feuilles de lessive dans le bac tout à gauche",
                 points: 10,
                 frequency: "days",
                 resetDays: 4
@@ -155,11 +183,18 @@ const MISSIONS = {
             },
             {
                 id: "l5",
-                title: "Lancer avant 20h",
+                title: "Lancer avant 20h ⏰",
                 desc: "Respecter le voisinage : pas de machine après 20h !",
                 points: 15,
                 frequency: "days",
                 resetDays: 4
+            },
+            {
+                id: "l6",
+                title: "Laver le tapis de cuisine (cycle 15min)",
+                desc: "Passer le tapis de cuisine en machine sur le cycle court",
+                points: 10,
+                frequency: "weekly"
             }
         ]
     },
@@ -176,8 +211,8 @@ const MISSIONS = {
             },
             {
                 id: "g2",
-                title: "Vider le plastique (RINCÉ)",
-                desc: "Rincer les emballages ! Poubelle plastique derrière la porte cuisine",
+                title: "Vider le plastique (RINCÉ) ♻️",
+                desc: "TOUT plastique = recyclable ! Rincer avant. Poubelle derrière porte cuisine",
                 points: 15,
                 frequency: "weekly"
             },
@@ -199,7 +234,7 @@ const MISSIONS = {
             {
                 id: "g5",
                 title: "Utiliser les serviettes en tissu",
-                desc: "Tiroir sous le four : réutiliser les serviettes en lin comme serviettes de table",
+                desc: "Serviettes en lin dans le tiroir sous le four",
                 points: 10,
                 frequency: "daily"
             },
@@ -210,7 +245,124 @@ const MISSIONS = {
                 points: 10,
                 frequency: "days",
                 resetDays: 3
+            },
+            {
+                id: "g7",
+                title: "Arroser les plantes 🌱",
+                desc: "Vérifier l'humidité de la terre et arroser si besoin",
+                points: 10,
+                frequency: "weekly"
+            },
+            {
+                id: "g8",
+                title: "Aspirer le sol 🧹",
+                desc: "Aspirateur dans le placard à côté SdB. Embouts dans le banc bleu couloir",
+                points: 15,
+                frequency: "weekly"
+            },
+            {
+                id: "g9",
+                title: "Aspirer le canapé si poussiéreux",
+                desc: "Utiliser l'embout tissu (banc bleu dans le couloir)",
+                points: 10,
+                frequency: "weekly"
+            },
+            {
+                id: "g10",
+                title: "Essuyer table basse ☕",
+                desc: "Essuyer la table basse après utilisation",
+                points: 5,
+                frequency: "daily"
+            },
+            {
+                id: "g11",
+                title: "Essuyer table à manger 🍽️",
+                desc: "Essuyer la table à manger après les repas",
+                points: 5,
+                frequency: "daily"
+            },
+            {
+                id: "g12",
+                title: "Serpillère mensuelle 🧹",
+                desc: "Serpillère avec Savon de Marseille (bouteille dans placard WC)",
+                points: 25,
+                frequency: "monthly"
+            },
+            {
+                id: "g13",
+                title: "Sacs poubelle = sous l'évier 🗑️",
+                desc: "Les sacs poubelle sont sous l'évier. Extras dans les boîtes vertes à gauche",
+                points: 5,
+                frequency: "reminder"
             }
+        ]
+    }
+};
+
+// Données "Où trouver les choses"
+const WHERE_TO_FIND = {
+    cooking: {
+        title: "🍳 Cuisine & Repas",
+        icon: "🍳",
+        items: [
+            { emoji: "🥘", name: "Cookware / Casseroles", location: "Tiroir du bas sous la machine à café" },
+            { emoji: "🥣", name: "Bols & Passoire", location: "Grand tiroir sous le four" },
+            { emoji: "🍚", name: "Produits secs", location: "Placard au-dessus du micro-ondes + étagères" },
+            { emoji: "🧂", name: "Épices & Condiments", location: "Tiroir fin à côté de la plaque" },
+            { emoji: "🍽️", name: "Couverts & Vaisselle", location: "Tiroirs sous la plaque de cuisson" },
+            { emoji: "🧻", name: "Serviettes en lin", location: "Tiroir sous le four" },
+            { emoji: "🫖", name: "Théière avec filtre", location: "2e tiroir sous la machine à café" },
+            { emoji: "🫙", name: "Contenants alimentaires", location: "Sous l'évier" }
+        ]
+    },
+    cleaning: {
+        title: "🧼 Nettoyage",
+        icon: "🧼",
+        items: [
+            { emoji: "🧴", name: "Produits ménagers", location: "Sous l'évier cuisine" },
+            { emoji: "🧹", name: "Balais", location: "Derrière la porte de la cuisine" },
+            { emoji: "🧻", name: "Torchons propres", location: "Fond du placard sous l'évier" },
+            { emoji: "🧽", name: "Serpillère & Seaux", location: "Placard à côté de la SdB" },
+            { emoji: "🔌", name: "Grand aspirateur + Nettoyeur vapeur", location: "Placard à côté de la SdB" },
+            { emoji: "💨", name: "Embouts aspirateur + filtre", location: "Banc bleu long dans le couloir" }
+        ]
+    },
+    trash: {
+        title: "♻️ Poubelles & Tri",
+        icon: "♻️",
+        items: [
+            { emoji: "🍶", name: "Verre", location: "Derrière la porte cuisine" },
+            { emoji: "🚮", name: "Plastique (tout est recyclable !)", location: "Derrière la porte cuisine - RINCER avant !" },
+            { emoji: "🍊", name: "Compost / Déchets organiques", location: "Bac à compost cuisine" },
+            { emoji: "🗑️", name: "Sacs poubelle", location: "Sous l'évier" },
+            { emoji: "📦", name: "Sacs poubelle extras", location: "Boîtes vertes capsule, tout à gauche" }
+        ]
+    },
+    laundry: {
+        title: "🧺 Linge",
+        icon: "🧺",
+        items: [
+            { emoji: "🧴", name: "Lessive, Calgon, Lingettes", location: "Sous l'évier cuisine" },
+            { emoji: "🧺", name: "Bac lessive machine", location: "Compartiment tout à gauche" },
+            { emoji: "💨", name: "Embouts aspirateur + filtre", location: "Banc bleu long dans le couloir" }
+        ]
+    },
+    bathroom: {
+        title: "🚿 Salle de bain",
+        icon: "🚿",
+        items: [
+            { emoji: "🧼", name: "Produits SdB + Tapis propres", location: "Meuble de salle de bain" },
+            { emoji: "🛁", name: "Serviettes propres", location: "3e tiroir de la commode marron (chambre)" }
+        ]
+    },
+    equipment: {
+        title: "🔧 Équipements",
+        icon: "🔧",
+        items: [
+            { emoji: "🔌", name: "Grand aspirateur", location: "Placard à côté de la SdB" },
+            { emoji: "💨", name: "Nettoyeur vapeur", location: "Placard à côté de la SdB" },
+            { emoji: "🪣", name: "Seaux", location: "Placard à côté de la SdB" },
+            { emoji: "🧹", name: "Serpillère + Seau", location: "Placard à côté de la SdB" }
         ]
     }
 };
@@ -220,6 +372,7 @@ const FREQUENCY_LABELS = {
     daily: "Chaque jour",
     weekly: "Chaque semaine",
     days: "Tous les {n} jours",
+    monthly: "Chaque mois",
     reminder: "Rappel permanent"
 };
 
@@ -286,6 +439,11 @@ function daysBetween(timestamp1, timestamp2) {
     return Math.floor((timestamp2 - timestamp1) / (1000 * 60 * 60 * 24));
 }
 
+function getStartOfMonth() {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+}
+
 // Vérifier si une mission doit être refaite
 function isMissionDue(mission) {
     const lastDone = state.completions[mission.id];
@@ -295,12 +453,15 @@ function isMissionDue(mission) {
 
     const today = getToday();
     const weekStart = getStartOfWeek();
+    const monthStart = getStartOfMonth();
 
     switch (mission.frequency) {
         case 'daily':
             return lastDone < today;
         case 'weekly':
             return lastDone < weekStart;
+        case 'monthly':
+            return lastDone < monthStart;
         case 'days':
             return daysBetween(lastDone, today) >= mission.resetDays;
         case 'reminder':
@@ -350,6 +511,8 @@ function getMissionStatus(mission) {
             return { text: "Fait aujourd'hui ✓", class: "done" };
         case 'weekly':
             return { text: "Fait cette semaine ✓", class: "done" };
+        case 'monthly':
+            return { text: "Fait ce mois ✓", class: "done" };
         case 'days':
             const nextDue = mission.resetDays - daysBetween(lastDone, getToday());
             if (nextDue === 1) {
@@ -1040,15 +1203,17 @@ function loadDarkMode() {
 
 // ========== ACTIVITY MODES ==========
 const ACTIVITY_MISSIONS = {
-    cooking: ['k1', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7', 'k8', 'k9', 'k10', 'k12'],
+    cooking: ['k1', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7', 'k8', 'k9', 'k10', 'k12', 'k13'],
     shower: ['b1', 'b2'],
-    departure: ['k10', 'k11', 'b1', 'b2', 'g1', 'g2', 'g3', 'g4', 'g6'] // Checklist de départ
+    departure: ['k10', 'k11', 'k14', 'b1', 'b2', 'b4', 'g1', 'g2', 'g3', 'g4', 'g6', 'g7', 'g8', 'g10', 'g11'],
+    deepClean: ['k11', 'k14', 'b4', 'b5', 'l6', 'g6', 'g8', 'g9', 'g12'] // Nettoyage profond
 };
 
 const ACTIVITY_NAMES = {
     cooking: '🍳 Mode Cuisine',
     shower: '🚿 Mode Douche',
-    departure: '✈️ Checklist Départ'
+    departure: '✈️ Checklist Départ',
+    deepClean: '✨ Nettoyage Profond'
 };
 
 function startActivity(activity) {
@@ -1413,6 +1578,56 @@ function loadRemindersSidebarState() {
     const isOpen = localStorage.getItem('dreamhouse_reminders_open') === 'true';
     if (isOpen) {
         document.getElementById('reminders-sidebar').classList.add('open');
+    }
+}
+
+// ========== WHERE TO FIND GUIDE ==========
+function showWhereToFind() {
+    const panel = document.getElementById('missions-panel');
+    const title = document.getElementById('panel-title');
+    const list = document.getElementById('missions-list');
+
+    title.textContent = '📍 Où trouver les choses';
+    list.innerHTML = '';
+
+    // Créer les catégories
+    Object.entries(WHERE_TO_FIND).forEach(([categoryId, category]) => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'where-category';
+        categoryDiv.innerHTML = `
+            <div class="where-category-header" onclick="toggleWhereCategory('${categoryId}')">
+                <span class="where-category-icon">${category.icon}</span>
+                <span class="where-category-title">${category.title}</span>
+                <span class="where-category-arrow">▼</span>
+            </div>
+            <div class="where-category-items" id="where-${categoryId}">
+                ${category.items.map(item => `
+                    <div class="where-item">
+                        <span class="where-item-emoji">${item.emoji}</span>
+                        <div class="where-item-content">
+                            <div class="where-item-name">${item.name}</div>
+                            <div class="where-item-location">${item.location}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        list.appendChild(categoryDiv);
+    });
+
+    panel.classList.add('active');
+}
+
+function toggleWhereCategory(categoryId) {
+    const items = document.getElementById(`where-${categoryId}`);
+    const arrow = items.parentElement.querySelector('.where-category-arrow');
+
+    if (items.classList.contains('collapsed')) {
+        items.classList.remove('collapsed');
+        arrow.textContent = '▼';
+    } else {
+        items.classList.add('collapsed');
+        arrow.textContent = '▶';
     }
 }
 

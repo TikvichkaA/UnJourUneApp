@@ -75,10 +75,18 @@
             <button class="activity-btn" onclick="startActivity('shower')">
                 <span>🚿</span> Je me douche
             </button>
+            <button class="activity-btn deep-clean" onclick="startActivity('deepClean')">
+                <span>✨</span> Nettoyage
+            </button>
             <button class="activity-btn departure" onclick="startActivity('departure')">
                 <span>✈️</span> Je pars
             </button>
         </div>
+
+        <!-- Bouton guide "Où trouver" -->
+        <button class="where-to-find-btn" onclick="showWhereToFind()">
+            <span>📍</span> Où trouver les choses ?
+        </button>
 
         <!-- Timer machine à laver -->
         <div class="timer-section" id="timer-section">
@@ -108,12 +116,12 @@
             <button class="zone-card" data-zone="kitchen" onclick="showZone('kitchen')">
                 <span class="zone-emoji">👩🏻‍🍳</span>
                 <span class="zone-name">Cuisine</span>
-                <span class="zone-progress" id="kitchen-progress">0/12</span>
+                <span class="zone-progress" id="kitchen-progress">0/11</span>
             </button>
             <button class="zone-card" data-zone="bathroom" onclick="showZone('bathroom')">
                 <span class="zone-emoji">🚿</span>
                 <span class="zone-name">Salle de bain</span>
-                <span class="zone-progress" id="bathroom-progress">0/3</span>
+                <span class="zone-progress" id="bathroom-progress">0/5</span>
             </button>
             <button class="zone-card" data-zone="laundry" onclick="showZone('laundry')">
                 <span class="zone-emoji">🧺</span>
@@ -123,7 +131,7 @@
             <button class="zone-card" data-zone="general" onclick="showZone('general')">
                 <span class="zone-emoji">🏠</span>
                 <span class="zone-name">Rangement</span>
-                <span class="zone-progress" id="general-progress">0/6</span>
+                <span class="zone-progress" id="general-progress">0/11</span>
             </button>
         </div>
 
@@ -263,6 +271,10 @@
     <audio id="complete-sound" preload="auto">
         <source src="data:audio/wav;base64,UklGRl9vT19teleXhBQEBARERERzBISEREREF" type="audio/wav">
     </audio>
+
+    <footer style="text-align: center; padding: 1rem; color: rgba(255,255,255,0.5); font-size: 0.75rem;">
+        Développée par Emmanuel Pinglier
+    </footer>
 
     <script src="app.js"></script>
 </body>

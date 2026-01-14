@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veille Municipales 2026 - Communes à risque ED</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
+        }
+
+        .header {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #fef783;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .source-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #1d4eff;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .source-link:hover {
+            background: #3d6eff;
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.1);
+            color: #e4e4e4;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            transform: scale(1.05);
+        }
+
+        .filter-btn[data-score="E"] { background: #e74c3c; color: white; }
+        .filter-btn[data-score="D"] { background: #e67e22; color: white; }
+        .filter-btn[data-score="C"] { background: #f1c40f; color: #333; }
+        .filter-btn[data-score="all"].active { background: #1d4eff; }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .search-box input::placeholder {
+            color: #888;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fef783;
+        }
+
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .communes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .commune-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .commune-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .commune-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .commune-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .commune-dept {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .score-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .score-E { background: #e74c3c; }
+        .score-D { background: #e67e22; }
+        .score-C { background: #f1c40f; color: #333; }
+        .score-B { background: #27ae60; }
+
+        .commune-body {
+            padding: 15px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .info-label {
+            color: #888;
+            min-width: 100px;
+        }
+
+        .info-value {
+            color: #e4e4e4;
+        }
+
+        .candidat-ed {
+            background: rgba(231, 76, 60, 0.2);
+            border-left: 3px solid #e74c3c;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .candidat-ed .name {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .candidat-ed .detail {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 3px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-btn.google {
+            background: #4285f4;
+            color: white;
+        }
+
+        .action-btn.twitter {
+            background: #1da1f2;
+            color: white;
+        }
+
+        .action-btn.news {
+            background: #27ae60;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .legend {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .legend h3 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .legend-items {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .legend-color {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .methodology {
+            background: rgba(29, 78, 255, 0.1);
+            border: 1px solid #1d4eff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .methodology h3 {
+            color: #1d4eff;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: #1d4eff;
+        }
+
+        @media (max-width: 600px) {
+            .communes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Veille Municipales 2026</h1>
+        <p>Communes à risque de basculer à l'extrême droite</p>
+        <a href="https://municipales.streetpress.com/" target="_blank" class="source-link">
+            Carte interactive StreetPress
+        </a>
+    </div>
+
+    <div class="container">
+        <div class="methodology">
+            <h3>Methodologie</h3>
+            <p>
+                Données issues du travail de <strong>StreetPress</strong> et du chercheur <strong>Alessio Motta</strong> (docteur en sciences politiques).
+                Le simulateur prend en compte les résultats des européennes et législatives 2024, les municipales 2020, et l'étiquette des maires sortants.
+                <strong>52 communes parmi les 500 plus peuplées</strong> présentent un risque significatif.
+            </p>
+        </div>
+
+        <div class="legend">
+            <h3>Echelle de risque (Nutri-score)</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color score-E">E</div>
+                    <span>Victoire probable dès le 1er tour</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color score-D">D</div>
+                    <span>Risque élevé</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color score-C">C</div>
+                    <span>Risque modéré</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color score-B">B</div>
+                    <span>Risque faible</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number" id="total-communes">0</div>
+                <div class="label">Communes à risque</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="score-e">0</div>
+                <div class="label">Score E (critique)</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="score-d">0</div>
+                <div class="label">Score D (élevé)</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="candidats-identifies">0</div>
+                <div class="label">Candidats ED identifiés</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-score="all">Toutes</button>
+            <button class="filter-btn" data-score="E">Score E</button>
+            <button class="filter-btn" data-score="D">Score D</button>
+            <button class="filter-btn" data-score="C">Score C</button>
+            <div class="search-box">
+                <input type="text" id="search" placeholder="Rechercher une commune, un département, un candidat...">
+            </div>
+        </div>
+
+        <div class="communes-grid" id="communes-grid">
+            <!-- Communes seront injectées ici -->
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            Outil de veille citoyenne - Données:
+            <a href="https://www.streetpress.com/sujet/1758557171-municipales-dix-villes-pourraient-basculer-extreme-droite-electionsmunicipales2026-france" target="_blank">StreetPress</a> |
+            <a href="https://basta.media/La-carte-des-cinquante-villes-qui-pourraient-basculer-extreme-droite-elections-municipales" target="_blank">Basta!</a>
+        </p>
+        <p style="margin-top: 10px;">App du 14 janvier 2026 - UnJourUneApp</p>
+    </footer>
+
+    <script>
+        // Base de données des communes à risque
+        const communes = [
+            // === SCORE E - Déjà RN ou victoire quasi-certaine ===
+            {
+                nom: "Hénin-Beaumont",
+                departement: "Pas-de-Calais (62)",
+                score: "E",
+                maireActuel: "Steeve Briois (RN)",
+                population: "27 000",
+                candidatED: null,
+                detail: "Fief historique du RN depuis 2014"
+            },
+            {
+                nom: "Perpignan",
+                departement: "Pyrénées-Orientales (66)",
+                score: "E",
+                maireActuel: "Louis Aliot (RN)",
+                population: "120 000",
+                candidatED: null,
+                detail: "RN depuis 2020"
+            },
+            {
+                nom: "Fréjus",
+                departement: "Var (83)",
+                score: "E",
+                maireActuel: "David Rachline (RN)",
+                population: "54 000",
+                candidatED: null,
+                detail: "RN depuis 2014"
+            },
+            {
+                nom: "Orange",
+                departement: "Vaucluse (84)",
+                score: "E",
+                maireActuel: "Yann Bompard (RN)",
+                population: "30 000",
+                candidatED: null,
+                detail: "Historique FN/RN depuis 1995"
+            },
+            {
+                nom: "Béziers",
+                departement: "Hérault (34)",
+                score: "E",
+                maireActuel: "Robert Ménard (proche RN)",
+                population: "78 000",
+                candidatED: null,
+                detail: "Robert Ménard depuis 2014"
+            },
+            {
+                nom: "Marignane",
+                departement: "Bouches-du-Rhône (13)",
+                score: "E",
+                maireActuel: "Eric Le Dissès (RN)",
+                population: "34 000",
+                candidatED: null,
+                detail: "RN depuis 2014"
+            },
+            {
+                nom: "Bruay-la-Buissière",
+                departement: "Pas-de-Calais (62)",
+                score: "E",
+                maireActuel: "Ludovic Pajot (RN)",
+                population: "22 000",
+                candidatED: null,
+                detail: "RN depuis 2020"
+            },
+
+            // === SCORE D - Risque élevé ===
+            {
+                nom: "Toulon",
+                departement: "Var (83)",
+                score: "D",
+                maireActuel: "Hubert Falco (DVD)",
+                population: "180 000",
+                candidatED: {
+                    nom: "Inconnu - à surveiller",
+                    detail: "Plus grande ville à risque. Ancien fief FN (1995-2001)"
+                },
+                detail: "Plus grande ville à risque de basculer"
+            },
+            {
+                nom: "Calais",
+                departement: "Pas-de-Calais (62)",
+                score: "D",
+                maireActuel: "Natacha Bouchart (LR)",
+                population: "73 000",
+                candidatED: {
+                    nom: "Marc de Fleurian",
+                    detail: "Député RN. Marine Le Pen élue dans le département"
+                },
+                detail: "Forte implantation RN dans le département"
+            },
+            {
+                nom: "Agde",
+                departement: "Hérault (34)",
+                score: "D",
+                maireActuel: "Vacant (Gilles d'Ettore démissionné)",
+                population: "29 000",
+                candidatED: {
+                    nom: "Aurélien Lopez-Liguori",
+                    detail: "Député RN élu au 1er tour. Possible candidature dissidente RN"
+                },
+                detail: "Maire sortant mis en examen, situation instable"
+            },
+            {
+                nom: "Allauch",
+                departement: "Bouches-du-Rhône (13)",
+                score: "D",
+                maireActuel: "Lionel de Cala (DVD)",
+                population: "21 000",
+                candidatED: {
+                    nom: "Christelle Varnier",
+                    detail: "Candidate RN. José Gonzalez (député RN) a fait 60%+ en 2024"
+                },
+                detail: "50 ans de mairie socialiste avant bascule à droite"
+            },
+            {
+                nom: "Les Pennes-Mirabeau",
+                departement: "Bouches-du-Rhône (13)",
+                score: "D",
+                maireActuel: "Michel Amiel (ex-PS, macroniste)",
+                population: "22 000",
+                candidatED: {
+                    nom: "À identifier",
+                    detail: "67,76% pour le RN aux législatives 2024"
+                },
+                detail: "Score RN très élevé aux législatives"
+            },
+            {
+                nom: "Fos-sur-Mer",
+                departement: "Bouches-du-Rhône (13)",
+                score: "D",
+                maireActuel: "René Raimondi (DVG)",
+                population: "16 000",
+                candidatED: {
+                    nom: "Emmanuel Fouquart",
+                    detail: "62,78% aux législatives 2024. Top 5 réservoir de voix RN"
+                },
+                detail: "Bassin industriel, fort vote RN"
+            },
+            {
+                nom: "Vitrolles",
+                departement: "Bouches-du-Rhône (13)",
+                score: "D",
+                maireActuel: "Loïc Gachon (DVG)",
+                population: "35 000",
+                candidatED: {
+                    nom: "À identifier",
+                    detail: "Première commune conquise par le FN en 1997 (Mégret)"
+                },
+                detail: "Historique FN, symbolique pour l'ED"
+            },
+            {
+                nom: "Roquebrune-sur-Argens",
+                departement: "Var (83)",
+                score: "D",
+                maireActuel: "Luc Jousse (DVD)",
+                population: "14 000",
+                candidatED: {
+                    nom: "Julie Lechanteux",
+                    detail: "Députée RN élue au 1er tour 2024"
+                },
+                detail: "Députée RN très implantée"
+            },
+            {
+                nom: "Menton",
+                departement: "Alpes-Maritimes (06)",
+                score: "D",
+                maireActuel: "Yves Juhel (DVD - ne se représente pas)",
+                population: "30 000",
+                candidatED: {
+                    nom: "Alexandra Masson",
+                    detail: "Députée RN élue au 1er tour 2024"
+                },
+                detail: "Maire sortant ne se représente pas, opportunité ED"
+            },
+            {
+                nom: "Montauban",
+                departement: "Tarn-et-Garonne (82)",
+                score: "D",
+                maireActuel: "Brigitte Barèges (LR→UDR, inéligible)",
+                population: "62 000",
+                candidatED: {
+                    nom: "À identifier (Marie-Claude Berly UDR en lice)",
+                    detail: "Exception dans le Sud-Ouest pour le RN"
+                },
+                detail: "Maire inéligible, succession incertaine"
+            },
+            {
+                nom: "Liévin",
+                departement: "Pas-de-Calais (62)",
+                score: "D",
+                maireActuel: "Laurent Duporge (PS)",
+                population: "30 000",
+                candidatED: {
+                    nom: "Dany Paiva",
+                    detail: "Trentenaire originaire du Gard, parachuté"
+                },
+                detail: "PS réélu à 73% en 2020 mais contexte changé"
+            },
+            {
+                nom: "Lens",
+                departement: "Pas-de-Calais (62)",
+                score: "D",
+                maireActuel: "Sylvain Robert (PS)",
+                population: "32 000",
+                candidatED: {
+                    nom: "À identifier",
+                    detail: "Bassin minier historiquement à gauche"
+                },
+                detail: "Ancien bastion PS menacé"
+            },
+            {
+                nom: "Hyères",
+                departement: "Var (83)",
+                score: "D",
+                maireActuel: "Jean-Pierre Giran (LR)",
+                population: "56 000",
+                candidatED: {
+                    nom: "À identifier",
+                    detail: "Var = département le plus RN de France"
+                },
+                detail: "Fort potentiel RN dans le Var"
+            },
+            {
+                nom: "Martigues",
+                departement: "Bouches-du-Rhône (13)",
+                score: "D",
+                maireActuel: "Gaby Charroux (PCF)",
+                population: "49 000",
+                candidatED: {
+                    nom: "À identifier",
+                    detail: "Bastion communiste historique sous pression"
+                },
+                detail: "Fief PCF menacé"
+            },
+            {
+                nom: "Narbonne",
+                departement: "Aude (11)",
+                score: "D",
+                maireActuel: "Didier Mouly (DVD)",
+                population: "55 000",
+                candidatED: {
+                    nom: "À identifier",
+                    detail: "Sud avec forte implantation RN"
+                },
+                detail: "Région à forte pression RN"
+            },
+            {
+                nom: "Boulogne-sur-Mer",
+                departement: "Pas-de-Calais (62)",
+                score: "D",
+                maireActuel: "Frédéric Cuvillier (PS)",
+                population: "41 000",
+                candidatED: {
+                    nom: "À identifier",
+                    detail: "Côte d'Opale, tensions migratoires instrumentalisées"
+                },
+                detail: "Port de pêche, thématiques RN"
+            },
+            {
+                nom: "Carpentras",
+                departement: "Vaucluse (84)",
+                score: "D",
+                maireActuel: "Serge Andrieu (DVG)",
+                population: "30 000",
+                candidatED: {
+                    nom: "À identifier",
+                    detail: "Vaucluse historiquement FN"
+                },
+                detail: "Département historique du FN"
+            },
+
+            // === SCORE C - Risque modéré ===
+            {
+                nom: "Romorantin-Lanthenay",
+                departement: "Loir-et-Cher (41)",
+                score: "C",
+                maireActuel: "Jeanny Lorgeoux (PS)",
+                population: "17 000",
+                candidatED: {
+                    nom: "À identifier",
+                    detail: "Sologne, territoire rural en mutation"
+                },
+                detail: "Territoire rural, vote RN en hausse"
+            }
+        ];
+
+        // Fonction pour générer les liens de recherche
+        function generateSearchLinks(commune, candidat) {
+            const communeQuery = encodeURIComponent(commune.nom);
+            const candidatQuery = candidat ? encodeURIComponent(candidat.nom) : null;
+
+            let links = [];
+
+            // Recherche générale sur la commune + municipales
+            links.push({
+                type: 'google',
+                label: 'Actualités',
+                url: `https://www.google.com/search?q=${communeQuery}+municipales+2026+extrême+droite&tbm=nws`
+            });
+
+            if (candidatQuery && candidat.nom !== "À identifier" && candidat.nom !== "Inconnu - à surveiller") {
+                // Recherche sur le candidat
+                links.push({
+                    type: 'google',
+                    label: 'Candidat',
+                    url: `https://www.google.com/search?q="${candidatQuery}"+RN+déclarations`
+                });
+
+                // Twitter/X
+                links.push({
+                    type: 'twitter',
+                    label: 'X/Twitter',
+                    url: `https://x.com/search?q=${candidatQuery}&f=live`
+                });
+            }
+
+            // Recherche déclarations polémiques
+            links.push({
+                type: 'news',
+                label: 'Polémiques',
+                url: `https://www.google.com/search?q=${communeQuery}+RN+polémique+racisme+OR+islamophobie+OR+condamnation`
+            });
+
+            return links;
+        }
+
+        // Fonction pour créer une carte de commune
+        function createCommuneCard(commune) {
+            const card = document.createElement('div');
+            card.className = 'commune-card';
+            card.dataset.score = commune.score;
+            card.dataset.search = `${commune.nom} ${commune.departement} ${commune.candidatED?.nom || ''}`.toLowerCase();
+
+            const searchLinks = generateSearchLinks(commune, commune.candidatED);
+
+            card.innerHTML = `
+                <div class="commune-header">
+                    <div>
+                        <div class="commune-name">${commune.nom}</div>
+                        <div class="commune-dept">${commune.departement}</div>
+                    </div>
+                    <div class="score-badge score-${commune.score}">${commune.score}</div>
+                </div>
+                <div class="commune-body">
+                    <div class="info-row">
+                        <span class="info-label">Population</span>
+                        <span class="info-value">${commune.population} hab.</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Maire actuel</span>
+                        <span class="info-value">${commune.maireActuel}</span>
+                    </div>
+                    ${commune.detail ? `
+                    <div class="info-row">
+                        <span class="info-label">Contexte</span>
+                        <span class="info-value">${commune.detail}</span>
+                    </div>
+                    ` : ''}
+                    ${commune.candidatED ? `
+                    <div class="candidat-ed">
+                        <div class="name">${commune.candidatED.nom}</div>
+                        <div class="detail">${commune.candidatED.detail}</div>
+                    </div>
+                    ` : ''}
+                    <div class="actions">
+                        ${searchLinks.map(link => `
+                            <a href="${link.url}" target="_blank" class="action-btn ${link.type}">
+                                ${link.label}
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Initialisation
+        function init() {
+            const grid = document.getElementById('communes-grid');
+
+            // Afficher toutes les communes
+            communes.forEach(commune => {
+                grid.appendChild(createCommuneCard(commune));
+            });
+
+            // Mettre à jour les stats
+            document.getElementById('total-communes').textContent = communes.length;
+            document.getElementById('score-e').textContent = communes.filter(c => c.score === 'E').length;
+            document.getElementById('score-d').textContent = communes.filter(c => c.score === 'D').length;
+            document.getElementById('candidats-identifies').textContent = communes.filter(c => c.candidatED && c.candidatED.nom !== "À identifier" && c.candidatED.nom !== "Inconnu - à surveiller").length;
+
+            // Filtres
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const score = btn.dataset.score;
+                    document.querySelectorAll('.commune-card').forEach(card => {
+                        if (score === 'all' || card.dataset.score === score) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Recherche
+            document.getElementById('search').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                document.querySelectorAll('.commune-card').forEach(card => {
+                    if (card.dataset.search.includes(query)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Reset filter buttons
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.filter-btn[data-score="all"]').classList.add('active');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
