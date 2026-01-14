@@ -84,17 +84,20 @@ async function scrapeStreetPress(url) {
     const $ = cheerio.load(html);
     const articles = [];
 
-    // Sélecteurs StreetPress (à ajuster selon la structure réelle)
-    $('article, .article-item, .post-item').each((i, el) => {
-        const title = $(el).find('h2, h3, .title').text().trim();
-        const link = $(el).find('a').attr('href');
-        const excerpt = $(el).find('p, .excerpt, .description').text().trim();
+    // Sélecteurs StreetPress (structure Nuxt.js)
+    $('section.article-preview-simple').each((i, el) => {
+        const titleEl = $(el).find('.title a').first();
+        const title = titleEl.text().trim();
+        const link = titleEl.attr('href');
+        const excerpt = $(el).find('.level-right .txt').text().trim();
+        const date = $(el).find('.date-rub').text().trim();
 
         if (title && link) {
             articles.push({
                 title,
                 url: link.startsWith('http') ? link : `https://www.streetpress.com${link}`,
                 excerpt,
+                date,
                 source: 'StreetPress'
             });
         }
@@ -233,28 +236,41 @@ async function scrapeArticle(url, source) {
 }
 
 // ============================================
-// FONCTIONS BASE DE DONNÉES
+// FONCTIONS BASE DE DONNÉES (fetch direct)
 // ============================================
+
+const SUPABASE_HEADERS = {
+    'apikey': SUPABASE_CONFIG.anonKey,
+    'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
+    'Content-Type': 'application/json',
+    'Prefer': 'return=representation'
+};
 
 /**
  * Sauvegarde un candidat dans Supabase
  */
 async function saveCandidat(candidat) {
     try {
-        // Vérifier si le candidat existe déjà
-        const existing = await supabase.query('candidats', {
-            nom: { ilike: `%${candidat.nom}%` }
+        const response = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/candidats`, {
+            method: 'POST',
+            headers: SUPABASE_HEADERS,
+            body: JSON.stringify(candidat)
         });
 
-        if (existing && existing.length > 0) {
-            console.log(`  Candidat déjà présent: ${candidat.nom}`);
-            return existing[0];
+        if (response.ok) {
+            const result = await response.json();
+            console.log(`  + Candidat ajouté: ${candidat.nom}`);
+            return result[0];
+        } else {
+            const error = await response.text();
+            // Ignorer les doublons (code 23505)
+            if (error.includes('duplicate') || error.includes('23505')) {
+                console.log(`  = Candidat existe: ${candidat.nom}`);
+                return null;
+            }
+            console.error(`  Erreur candidat:`, error.substring(0, 100));
+            return null;
         }
-
-        // Insérer le nouveau candidat
-        const result = await supabase.insert('candidats', candidat);
-        console.log(`  Nouveau candidat ajouté: ${candidat.nom}`);
-        return result[0];
     } catch (error) {
         console.error(`  Erreur sauvegarde candidat:`, error.message);
         return null;
@@ -266,21 +282,21 @@ async function saveCandidat(candidat) {
  */
 async function saveDinguerie(dinguerie) {
     try {
-        // Vérifier si la dinguerie existe déjà (même citation + auteur)
-        const existing = await supabase.query('dingueries', {
-            auteur: { ilike: `%${dinguerie.auteur}%` },
-            citation: { ilike: `%${dinguerie.citation.substring(0, 50)}%` }
+        const response = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/dingueries`, {
+            method: 'POST',
+            headers: SUPABASE_HEADERS,
+            body: JSON.stringify(dinguerie)
         });
 
-        if (existing && existing.length > 0) {
-            console.log(`  Dinguerie déjà présente pour ${dinguerie.auteur}`);
-            return existing[0];
+        if (response.ok) {
+            const result = await response.json();
+            console.log(`  + Dinguerie ajoutée: ${dinguerie.auteur}`);
+            return result[0];
+        } else {
+            const error = await response.text();
+            console.error(`  Erreur dinguerie:`, error.substring(0, 100));
+            return null;
         }
-
-        // Insérer la nouvelle dinguerie
-        const result = await supabase.insert('dingueries', dinguerie);
-        console.log(`  Nouvelle dinguerie ajoutée: ${dinguerie.auteur}`);
-        return result[0];
     } catch (error) {
         console.error(`  Erreur sauvegarde dinguerie:`, error.message);
         return null;

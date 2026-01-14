@@ -10,14 +10,14 @@ const MISSIONS = {
                 title: "Ne pas tout allumer en même temps ⚡",
                 desc: "L'électricité saute si trop d'appareils fonctionnent ensemble !",
                 points: 10,
-                frequency: "daily"
+                frequency: "reminder"
             },
             {
                 id: "k2",
                 title: "Protéger la plaque de cuisson",
                 desc: "Ne pas traîner les casseroles et NE JAMAIS couper dessus. Pas de rayures !",
                 points: 15,
-                frequency: "daily"
+                frequency: "reminder"
             },
             {
                 id: "k3",
@@ -31,28 +31,28 @@ const MISSIONS = {
                 title: "Utiliser la hotte + aérer",
                 desc: "Allumer la hotte aspirante et ouvrir la fenêtre si nécessaire",
                 points: 10,
-                frequency: "daily"
+                frequency: "reminder"
             },
             {
                 id: "k5",
                 title: "Prendre soin des ustensiles 💅🏻",
                 desc: "Pas de grattage ! Utiliser et laver délicatement. Extra doux avec les Staub !",
                 points: 10,
-                frequency: "daily"
+                frequency: "reminder"
             },
             {
                 id: "k6",
                 title: "Laver les couteaux délicatement 🔪",
                 desc: "Éponge douce ou brosse uniquement, puis séchage à plat. Jamais de côté !",
                 points: 10,
-                frequency: "daily"
+                frequency: "reminder"
             },
             {
                 id: "k7",
                 title: "Utiliser la cloche du micro-ondes 🔔",
                 desc: "Toujours couvrir les plats quand on réchauffe",
                 points: 5,
-                frequency: "daily"
+                frequency: "reminder"
             },
             {
                 id: "k8",
@@ -66,7 +66,7 @@ const MISSIONS = {
                 title: "Ranger les couverts correctement 🍴",
                 desc: "Remettre chaque couvert à sa place selon forme et type",
                 points: 10,
-                frequency: "daily"
+                frequency: "reminder"
             },
             {
                 id: "k10",
@@ -87,7 +87,7 @@ const MISSIONS = {
                 title: "Stocker dans les contenants",
                 desc: "Utiliser les boîtes sous l'évier. NE PAS jeter les bons contenants épais !",
                 points: 10,
-                frequency: "daily"
+                frequency: "reminder"
             },
             {
                 id: "k13",
@@ -229,7 +229,7 @@ const MISSIONS = {
                 title: "Utiliser les serviettes en tissu",
                 desc: "Serviettes en lin dans le tiroir sous le four",
                 points: 10,
-                frequency: "daily"
+                frequency: "reminder"
             },
             {
                 id: "g6",
