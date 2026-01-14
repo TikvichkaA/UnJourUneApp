@@ -123,20 +123,16 @@ const CATEGORIES = {
 };
 
 // Données des employés avec leur planning de janvier 2026
+// =====================================================
+// DONNÉES DE DÉMONSTRATION - VERSION PUBLIQUE
+// Les vraies données sont dans le dossier 12-backup
+// =====================================================
+
 let EMPLOYEES = [
     // Responsables
     {
         id: 1,
-        name: 'Nicolas Boyer',
-        category: 'responsables',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F','P',null,null,'P','P','P','P','P',null,null,'P','P','P','P','P',null,null,'P','P','P','P','P',null,null,'P','P','P','P','P',null]
-        }
-    },
-    {
-        id: 2,
-        name: 'Lizzeth Vazquez',
+        name: 'Jean Dupont',
         category: 'responsables',
         type: 'permanent',
         planning: {
@@ -145,38 +141,18 @@ let EMPLOYEES = [
     },
     // Coordination
     {
-        id: 3,
-        name: 'Pamela Breter',
+        id: 2,
+        name: 'Marie Martin',
         category: 'coordination',
         type: 'permanent',
         planning: {
             '2026-01': [null,'F','P','P',null,null,'P','P','P','P','P',null,null,'P','P','P','P','P',null,null,'P','P','P','P','P',null,'P','P','P','P','P',null]
         }
     },
-    // Maintenance
-    {
-        id: 4,
-        name: 'Farid Mojahed',
-        category: 'maintenance',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F','P',null,null,'P','P','P','P','P',null,null,'P','P','P','P','P',null,null,'P','P','P','P','P','12j',null,'P','P','P','P','P',null]
-        }
-    },
-    // Administratif
-    {
-        id: 5,
-        name: 'Angélique Gomis',
-        category: 'administratif',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F','P',null,null,'P','P','P','P','P',null,null,'P','P','P','P','P',null,null,'P','ABS','P','P','P',null,null,'P','P','P','P','P',null]
-        }
-    },
     // Restauration
     {
-        id: 6,
-        name: 'Léonie Laza-Manzambi',
+        id: 3,
+        name: 'Pierre Durand',
         category: 'restauration',
         type: 'permanent',
         planning: {
@@ -184,44 +160,8 @@ let EMPLOYEES = [
         }
     },
     {
-        id: 7,
-        name: 'Elise Mbappe',
-        category: 'restauration',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F','7rc',null,null,'8,5ra','8,5rb','7rd','7rc',null,null,null,'7rc','7rd','FS',null,'8,5ra','9rs','9rs',null,null,'8,5rb','8,5ra','7rc',null,null,'8,5rb','8,5ra','7rd','FOR',null,'8,5rm']
-        }
-    },
-    {
-        id: 8,
-        name: 'Kamel Ben Slimen',
-        category: 'restauration',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F','8,5rb','9rs','9rs',null,null,'8,5ra','8,5rb','7rc',null,null,'8,5ra','8,5rb','7rc','7rd',null,null,null,'7rc','7rd',null,null,'8,5ra','10,5rm','10,5rm','FOR',null,'8,5ra','8,5rb','7rc',null]
-        }
-    },
-    {
-        id: 9,
-        name: 'Hakim Haddag',
-        category: 'restauration',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F',null,'8,5rm','8,5rm','7rc','7rd',null,'FS','8,5rb','9rs','9rs',null,null,'8,5rb','8,5ra','7rd',null,null,'8,5rb','8,5ra','7rc','7rd',null,null,'9rs','7rd','7rc',null,null,'8,5ra','10,5rm']
-        }
-    },
-    {
-        id: 10,
-        name: 'Papy Bokekete',
-        category: 'restauration',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F','7rd',null,null,'8,5rb','8,5ra','7rc',null,null,'8,5rm','8,5rm','7rd','7rc',null,null,'8,5rb','10,5rm','10,5rm',null,null,'8,5ra','8,5rb','7rd',null,null,'8,5ra','8,5rb','7rc','7rd',null,null]
-        }
-    },
-    {
-        id: 11,
-        name: 'Flora Bertille',
+        id: 4,
+        name: 'Sophie Bernard',
         category: 'restauration',
         type: 'vacataire',
         planning: {
@@ -230,8 +170,8 @@ let EMPLOYEES = [
     },
     // Accueil
     {
-        id: 12,
-        name: 'Rosa Rodriguez',
+        id: 5,
+        name: 'Lucas Moreau',
         category: 'accueil',
         type: 'permanent',
         planning: {
@@ -239,35 +179,8 @@ let EMPLOYEES = [
         }
     },
     {
-        id: 13,
-        name: 'Junior Kafinga',
-        category: 'accueil',
-        type: 'interimaire',
-        planning: {
-            '2026-01': [null,'F',null,'12j','12j',null,null,'9,2j','9,2j','9,2j',null,null,'9,2j','9,2j',null,null,null,'12j','12j',null,null,'9,2j','9,2j','9,2j',null,null,'9,2j','9,2j',null,null,null,'12j']
-        }
-    },
-    {
-        id: 14,
-        name: 'Christophe Marchandise',
-        category: 'accueil',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F','7,5a',null,null,'7,5a','7,5a','7,5a','7,5a','7,5a',null,null,'7,5a','7,5a','7,5a','7,5a','7,5a',null,null,'7,5a','7,5a','7,5a','7,5a','7,5a',null,null,'7,5a','7,5a','7,5a','7,5a','7,5a',null]
-        }
-    },
-    {
-        id: 15,
-        name: 'Ali Ziani',
-        category: 'accueil',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F','8,2n',null,null,'8,2n','8,2n',null,null,null,'12n','12n',null,null,'8,2n','8,2n','8,2n',null,null,'8,2n','8,2n',null,null,null,'12n','12n',null,null,'8,2n','8,2n','8,2n',null]
-        }
-    },
-    {
-        id: 16,
-        name: 'Andreea Bancos',
+        id: 6,
+        name: 'Emma Petit',
         category: 'accueil',
         type: 'interimaire',
         planning: {
@@ -276,54 +189,18 @@ let EMPLOYEES = [
     },
     // Entretien
     {
-        id: 17,
-        name: 'Claudine Kisonga',
+        id: 7,
+        name: 'Thomas Robert',
         category: 'entretien',
         type: 'permanent',
         planning: {
             '2026-01': [null,'F',null,'8e.1','8e.2','8eb',null,null,'8ed','8ea',null,null,'8eb','8ea','8ed','8ec','8ed',null,null,'8ec','8ec','8ed',null,null,'8e.1','8e.2','8eb',null,null,'8ed','8ea',null]
         }
     },
-    {
-        id: 18,
-        name: 'Ewere Unuagbon',
-        category: 'entretien',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F','8ec',null,null,'8ea','8eb','8ea','8ec','8ed',null,null,'8ea','8eb',null,null,'8eb','8e.1','8e.2',null,null,'8ec','8ed','8ec',null,null,'8ea','8eb','8ea','8ec','8ed',null]
-        }
-    },
-    {
-        id: 19,
-        name: 'Ansumane Conte',
-        category: 'entretien',
-        type: 'vacataire',
-        planning: {
-            '2026-01': [null,'F','8ed',null,null,'8ed','8ea','8eb',null,null,'8e.1','8e.2',null,null,'8ec','8ed','8ec',null,null,'8ea','8eb','8ea','8ec','8ed',null,null,'8ed','8ea','8eb','8eb',null,'8e.1']
-        }
-    },
-    {
-        id: 20,
-        name: 'Aminata Sanogo',
-        category: 'entretien',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F','8eb','8e.2','8e.1',null,null,'8ec','8eb','8ec',null,null,'8ed','8ed','8ea','8eb','8ea',null,null,'8eb','8ea',null,null,'8eb','8e.2','8e.1',null,null,'8ec','8eb','8ec',null]
-        }
-    },
-    {
-        id: 21,
-        name: 'Henda Sissoko',
-        category: 'entretien',
-        type: 'permanent',
-        planning: {
-            '2026-01': [null,'F','8ea',null,null,'8ec','8ec','8ed','8ea','8eb',null,null,'8ec','8ec','8eb',null,null,'8e.2','8e.1',null,null,'8eb','8eb','8ea',null,null,'8ec','8ec','8ed','8ea','8eb',null]
-        }
-    },
     // Polyvalent
     {
-        id: 22,
-        name: 'Ousmane Ba',
+        id: 8,
+        name: 'Julie Richard',
         category: 'polyvalent',
         type: 'interimaire',
         planning: {
@@ -331,6 +208,8 @@ let EMPLOYEES = [
         }
     }
 ];
+
+console.log('⚠️ Version démo - Données fictives chargées');
 
 // État de l'application
 let state = {
@@ -344,7 +223,7 @@ let state = {
     darkMode: localStorage.getItem('darkMode') === 'true',
     editingShift: null,
     collapsedCategories: new Set(),
-    nextId: 23
+    nextId: 9
 };
 
 // Noms des mois en français
