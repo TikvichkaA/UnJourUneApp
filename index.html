@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Un Jour Une App - Maintenance</title>
+    <title>Un Jour Une App - Janvier 2026</title>
     <style>
         * {
             margin: 0;
@@ -13,53 +13,295 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #fafafa;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
+            padding: 3rem 1.5rem;
         }
 
-        .maintenance-box {
-            background: white;
-            padding: 3rem;
-            border-radius: 1rem;
+        header {
             text-align: center;
-            max-width: 500px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-
-        .emoji {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+            margin-bottom: 3rem;
         }
 
         h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: #111;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .day-header {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #999;
+            padding: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            text-decoration: none;
             color: #333;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .day:hover {
+            border-color: #111;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .day.empty {
+            background: transparent;
+            border: none;
+            pointer-events: none;
+        }
+
+        .day.available {
+            cursor: pointer;
+        }
+
+        .day.available::after {
+            content: '';
+            position: absolute;
+            bottom: 6px;
+            width: 4px;
+            height: 4px;
+            background: #111;
+            border-radius: 50%;
+        }
+
+        .day.upcoming {
+            color: #ccc;
+            border-color: #f5f5f5;
+        }
+
+        .day.upcoming:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: #f5f5f5;
+            cursor: default;
+        }
+
+        .day-number {
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .day-name {
+            font-size: 0.55rem;
+            margin-top: 0.25rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            max-width: 90%;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #999;
+            font-size: 0.75rem;
+        }
+
+        .contact {
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            padding: 2rem;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #333;
+            margin-bottom: 0.75rem;
+        }
+
+        .contact p {
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.6;
             margin-bottom: 1rem;
         }
 
-        p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
+        .contact a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #0077b5;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border: 1px solid #0077b5;
+            border-radius: 4px;
+            transition: all 0.2s ease;
         }
 
-        .back-soon {
-            font-size: 0.9rem;
-            color: #999;
+        .contact a:hover {
+            background: #0077b5;
+            color: white;
+        }
+
+        @media (max-width: 500px) {
+            .calendar {
+                gap: 0.3rem;
+            }
+            .day-number {
+                font-size: 0.9rem;
+            }
+            .day-name {
+                font-size: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="maintenance-box">
-        <div class="emoji">🔧</div>
-        <h1>Maintenance en cours</h1>
-        <p>Le site est en cours de mise à jour.<br>Revenez dans quelques minutes !</p>
-        <p class="back-soon">Un Jour Une App - Janvier 2026</p>
-    </div>
+    <header>
+        <h1>Un Jour Une App</h1>
+        <p class="subtitle">Janvier 2026</p>
+    </header>
+
+    <section class="contact">
+        <h2>Besoin d'une app sur mesure ?</h2>
+        <p>Apparemment maintenant je fais des apps - s'il vous en faut une aussi, contactez-moi.</p>
+        <a href="https://www.linkedin.com/in/emmanuel-pinglier-449988151/" target="_blank" rel="noopener">
+            Me contacter sur LinkedIn
+        </a>
+    </section>
+
+    <main class="calendar">
+        <!-- En-têtes des jours -->
+        <div class="day-header">Lun</div>
+        <div class="day-header">Mar</div>
+        <div class="day-header">Mer</div>
+        <div class="day-header">Jeu</div>
+        <div class="day-header">Ven</div>
+        <div class="day-header">Sam</div>
+        <div class="day-header">Dim</div>
+
+        <!-- Semaine 1 : Janvier 2026 commence un jeudi -->
+        <div class="day empty"></div>
+        <div class="day empty"></div>
+        <div class="day empty"></div>
+        <a href="./01/NY-Forecast/?group=public" class="day available">
+            <span class="day-number">1</span>
+            <span class="day-name">Nouvel An</span>
+        </a>
+        <a href="./02/" class="day available">
+            <span class="day-number">2</span>
+            <span class="day-name">Toi vs Vie</span>
+        </a>
+        <a href="./03/" class="day available">
+            <span class="day-number">3</span>
+            <span class="day-name">Résolutions</span>
+        </a>
+        <a href="./04/dist/" class="day available">
+            <span class="day-number">4</span>
+            <span class="day-name">Micro-Cité</span>
+        </a>
+
+        <!-- Semaine 2 -->
+        <a href="./05/" class="day available">
+            <span class="day-number">5</span>
+            <span class="day-name">Mission</span>
+        </a>
+        <a href="./06/" class="day available">
+            <span class="day-number">6</span>
+            <span class="day-name">Qui a dit ?</span>
+        </a>
+        <a href="./07/" class="day available">
+            <span class="day-number">7</span>
+            <span class="day-name">Shu Aboie</span>
+        </a>
+        <a href="./08/" class="day available">
+            <span class="day-number">8</span>
+            <span class="day-name">EntreGraphe</span>
+        </a>
+        <a href="./09/" class="day available">
+            <span class="day-number">9</span>
+            <span class="day-name">Liens Intérêt</span>
+        </a>
+        <a href="./10/" class="day available">
+            <span class="day-number">10</span>
+            <span class="day-name">SubVeille</span>
+        </a>
+        <a href="./11/" class="day available">
+            <span class="day-number">11</span>
+            <span class="day-name">Dreamhouse</span>
+        </a>
+
+        <!-- Semaine 3 -->
+        <a href="./12/" class="day available">
+            <span class="day-number">12</span>
+            <span class="day-name">CHU Babinski</span>
+        </a>
+        <a href="./13/" class="day available">
+            <span class="day-number">13</span>
+            <span class="day-name">SecondMain</span>
+        </a>
+        <a href="./14/" class="day available">
+            <span class="day-number">14</span>
+            <span class="day-name">Muni 2026</span>
+        </a>
+        <div class="day upcoming"><span class="day-number">15</span></div>
+        <div class="day upcoming"><span class="day-number">16</span></div>
+        <div class="day upcoming"><span class="day-number">17</span></div>
+        <div class="day upcoming"><span class="day-number">18</span></div>
+
+        <!-- Semaine 4 -->
+        <div class="day upcoming"><span class="day-number">19</span></div>
+        <div class="day upcoming"><span class="day-number">20</span></div>
+        <div class="day upcoming"><span class="day-number">21</span></div>
+        <div class="day upcoming"><span class="day-number">22</span></div>
+        <div class="day upcoming"><span class="day-number">23</span></div>
+        <div class="day upcoming"><span class="day-number">24</span></div>
+        <div class="day upcoming"><span class="day-number">25</span></div>
+
+        <!-- Semaine 5 -->
+        <div class="day upcoming"><span class="day-number">26</span></div>
+        <div class="day upcoming"><span class="day-number">27</span></div>
+        <div class="day upcoming"><span class="day-number">28</span></div>
+        <div class="day upcoming"><span class="day-number">29</span></div>
+        <div class="day upcoming"><span class="day-number">30</span></div>
+        <div class="day upcoming"><span class="day-number">31</span></div>
+        <div class="day empty"></div>
+    </main>
+
+    <footer>
+        31 jours, 31 apps
+    </footer>
 </body>
 </html>
