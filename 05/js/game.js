@@ -306,7 +306,7 @@ const Dialogues = {
         { speaker: 'Alex', text: '*appuie frénétiquement sur le bouton*', portrait: 'damage' },
         { speaker: 'Alex', text: '... Non. Non non non.', portrait: 'damage' },
         { speaker: 'Léa', text: 'Quoi ? Qu\'est-ce qui se passe ?', portrait: null },
-        { speaker: 'Alex', text: 'Plus de batterie. Et... j\'ai pas noté l\'adresse d\'Abel.', portrait: 'damage' },
+        { speaker: 'Alex', text: 'Plus de batterie. Et... j\'ai pas noté l\'adresse d\'Tom.', portrait: 'damage' },
         { speaker: 'Léa', text: '... T\'es sérieux là ?', portrait: null },
         {
             speaker: 'Alex',
@@ -415,14 +415,14 @@ const Dialogues = {
     wrong_floor: [
         { speaker: 'Alex', text: '*essaye la clé sur une porte* ...Nope.', portrait: 'openDoor' },
         { speaker: 'Léa', text: 'C\'est une blague ? C\'est pas le bon étage ?!', portrait: null },
-        { speaker: 'Alex', text: 'Abel m\'a dit un truc genre "au milieu"...', portrait: 'checkMap' },
+        { speaker: 'Alex', text: 'Tom m\'a dit un truc genre "au milieu"...', portrait: 'checkMap' },
         {
             speaker: 'Léa',
             text: '*commence à perdre patience*',
             portrait: null,
             choices: [
                 { text: 'C\'est sûrement juste au-dessus !', effect: { interest: -1, weirdness: 1 }, next: 'floor_select' },
-                { text: 'Abel et ses indications de merde...', effect: { weirdness: 1 }, next: 'floor_select' }
+                { text: 'Tom et ses indications de merde...', effect: { weirdness: 1 }, next: 'floor_select' }
             ]
         }
     ],
@@ -499,7 +499,7 @@ const Dialogues = {
     ],
 
     memory_intro: [
-        { speaker: 'Alex', text: 'Attends je check les SMS d\'Abel...', portrait: 'checkMap' },
+        { speaker: 'Alex', text: 'Attends je check les SMS d\'Tom...', portrait: 'checkMap' },
         { speaker: 'Léa', text: 'Il t\'a envoyé l\'adresse ?', portrait: null },
         { speaker: 'Alex', text: 'Ouais mais... mon tel va s\'éteindre ! Faut que je mémorise vite !', portrait: 'damage' },
         { speaker: 'Narrateur', text: '*L\'écran clignote dangereusement...*', portrait: null, next: 'start_memory_game' }
@@ -959,7 +959,7 @@ const DialogueSystem = {
                             this.start('tea_intro');
                         });
                     } else if (branch === 'to_maze' || branch === 'maze_intro') {
-                        transition('En route vers chez Abel...', () => {
+                        transition('En route vers chez Tom...', () => {
                             UI.showScene('scene-maze');
                             UI.setLocation('Quartier résidentiel');
                             setupMaze();
@@ -1154,9 +1154,9 @@ function showFloorSelect() {
     UI.showScreen('minigame-floor');
 
     const hints = [
-        '"C\'est pas trop haut" - Abel',
-        '"Au milieu je crois" - Abel',
-        '"Fais pas de bruit en montant" - Abel'
+        '"C\'est pas trop haut" - Tom',
+        '"Au milieu je crois" - Tom',
+        '"Fais pas de bruit en montant" - Tom'
     ];
     document.getElementById('floor-hint').textContent = hints[Math.floor(Math.random() * hints.length)];
 
@@ -1198,7 +1198,7 @@ function showDoorSelect() {
     const wrongDoor = doors.filter(d => d !== GameState.correctDoor)[Math.floor(Math.random() * 3)];
 
     // Update hint in dialogue
-    const hint = `Abel a dit: "C'est la porte ${GameState.correctDoor}... ou ${wrongDoor}? J'sais plus."`;
+    const hint = `Tom a dit: "C'est la porte ${GameState.correctDoor}... ou ${wrongDoor}? J'sais plus."`;
 
     doors.forEach(letter => {
         const door = document.createElement('div');
@@ -1866,7 +1866,7 @@ const MemoryGame = {
         const doorClues = {
             'A': [
                 "Première lettre de l'alphabet, facile",
-                "Comme Abel d'ailleurs mdrr",
+                "Comme Tom d'ailleurs mdrr",
                 "La porte du début, A comme Amour 💕"
             ],
             'B': [
@@ -1915,7 +1915,7 @@ const MemoryGame = {
         const sms = document.createElement('div');
         sms.className = 'sms-message';
         sms.innerHTML = `
-            <div class="sms-sender">Abel</div>
+            <div class="sms-sender">Tom</div>
             <div class="sms-bubble">${clue.text}</div>
             <div class="sms-time">2:03</div>
         `;
@@ -1925,7 +1925,7 @@ const MemoryGame = {
         const hint = document.createElement('div');
         hint.className = 'sms-message';
         hint.innerHTML = `
-            <div class="sms-sender">Abel</div>
+            <div class="sms-sender">Tom</div>
             <div class="sms-bubble">Retiens bien !</div>
             <div class="sms-time">2:03</div>
         `;
