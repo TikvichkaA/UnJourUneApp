@@ -68,7 +68,6 @@ let authMode = 'login';
 async function initAuth() {
     // Verifier si Auth est disponible (supabase-auth.js charge)
     if (typeof Auth === 'undefined') {
-        console.log('Auth module not loaded');
         return;
     }
 
@@ -91,6 +90,8 @@ async function initAuth() {
 function updateAuthUI(user) {
     const loginPrompt = document.getElementById('btnLoginPrompt');
     const subscribeBtn = document.getElementById('btnSubscribe');
+
+    if (!loginPrompt || !subscribeBtn) return;
 
     if (user) {
         loginPrompt.classList.add('hidden');

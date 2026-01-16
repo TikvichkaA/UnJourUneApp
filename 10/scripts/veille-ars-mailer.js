@@ -25,7 +25,7 @@ const { createClient } = require('@supabase/supabase-js');
 const CONFIG = {
     resendApiKey: process.env.RESEND_API_KEY,
     alertEmail: process.env.ALERT_EMAIL || 'votre@email.com',
-    fromEmail: 'Veille ARS <veille@resend.dev>',
+    fromEmail: 'Veille ARS <veille@unjouruneapp.com>',
     supabaseUrl: process.env.SUPABASE_URL || 'https://zstisdptwxynshftqdln.supabase.co',
     supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
     keywords: [

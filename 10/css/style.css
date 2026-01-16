@@ -38,6 +38,11 @@
   --transition-normal: 0.25s ease;
 }
 
+/* Utility classes */
+.hidden {
+  display: none !important;
+}
+
 /* Reset */
 *, *::before, *::after {
   box-sizing: border-box;
