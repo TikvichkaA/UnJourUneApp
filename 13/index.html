@@ -3,233 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SecondMain - Trouve en occasion</title>
+  <meta http-equiv="refresh" content="0; url=https://chromewebstore.google.com/detail/secondmain-trouve-en-occa/ibnnihglegjopmhimecbaflodcfghecj">
+  <title>SecondMain - Redirection Chrome Web Store</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♻️</text></svg>">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --primary: #10b981;
-      --primary-dark: #059669;
-      --primary-light: #d1fae5;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --bg: #f8fafc;
-      --bg-card: #ffffff;
-    }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f8fafc;
+      text-align: center;
     }
-    .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
-    header { text-align: center; margin-bottom: 40px; }
-    .back-home { display: inline-block; margin-bottom: 20px; color: var(--text-muted); text-decoration: none; font-size: 14px; }
-    .back-home:hover { color: var(--primary); }
-    .logo { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 12px; }
-    .logo-icon { width: 70px; height: 70px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 6px 20px rgba(16,185,129,0.3); }
-    h1 { font-size: 38px; font-weight: 700; }
-    .tagline { font-size: 18px; color: var(--text-muted); }
-
-    /* Tabs */
-    .tabs { display: flex; gap: 8px; margin-bottom: 20px; justify-content: center; }
-    .tab { padding: 12px 24px; border: 2px solid #e2e8f0; border-radius: 10px; background: white; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
-    .tab:hover { border-color: var(--primary); }
-    .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
-    .tab-badge { background: #f59e0b; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
-    .tab.active .tab-badge { background: white; color: var(--primary); }
-
-    /* Install sections */
-    .install-section { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 16px; padding: 32px; color: white; text-align: center; margin-bottom: 32px; }
-    .install-section.hidden { display: none; }
-    .install-section h2 { font-size: 22px; margin-bottom: 8px; }
-    .install-section > p { opacity: 0.9; margin-bottom: 24px; }
-    .install-btn { display: inline-flex; align-items: center; gap: 10px; background: white; color: var(--primary-dark); padding: 14px 28px; border-radius: 10px; font-size: 16px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .install-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
-    .install-btn.copied { background: var(--primary-dark); color: white; }
-    .install-btn svg { width: 20px; height: 20px; }
-    .install-steps { display: flex; gap: 16px; margin-top: 24px; justify-content: center; flex-wrap: wrap; }
-    .install-step { display: flex; align-items: center; gap: 8px; font-size: 13px; opacity: 0.9; }
-    .step-num { width: 22px; height: 22px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 11px; }
-
-    /* Features */
-    .features { background: var(--bg-card); border-radius: 16px; padding: 28px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    .features h2 { text-align: center; font-size: 20px; margin-bottom: 20px; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
-    .feature { text-align: center; padding: 16px; background: var(--bg); border-radius: 10px; }
-    .feature-icon { font-size: 32px; margin-bottom: 8px; }
-    .feature h3 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-    .feature p { font-size: 12px; color: var(--text-muted); }
-
-    /* Sites */
-    .sites { margin-bottom: 32px; text-align: center; }
-    .sites h2 { font-size: 16px; margin-bottom: 12px; color: var(--text-muted); }
-    .sites-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-    .site-badge { background: white; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 16px; font-size: 12px; }
-    .source-badge { padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 500; color: white; }
-
-    footer { text-align: center; padding: 24px 0; color: var(--text-muted); font-size: 13px; }
-    footer a { color: var(--primary); text-decoration: none; }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 28px; }
-      .tabs { flex-direction: column; }
-      .install-section { padding: 24px 16px; }
-      .install-steps { flex-direction: column; align-items: center; }
+    .container {
+      padding: 40px;
+    }
+    .logo {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #1e293b;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+    a {
+      color: #10b981;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <a href="../" class="back-home">&larr; Retour au calendrier</a>
-      <div class="logo">
-        <div class="logo-icon">♻️</div>
-        <h1>SecondMain</h1>
-      </div>
-      <p class="tagline">Trouve moins cher en seconde main</p>
-    </header>
-
-    <!-- Choix methode -->
-    <div class="tabs">
-      <button class="tab active" onclick="showTab('chrome')">
-        🧩 Extension Chrome
-        <span class="tab-badge">Recommande</span>
-      </button>
-      <button class="tab" onclick="showTab('tampermonkey')">
-        🐒 Tampermonkey
-      </button>
-    </div>
-
-    <!-- Installation Extension Chrome -->
-    <section class="install-section" id="tab-chrome">
-      <h2>Extension Chrome</h2>
-      <p>Recherche automatique en arriere-plan + notifications</p>
-
-      <a href="chrome-extension/generate-icons.html" class="install-btn" target="_blank">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        Telecharger l'extension
+    <div class="logo">♻️</div>
+    <h1>SecondMain</h1>
+    <p>Redirection vers le Chrome Web Store...</p>
+    <p>
+      <a href="https://chromewebstore.google.com/detail/secondmain-trouve-en-occa/ibnnihglegjopmhimecbaflodcfghecj">
+        Cliquez ici si la redirection ne fonctionne pas
       </a>
-
-      <div class="install-steps">
-        <div class="install-step"><span class="step-num">1</span> Genere les icones (lien ci-dessus)</div>
-        <div class="install-step"><span class="step-num">2</span> chrome://extensions → Mode dev</div>
-        <div class="install-step"><span class="step-num">3</span> "Charger l'extension non empaquetee"</div>
-      </div>
-    </section>
-
-    <!-- Installation Tampermonkey -->
-    <section class="install-section hidden" id="tab-tampermonkey">
-      <h2>Tampermonkey</h2>
-      <p>Copie le script et colle-le dans Tampermonkey</p>
-
-      <button class="install-btn" id="copy-btn" onclick="copyScript()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="9" y="9" width="13" height="13" rx="2"></rect>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-        </svg>
-        <span id="copy-text">Copier le script</span>
-      </button>
-
-      <div class="install-steps">
-        <div class="install-step"><span class="step-num">1</span> Copie le script</div>
-        <div class="install-step"><span class="step-num">2</span> Tampermonkey → Nouveau script</div>
-        <div class="install-step"><span class="step-num">3</span> Ctrl+A, Ctrl+V, Ctrl+S</div>
-      </div>
-    </section>
-
-    <!-- Fonctionnalites -->
-    <section class="features">
-      <h2>Comment ca marche ?</h2>
-      <div class="features-grid">
-        <div class="feature">
-          <div class="feature-icon">🔍</div>
-          <h3>Detection auto</h3>
-          <p>Detecte le produit sur la page</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">🔔</div>
-          <h3>Notification</h3>
-          <p>Alerte si trouve moins cher</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">📍</div>
-          <h3>Geolocalise</h3>
-          <p>Filtre par region (IDF)</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">💰</div>
-          <h3>Economies</h3>
-          <p>Compare avec le prix neuf</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sites -->
-    <section class="sites">
-      <h2>Sites detectes</h2>
-      <div class="sites-row">
-        <span class="site-badge">Leroy Merlin</span>
-        <span class="site-badge">Castorama</span>
-        <span class="site-badge">IKEA</span>
-        <span class="site-badge">Amazon</span>
-        <span class="site-badge">Fnac</span>
-        <span class="site-badge">Darty</span>
-        <span class="site-badge">Boulanger</span>
-        <span class="site-badge">Cdiscount</span>
-        <span class="site-badge">ManoMano</span>
-      </div>
-    </section>
-
-    <section class="sites">
-      <h2>Recherche sur</h2>
-      <div class="sites-row">
-        <span class="source-badge" style="background:#f56b2a;">Le Bon Coin</span>
-        <span class="source-badge" style="background:#09b1ba;">Vinted</span>
-        <span class="source-badge" style="background:#1877f2;">FB Marketplace</span>
-        <span class="source-badge" style="background:#e53238;">eBay</span>
-      </div>
-    </section>
-
-    <footer>
-      <p>Un Jour Une App - Jour 13 / Janvier 2026</p>
-      <p style="margin-top:6px;">
-        <a href="https://www.linkedin.com/in/emmanuel-pinglier-449988151/" target="_blank">Emmanuel Pinglier</a>
-      </p>
-    </footer>
+    </p>
+    <p style="margin-top: 30px; font-size: 13px;">
+      <a href="../">&larr; Retour au calendrier</a>
+    </p>
   </div>
-
   <script>
-    function showTab(tab) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.install-section').forEach(s => s.classList.add('hidden'));
-      document.querySelector(`[onclick="showTab('${tab}')"]`).classList.add('active');
-      document.getElementById('tab-' + tab).classList.remove('hidden');
-    }
-
-    // Charger le script Tampermonkey
-    fetch('secondmain.user.js').then(r => r.text()).then(s => window.SCRIPT = s).catch(() => {});
-
-    async function copyScript() {
-      const btn = document.getElementById('copy-btn');
-      const txt = document.getElementById('copy-text');
-      try {
-        if (!window.SCRIPT) {
-          const r = await fetch('secondmain.user.js');
-          window.SCRIPT = await r.text();
-        }
-        await navigator.clipboard.writeText(window.SCRIPT);
-        btn.classList.add('copied');
-        txt.textContent = 'Copie ! ✓';
-        setTimeout(() => { btn.classList.remove('copied'); txt.textContent = 'Copier le script'; }, 3000);
-      } catch(e) {
-        alert('Erreur: ouvre secondmain.user.js et copie manuellement');
-      }
-    }
+    window.location.href = 'https://chromewebstore.google.com/detail/secondmain-trouve-en-occa/ibnnihglegjopmhimecbaflodcfghecj';
   </script>
 </body>
 </html>

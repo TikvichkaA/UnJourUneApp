@@ -1,0 +1,110 @@
+{
+  "_comment": "Import petites communes - Veille Municipales 2026",
+  "_date": "2026-01-16",
+  "_source": "Recherches web (France 3, Horizon Actu, Nice Presse, etc.)",
+
+  "communes": [
+    {"nom": "Harnes", "departement": "62"},
+    {"nom": "Carvin", "departement": "62"},
+    {"nom": "Méricourt", "departement": "62"},
+    {"nom": "Pont-à-Vendin", "departement": "62"},
+    {"nom": "Sallaumines", "departement": "62"},
+    {"nom": "Grenay", "departement": "62"},
+    {"nom": "Noyelles-Godault", "departement": "62"},
+    {"nom": "Oignies", "departement": "62"},
+    {"nom": "Libercourt", "departement": "62"},
+    {"nom": "Montigny-en-Gohelle", "departement": "62"},
+    {"nom": "Courrières", "departement": "62"},
+    {"nom": "Wingles", "departement": "62"},
+
+    {"nom": "Wattrelos", "departement": "59"},
+    {"nom": "Caudry", "departement": "59"},
+    {"nom": "Sin-le-Noble", "departement": "59"},
+    {"nom": "Bruay-sur-l'Escaut", "departement": "59"},
+    {"nom": "Denain", "departement": "59"},
+    {"nom": "Anzin", "departement": "59"},
+    {"nom": "Maubeuge", "departement": "59"},
+
+    {"nom": "Tergnier", "departement": "02"},
+    {"nom": "Chauny", "departement": "02"},
+    {"nom": "Laon", "departement": "02"},
+    {"nom": "Soissons", "departement": "02"},
+
+    {"nom": "Clermont", "departement": "60"},
+    {"nom": "Creil", "departement": "60"},
+    {"nom": "Nogent-sur-Oise", "departement": "60"},
+
+    {"nom": "Abbeville", "departement": "80"},
+    {"nom": "Albert", "departement": "80"},
+
+    {"nom": "La Ciotat", "departement": "13"},
+    {"nom": "Istres", "departement": "13"},
+    {"nom": "Miramas", "departement": "13"},
+    {"nom": "Port-de-Bouc", "departement": "13"},
+    {"nom": "Salon-de-Provence", "departement": "13"},
+
+    {"nom": "La Garde", "departement": "83"},
+    {"nom": "Ollioules", "departement": "83"},
+    {"nom": "La Valette-du-Var", "departement": "83"},
+    {"nom": "Le Pradet", "departement": "83"},
+    {"nom": "Carqueiranne", "departement": "83"},
+    {"nom": "La Crau", "departement": "83"},
+
+    {"nom": "Vence", "departement": "06"},
+    {"nom": "Villeneuve-Loubet", "departement": "06"},
+    {"nom": "Vallauris", "departement": "06"},
+    {"nom": "Mandelieu-la-Napoule", "departement": "06"},
+    {"nom": "Saint-Laurent-du-Var", "departement": "06"}
+  ],
+
+  "candidats": [
+    {
+      "nom": "Anthony Garénaux",
+      "commune": "Harnes",
+      "parti": "RN",
+      "detail": "Conseiller municipal RN, conseiller départemental, employé cabinet Steeve Briois"
+    },
+    {
+      "nom": "Arnaud de Rigné",
+      "commune": "Carvin",
+      "parti": "RN",
+      "detail": "Conseiller municipal, conseiller régional HdF, attaché parlementaire Marine Le Pen"
+    },
+    {
+      "nom": "Noé Carette",
+      "commune": "Pont-à-Vendin",
+      "parti": "RN",
+      "detail": "24 ans, assistant parlementaire Bruno Clavet"
+    },
+    {
+      "nom": "Laurent Dassonville",
+      "commune": "Méricourt",
+      "parti": "RN",
+      "detail": "Tête de liste RN Méricourt"
+    },
+    {
+      "nom": "Ludovic Pajot",
+      "commune": "Bruay-la-Buissière",
+      "parti": "RN",
+      "detail": "Maire sortant RN depuis 2020, député RN"
+    },
+    {
+      "nom": "Marc-Alexandre de Fleurian",
+      "commune": "Calais",
+      "parti": "RN",
+      "detail": "Chef de file RN Calais, candidat 2026"
+    },
+    {
+      "nom": "Philippe Olivier",
+      "commune": "Tergnier",
+      "parti": "RN",
+      "detail": "Député RN Aisne, soutien liste Tergnier"
+    },
+    {
+      "nom": "Jessica Music",
+      "commune": "Soissons",
+      "parti": "RN",
+      "detail": "Candidate RN Soissons 2026"
+    }
+  ]
+}

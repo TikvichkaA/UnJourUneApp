@@ -1,0 +1,12 @@
+(;GM[1]FF[4]CA[UTF-8]
+SZ[9]
+KM[6.5]
+PB[Position]
+PW[Test]
+GN[Position simple pour test]
+C[Cette position est configuree directement avec AB et AW, sans coups joues.]
+AB[cc][dc][ec][cd][ed][ce][de][ee]
+AW[gc][hc][gd][hd][ge][he][gf][hf][gg][hg]
+AB[cf][df][ef][cg][dg][eg][ch][dh][eh]
+AW[ff][fg][fh][fi][gi][hi][gh][hh]
+)

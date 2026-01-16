@@ -1,0 +1,339 @@
+{
+  "_comment": "Sources à surveiller pour chaque commune - Veille Municipales 2026",
+  "_updated": "2026-01-14",
+  "communes": {
+    "Toulon": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_à_Toulon",
+      "presse": [
+        "https://www.francebleu.fr/provence-alpes-cote-dazur/var-83/toulon/elections",
+        "https://www.varmatin.com/politique"
+      ],
+      "candidats_connus": [
+        "Laure Lavalette",
+        "David Gérard",
+        "Philippe Vitel",
+        "Robin Cloedt"
+      ]
+    },
+    "Perpignan": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_à_Perpignan",
+      "presse": [
+        "https://www.francebleu.fr/occitanie/pyrenees-orientales-66/perpignan/elections",
+        "https://www.lindependant.fr/politique"
+      ],
+      "candidats_connus": [
+        "Louis Aliot",
+        "Charles Pons",
+        "Patricia Fourquet",
+        "Xavier Baudry",
+        "Marie-Thérèse Fesenbeck"
+      ]
+    },
+    "Hénin-Beaumont": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_le_Pas-de-Calais",
+      "presse": [
+        "https://www.francebleu.fr/hauts-de-france/pas-de-calais-62/henin-beaumont/elections",
+        "https://www.lavoixdunord.fr/tag/henin-beaumont"
+      ],
+      "candidats_connus": [
+        "Steeve Briois",
+        "Christopher Szczurek",
+        "Laurent Brice",
+        "Bruno Bilde",
+        "Aurélia Beigneux",
+        "Maryse Poulain"
+      ]
+    },
+    "Lens": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_le_Pas-de-Calais",
+      "presse": [
+        "https://www.francebleu.fr/hauts-de-france/pas-de-calais-62/lens/elections",
+        "https://www.lavoixdunord.fr/tag/lens"
+      ],
+      "candidats_connus": [
+        "Bruno Clavet"
+      ]
+    },
+    "Béziers": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_à_Béziers",
+      "presse": [
+        "https://www.francebleu.fr/occitanie/herault-34/beziers/elections",
+        "https://www.midilibre.fr/beziers"
+      ],
+      "candidats_connus": [
+        "Julien Gabarron"
+      ]
+    },
+    "Vitrolles": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_les_Bouches-du-Rhône",
+      "presse": [
+        "https://www.francebleu.fr/provence-alpes-cote-dazur/bouches-du-rhone-13/vitrolles/elections"
+      ],
+      "candidats_connus": [
+        "Fabien Bravi",
+        "Stéphane Waharte"
+      ]
+    },
+    "Menton": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_les_Alpes-Maritimes",
+      "presse": [
+        "https://www.francebleu.fr/provence-alpes-cote-dazur/alpes-maritimes-06/menton/elections",
+        "https://www.nicematin.com/menton"
+      ],
+      "candidats_connus": [
+        "Alexandra Masson"
+      ]
+    },
+    "Nice": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_à_Nice",
+      "presse": [
+        "https://www.francebleu.fr/provence-alpes-cote-dazur/alpes-maritimes-06/nice/elections",
+        "https://www.nicematin.com/nice"
+      ],
+      "candidats_connus": [
+        "Lionel Tivoli",
+        "Eric Ciotti"
+      ]
+    },
+    "Cannes": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_les_Alpes-Maritimes",
+      "presse": [
+        "https://www.nicematin.com/cannes"
+      ],
+      "candidats_connus": [
+        "Lucas Mussio"
+      ]
+    },
+    "Marignane": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_les_Bouches-du-Rhône",
+      "presse": [
+        "https://www.laprovence.com/recherche?query=marignane+municipales"
+      ],
+      "candidats_connus": [
+        "Eric Le Dissès",
+        "Franck Allisio",
+        "Patricia Colin",
+        "Gérard Terrier"
+      ]
+    },
+    "Orange": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_en_Vaucluse",
+      "presse": [
+        "https://www.francebleu.fr/provence-alpes-cote-dazur/vaucluse-84/orange/elections"
+      ],
+      "candidats_connus": [
+        "Yann Bompard",
+        "Denis Sabon",
+        "Marcelle Arsac",
+        "Marie-Thérèse Galmard"
+      ]
+    },
+    "Carpentras": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_en_Vaucluse",
+      "presse": [
+        "https://www.francebleu.fr/provence-alpes-cote-dazur/vaucluse-84/carpentras/elections"
+      ],
+      "candidats_connus": [
+        "Christian Richaud"
+      ]
+    },
+    "Fréjus": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_le_Var",
+      "presse": [
+        "https://www.francebleu.fr/provence-alpes-cote-dazur/var-83/frejus/elections"
+      ],
+      "candidats_connus": [
+        "David Rachline"
+      ]
+    },
+    "Narbonne": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_l'Aude",
+      "presse": [
+        "https://www.francebleu.fr/occitanie/aude-11/narbonne/elections"
+      ],
+      "candidats_connus": [
+        "Frédéric Falcon"
+      ]
+    },
+    "Martigues": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_les_Bouches-du-Rhône",
+      "presse": [
+        "https://maritima.fr/actualites/politique/martigues"
+      ],
+      "candidats_connus": [
+        "Emmanuel Fouquart",
+        "Jean-Luc Di Maria"
+      ]
+    },
+    "Boulogne-sur-Mer": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_le_Pas-de-Calais",
+      "presse": [
+        "https://www.lavoixdunord.fr/tag/boulogne-sur-mer"
+      ],
+      "candidats_connus": [
+        "Antoine Golliot"
+      ]
+    },
+    "Montauban": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_en_Tarn-et-Garonne",
+      "presse": [
+        "https://www.ladepeche.fr/montauban"
+      ],
+      "candidats_connus": [
+        "Didier Lallemand"
+      ]
+    },
+    "Hyères": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_le_Var",
+      "presse": [
+        "https://www.varmatin.com/hyeres"
+      ],
+      "candidats_connus": [
+        "Jean-Michel Eynard-Tomatis"
+      ]
+    },
+
+    "Grasse": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_les_Alpes-Maritimes",
+      "presse": [
+        "https://www.nicematin.com/grasse"
+      ],
+      "candidats_connus": [
+        "Jean-Paul Camerano"
+      ]
+    },
+
+    "Le Cannet": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_les_Alpes-Maritimes",
+      "presse": [
+        "https://www.nicematin.com/le-cannet"
+      ],
+      "candidats_connus": [
+        "Franck Galbert"
+      ]
+    },
+
+    "Mougins": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_les_Alpes-Maritimes",
+      "presse": [
+        "https://www.nicematin.com/mougins"
+      ],
+      "candidats_connus": [
+        "Alexandre Lucas"
+      ]
+    },
+
+    "Antibes": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_les_Alpes-Maritimes",
+      "presse": [
+        "https://www.nicematin.com/antibes"
+      ],
+      "candidats_connus": [
+        "Hugo Muriel"
+      ]
+    },
+
+    "Cagnes-sur-Mer": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_les_Alpes-Maritimes",
+      "presse": [
+        "https://www.nicematin.com/cagnes-sur-mer"
+      ],
+      "candidats_connus": [
+        "Bryan Masson"
+      ]
+    },
+
+    "Limoux": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_l'Aude",
+      "presse": [
+        "https://www.ladepeche.fr/limoux"
+      ],
+      "candidats_connus": [
+        "Maxime Bot"
+      ]
+    },
+
+    "Billy-Montigny": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_le_Pas-de-Calais",
+      "presse": [
+        "https://www.lavoixdunord.fr/tag/billy-montigny"
+      ],
+      "candidats_connus": [
+        "Yanis Gaudillat"
+      ]
+    },
+
+    "Rivesaltes": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_les_Pyrénées-Orientales",
+      "presse": [
+        "https://www.lindependant.fr/rivesaltes"
+      ],
+      "candidats_connus": [
+        "Julien Potel"
+      ]
+    },
+
+    "Loison-sous-Lens": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_le_Pas-de-Calais",
+      "presse": [
+        "https://www.lavoixdunord.fr/tag/loison-sous-lens"
+      ],
+      "candidats_connus": [
+        "Fabrice Trepczynski"
+      ]
+    },
+
+    "Fouquières-lès-Lens": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_le_Pas-de-Calais",
+      "presse": [
+        "https://www.lavoixdunord.fr/tag/fouquieres-les-lens"
+      ],
+      "candidats_connus": [
+        "Alexis Goeury"
+      ]
+    },
+
+    "Avion": {
+      "wikipedia": "https://fr.wikipedia.org/wiki/Élections_municipales_de_2026_dans_le_Pas-de-Calais",
+      "presse": [
+        "https://www.lavoixdunord.fr/tag/avion"
+      ],
+      "candidats_connus": [
+        "Joël Bernard"
+      ]
+    }
+  },
+  "sources_nationales": [
+    {
+      "nom": "StreetPress - Municipales",
+      "url": "https://www.streetpress.com/rubriques/municipales",
+      "type": "investigation"
+    },
+    {
+      "nom": "Mediapart - Municipales",
+      "url": "https://www.mediapart.fr/journal/france/dossier/municipales-2026",
+      "type": "investigation"
+    },
+    {
+      "nom": "RN Officiel",
+      "url": "https://rassemblementnational.fr/",
+      "type": "officiel"
+    },
+    {
+      "nom": "Candidator",
+      "url": "https://www.candidator.fr/municipales2026/",
+      "type": "aggregator"
+    }
+  ],
+  "prefectures": {
+    "Var": "https://www.var.gouv.fr/Actions-de-l-Etat/Elections/Elections-municipales-2026",
+    "Bouches-du-Rhône": "https://www.bouches-du-rhone.gouv.fr/Actions-de-l-Etat/Vie-democratique/Les-elections/Les-elections-en-2026/Les-elections-municipales-de-mars-2026",
+    "Pas-de-Calais": "https://www.pas-de-calais.gouv.fr/Actions-de-l-Etat/Elections-politiques-et-professionnelles/Elections-politiques/Elections-municipales",
+    "Vaucluse": "https://www.vaucluse.gouv.fr/Actions-de-l-Etat/Citoyennete-et-elections/Elections",
+    "Hérault": "https://www.herault.gouv.fr/Actions-de-l-Etat/Elections-et-citoyennete/Elections/MUNICIPALES-2026",
+    "Alpes-Maritimes": "https://www.alpes-maritimes.gouv.fr/Actions-de-l-Etat/Elections",
+    "Pyrénées-Orientales": "https://www.pyrenees-orientales.gouv.fr/Actions-de-l-Etat/Elections",
+    "Aude": "https://www.aude.gouv.fr/Actions-de-l-Etat/Elections",
+    "Tarn-et-Garonne": "https://www.tarn-et-garonne.gouv.fr/Actions-de-l-Etat/Elections"
+  }
+}

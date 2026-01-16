@@ -1,306 +1,283 @@
 /**
  * Scraper - Veille Municipales 2026
  * ==================================
- * Script Node.js pour récupérer les candidats ED et leurs dingueries
+ * Extraction automatique de candidats depuis les articles de presse
  *
- * Usage: node scraper.js
+ * Usage:
+ *   node scraper.js <url>              # Scraper une URL
+ *   node scraper.js --source france3   # Scraper une source prédéfinie
+ *   node scraper.js --batch urls.txt   # Scraper plusieurs URLs
+ *   node scraper.js --output data.json # Sauvegarder en JSON
  *
- * Dépendances: npm install node-fetch cheerio
+ * Dépendances: npm install node-fetch@2 cheerio
  */
 
-const { SUPABASE_CONFIG, SupabaseClient } = require('./config.js');
+const { SUPABASE_CONFIG } = require('./config.js');
+const fs = require('fs');
+const path = require('path');
 
-// Vérifier si les dépendances sont installées
 let fetch, cheerio;
 try {
     fetch = require('node-fetch');
     cheerio = require('cheerio');
 } catch (e) {
-    console.log('Installation des dépendances...');
     console.log('Exécute: npm install node-fetch@2 cheerio');
     process.exit(1);
 }
 
-// Client Supabase
-const supabase = new SupabaseClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
-
-// ============================================
-// SOURCES À SCRAPER
-// ============================================
-
-const SOURCES = {
-    streetpress_rn: {
-        name: 'StreetPress - RN',
-        url: 'https://www.streetpress.com/rubriques/rassemblement-national',
-        type: 'article_list'
-    },
-    streetpress_municipales: {
-        name: 'StreetPress - Municipales',
-        url: 'https://www.streetpress.com/rubriques/municipales',
-        type: 'article_list'
-    },
-    basta_candidats: {
-        name: 'Basta! - Candidats RN',
-        url: 'https://basta.media/racistes-homophobes-complotistes-pro-poutine-antisemites-candidats-rn',
-        type: 'article'
-    }
-};
-
-// ============================================
-// FONCTIONS DE SCRAPING
-// ============================================
-
-/**
- * Récupère le HTML d'une page
- */
-async function fetchPage(url) {
-    try {
-        const response = await fetch(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        return await response.text();
-    } catch (error) {
-        console.error(`Erreur fetch ${url}:`, error.message);
-        return null;
-    }
-}
-
-/**
- * Scrape les articles StreetPress
- */
-async function scrapeStreetPress(url) {
-    console.log(`\nScraping StreetPress: ${url}`);
-
-    const html = await fetchPage(url);
-    if (!html) return [];
-
-    const $ = cheerio.load(html);
-    const articles = [];
-
-    // Sélecteurs StreetPress (structure Nuxt.js)
-    $('section.article-preview-simple').each((i, el) => {
-        const titleEl = $(el).find('.title a').first();
-        const title = titleEl.text().trim();
-        const link = titleEl.attr('href');
-        const excerpt = $(el).find('.level-right .txt').text().trim();
-        const date = $(el).find('.date-rub').text().trim();
-
-        if (title && link) {
-            articles.push({
-                title,
-                url: link.startsWith('http') ? link : `https://www.streetpress.com${link}`,
-                excerpt,
-                date,
-                source: 'StreetPress'
-            });
-        }
-    });
-
-    console.log(`  -> ${articles.length} articles trouvés`);
-    return articles;
-}
-
-/**
- * Extrait les noms de candidats d'un texte
- */
-function extractCandidatNames(text) {
-    const candidats = [];
-
-    // Patterns pour détecter les noms de candidats RN
-    const patterns = [
-        /(?:candidat[e]?|député[e]?|élu[e]?)\s+(?:RN|Rassemblement\s+national)[^,]*?([A-Z][a-zéèêë]+(?:\s+[A-Z][a-zéèêë]+)+)/gi,
-        /([A-Z][a-zéèêë]+(?:\s+[A-Z][a-zéèêë]+)+)\s*,?\s*(?:candidat|député|élu)[e]?\s+(?:RN|du\s+Rassemblement)/gi,
-        /([A-Z][a-zéèêë]+\s+[A-Z][a-zéèêë\-]+)\s*\(RN\)/g
-    ];
-
-    patterns.forEach(pattern => {
-        let match;
-        while ((match = pattern.exec(text)) !== null) {
-            const name = match[1].trim();
-            if (name.length > 5 && name.length < 50 && !candidats.includes(name)) {
-                candidats.push(name);
-            }
-        }
-    });
-
-    return candidats;
-}
-
-/**
- * Extrait les citations/dingueries d'un texte
- */
-function extractDingueries(text, auteur = 'Inconnu') {
-    const dingueries = [];
-
-    // Patterns pour détecter des citations
-    const quotePatterns = [
-        /«\s*([^»]+)\s*»/g,
-        /"([^"]+)"/g,
-        /a\s+(?:déclaré|écrit|tweeté|publié)\s*:\s*[«"]([^»"]+)[»"]/gi
-    ];
-
-    // Mots-clés problématiques
-    const keywords = [
-        'racis', 'islam', 'arabe', 'maghréb', 'noir', 'immigr', 'étranger',
-        'juif', 'sion', 'antisém', 'shoah', 'hitler',
-        'homosex', 'gay', 'pd', 'lgbt',
-        'femme', 'avortement', 'ivg',
-        'remplace', 'invasion', 'grand remplacement'
-    ];
-
-    quotePatterns.forEach(pattern => {
-        let match;
-        while ((match = pattern.exec(text)) !== null) {
-            const citation = match[1].trim();
-
-            // Vérifier si la citation contient des mots-clés problématiques
-            const isProblematic = keywords.some(kw =>
-                citation.toLowerCase().includes(kw)
-            );
-
-            if (isProblematic && citation.length > 20 && citation.length < 500) {
-                dingueries.push({
-                    auteur,
-                    citation,
-                    type: detectType(citation)
-                });
-            }
-        }
-    });
-
-    return dingueries;
-}
-
-/**
- * Détecte le type de propos
- */
-function detectType(text) {
-    const lower = text.toLowerCase();
-
-    if (lower.match(/juif|sion|antisém|shoah|hitler|faurisson|coston/)) {
-        return 'antisemitisme';
-    }
-    if (lower.match(/islam|musulman|mosquée|voile|halal/)) {
-        return 'islamophobie';
-    }
-    if (lower.match(/homosex|gay|pd|lgbt|trans/)) {
-        return 'homophobie';
-    }
-    if (lower.match(/femme|avortement|ivg|fémin/)) {
-        return 'sexisme';
-    }
-    if (lower.match(/racis|noir|arabe|maghréb|immigr|étranger|remplace/)) {
-        return 'racisme';
-    }
-    if (lower.match(/complot|vaccin|covid|plandém|5g|pédophile|deep state/)) {
-        return 'complotisme';
-    }
-
-    return 'autre';
-}
-
-/**
- * Scrape un article complet pour extraire les données
- */
-async function scrapeArticle(url, source) {
-    console.log(`  Scraping article: ${url}`);
-
-    const html = await fetchPage(url);
-    if (!html) return null;
-
-    const $ = cheerio.load(html);
-
-    // Extraire le contenu principal
-    const content = $('article, .article-content, .post-content, main').text();
-    const title = $('h1').first().text().trim();
-
-    // Extraire candidats et dingueries
-    const candidats = extractCandidatNames(content);
-    const dingueries = extractDingueries(content);
-
-    return {
-        title,
-        url,
-        source,
-        candidats,
-        dingueries,
-        scrapedAt: new Date().toISOString()
-    };
-}
-
-// ============================================
-// FONCTIONS BASE DE DONNÉES (fetch direct)
-// ============================================
-
-const SUPABASE_HEADERS = {
+const HEADERS = {
     'apikey': SUPABASE_CONFIG.anonKey,
     'Authorization': `Bearer ${SUPABASE_CONFIG.anonKey}`,
     'Content-Type': 'application/json',
     'Prefer': 'return=representation'
 };
 
-/**
- * Sauvegarde un candidat dans Supabase
- */
-async function saveCandidat(candidat) {
-    try {
-        const response = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/candidats`, {
-            method: 'POST',
-            headers: SUPABASE_HEADERS,
-            body: JSON.stringify(candidat)
-        });
+// ============================================
+// SOURCES PRÉDÉFINIES
+// ============================================
 
-        if (response.ok) {
-            const result = await response.json();
-            console.log(`  + Candidat ajouté: ${candidat.nom}`);
-            return result[0];
-        } else {
-            const error = await response.text();
-            // Ignorer les doublons (code 23505)
-            if (error.includes('duplicate') || error.includes('23505')) {
-                console.log(`  = Candidat existe: ${candidat.nom}`);
-                return null;
-            }
-            console.error(`  Erreur candidat:`, error.substring(0, 100));
-            return null;
-        }
+const SOURCES = {
+    france3_paca: 'https://france3-regions.franceinfo.fr/provence-alpes-cote-d-azur/alpes-maritimes/elections-municipales-2026-le-rassemblement-national-presente-ses-14-candidats-dans-les-alpes-maritimes-3266135.html',
+    france3_lens: 'https://france3-regions.franceinfo.fr/hauts-de-france/pas-calais/lens/municipales-2026-la-ville-est-prenable-le-rn-reve-de-conquerir-lens-bastion-socialiste-du-bassin-minier-3279527.html',
+    nicepresse_06: 'https://nicepresse.com/municipales-2026-le-rn-en-mode-conquete-voici-les-candidats-investis-dans-ces-communes-autour-de-nice/',
+    horizon_62: 'https://www.horizonactu.fr/actualite-45951-municipales-2026-le-rn-annonce-six-tetes-de-liste-dans-le-lensois',
+};
+
+// ============================================
+// PATTERNS D'EXTRACTION
+// ============================================
+
+// Patterns pour extraire les candidats RN
+const CANDIDATE_PATTERNS = [
+    // "Nom Prénom, candidat RN à Commune"
+    /([A-ZÀ-Ÿ][a-zà-ÿ\-]+(?:\s+[A-ZÀ-Ÿ][a-zà-ÿ\-]+)+)\s*,?\s*(?:candidat|investi|tête de liste|soutenu)(?:\s+par)?\s*(?:le\s+)?(?:RN|Rassemblement\s+national|UDR)(?:\s+à|\s+pour|\s+sur)?\s*([A-ZÀ-Ÿ][a-zà-ÿ\-]+(?:[- ][a-zà-ÿA-ZÀ-Ÿ\-]+)*)?/gi,
+
+    // "le RN investit Nom Prénom à Commune"
+    /(?:RN|Rassemblement\s+national)\s+(?:investit|présente|soutient)\s+([A-ZÀ-Ÿ][a-zà-ÿ\-]+(?:\s+[A-ZÀ-Ÿ][a-zà-ÿ\-]+)+)(?:\s+à|\s+pour|\s+sur)?\s*([A-ZÀ-Ÿ][a-zà-ÿ\-]+(?:[- ][a-zà-ÿA-ZÀ-Ÿ\-]+)*)?/gi,
+
+    // "Nom Prénom (RN)"
+    /([A-ZÀ-Ÿ][a-zà-ÿ\-]+(?:\s+[A-ZÀ-Ÿ][a-zà-ÿ\-]+)+)\s*\((?:RN|Rassemblement national)\)/gi,
+
+    // "À Commune : Nom Prénom"
+    /[ÀA]\s+([A-ZÀ-Ÿ][a-zà-ÿ\-]+(?:[- ][a-zà-ÿA-ZÀ-Ÿ\-]+)*)\s*:\s*([A-ZÀ-Ÿ][a-zà-ÿ\-]+(?:\s+[A-ZÀ-Ÿ][a-zà-ÿ\-]+)+)/gi,
+
+    // Format liste "Commune : Nom Prénom, age ans, profession"
+    /([A-ZÀ-Ÿ][a-zà-ÿ\-]+(?:[- ][a-zà-ÿA-ZÀ-Ÿ\-]+)*)\s*:\s*([A-ZÀ-Ÿ][a-zà-ÿ\-]+(?:\s+[A-ZÀ-Ÿ][a-zà-ÿ\-]+)+)\s*,\s*\d+\s*ans/gi,
+
+    // "député RN Nom Prénom" / "conseiller RN Nom Prénom"
+    /(?:député|conseiller|sénateur|eurodéputé)[e]?\s+(?:RN|du\s+Rassemblement)\s+([A-ZÀ-Ÿ][a-zà-ÿ\-]+(?:\s+[A-ZÀ-Ÿ][a-zà-ÿ\-]+)+)/gi,
+];
+
+// Mots à exclure (faux positifs fréquents)
+const EXCLUDE_WORDS = [
+    'Rassemblement National', 'Marine Le', 'Jordan Bardella', 'Eric Ciotti',
+    'Assemblée Nationale', 'Conseil Municipal', 'France Info', 'Nice Matin',
+    'La Voix', 'France Bleu', 'Le Monde', 'Le Figaro', 'Ouest France',
+    'Alpes Maritimes', 'Bouches Rhône', 'Hauts France', 'Provence Alpes',
+    'Seine Saint', 'Pas Calais', 'Côte Azur'
+];
+
+// ============================================
+// FONCTIONS DE SCRAPING
+// ============================================
+
+async function fetchPage(url) {
+    try {
+        const response = await fetch(url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.8'
+            },
+            timeout: 15000
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.text();
     } catch (error) {
-        console.error(`  Erreur sauvegarde candidat:`, error.message);
+        console.error(`Erreur fetch: ${error.message}`);
         return null;
     }
 }
 
-/**
- * Sauvegarde une dinguerie dans Supabase
- */
-async function saveDinguerie(dinguerie) {
-    try {
-        const response = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/dingueries`, {
+function extractCandidates(text) {
+    const candidates = new Map(); // nom -> {nom, commune, details}
+
+    // Nettoyer le texte
+    const cleanText = text
+        .replace(/\s+/g, ' ')
+        .replace(/\n/g, ' ');
+
+    // Appliquer chaque pattern
+    for (const pattern of CANDIDATE_PATTERNS) {
+        pattern.lastIndex = 0;
+        let match;
+
+        while ((match = pattern.exec(cleanText)) !== null) {
+            let nom, commune;
+
+            // Selon le pattern, l'ordre nom/commune varie
+            if (match[0].match(/^[ÀA]\s+/i)) {
+                // Pattern "À Commune : Nom"
+                commune = match[1]?.trim();
+                nom = match[2]?.trim();
+            } else if (match[0].match(/:\s*[A-Z]/)) {
+                // Pattern "Commune : Nom"
+                commune = match[1]?.trim();
+                nom = match[2]?.trim();
+            } else {
+                nom = match[1]?.trim();
+                commune = match[2]?.trim();
+            }
+
+            // Valider le nom
+            if (!nom || nom.length < 5 || nom.length > 50) continue;
+            if (EXCLUDE_WORDS.some(w => nom.includes(w))) continue;
+            if (nom.match(/^\d/) || nom.match(/^[a-z]/)) continue;
+
+            // Extraire prénom/nom
+            const parts = nom.split(' ').filter(p => p.length > 1);
+            if (parts.length < 2) continue;
+
+            const key = nom.toLowerCase();
+            if (!candidates.has(key)) {
+                candidates.set(key, {
+                    nom_complet: nom,
+                    prenom: parts.slice(0, -1).join(' '),
+                    nom: parts.slice(-1)[0],
+                    commune: commune || null,
+                    parti: 'RN'
+                });
+            } else if (commune && !candidates.get(key).commune) {
+                candidates.get(key).commune = commune;
+            }
+        }
+    }
+
+    return Array.from(candidates.values());
+}
+
+async function scrapeUrl(url) {
+    console.log(`\nScraping: ${url}\n`);
+
+    const html = await fetchPage(url);
+    if (!html) {
+        return { url, error: 'Impossible de charger la page', candidats: [] };
+    }
+
+    const $ = cheerio.load(html);
+
+    // Extraire le titre
+    const title = $('h1').first().text().trim() ||
+                  $('title').text().trim() ||
+                  'Sans titre';
+
+    // Extraire le contenu principal
+    const contentSelectors = [
+        'article',
+        '.article-content',
+        '.post-content',
+        '.entry-content',
+        'main',
+        '.content',
+        '[role="main"]'
+    ];
+
+    let content = '';
+    for (const selector of contentSelectors) {
+        const el = $(selector);
+        if (el.length > 0) {
+            content = el.text();
+            break;
+        }
+    }
+
+    if (!content) {
+        content = $('body').text();
+    }
+
+    // Extraire les candidats
+    const candidats = extractCandidates(content);
+
+    console.log(`Titre: ${title.substring(0, 80)}...`);
+    console.log(`Candidats trouvés: ${candidats.length}\n`);
+
+    candidats.forEach(c => {
+        console.log(`  - ${c.nom_complet}${c.commune ? ` (${c.commune})` : ''}`);
+    });
+
+    return {
+        url,
+        title,
+        candidats,
+        scrapedAt: new Date().toISOString()
+    };
+}
+
+// ============================================
+// FONCTIONS D'EXPORT
+// ============================================
+
+function exportToJson(data, filepath) {
+    const output = {
+        _comment: 'Export scraper - Veille Municipales 2026',
+        _generated: new Date().toISOString(),
+        candidats: data.flatMap(d => d.candidats.map(c => ({
+            nom: `${c.prenom} ${c.nom}`,
+            commune: c.commune || '',
+            parti: c.parti,
+            source: d.url
+        })))
+    };
+
+    fs.writeFileSync(filepath, JSON.stringify(output, null, 2));
+    console.log(`\nExport JSON: ${filepath}`);
+    console.log(`Total: ${output.candidats.length} candidats`);
+}
+
+async function importToDB(candidats) {
+    console.log('\n--- Import en base de données ---\n');
+
+    // Récupérer les communes existantes
+    const communes = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/communes?select=id,nom`, {
+        headers: HEADERS
+    }).then(r => r.json());
+
+    const communeMap = {};
+    communes.forEach(c => communeMap[c.nom.toLowerCase()] = c.id);
+
+    let added = 0, skipped = 0;
+
+    for (const c of candidats) {
+        const communeId = c.commune ? communeMap[c.commune.toLowerCase()] : null;
+
+        const data = {
+            nom: c.nom,
+            prenom: c.prenom,
+            commune_id: communeId,
+            parti: c.parti || 'RN',
+            role: 'tete'
+        };
+
+        const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/candidats`, {
             method: 'POST',
-            headers: SUPABASE_HEADERS,
-            body: JSON.stringify(dinguerie)
+            headers: HEADERS,
+            body: JSON.stringify(data)
         });
 
-        if (response.ok) {
-            const result = await response.json();
-            console.log(`  + Dinguerie ajoutée: ${dinguerie.auteur}`);
-            return result[0];
+        if (res.ok) {
+            console.log(`  + ${c.prenom} ${c.nom}`);
+            added++;
         } else {
-            const error = await response.text();
-            console.error(`  Erreur dinguerie:`, error.substring(0, 100));
-            return null;
+            const err = await res.text();
+            if (err.includes('duplicate')) {
+                skipped++;
+            } else {
+                console.log(`  ! ${c.prenom} ${c.nom}: erreur`);
+            }
         }
-    } catch (error) {
-        console.error(`  Erreur sauvegarde dinguerie:`, error.message);
-        return null;
     }
+
+    console.log(`\nRésultat: +${added} ajoutés, ${skipped} existants`);
 }
 
 // ============================================
@@ -308,66 +285,90 @@ async function saveDinguerie(dinguerie) {
 // ============================================
 
 async function main() {
-    console.log('='.repeat(50));
+    const args = process.argv.slice(2);
+
+    console.log('='.repeat(60));
     console.log('SCRAPER - Veille Municipales 2026');
-    console.log('='.repeat(50));
+    console.log('='.repeat(60));
 
-    // Vérifier la configuration
-    if (SUPABASE_CONFIG.anonKey === 'REMPLACER_PAR_TA_CLE_ANON') {
-        console.log('\n⚠️  ATTENTION: Configure ta clé Supabase dans config.js');
-        console.log('   Trouve-la dans: Settings > API > anon public key\n');
+    if (args.length === 0) {
+        console.log(`
+Usage:
+  node scraper.js <url>                    # Scraper une URL
+  node scraper.js --source <nom>           # Source prédéfinie
+  node scraper.js --batch <fichier.txt>    # URLs depuis fichier
+  node scraper.js --output <fichier.json>  # Exporter en JSON
+  node scraper.js --import                 # Importer en BDD
 
-        // Mode démo sans base de données
-        console.log('Mode démo (sans sauvegarde en base)...\n');
+Sources prédéfinies:
+${Object.entries(SOURCES).map(([k, v]) => `  ${k}: ${v.substring(0, 60)}...`).join('\n')}
+
+Exemple workflow:
+  1. node scraper.js https://... --output candidats.json
+  2. Vérifier/éditer candidats.json
+  3. node veille.js import candidats.json
+        `);
+        return;
     }
 
-    // Scraper les sources
-    for (const [key, source] of Object.entries(SOURCES)) {
-        console.log(`\n--- ${source.name} ---`);
+    const results = [];
+    let outputFile = null;
+    let doImport = false;
 
-        if (source.type === 'article_list') {
-            const articles = await scrapeStreetPress(source.url);
+    // Parser les arguments
+    for (let i = 0; i < args.length; i++) {
+        const arg = args[i];
 
-            // Scraper les 5 premiers articles
-            for (const article of articles.slice(0, 5)) {
-                const data = await scrapeArticle(article.url, source.name);
-
-                if (data) {
-                    console.log(`  Titre: ${data.title}`);
-                    console.log(`  Candidats trouvés: ${data.candidats.length}`);
-                    console.log(`  Dingueries trouvées: ${data.dingueries.length}`);
-
-                    // Sauvegarder en base si configuré
-                    if (SUPABASE_CONFIG.anonKey !== 'REMPLACER_PAR_TA_CLE_ANON') {
-                        for (const nom of data.candidats) {
-                            await saveCandidat({
-                                nom: nom.split(' ').slice(-1)[0], // Nom de famille
-                                prenom: nom.split(' ').slice(0, -1).join(' '),
-                                parti: 'RN',
-                                detail: `Mentionné dans: ${data.title}`
-                            });
-                        }
-
-                        for (const ding of data.dingueries) {
-                            await saveDinguerie({
-                                ...ding,
-                                source_url: data.url,
-                                source_media: source.name
-                            });
-                        }
-                    }
-                }
-
-                // Pause pour éviter de surcharger le serveur
-                await new Promise(r => setTimeout(r, 1000));
+        if (arg === '--source' && args[i + 1]) {
+            const sourceName = args[++i];
+            if (SOURCES[sourceName]) {
+                const result = await scrapeUrl(SOURCES[sourceName]);
+                results.push(result);
+            } else {
+                console.log(`Source inconnue: ${sourceName}`);
             }
+        } else if (arg === '--output' && args[i + 1]) {
+            outputFile = args[++i];
+        } else if (arg === '--import') {
+            doImport = true;
+        } else if (arg === '--batch' && args[i + 1]) {
+            const batchFile = args[++i];
+            if (fs.existsSync(batchFile)) {
+                const urls = fs.readFileSync(batchFile, 'utf-8')
+                    .split('\n')
+                    .map(l => l.trim())
+                    .filter(l => l && l.startsWith('http'));
+
+                for (const url of urls) {
+                    const result = await scrapeUrl(url);
+                    results.push(result);
+                    await new Promise(r => setTimeout(r, 1000)); // Pause 1s
+                }
+            }
+        } else if (arg.startsWith('http')) {
+            const result = await scrapeUrl(arg);
+            results.push(result);
         }
     }
 
-    console.log('\n' + '='.repeat(50));
-    console.log('Scraping terminé !');
-    console.log('='.repeat(50));
+    // Export ou import
+    if (results.length > 0) {
+        if (outputFile) {
+            exportToJson(results, outputFile);
+        }
+
+        if (doImport) {
+            const allCandidats = results.flatMap(r => r.candidats);
+            await importToDB(allCandidats);
+        }
+
+        if (!outputFile && !doImport) {
+            console.log('\nPour sauvegarder: --output fichier.json');
+            console.log('Pour importer en BDD: --import');
+        }
+    }
+
+    console.log('\n' + '='.repeat(60));
 }
 
-// Exécuter
 main().catch(console.error);

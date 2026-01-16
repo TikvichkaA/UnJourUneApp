@@ -60,18 +60,8 @@ async function init() {
       document.getElementById('link-paruvendu').href =
         `https://www.paruvendu.fr/pa/recherche/?kw=${encodedQuery}`;
 
-      // Vérifier s'il y a des résultats en cache
-      const stored = await chrome.storage.local.get(['lastResults', 'lastProduct', 'lastSearch']);
-
-      if (stored.lastResults &&
-        stored.lastProduct &&
-        stored.lastProduct.includes(searchQuery.split(' ')[0]) &&
-        Date.now() - stored.lastSearch < 300000) { // Moins de 5 minutes
-
-        displayResults(stored.lastResults, response.price);
-      } else {
-        noResults.style.display = 'block';
-      }
+      // Afficher la section de liens (pas de résultats automatiques)
+      noResults.style.display = 'block';
     });
 
   } catch (error) {

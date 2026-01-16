@@ -1,0 +1,20 @@
+{
+  "_comment": "Template pour import de candidats - Veille Municipales 2026",
+  "_usage": "node veille.js import ce_fichier.json",
+  "candidats": [
+    {
+      "nom": "Prénom Nom",
+      "commune": "Ville",
+      "parti": "RN",
+      "role": "tete",
+      "detail": "Député, conseiller municipal, etc."
+    },
+    {
+      "nom": "Autre Candidat",
+      "commune": "Autre Ville",
+      "parti": "RN",
+      "role": "colistier",
+      "detail": "Adjoint, conseiller, etc."
+    }
+  ]
+}

@@ -301,7 +301,34 @@
     </main>
 
     <footer>
-        31 jours, 31 apps
+        31 jours, 31 apps<span id="secret-dot">.</span>
     </footer>
+
+    <script>
+        (function() {
+            const dot = document.getElementById('secret-dot');
+            let clicks = 0;
+            let timer = null;
+
+            dot.style.cursor = 'default';
+            dot.style.userSelect = 'none';
+
+            dot.addEventListener('click', function(e) {
+                e.preventDefault();
+                clicks++;
+
+                if (timer) clearTimeout(timer);
+
+                if (clicks >= 3) {
+                    window.location.href = './16bis/';
+                    clicks = 0;
+                } else {
+                    timer = setTimeout(function() {
+                        clicks = 0;
+                    }, 1000);
+                }
+            });
+        })();
+    </script>
 </body>
 </html>

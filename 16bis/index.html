@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatchChat - Analyse de Compatibilite WhatsApp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1 class="logo">MatchChat</h1>
+            <p class="tagline">L'art de lire entre les lignes</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Zone de drop -->
+            <section class="upload-section" id="upload-section">
+                <div class="drop-zone" id="drop-zone">
+                    <div class="drop-zone-content">
+                        <div class="drop-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                        </div>
+                        <h2>Deposez votre conversation</h2>
+                        <p class="drop-text">Fichier .txt exporte de WhatsApp</p>
+                        <input type="file" id="file-input" accept=".txt" hidden>
+                    </div>
+                </div>
+
+                <div class="help-card">
+                    <details>
+                        <summary>Comment exporter une conversation ?</summary>
+                        <ol>
+                            <li>Ouvrez la conversation dans WhatsApp</li>
+                            <li>Menu (3 points) > Plus > Exporter la discussion</li>
+                            <li>Choisissez "Sans fichiers media"</li>
+                            <li>Enregistrez le fichier .txt</li>
+                        </ol>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Section de chargement -->
+            <section class="loading-section" id="loading-section" style="display: none;">
+                <div class="loader">
+                    <span></span><span></span><span></span>
+                </div>
+                <p>Lecture des messages...</p>
+            </section>
+
+            <!-- Section des resultats -->
+            <section class="results-section" id="results-section" style="display: none;">
+
+                <!-- Synthese globale -->
+                <div class="synthesis-card" id="synthesis-card">
+                    <div class="synthesis-header">
+                        <div class="participants-avatars" id="participants-avatars"></div>
+                        <h2 class="synthesis-headline" id="synthesis-headline"></h2>
+                    </div>
+                    <p class="synthesis-portrait" id="synthesis-portrait"></p>
+                    <div class="synthesis-details">
+                        <p class="synthesis-dynamic" id="synthesis-dynamic"></p>
+                        <p class="synthesis-rhythm" id="synthesis-rhythm"></p>
+                    </div>
+                </div>
+
+                <!-- Cartes de compatibilite -->
+                <div class="compatibility-cards">
+                    <!-- Amicale -->
+                    <article class="narrative-card friendship">
+                        <header class="card-header">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </div>
+                            <div class="card-title-group">
+                                <span class="card-category">Compatibilite amicale</span>
+                                <h3 class="card-title" id="title-friendship"></h3>
+                            </div>
+                            <div class="score-badge" id="badge-friendship"></div>
+                        </header>
+                        <p class="card-description" id="desc-friendship"></p>
+                        <ul class="card-traits" id="traits-friendship"></ul>
+                        <p class="card-chemistry" id="chemistry-friendship"></p>
+                    </article>
+
+                    <!-- Romantique -->
+                    <article class="narrative-card romantic">
+                        <header class="card-header">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </div>
+                            <div class="card-title-group">
+                                <span class="card-category">Compatibilite romantique</span>
+                                <h3 class="card-title" id="title-romantic"></h3>
+                            </div>
+                            <div class="score-badge" id="badge-romantic"></div>
+                        </header>
+                        <p class="card-description" id="desc-romantic"></p>
+                        <ul class="card-traits" id="traits-romantic"></ul>
+                        <p class="card-chemistry" id="chemistry-romantic"></p>
+                    </article>
+
+                    <!-- Intime -->
+                    <article class="narrative-card intimate">
+                        <header class="card-header">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/>
+                                    <path d="M12 6v6l4 2"/>
+                                </svg>
+                            </div>
+                            <div class="card-title-group">
+                                <span class="card-category">Compatibilite intime</span>
+                                <h3 class="card-title" id="title-intimate"></h3>
+                            </div>
+                            <div class="score-badge" id="badge-intimate"></div>
+                        </header>
+                        <p class="card-description" id="desc-intimate"></p>
+                        <ul class="card-traits" id="traits-intimate"></ul>
+                        <p class="card-chemistry" id="chemistry-intimate"></p>
+                    </article>
+
+                    <!-- Professionnelle -->
+                    <article class="narrative-card professional">
+                        <header class="card-header">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                                </svg>
+                            </div>
+                            <div class="card-title-group">
+                                <span class="card-category">Compatibilite professionnelle</span>
+                                <h3 class="card-title" id="title-professional"></h3>
+                            </div>
+                            <div class="score-badge" id="badge-professional"></div>
+                        </header>
+                        <p class="card-description" id="desc-professional"></p>
+                        <ul class="card-traits" id="traits-professional"></ul>
+                        <p class="card-chemistry" id="chemistry-professional"></p>
+                    </article>
+                </div>
+
+                <!-- Dynamiques relationnelles -->
+                <div class="dynamics-section" id="dynamics-section">
+                    <h3>Dynamiques observees</h3>
+                    <div class="dynamics-list" id="dynamics-list"></div>
+                </div>
+
+                <!-- Actions -->
+                <div class="actions">
+                    <button class="btn btn-secondary" id="btn-new">Nouvelle analyse</button>
+                    <button class="btn btn-primary" id="btn-share">Partager</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p><a href="../index.html">Un Jour Une App</a> - Jour 16</p>
+            <p class="privacy-note">Analyse 100% locale. Vos donnees ne quittent jamais votre appareil.</p>
+        </footer>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="js/whatsapp-parser.js"></script>
+    <script src="js/compatibility-analyzer.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
