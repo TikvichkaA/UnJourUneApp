@@ -1,9 +1,11 @@
 /* ===========================================
    Rectangle Packer - Japanese Style Counting
 
-   CRITICAL: Total territory for each color MUST be preserved
-   - Only move stones if territory count stays the same
-   - Verify score before and after
+   Strategy:
+   1. Move isolated stones from territory centers to fill border gaps
+   2. Fill small territories (1-2 pts) using stones from large territories
+   3. Prefer large continuous zones over many small ones
+   4. ALWAYS preserve total territory counts
    =========================================== */
 
 const RectanglePacker = (function() {
@@ -15,7 +17,6 @@ const RectanglePacker = (function() {
 
     /**
      * Remodel the board for easy counting
-     * Territory totals MUST be preserved
      */
     function remodel(territories, board, score, deadStones) {
         const size = board.size;
@@ -30,19 +31,33 @@ const RectanglePacker = (function() {
         const initialTerritories = calculateTerritoryTotals(grid, size);
         console.log('Initial territories:', initialTerritories);
 
-        // Step 4: Smooth territories while preserving counts
+        // Step 4: Remodel
         const movements = [];
-        smoothAllTerritories(grid, size, movements, initialTerritories);
 
-        // Step 5: Verify territory counts are preserved
-        const finalTerritories = calculateTerritoryTotals(grid, size);
-        console.log('Final territories:', finalTerritories);
+        // Phase 1: Fill small territories (1-2 points) with stones from large territories
+        fillSmallTerritories(grid, size, movements, initialTerritories);
 
-        if (finalTerritories.black !== initialTerritories.black ||
-            finalTerritories.white !== initialTerritories.white) {
-            console.error('TERRITORY COUNT CHANGED! Reverting...');
-            // This should never happen if algorithm is correct
+        // Phase 2: Move isolated center stones to fill border gaps
+        for (let pass = 0; pass < 10; pass++) {
+            const moved = moveIsolatedStonesToBorders(grid, size, movements, initialTerritories);
+            if (moved === 0) break;
         }
+
+        // Phase 3: Straighten borders toward rectangles
+        for (let pass = 0; pass < 10; pass++) {
+            const moved = straightenBorders(grid, size, movements, initialTerritories);
+            if (moved === 0) break;
+        }
+
+        // Phase 4: Adjust territory sizes to multiples of 5
+        for (let pass = 0; pass < 20; pass++) {
+            const moved = adjustToMultiplesOf5(grid, size, movements, initialTerritories);
+            if (moved === 0) break;
+        }
+
+        // Step 5: Verify
+        const finalTerritories = calculateTerritoryTotals(grid, size);
+        console.log('Final territories:', finalTerritories, 'Movements:', movements.length);
 
         // Count final stones
         const counts = countStones(grid, size);
@@ -155,47 +170,12 @@ const RectanglePacker = (function() {
     }
 
     /**
-     * Smooth all territories while preserving total counts
+     * Get all territories grouped by color and sorted by size
      */
-    function smoothAllTerritories(grid, size, movements, initialTerritories) {
-        // Find candidate moves: pairs of (protrusion, gap) for each color
-        const blackMoves = findValidMoves(grid, size, BLACK);
-        const whiteMoves = findValidMoves(grid, size, WHITE);
-
-        // Apply moves one by one, checking territory preservation
-        for (const move of [...blackMoves, ...whiteMoves]) {
-            // Try the move
-            const fromCell = grid[move.from.y][move.from.x];
-            grid[move.from.y][move.from.x] = EMPTY;
-            grid[move.to.y][move.to.x] = fromCell;
-
-            // Check if territories are preserved
-            const newTerritories = calculateTerritoryTotals(grid, size);
-
-            if (newTerritories.black === initialTerritories.black &&
-                newTerritories.white === initialTerritories.white) {
-                // Move is valid, keep it
-                movements.push({
-                    from: move.from,
-                    to: move.to,
-                    color: fromCell
-                });
-            } else {
-                // Move changes territory counts, revert it
-                grid[move.to.y][move.to.x] = EMPTY;
-                grid[move.from.y][move.from.x] = fromCell;
-            }
-        }
-    }
-
-    /**
-     * Find valid moves for a color (protrusion -> gap pairs)
-     */
-    function findValidMoves(grid, size, color) {
-        const moves = [];
+    function getAllTerritories(grid, size) {
         const visited = new Set();
+        const territories = { [BLACK]: [], [WHITE]: [] };
 
-        // Find all territories of this color
         for (let y = 0; y < size; y++) {
             for (let x = 0; x < size; x++) {
                 if (grid[y][x] !== EMPTY) continue;
@@ -203,74 +183,447 @@ const RectanglePacker = (function() {
                 if (visited.has(key)) continue;
 
                 const region = floodFill(grid, x, y, size, visited);
-                if (region.owner !== color) continue;
-
-                // Find protrusions and gaps for this territory
-                const protrusions = findProtrusions(grid, region.points, color, size);
-                const gaps = findGaps(grid, region.points, color, size);
-
-                // Create move pairs
-                const numMoves = Math.min(protrusions.length, gaps.length, 3);
-                for (let i = 0; i < numMoves; i++) {
-                    moves.push({
-                        from: { x: protrusions[i].x, y: protrusions[i].y },
-                        to: { x: gaps[i].x, y: gaps[i].y }
-                    });
+                if (region.owner !== null) {
+                    territories[region.owner].push(region);
                 }
             }
         }
 
-        return moves;
+        // Sort by size descending
+        territories[BLACK].sort((a, b) => b.points.length - a.points.length);
+        territories[WHITE].sort((a, b) => b.points.length - a.points.length);
+
+        return territories;
     }
 
     /**
-     * Find protrusions - stones that stick out and can be moved
+     * Fill small territories (1-2 points) using stones from large territories
      */
-    function findProtrusions(grid, territoryPoints, color, size) {
-        const protrusions = [];
-        const checked = new Set();
+    function fillSmallTerritories(grid, size, movements, initialTerritories) {
+        for (const color of [BLACK, WHITE]) {
+            let territories = getAllTerritories(grid, size)[color];
 
-        // Find border stones of this territory
-        for (const p of territoryPoints) {
+            // Find small territories to fill
+            const smallTerritories = territories.filter(t => t.points.length <= 2);
+            const largeTerritories = territories.filter(t => t.points.length >= 10);
+
+            for (const smallT of smallTerritories) {
+                if (smallT.points.length === 0) continue;
+
+                // Find a stone from a large territory that we can move
+                for (const largeT of largeTerritories) {
+                    // Find isolated stones in the large territory (stones inside, not on border)
+                    const isolatedStones = findIsolatedStones(grid, largeT, color, size);
+
+                    for (const stone of isolatedStones) {
+                        // Try to move this stone to fill the small territory
+                        for (const target of smallT.points) {
+                            if (grid[target.y][target.x] !== EMPTY) continue;
+
+                            // Try the move
+                            grid[stone.y][stone.x] = EMPTY;
+                            grid[target.y][target.x] = color;
+
+                            // Check if territories are preserved
+                            const newTerritories = calculateTerritoryTotals(grid, size);
+
+                            if (newTerritories.black === initialTerritories.black &&
+                                newTerritories.white === initialTerritories.white) {
+                                movements.push({
+                                    from: { x: stone.x, y: stone.y },
+                                    to: { x: target.x, y: target.y },
+                                    color
+                                });
+                                break;
+                            } else {
+                                // Revert
+                                grid[target.y][target.x] = EMPTY;
+                                grid[stone.y][stone.x] = color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Find isolated stones inside a territory (not on the border of the territory)
+     */
+    function findIsolatedStones(grid, territory, color, size) {
+        const isolated = [];
+        const territorySet = new Set(territory.points.map(p => `${p.x},${p.y}`));
+
+        // Find all stones adjacent to this territory
+        const adjacentStones = new Set();
+        for (const p of territory.points) {
             for (const n of getNeighbors(p.x, p.y, size)) {
-                if (grid[n.y][n.x] !== color) continue;
-                const key = `${n.x},${n.y}`;
-                if (checked.has(key)) continue;
-                checked.add(key);
-
-                // Check if this stone is a leaf (only 1 same-color neighbor)
-                const neighbors = getNeighbors(n.x, n.y, size);
-                const sameColor = neighbors.filter(nn => grid[nn.y][nn.x] === color);
-                const empty = neighbors.filter(nn => grid[nn.y][nn.x] === EMPTY);
-
-                if (sameColor.length === 1 && empty.length >= 2) {
-                    protrusions.push({ x: n.x, y: n.y, score: empty.length });
+                if (grid[n.y][n.x] === color) {
+                    adjacentStones.add(`${n.x},${n.y}`);
                 }
             }
         }
 
-        protrusions.sort((a, b) => b.score - a.score);
-        return protrusions;
+        // Check each adjacent stone
+        for (const stoneKey of adjacentStones) {
+            const [x, y] = stoneKey.split(',').map(Number);
+            const neighbors = getNeighbors(x, y, size);
+
+            // Count how many neighbors are in this territory vs other
+            const inTerritory = neighbors.filter(n => territorySet.has(`${n.x},${n.y}`)).length;
+            const sameColor = neighbors.filter(n => grid[n.y][n.x] === color).length;
+
+            // Isolated = surrounded mostly by this territory (3-4 neighbors in territory)
+            // or has only 1 same-color connection
+            if (inTerritory >= 3 || (inTerritory >= 2 && sameColor === 1)) {
+                isolated.push({ x, y, score: inTerritory });
+            }
+        }
+
+        // Sort by most isolated first
+        isolated.sort((a, b) => b.score - a.score);
+        return isolated;
     }
 
     /**
-     * Find gaps - empty cells that could be filled
+     * Move isolated stones from territory centers to fill border gaps (créneaux)
      */
-    function findGaps(grid, territoryPoints, color, size) {
-        const gaps = [];
+    function moveIsolatedStonesToBorders(grid, size, movements, initialTerritories) {
+        let totalMoved = 0;
 
-        for (const p of territoryPoints) {
+        for (const color of [BLACK, WHITE]) {
+            const territories = getAllTerritories(grid, size)[color];
+
+            for (const territory of territories) {
+                if (territory.points.length < 3) continue;
+
+                // Find isolated stones in this territory
+                const isolatedStones = findIsolatedStones(grid, territory, color, size);
+
+                // Find border gaps (créneaux) - empty cells on the edge that could be filled
+                const gaps = findBorderGaps(grid, territory, color, size);
+
+                // Move isolated stones to gaps
+                for (const stone of isolatedStones) {
+                    if (grid[stone.y][stone.x] !== color) continue;
+
+                    for (const gap of gaps) {
+                        if (grid[gap.y][gap.x] !== EMPTY) continue;
+
+                        // Try the move
+                        grid[stone.y][stone.x] = EMPTY;
+                        grid[gap.y][gap.x] = color;
+
+                        // Check if territories are preserved
+                        const newTerritories = calculateTerritoryTotals(grid, size);
+
+                        if (newTerritories.black === initialTerritories.black &&
+                            newTerritories.white === initialTerritories.white) {
+                            movements.push({
+                                from: { x: stone.x, y: stone.y },
+                                to: { x: gap.x, y: gap.y },
+                                color
+                            });
+                            totalMoved++;
+                            break;
+                        } else {
+                            // Revert
+                            grid[gap.y][gap.x] = EMPTY;
+                            grid[stone.y][stone.x] = color;
+                        }
+                    }
+                }
+            }
+        }
+
+        return totalMoved;
+    }
+
+    /**
+     * Find border gaps (créneaux) - indentations in the territory border
+     */
+    function findBorderGaps(grid, territory, color, size) {
+        const gaps = [];
+        const territorySet = new Set(territory.points.map(p => `${p.x},${p.y}`));
+
+        for (const p of territory.points) {
             const neighbors = getNeighbors(p.x, p.y, size);
             const colorNeighbors = neighbors.filter(n => grid[n.y][n.x] === color);
+            const emptyNeighbors = neighbors.filter(n => grid[n.y][n.x] === EMPTY);
+            const territoryNeighbors = neighbors.filter(n => territorySet.has(`${n.x},${n.y}`));
 
-            // Gap: surrounded by owner on 3+ sides
-            if (colorNeighbors.length >= 3) {
-                gaps.push({ x: p.x, y: p.y, score: colorNeighbors.length });
+            // A gap is on the edge of territory (has both color neighbors and territory neighbors)
+            // and would "fill in" an indentation
+            if (colorNeighbors.length >= 2 && territoryNeighbors.length <= 2) {
+                // Check if filling this would make the border straighter
+                // (the color neighbors should be roughly aligned)
+                gaps.push({ x: p.x, y: p.y, score: colorNeighbors.length * 10 - territoryNeighbors.length });
             }
         }
 
+        // Sort by best gaps first
         gaps.sort((a, b) => b.score - a.score);
         return gaps;
+    }
+
+    /**
+     * Phase 4: Adjust territory sizes to be multiples of 5
+     * Transfer points between territories of the same color
+     */
+    function adjustToMultiplesOf5(grid, size, movements, initialTerritories) {
+        let totalMoved = 0;
+
+        for (const color of [BLACK, WHITE]) {
+            const territories = getAllTerritories(grid, size)[color];
+            if (territories.length < 2) continue;
+
+            // Calculate current "badness" (distance from multiples of 5)
+            const currentScore = territories.reduce((sum, t) => sum + (t.points.length % 5), 0);
+            if (currentScore === 0) continue; // Already all multiples of 5
+
+            // Find territories that need adjustment
+            const needsMore = territories.filter(t => {
+                const mod = t.points.length % 5;
+                return mod > 0 && mod <= 2; // Needs 1-2 more to reach next multiple
+            });
+            const needsLess = territories.filter(t => {
+                const mod = t.points.length % 5;
+                return mod >= 3; // Needs to lose 1-2 to reach previous multiple
+            });
+
+            // Try to transfer from needsLess to needsMore
+            for (const srcTerritory of needsLess) {
+                for (const dstTerritory of needsMore) {
+                    if (srcTerritory === dstTerritory) continue;
+
+                    // Find a stone on the border of srcTerritory that we could move
+                    const srcBorderStones = findBorderStonesForTransfer(grid, srcTerritory, color, size);
+
+                    // Find empty cells in dstTerritory where we could place a stone
+                    const dstEmptyCells = findEmptyCellsForTransfer(grid, dstTerritory, color, size);
+
+                    for (const stone of srcBorderStones) {
+                        if (grid[stone.y][stone.x] !== color) continue;
+
+                        for (const target of dstEmptyCells) {
+                            if (grid[target.y][target.x] !== EMPTY) continue;
+
+                            // Try the move
+                            grid[stone.y][stone.x] = EMPTY;
+                            grid[target.y][target.x] = color;
+
+                            // Check if territories are preserved AND if we improved
+                            const newTerritories = calculateTerritoryTotals(grid, size);
+
+                            if (newTerritories.black === initialTerritories.black &&
+                                newTerritories.white === initialTerritories.white) {
+
+                                // Check if this improved the multiple-of-5 score
+                                const newTerrs = getAllTerritories(grid, size)[color];
+                                const newScore = newTerrs.reduce((sum, t) => sum + (t.points.length % 5), 0);
+
+                                if (newScore < currentScore) {
+                                    movements.push({
+                                        from: { x: stone.x, y: stone.y },
+                                        to: { x: target.x, y: target.y },
+                                        color
+                                    });
+                                    totalMoved++;
+                                    return totalMoved; // Restart to recalculate territories
+                                }
+                            }
+
+                            // Revert
+                            grid[target.y][target.x] = EMPTY;
+                            grid[stone.y][stone.x] = color;
+                        }
+                    }
+                }
+            }
+        }
+
+        return totalMoved;
+    }
+
+    /**
+     * Find border stones of a territory that could be moved
+     */
+    function findBorderStonesForTransfer(grid, territory, color, size) {
+        const stones = [];
+        const territorySet = new Set(territory.points.map(p => `${p.x},${p.y}`));
+
+        for (const p of territory.points) {
+            for (const n of getNeighbors(p.x, p.y, size)) {
+                if (grid[n.y][n.x] === color) {
+                    const neighbors = getNeighbors(n.x, n.y, size);
+                    const sameColor = neighbors.filter(nn => grid[nn.y][nn.x] === color).length;
+                    const inThisTerritory = neighbors.filter(nn => territorySet.has(`${nn.x},${nn.y}`)).length;
+
+                    // Prefer stones that are more "detachable"
+                    if (sameColor >= 1 && inThisTerritory >= 1) {
+                        stones.push({ x: n.x, y: n.y, score: inThisTerritory - sameColor });
+                    }
+                }
+            }
+        }
+
+        // Remove duplicates and sort
+        const unique = [...new Map(stones.map(s => [`${s.x},${s.y}`, s])).values()];
+        unique.sort((a, b) => b.score - a.score);
+        return unique;
+    }
+
+    /**
+     * Find empty cells in a territory where we could place a stone
+     */
+    function findEmptyCellsForTransfer(grid, territory, color, size) {
+        const cells = [];
+
+        for (const p of territory.points) {
+            const neighbors = getNeighbors(p.x, p.y, size);
+            const colorNeighbors = neighbors.filter(n => grid[n.y][n.x] === color).length;
+
+            // Prefer cells that would integrate well (more color neighbors)
+            cells.push({ x: p.x, y: p.y, score: colorNeighbors });
+        }
+
+        cells.sort((a, b) => b.score - a.score);
+        return cells;
+    }
+
+    /**
+     * Phase 3: Straighten borders toward rectangles
+     * Look for single-point bumps and dents along horizontal/vertical lines
+     */
+    function straightenBorders(grid, size, movements, initialTerritories) {
+        let totalMoved = 0;
+
+        for (const color of [BLACK, WHITE]) {
+            const territories = getAllTerritories(grid, size)[color];
+
+            for (const territory of territories) {
+                if (territory.points.length < 5) continue;
+
+                const territorySet = new Set(territory.points.map(p => `${p.x},${p.y}`));
+                const bounds = getBoundingBox(territory.points);
+
+                // Find bumps (stones that stick out from a straight line)
+                const bumps = findBumps(grid, territory, color, size, bounds);
+
+                // Find dents (empty cells that indent from a straight line)
+                const dents = findDents(grid, territory, color, size, territorySet, bounds);
+
+                // Try to move bumps to fill dents
+                for (const bump of bumps) {
+                    if (grid[bump.y][bump.x] !== color) continue;
+
+                    for (const dent of dents) {
+                        if (grid[dent.y][dent.x] !== EMPTY) continue;
+
+                        // Try the move
+                        grid[bump.y][bump.x] = EMPTY;
+                        grid[dent.y][dent.x] = color;
+
+                        // Check if territories are preserved
+                        const newTerritories = calculateTerritoryTotals(grid, size);
+
+                        if (newTerritories.black === initialTerritories.black &&
+                            newTerritories.white === initialTerritories.white) {
+                            movements.push({
+                                from: { x: bump.x, y: bump.y },
+                                to: { x: dent.x, y: dent.y },
+                                color
+                            });
+                            totalMoved++;
+                            break;
+                        } else {
+                            // Revert
+                            grid[dent.y][dent.x] = EMPTY;
+                            grid[bump.y][bump.x] = color;
+                        }
+                    }
+                }
+            }
+        }
+
+        return totalMoved;
+    }
+
+    /**
+     * Find bumps - stones that stick out from the territory border
+     * (stone with mostly empty neighbors on the territory side)
+     */
+    function findBumps(grid, territory, color, size, bounds) {
+        const bumps = [];
+        const territorySet = new Set(territory.points.map(p => `${p.x},${p.y}`));
+
+        // Find border stones
+        const borderStones = new Set();
+        for (const p of territory.points) {
+            for (const n of getNeighbors(p.x, p.y, size)) {
+                if (grid[n.y][n.x] === color) {
+                    borderStones.add(`${n.x},${n.y}`);
+                }
+            }
+        }
+
+        for (const stoneKey of borderStones) {
+            const [x, y] = stoneKey.split(',').map(Number);
+            const neighbors = getNeighbors(x, y, size);
+
+            const sameColor = neighbors.filter(n => grid[n.y][n.x] === color).length;
+            const inTerritory = neighbors.filter(n => territorySet.has(`${n.x},${n.y}`)).length;
+
+            // A bump: stone with 1 same-color neighbor and 2+ territory neighbors
+            // It's sticking into the territory
+            if (sameColor === 1 && inTerritory >= 2) {
+                bumps.push({ x, y, score: inTerritory });
+            }
+            // Also: stone with 2 same-color neighbors in a line, sticking out
+            else if (sameColor === 2 && inTerritory >= 1) {
+                const colorNeighbors = neighbors.filter(n => grid[n.y][n.x] === color);
+                // Check if aligned (same row or column)
+                if (colorNeighbors.length === 2) {
+                    const [n1, n2] = colorNeighbors;
+                    if (n1.x === n2.x || n1.y === n2.y) {
+                        // Aligned - this could be a bump on a straight line
+                        bumps.push({ x, y, score: inTerritory + 1 });
+                    }
+                }
+            }
+        }
+
+        bumps.sort((a, b) => b.score - a.score);
+        return bumps;
+    }
+
+    /**
+     * Find dents - empty cells that are indentations in the border
+     * (would make border straighter if filled)
+     */
+    function findDents(grid, territory, color, size, territorySet, bounds) {
+        const dents = [];
+
+        for (const p of territory.points) {
+            const neighbors = getNeighbors(p.x, p.y, size);
+            const colorNeighbors = neighbors.filter(n => grid[n.y][n.x] === color);
+            const territoryNeighbors = neighbors.filter(n => territorySet.has(`${n.x},${n.y}`));
+
+            // A dent: empty cell with 2+ color neighbors (would straighten border)
+            if (colorNeighbors.length >= 2) {
+                // Prefer dents that are more "indented" (fewer territory neighbors = more indented)
+                const score = colorNeighbors.length * 10 - territoryNeighbors.length;
+
+                // Check if filling would make a straighter line
+                // (color neighbors should be roughly aligned or forming a corner)
+                if (colorNeighbors.length >= 2) {
+                    dents.push({ x: p.x, y: p.y, score });
+                }
+            }
+        }
+
+        dents.sort((a, b) => b.score - a.score);
+        return dents;
     }
 
     /**

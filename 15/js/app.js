@@ -59,6 +59,8 @@ const App = (function() {
 
             // Buttons
             btnLoad: document.getElementById('btn-load'),
+            btnPhoto: document.getElementById('btn-photo'),
+            photoInput: document.getElementById('photo-input'),
             btnExport: document.getElementById('btn-export'),
             btnResetDead: document.getElementById('btn-reset-dead'),
             btnAutoDetect: document.getElementById('btn-auto-detect'),
@@ -76,6 +78,10 @@ const App = (function() {
         elements.dropZone.addEventListener('click', () => elements.fileInput.click());
         elements.fileInput.addEventListener('change', handleFileSelect);
         elements.btnLoad.addEventListener('click', () => elements.fileInput.click());
+
+        // Photo upload
+        elements.btnPhoto.addEventListener('click', () => showPhotoSizeDialog());
+        elements.photoInput.addEventListener('change', handlePhotoSelect);
 
         // Drag and drop
         elements.dropZone.addEventListener('dragover', handleDragOver);
@@ -307,6 +313,105 @@ const App = (function() {
         recalculateScore();
         render();
         showToast(`${state.deadStones.size} pierres mortes detectees`, 'success');
+    }
+
+    // Show photo size dialog
+    function showPhotoSizeDialog() {
+        const overlay = document.createElement('div');
+        overlay.id = 'size-dialog-overlay';
+        overlay.style.cssText = `
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8); z-index: 1500;
+            display: flex; align-items: center; justify-content: center;
+        `;
+        overlay.innerHTML = `
+            <div style="background: var(--bg-secondary); padding: 24px; border-radius: 12px; text-align: center;">
+                <h3 style="margin-bottom: 16px;">Taille du plateau</h3>
+                <div class="size-selector">
+                    <button class="size-btn" data-size="9">9×9</button>
+                    <button class="size-btn" data-size="13">13×13</button>
+                    <button class="size-btn active" data-size="19">19×19</button>
+                </div>
+                <div style="margin-top: 20px; display: flex; gap: 8px; justify-content: center;">
+                    <button id="size-cancel" class="btn btn-outline">Annuler</button>
+                    <button id="size-confirm" class="btn btn-primary">Choisir photo</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        let selectedSize = 19;
+
+        overlay.querySelectorAll('.size-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                overlay.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedSize = parseInt(btn.dataset.size);
+            });
+        });
+
+        document.getElementById('size-cancel').addEventListener('click', () => overlay.remove());
+        document.getElementById('size-confirm').addEventListener('click', () => {
+            overlay.remove();
+            state.pendingPhotoSize = selectedSize;
+            elements.photoInput.click();
+        });
+    }
+
+    // Handle photo selection
+    function handlePhotoSelect(e) {
+        const files = e.target.files;
+        if (files.length > 0) {
+            const size = state.pendingPhotoSize || 19;
+            loadPhoto(files[0], size);
+        }
+        // Reset input
+        e.target.value = '';
+    }
+
+    // Load and analyze photo
+    function loadPhoto(file, boardSize) {
+        showToast('Chargement de la photo...', 'info');
+
+        PhotoAnalyzer.analyze(file, boardSize, (result) => {
+            if (result && result.grid) {
+                // Create board object from photo result
+                state.gameInfo = {
+                    size: result.size,
+                    komi: 6.5,
+                    handicap: 0,
+                    blackPlayer: 'Photo',
+                    whitePlayer: 'Analyse',
+                    result: '',
+                    rules: 'Japanese'
+                };
+
+                state.board = {
+                    size: result.size,
+                    grid: result.grid,
+                    prisoners: { black: 0, white: 0 }
+                };
+
+                // Reset dead stones
+                state.deadStones = new Set();
+
+                // Auto-detect dead stones
+                state.deadStones = DeadStones.detect(state.board);
+
+                // Calculate territories and score
+                recalculateScore();
+
+                // Update UI
+                showBoardView();
+                updateGameInfo();
+                render();
+
+                elements.btnExport.disabled = false;
+                showToast('Photo analysee avec succes', 'success');
+            } else {
+                showToast('Erreur lors de l\'analyse de la photo', 'error');
+            }
+        });
     }
 
     // Show toast notification

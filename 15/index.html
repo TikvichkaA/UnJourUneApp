@@ -17,6 +17,7 @@
             </div>
             <div class="header-right">
                 <button id="btn-load" class="btn btn-primary">Charger SGF</button>
+                <button id="btn-photo" class="btn btn-secondary">Photo</button>
                 <div class="dropdown">
                     <button id="btn-export" class="btn btn-secondary" disabled>Exporter</button>
                     <div class="dropdown-menu" id="export-menu">
@@ -49,6 +50,9 @@
                     <input type="file" id="file-input" accept=".sgf" hidden>
                 </div>
             </div>
+
+            <!-- Photo input outside drop-zone to avoid event bubbling -->
+            <input type="file" id="photo-input" accept="image/*" hidden>
 
             <!-- Vue principale (cachee initialement) -->
             <div class="board-view" id="board-view" style="display: none;">
@@ -139,6 +143,7 @@
     <div class="toast" id="toast"></div>
 
     <!-- Scripts -->
+    <script src="js/photo-analyzer.js"></script>
     <script src="js/sgf-parser.js"></script>
     <script src="js/game-engine.js"></script>
     <script src="js/territory.js"></script>
