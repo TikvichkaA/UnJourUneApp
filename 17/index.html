@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CollecPro - Collectes Professionnelles</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚚</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2196F3;
+            --primary-light: #E3F2FD;
+            --primary-dark: #1976D2;
+            --secondary: #4CAF50;
+            --secondary-light: #E8F5E9;
+            --error: #E53935;
+            --warning: #FB8C00;
+            --warning-light: #FFF3E0;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --background: #F5F5F5;
+            --surface: #FFFFFF;
+            --border: #E0E0E0;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Mobile App Container */
+        .app-container {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--surface);
+            position: relative;
+            box-shadow: 0 0 20px var(--shadow);
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* App Bar */
+        .app-bar {
+            background: var(--primary);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .app-bar h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .app-bar-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .app-bar-icon:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: var(--surface);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+            padding: 4px 16px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item span {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Login Page */
+        .login-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+            padding-bottom: 24px;
+        }
+
+        .login-logo {
+            font-size: 80px;
+            margin-bottom: 16px;
+        }
+
+        .login-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .login-link {
+            margin-top: 16px;
+            color: var(--text-secondary);
+        }
+
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px;
+            box-shadow: 0 2px 12px var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .card-header .material-icons {
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Tournee Page */
+        .tournee-header {
+            background: var(--surface);
+            padding: 20px;
+            margin: 16px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .tournee-date {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tournee-date .material-icons {
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .tournee-info {
+            flex: 1;
+        }
+
+        .tournee-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .tournee-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-en-cours {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .status-termine {
+            background: var(--secondary-light);
+            color: var(--secondary);
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .info-row .material-icons {
+            font-size: 20px;
+        }
+
+        /* Stats Card */
+        .stats-card {
+            background: var(--primary-light);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .stat-collectes .stat-icon,
+        .stat-collectes .stat-value {
+            color: var(--secondary);
+        }
+
+        .stat-livraisons .stat-icon,
+        .stat-livraisons .stat-value {
+            color: var(--primary);
+        }
+
+        .stat-divider {
+            width: 1px;
+            background: var(--border);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .action-btn .material-icons {
+            font-size: 28px;
+        }
+
+        /* Links List Page */
+        .progress-card {
+            background: var(--primary-light);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .progress-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px 16px 12px;
+        }
+
+        /* Link Item */
+        .link-item {
+            background: var(--surface);
+            margin: 0 16px 12px;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .link-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .link-item.completed {
+            opacity: 0.7;
+        }
+
+        .link-order {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .link-pdc .link-order {
+            background: var(--secondary-light);
+            color: var(--secondary);
+        }
+
+        .link-pdl .link-order {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .link-item.completed .link-order {
+            background: var(--border);
+            color: var(--text-secondary);
+        }
+
+        .link-content {
+            flex: 1;
+        }
+
+        .link-badges {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .link-type {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .link-pdc .link-type {
+            background: var(--secondary);
+        }
+
+        .link-pdl .link-type {
+            background: var(--primary);
+        }
+
+        .link-item.completed .link-type {
+            background: var(--text-secondary);
+        }
+
+        .link-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .link-item.completed .link-name {
+            text-decoration: line-through;
+        }
+
+        .link-address {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .link-address .material-icons {
+            font-size: 16px;
+        }
+
+        .check-icon {
+            color: var(--secondary);
+        }
+
+        /* Expansion Panel */
+        .expansion-panel {
+            margin: 16px;
+        }
+
+        .expansion-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--surface);
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .expansion-content {
+            display: none;
+            padding-top: 12px;
+        }
+
+        .expansion-content.open {
+            display: block;
+        }
+
+        /* Profile Page */
+        .profile-header {
+            background: var(--surface);
+            padding: 24px;
+            margin: 16px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .profile-role {
+            color: var(--text-secondary);
+        }
+
+        .profile-details {
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+
+        .profile-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+        }
+
+        .profile-row .material-icons {
+            color: var(--text-secondary);
+            font-size: 20px;
+        }
+
+        .profile-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .profile-value {
+            font-weight: 500;
+        }
+
+        /* Hours Card */
+        .hours-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 16px 0;
+        }
+
+        .hours-stat {
+            text-align: center;
+        }
+
+        .hours-stat .material-icons {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .hours-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .hours-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Schedule Items */
+        .schedule-item {
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--background);
+        }
+
+        .schedule-item.today {
+            background: var(--secondary-light);
+            border-color: var(--secondary);
+        }
+
+        .schedule-item.tomorrow {
+            background: var(--warning-light);
+            border-color: var(--warning);
+        }
+
+        .schedule-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .schedule-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .schedule-badge.today {
+            background: var(--secondary);
+        }
+
+        .schedule-badge.tomorrow {
+            background: var(--warning);
+        }
+
+        .schedule-time {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* History Items */
+        .history-item {
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--background);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .history-date {
+            font-weight: 600;
+        }
+
+        .history-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 14px;
+        }
+
+        .history-stats span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .history-stats .material-icons {
+            font-size: 16px;
+        }
+
+        /* RH Buttons */
+        .rh-buttons {
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .btn-rh {
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .btn-rdv {
+            background: #9C27B0;
+        }
+
+        .btn-conges {
+            background: #009688;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-actions {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .modal-actions .btn {
+            width: auto;
+            padding: 12px 24px;
+        }
+
+        .btn-text {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        /* Snackbar */
+        .snackbar {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #323232;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            display: none;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        .snackbar.show {
+            display: block;
+        }
+
+        .snackbar.success {
+            background: var(--secondary);
+        }
+
+        .snackbar.error {
+            background: var(--error);
+        }
+
+        @keyframes slideIn {
+            from { transform: translate(-50%, 20px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        /* Link Detail Modal */
+        .link-detail-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .link-detail-badge {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .link-detail-badge.pdc {
+            background: var(--secondary);
+        }
+
+        .link-detail-badge.pdl {
+            background: var(--primary);
+        }
+
+        .link-detail-section {
+            margin-bottom: 20px;
+        }
+
+        .link-detail-section h4 {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .link-detail-section p {
+            font-size: 16px;
+        }
+
+        /* Demo Banner */
+        .demo-banner {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 12px 16px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .demo-banner strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Demo Banner -->
+        <div class="demo-banner">
+            <strong>Version Demo</strong>
+            Connectez-vous avec n'importe quelles informations
+        </div>
+
+        <!-- Login Page -->
+        <div id="login-page" class="page active login-page">
+            <div class="login-logo">
+                <span class="material-icons" style="font-size: 80px; color: var(--primary);">local_shipping</span>
+            </div>
+            <h1 class="login-title">CollecPro</h1>
+            <p class="login-subtitle">Collectes professionnelles</p>
+
+            <form id="login-form" style="width: 100%;">
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="Email" value="demo@collecpro.fr">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Mot de passe" value="demo123">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    Se connecter
+                </button>
+            </form>
+
+            <p class="login-link">
+                Pas encore de compte ? <a href="#" onclick="showSnackbar('Inscription non disponible en demo')">S'inscrire</a>
+            </p>
+        </div>
+
+        <!-- Tournee Page -->
+        <div id="tournee-page" class="page">
+            <div class="app-bar">
+                <h1>Ma Tournee</h1>
+                <div class="app-bar-icon" onclick="showSnackbar('Actualisation...')">
+                    <span class="material-icons">refresh</span>
+                </div>
+            </div>
+
+            <div class="tournee-header">
+                <div class="tournee-date">
+                    <span class="material-icons">calendar_today</span>
+                    <div class="tournee-info">
+                        <div class="tournee-title">Tournee du jour</div>
+                        <div class="tournee-subtitle" id="today-date">Lundi 20 janvier 2025</div>
+                    </div>
+                    <span class="status-badge status-en-cours">En cours</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="material-icons">access_time</span>
+                    <span>Heure de debut: <strong>08:00</strong></span>
+                </div>
+                <div class="info-row">
+                    <span class="material-icons">directions_car</span>
+                    <span>Vehicule: <strong>Renault Kangoo - AB-123-CD</strong></span>
+                </div>
+                <div class="info-row">
+                    <span class="material-icons">location_on</span>
+                    <span>Depot: <strong>12 rue de la Logistique, 75011 Paris</strong></span>
+                </div>
+            </div>
+
+            <div class="stats-card">
+                <div class="stat-item stat-collectes">
+                    <div class="stat-icon material-icons">shopping_basket</div>
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Collectes</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item stat-livraisons">
+                    <div class="stat-icon material-icons">local_shipping</div>
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Livraisons</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn action-btn btn-primary" onclick="showSnackbar('Checklist de depart en cours de developpement')">
+                    <span class="material-icons">checklist</span>
+                    Checklist de depart
+                </button>
+                <button class="btn action-btn btn-secondary" onclick="showPage('links-page')">
+                    <span class="material-icons">map</span>
+                    Voir la feuille de route
+                </button>
+                <button class="btn action-btn btn-outline" onclick="showSnackbar('Cloture de collecte en cours de developpement')">
+                    <span class="material-icons">check_circle_outline</span>
+                    Cloturer la collecte
+                </button>
+            </div>
+        </div>
+
+        <!-- Links List Page -->
+        <div id="links-page" class="page">
+            <div class="app-bar">
+                <div class="app-bar-icon" onclick="showPage('tournee-page')">
+                    <span class="material-icons">arrow_back</span>
+                </div>
+                <h1>Feuille de route</h1>
+                <div class="app-bar-icon" onclick="showSnackbar('Actualisation...')">
+                    <span class="material-icons">refresh</span>
+                </div>
+            </div>
+
+            <div class="progress-card">
+                <div class="progress-header">
+                    <span class="progress-title">Progression</span>
+                    <span class="progress-value">5 / 13</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 38%"></div>
+                </div>
+            </div>
+
+            <div class="section-title">A faire (8)</div>
+
+            <div class="link-item link-pdc" onclick="openLinkDetail('Bio c Bon Bastille', 'PDC', '45 bd de la Bastille, 75012 Paris', 'Fruits et legumes bio')">
+                <div class="link-order">6</div>
+                <div class="link-content">
+                    <div class="link-badges">
+                        <span class="link-type">PDC</span>
+                    </div>
+                    <div class="link-name">Bio c Bon Bastille</div>
+                    <div class="link-address">
+                        <span class="material-icons">location_on</span>
+                        45 bd de la Bastille, 75012 Paris
+                    </div>
+                </div>
+                <span class="material-icons" style="color: var(--text-secondary)">chevron_right</span>
+            </div>
+
+            <div class="link-item link-pdl" onclick="openLinkDetail('Resto du Coeur Republique', 'PDL', '23 rue du Temple, 75003 Paris', 'Livraison produits frais')">
+                <div class="link-order">7</div>
+                <div class="link-content">
+                    <div class="link-badges">
+                        <span class="link-type">PDL</span>
+                    </div>
+                    <div class="link-name">Resto du Coeur Republique</div>
+                    <div class="link-address">
+                        <span class="material-icons">location_on</span>
+                        23 rue du Temple, 75003 Paris
+                    </div>
+                </div>
+                <span class="material-icons" style="color: var(--text-secondary)">chevron_right</span>
+            </div>
+
+            <div class="link-item link-pdc" onclick="openLinkDetail('Carrefour City Nation', 'PDC', '78 avenue de la Nation, 75012 Paris', 'Produits laitiers')">
+                <div class="link-order">8</div>
+                <div class="link-content">
+                    <div class="link-badges">
+                        <span class="link-type">PDC</span>
+                    </div>
+                    <div class="link-name">Carrefour City Nation</div>
+                    <div class="link-address">
+                        <span class="material-icons">location_on</span>
+                        78 avenue de la Nation, 75012 Paris
+                    </div>
+                </div>
+                <span class="material-icons" style="color: var(--text-secondary)">chevron_right</span>
+            </div>
+
+            <div class="link-item link-pdc" onclick="openLinkDetail('Franprix Voltaire', 'PDC', '112 bd Voltaire, 75011 Paris', 'Pain et viennoiseries')">
+                <div class="link-order">9</div>
+                <div class="link-content">
+                    <div class="link-badges">
+                        <span class="link-type">PDC</span>
+                    </div>
+                    <div class="link-name">Franprix Voltaire</div>
+                    <div class="link-address">
+                        <span class="material-icons">location_on</span>
+                        112 bd Voltaire, 75011 Paris
+                    </div>
+                </div>
+                <span class="material-icons" style="color: var(--text-secondary)">chevron_right</span>
+            </div>
+
+            <div class="link-item link-pdl" onclick="openLinkDetail('Banque Alimentaire Paris', 'PDL', '8 rue des Amandiers, 75020 Paris', 'Livraison mixte')">
+                <div class="link-order">10</div>
+                <div class="link-content">
+                    <div class="link-badges">
+                        <span class="link-type">PDL</span>
+                    </div>
+                    <div class="link-name">Banque Alimentaire Paris</div>
+                    <div class="link-address">
+                        <span class="material-icons">location_on</span>
+                        8 rue des Amandiers, 75020 Paris
+                    </div>
+                </div>
+                <span class="material-icons" style="color: var(--text-secondary)">chevron_right</span>
+            </div>
+
+            <div class="link-item link-pdc" onclick="openLinkDetail('Naturalia Oberkampf', 'PDC', '56 rue Oberkampf, 75011 Paris', 'Conserves et epicerie')">
+                <div class="link-order">11</div>
+                <div class="link-content">
+                    <div class="link-badges">
+                        <span class="link-type">PDC</span>
+                    </div>
+                    <div class="link-name">Naturalia Oberkampf</div>
+                    <div class="link-address">
+                        <span class="material-icons">location_on</span>
+                        56 rue Oberkampf, 75011 Paris
+                    </div>
+                </div>
+                <span class="material-icons" style="color: var(--text-secondary)">chevron_right</span>
+            </div>
+
+            <div class="link-item link-pdc" onclick="openLinkDetail('Monoprix Belleville', 'PDC', '89 rue de Belleville, 75019 Paris', 'Produits surgeles')">
+                <div class="link-order">12</div>
+                <div class="link-content">
+                    <div class="link-badges">
+                        <span class="link-type">PDC</span>
+                    </div>
+                    <div class="link-name">Monoprix Belleville</div>
+                    <div class="link-address">
+                        <span class="material-icons">location_on</span>
+                        89 rue de Belleville, 75019 Paris
+                    </div>
+                </div>
+                <span class="material-icons" style="color: var(--text-secondary)">chevron_right</span>
+            </div>
+
+            <div class="link-item link-pdl" onclick="openLinkDetail('Secours Populaire 19e', 'PDL', '15 rue de Crimee, 75019 Paris', 'Livraison finale')">
+                <div class="link-order">13</div>
+                <div class="link-content">
+                    <div class="link-badges">
+                        <span class="link-type">PDL</span>
+                    </div>
+                    <div class="link-name">Secours Populaire 19e</div>
+                    <div class="link-address">
+                        <span class="material-icons">location_on</span>
+                        15 rue de Crimee, 75019 Paris
+                    </div>
+                </div>
+                <span class="material-icons" style="color: var(--text-secondary)">chevron_right</span>
+            </div>
+
+            <!-- Completed Section -->
+            <div class="expansion-panel">
+                <div class="expansion-header" onclick="toggleExpansion(this)">
+                    <span class="material-icons" style="color: var(--secondary)">check_circle</span>
+                    <span style="font-weight: 600; flex: 1">Termines (5)</span>
+                    <span class="material-icons expansion-icon">expand_more</span>
+                </div>
+                <div class="expansion-content">
+                    <div class="link-item link-pdc completed">
+                        <div class="link-order">1</div>
+                        <div class="link-content">
+                            <div class="link-badges">
+                                <span class="link-type">PDC</span>
+                                <span class="material-icons check-icon">check_circle</span>
+                            </div>
+                            <div class="link-name">Auchan Express Gambetta</div>
+                            <div class="link-address">
+                                <span class="material-icons">location_on</span>
+                                34 av. Gambetta, 75020 Paris
+                            </div>
+                        </div>
+                    </div>
+                    <div class="link-item link-pdc completed">
+                        <div class="link-order">2</div>
+                        <div class="link-content">
+                            <div class="link-badges">
+                                <span class="link-type">PDC</span>
+                                <span class="material-icons check-icon">check_circle</span>
+                            </div>
+                            <div class="link-name">Picard Menilmontant</div>
+                            <div class="link-address">
+                                <span class="material-icons">location_on</span>
+                                67 rue de Menilmontant, 75020 Paris
+                            </div>
+                        </div>
+                    </div>
+                    <div class="link-item link-pdl completed">
+                        <div class="link-order">3</div>
+                        <div class="link-content">
+                            <div class="link-badges">
+                                <span class="link-type">PDL</span>
+                                <span class="material-icons check-icon">check_circle</span>
+                            </div>
+                            <div class="link-name">Epicerie Solidaire 20e</div>
+                            <div class="link-address">
+                                <span class="material-icons">location_on</span>
+                                12 rue des Pyrenees, 75020 Paris
+                            </div>
+                        </div>
+                    </div>
+                    <div class="link-item link-pdc completed">
+                        <div class="link-order">4</div>
+                        <div class="link-content">
+                            <div class="link-badges">
+                                <span class="link-type">PDC</span>
+                                <span class="material-icons check-icon">check_circle</span>
+                            </div>
+                            <div class="link-name">Lidl Pere Lachaise</div>
+                            <div class="link-address">
+                                <span class="material-icons">location_on</span>
+                                98 bd de Charonne, 75020 Paris
+                            </div>
+                        </div>
+                    </div>
+                    <div class="link-item link-pdl completed">
+                        <div class="link-order">5</div>
+                        <div class="link-content">
+                            <div class="link-badges">
+                                <span class="link-type">PDL</span>
+                                <span class="material-icons check-icon">check_circle</span>
+                            </div>
+                            <div class="link-name">Croix Rouge Charonne</div>
+                            <div class="link-address">
+                                <span class="material-icons">location_on</span>
+                                45 rue de Charonne, 75011 Paris
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile-page" class="page">
+            <div class="app-bar">
+                <h1>Mes donnees</h1>
+                <div class="app-bar-icon" onclick="showSnackbar('Actualisation...')">
+                    <span class="material-icons">refresh</span>
+                </div>
+            </div>
+
+            <div class="profile-header">
+                <div class="profile-info">
+                    <div class="profile-avatar">ML</div>
+                    <div>
+                        <div class="profile-name">Marie Leroy</div>
+                        <div class="profile-role">Linkeur</div>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-row">
+                        <span class="material-icons">email</span>
+                        <div>
+                            <div class="profile-label">Email</div>
+                            <div class="profile-value">marie.leroy@collecpro.fr</div>
+                        </div>
+                    </div>
+                    <div class="profile-row">
+                        <span class="material-icons">phone</span>
+                        <div>
+                            <div class="profile-label">Telephone</div>
+                            <div class="profile-value">06 12 34 56 78</div>
+                        </div>
+                    </div>
+                    <div class="profile-row">
+                        <span class="material-icons">location_city</span>
+                        <div>
+                            <div class="profile-label">Antenne</div>
+                            <div class="profile-value">Paris Est</div>
+                        </div>
+                    </div>
+                    <div class="profile-row">
+                        <span class="material-icons">work</span>
+                        <div>
+                            <div class="profile-label">Statut</div>
+                            <div class="profile-value">CDI - Temps plein</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hours Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="material-icons">access_time</span>
+                    <div>
+                        <div class="card-title">Heures du mois</div>
+                        <div class="card-subtitle">Janvier 2025</div>
+                    </div>
+                </div>
+                <div class="hours-stats">
+                    <div class="hours-stat">
+                        <span class="material-icons" style="color: var(--primary)">schedule</span>
+                        <div class="hours-value" style="color: var(--primary)">87h</div>
+                        <div class="hours-label">Total heures</div>
+                    </div>
+                    <div style="width: 1px; background: var(--border)"></div>
+                    <div class="hours-stat">
+                        <span class="material-icons" style="color: var(--secondary)">local_shipping</span>
+                        <div class="hours-value" style="color: var(--secondary)">12</div>
+                        <div class="hours-label">Tournees</div>
+                    </div>
+                </div>
+                <div style="border-top: 1px solid var(--border); padding-top: 16px; margin-top: 8px;">
+                    <div style="font-weight: 500; color: var(--text-secondary); margin-bottom: 8px;">Par semaine</div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                        <span>Semaine 1</span>
+                        <strong>22h</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                        <span>Semaine 2</span>
+                        <strong>24h</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                        <span>Semaine 3</span>
+                        <strong>21h</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                        <span>Semaine 4 (en cours)</span>
+                        <strong>20h</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schedule Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="material-icons">calendar_month</span>
+                    <div>
+                        <div class="card-title">Mon emploi du temps</div>
+                        <div class="card-subtitle">7 prochains jours</div>
+                    </div>
+                </div>
+
+                <div class="schedule-item today">
+                    <div class="schedule-date">
+                        <span class="schedule-badge today">Aujourd'hui</span>
+                        <strong>Lundi 20 janvier</strong>
+                    </div>
+                    <div class="schedule-time">
+                        <span class="material-icons">access_time</span>
+                        08:00 - 16:00
+                    </div>
+                </div>
+
+                <div class="schedule-item tomorrow">
+                    <div class="schedule-date">
+                        <span class="schedule-badge tomorrow">Demain</span>
+                        <strong>Mardi 21 janvier</strong>
+                    </div>
+                    <div class="schedule-time">
+                        <span class="material-icons">access_time</span>
+                        09:00 - 17:00
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-date">
+                        <strong>Jeudi 23 janvier</strong>
+                    </div>
+                    <div class="schedule-time">
+                        <span class="material-icons">access_time</span>
+                        08:00 - 14:00
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-date">
+                        <strong>Vendredi 24 janvier</strong>
+                    </div>
+                    <div class="schedule-time">
+                        <span class="material-icons">access_time</span>
+                        10:00 - 18:00
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="material-icons">history</span>
+                    <div>
+                        <div class="card-title">Historique des tournees</div>
+                        <div class="card-subtitle">30 derniers jours</div>
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-header">
+                        <span class="history-date">Vendredi 17 janvier</span>
+                        <span class="status-badge status-termine">Terminee</span>
+                    </div>
+                    <div class="history-stats">
+                        <span><span class="material-icons" style="color: var(--secondary)">shopping_basket</span> 6 collectes</span>
+                        <span><span class="material-icons" style="color: var(--primary)">local_shipping</span> 4 livraisons</span>
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-header">
+                        <span class="history-date">Mercredi 15 janvier</span>
+                        <span class="status-badge status-termine">Terminee</span>
+                    </div>
+                    <div class="history-stats">
+                        <span><span class="material-icons" style="color: var(--secondary)">shopping_basket</span> 9 collectes</span>
+                        <span><span class="material-icons" style="color: var(--primary)">local_shipping</span> 5 livraisons</span>
+                    </div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-header">
+                        <span class="history-date">Lundi 13 janvier</span>
+                        <span class="status-badge status-termine">Terminee</span>
+                    </div>
+                    <div class="history-stats">
+                        <span><span class="material-icons" style="color: var(--secondary)">shopping_basket</span> 7 collectes</span>
+                        <span><span class="material-icons" style="color: var(--primary)">local_shipping</span> 3 livraisons</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RH Section -->
+            <div style="padding: 0 16px; margin-top: 8px;">
+                <div class="card-title" style="margin-bottom: 12px;">Demandes</div>
+            </div>
+            <div class="rh-buttons">
+                <button class="btn btn-rh btn-rdv" onclick="openModal('rdv-modal')">
+                    <span class="material-icons">person</span>
+                    Demander un RDV RH
+                </button>
+                <button class="btn btn-rh btn-conges" onclick="openModal('conges-modal')">
+                    <span class="material-icons">beach_access</span>
+                    Demander des conges
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav" id="bottom-nav" style="display: none;">
+            <div class="nav-item active" onclick="showPage('tournee-page')">
+                <span class="material-icons">home</span>
+                <span>Accueil</span>
+            </div>
+            <div class="nav-item" onclick="showPage('links-page')">
+                <span class="material-icons">map</span>
+                <span>Route</span>
+            </div>
+            <div class="nav-item" onclick="showPage('profile-page')">
+                <span class="material-icons">person</span>
+                <span>Profil</span>
+            </div>
+            <div class="nav-item" onclick="handleLogout()">
+                <span class="material-icons">logout</span>
+                <span>Quitter</span>
+            </div>
+        </div>
+
+        <!-- Link Detail Modal -->
+        <div class="modal-overlay" id="link-modal">
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="modal-title">Detail du point</div>
+                </div>
+                <div class="modal-body">
+                    <div class="link-detail-header">
+                        <span class="link-detail-badge" id="modal-type-badge">PDC</span>
+                        <span class="status-badge status-en-cours">A faire</span>
+                    </div>
+                    <div class="link-detail-section">
+                        <h4>Nom</h4>
+                        <p id="modal-name">-</p>
+                    </div>
+                    <div class="link-detail-section">
+                        <h4>Adresse</h4>
+                        <p id="modal-address">-</p>
+                    </div>
+                    <div class="link-detail-section">
+                        <h4>Type de produits</h4>
+                        <p id="modal-products">-</p>
+                    </div>
+                    <div class="link-detail-section">
+                        <h4>Instructions</h4>
+                        <p>Sonner a l'interphone, demander le responsable. Verifier les DLC avant collecte.</p>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-text" onclick="closeModal('link-modal')">Fermer</button>
+                    <button class="btn btn-primary" onclick="showSnackbar('Validation en cours de developpement', 'success'); closeModal('link-modal');">Valider</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RDV RH Modal -->
+        <div class="modal-overlay" id="rdv-modal">
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="modal-title">Demande de RDV RH</div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="Motif *" id="rdv-motif">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-input" rows="3" placeholder="Details *" id="rdv-details" style="resize: none;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="Preference horaire (optionnel)" id="rdv-horaire">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-text" onclick="closeModal('rdv-modal')">Annuler</button>
+                    <button class="btn btn-primary" onclick="submitRdvRequest()">Envoyer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conges Modal -->
+        <div class="modal-overlay" id="conges-modal">
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="modal-title">Demande de conges</div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <select class="form-input" id="conges-type">
+                            <option value="cp">Conges payes</option>
+                            <option value="rtt">RTT</option>
+                            <option value="sans-solde">Conge sans solde</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 14px;">Date de debut *</label>
+                        <input type="date" class="form-input" id="conges-debut">
+                    </div>
+                    <div class="form-group">
+                        <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 14px;">Date de fin *</label>
+                        <input type="date" class="form-input" id="conges-fin">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-input" rows="2" placeholder="Commentaire (optionnel)" id="conges-commentaire" style="resize: none;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-text" onclick="closeModal('conges-modal')">Annuler</button>
+                    <button class="btn btn-primary" onclick="submitCongesRequest()">Envoyer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Snackbar -->
+        <div class="snackbar" id="snackbar"></div>
+    </div>
+
+    <script>
+        // Update date
+        function updateDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date();
+            document.getElementById('today-date').textContent = today.toLocaleDateString('fr-FR', options);
+        }
+        updateDate();
+
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach((item, index) => {
+                item.classList.remove('active');
+                if ((pageId === 'tournee-page' && index === 0) ||
+                    (pageId === 'links-page' && index === 1) ||
+                    (pageId === 'profile-page' && index === 2)) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Login handler
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showSnackbar('Connexion reussie !', 'success');
+            setTimeout(() => {
+                document.getElementById('bottom-nav').style.display = 'flex';
+                showPage('tournee-page');
+            }, 500);
+        });
+
+        // Logout handler
+        function handleLogout() {
+            document.getElementById('bottom-nav').style.display = 'none';
+            showPage('login-page');
+            showSnackbar('Deconnexion reussie');
+        }
+
+        // Snackbar
+        function showSnackbar(message, type = '') {
+            const snackbar = document.getElementById('snackbar');
+            snackbar.textContent = message;
+            snackbar.className = 'snackbar show ' + type;
+            setTimeout(() => {
+                snackbar.classList.remove('show');
+            }, 3000);
+        }
+
+        // Expansion panel
+        function toggleExpansion(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.expansion-icon');
+            content.classList.toggle('open');
+            icon.textContent = content.classList.contains('open') ? 'expand_less' : 'expand_more';
+        }
+
+        // Modals
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Link detail modal
+        function openLinkDetail(name, type, address, products) {
+            document.getElementById('modal-name').textContent = name;
+            document.getElementById('modal-address').textContent = address;
+            document.getElementById('modal-products').textContent = products;
+            const badge = document.getElementById('modal-type-badge');
+            badge.textContent = type;
+            badge.className = 'link-detail-badge ' + type.toLowerCase();
+            openModal('link-modal');
+        }
+
+        // Form submissions
+        function submitRdvRequest() {
+            const motif = document.getElementById('rdv-motif').value;
+            const details = document.getElementById('rdv-details').value;
+
+            if (!motif || !details) {
+                showSnackbar('Le motif et les details sont obligatoires', 'error');
+                return;
+            }
+
+            closeModal('rdv-modal');
+            showSnackbar('Demande de RDV RH envoyee avec succes', 'success');
+
+            // Reset form
+            document.getElementById('rdv-motif').value = '';
+            document.getElementById('rdv-details').value = '';
+            document.getElementById('rdv-horaire').value = '';
+        }
+
+        function submitCongesRequest() {
+            const debut = document.getElementById('conges-debut').value;
+            const fin = document.getElementById('conges-fin').value;
+
+            if (!debut || !fin) {
+                showSnackbar('Les dates sont obligatoires', 'error');
+                return;
+            }
+
+            const debutDate = new Date(debut);
+            const finDate = new Date(fin);
+            const days = Math.ceil((finDate - debutDate) / (1000 * 60 * 60 * 24)) + 1;
+
+            closeModal('conges-modal');
+            showSnackbar(`Demande de conges envoyee (${days} jours)`, 'success');
+
+            // Reset form
+            document.getElementById('conges-debut').value = '';
+            document.getElementById('conges-fin').value = '';
+            document.getElementById('conges-commentaire').value = '';
+        }
+
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
