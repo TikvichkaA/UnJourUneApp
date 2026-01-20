@@ -1,0 +1,2518 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoProfil Admin - Vue d'Ensemble</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #5528ff;
+            --primary-dark: #4420cc;
+            --secondary: #27b782;
+            --accent: #ea4e1b;
+            --cream: #f8f3e0;
+            --dark: #1d1d1b;
+            --gray: #6b7280;
+            --light-gray: #e5e7eb;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f5f5;
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        /* Layout */
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--dark);
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 0.75rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .nav-menu a:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-menu a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--gray);
+        }
+
+        .btn-ghost:hover {
+            background: var(--light-gray);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-card .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-trend.up { color: var(--secondary); }
+        .stat-trend.down { color: var(--accent); }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        th {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            font-size: 0.95rem;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-green { background: rgba(39, 183, 130, 0.1); color: var(--secondary); }
+        .badge-orange { background: rgba(234, 78, 27, 0.1); color: var(--accent); }
+        .badge-purple { background: rgba(85, 40, 255, 0.1); color: var(--primary); }
+        .badge-gray { background: var(--light-gray); color: var(--gray); }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Options Builder */
+        .options-builder {
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .option-item {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .option-item input {
+            flex: 1;
+        }
+
+        .add-option-btn {
+            margin-top: 0.5rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Checkbox group */
+        .checkbox-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+
+        .checkbox-list label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .checkbox-list label:hover {
+            background: var(--cream);
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--dark);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1001;
+        }
+
+        .toast.show { display: flex; }
+        .toast.success { background: var(--secondary); }
+        .toast.error { background: #ef4444; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Login */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .login-card h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-card .subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Target selector */
+        .target-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .target-chip {
+            padding: 0.4rem 0.75rem;
+            background: var(--cream);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .target-chip:hover {
+            border-color: var(--primary);
+        }
+
+        .target-chip.selected {
+            background: rgba(85, 40, 255, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Login View -->
+    <div id="loginView" class="login-container">
+        <div class="login-card">
+            <h1>EcoProfil Admin</h1>
+            <p class="subtitle">Espace administrateur Vue d'Ensemble</p>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="form-group">
+                    <label>Email administrateur</label>
+                    <input type="email" id="adminEmail" required placeholder="admin@vuedensemble.fr">
+                </div>
+                <div class="form-group">
+                    <label>Mot de passe</label>
+                    <input type="password" id="adminPassword" required placeholder="Mot de passe">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">
+                    Se connecter
+                </button>
+            </form>
+            <p style="text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--gray);">
+                Mode d&#233;mo : utilisez n'importe quel email/mdp
+            </p>
+            <a href="index.html" style="display: block; text-align: center; margin-top: 1rem; color: white; opacity: 0.7; text-decoration: none; font-size: 0.9rem;">
+                &#8592; Retour au site public
+            </a>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminView" class="admin-layout" style="display: none;">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">VE</div>
+                <div>
+                    <div class="sidebar-title">EcoProfil</div>
+                    <div class="sidebar-subtitle">Administration</div>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Tableau de bord</div>
+                <ul class="nav-menu">
+                    <li><a href="#" class="active" onclick="showSection('dashboard')"><span class="nav-icon">&#128200;</span> Vue d'ensemble</a></li>
+                    <li><a href="#" onclick="showSection('stats')"><span class="nav-icon">&#128202;</span> Statistiques</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Gestion</div>
+                <ul class="nav-menu">
+                    <li><a href="#" onclick="showSection('questions')"><span class="nav-icon">&#128172;</span> Questions</a></li>
+                    <li><a href="#" onclick="showSection('events')"><span class="nav-icon">&#128197;</span> &#201;v&#233;nements</a></li>
+                    <li><a href="#" onclick="showSection('proposals')"><span class="nav-icon">&#128161;</span> Propositions</a></li>
+                    <li><a href="#" onclick="showSection('notifications')"><span class="nav-icon">&#128276;</span> Notifications</a></li>
+                    <li><a href="#" onclick="showSection('members')"><span class="nav-icon">&#128101;</span> Membres</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section" style="margin-top: auto;">
+                <ul class="nav-menu">
+                    <li><a href="index.html"><span class="nav-icon">&#128065;</span> Voir le site</a></li>
+                    <li><a href="#" onclick="handleAdminLogout()"><span class="nav-icon">&#128682;</span> D&#233;connexion</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="section-dashboard" class="section active">
+                <div class="page-header">
+                    <div>
+                        <h1>Tableau de bord</h1>
+                        <p>Bienvenue sur l'espace administrateur EcoProfil</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(85, 40, 255, 0.1); color: var(--primary);">&#128101;</div>
+                        <h3 id="totalMembers">0</h3>
+                        <p>Membres inscrits</p>
+                        <div class="stat-trend up">&#8593; +12 ce mois</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(39, 183, 130, 0.1); color: var(--secondary);">&#128172;</div>
+                        <h3 id="totalResponses">0</h3>
+                        <p>R&#233;ponses collect&#233;es</p>
+                        <div class="stat-trend up">&#8593; +45 cette semaine</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(234, 78, 27, 0.1); color: var(--accent);">&#128203;</div>
+                        <h3 id="avgCompletion">0%</h3>
+                        <p>Profils compl&#233;t&#233;s (moy.)</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(85, 40, 255, 0.1); color: var(--primary);">&#128276;</div>
+                        <h3 id="activeQuestions">0</h3>
+                        <p>Questions actives</p>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Derni&#232;res inscriptions</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Membre</th>
+                                            <th>Commune</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentMembers">
+                                        <!-- Dynamic -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Questions r&#233;centes</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Question</th>
+                                            <th>R&#233;ponses</th>
+                                            <th>Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentQuestions">
+                                        <!-- Dynamic -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section id="section-stats" class="section">
+                <div class="page-header">
+                    <div>
+                        <h1>Statistiques</h1>
+                        <p>Analyse anonymis&#233;e des donn&#233;es des membres</p>
+                    </div>
+                    <button class="btn btn-outline" onclick="exportStats()">
+                        &#128202; Exporter le rapport
+                    </button>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="stats-grid" style="margin-bottom: 2rem;">
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(85, 40, 255, 0.1); color: var(--primary);">&#128200;</div>
+                        <h3 id="engagementRate">0%</h3>
+                        <p>Taux d'engagement</p>
+                        <div class="stat-trend up">&#8593; +5% ce mois</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(39, 183, 130, 0.1); color: var(--secondary);">&#11088;</div>
+                        <h3 id="avgLevel">0</h3>
+                        <p>Niveau moyen</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(234, 78, 27, 0.1); color: var(--accent);">&#128197;</div>
+                        <h3 id="eventParticipation">0%</h3>
+                        <p>Participation &#233;v&#233;nements</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">&#128161;</div>
+                        <h3 id="proposalActivity">0</h3>
+                        <p>Propositions / mois</p>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-bottom: 2rem;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>&#128205; R&#233;partition par commune</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="cityChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>&#128690; Modes de transport</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="transportChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-bottom: 2rem;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>&#127919; Centres d'int&#233;r&#234;t</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="interestsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>&#128101; Tranches d'&#226;ge</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="ageChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Engagement & Activity -->
+                <div class="grid-2" style="margin-bottom: 2rem;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>&#128640; Niveaux d'engagement</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="levelChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>&#128200; Activit&#233; mensuelle</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="activityChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard & Top Contributors -->
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>&#127942; Top contributeurs</h2>
+                        </div>
+                        <div class="card-body">
+                            <div id="topContributors">
+                                <!-- Dynamic -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>&#128200; R&#233;sum&#233; des r&#233;ponses</h2>
+                        </div>
+                        <div class="card-body">
+                            <div id="responseSummary">
+                                <!-- Dynamic -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Questions Section -->
+            <section id="section-questions" class="section">
+                <div class="page-header">
+                    <div>
+                        <h1>Questions & Sondages</h1>
+                        <p>Cr&#233;ez et g&#233;rez les consultations citoyennes</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openQuestionModal()">
+                        + Nouvelle question
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Question</th>
+                                        <th>Cat&#233;gorie</th>
+                                        <th>R&#233;ponses</th>
+                                        <th>Statut</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="questionsTable">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notifications Section -->
+            <section id="section-notifications" class="section">
+                <div class="page-header">
+                    <div>
+                        <h1>Notifications</h1>
+                        <p>Envoyez des messages aux membres de la communaut&#233;</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openNotificationModal()">
+                        + Nouvelle notification
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Type</th>
+                                        <th>Destinataires</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="notificationsTable">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Events Section -->
+            <section id="section-events" class="section">
+                <div class="page-header">
+                    <div>
+                        <h1>&#201;v&#233;nements</h1>
+                        <p>G&#233;rez les &#233;v&#233;nements communautaires</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openEventModal()">
+                        + Nouvel &#233;v&#233;nement
+                    </button>
+                </div>
+
+                <div class="stats-grid" style="margin-bottom: 2rem;">
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(85, 40, 255, 0.1); color: var(--primary);">&#128197;</div>
+                        <h3 id="totalEvents">0</h3>
+                        <p>&#201;v&#233;nements &#224; venir</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(39, 183, 130, 0.1); color: var(--secondary);">&#128101;</div>
+                        <h3 id="totalRegistrations">0</h3>
+                        <p>Inscriptions totales</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(234, 78, 27, 0.1); color: var(--accent);">&#9734;</div>
+                        <h3 id="avgAttendance">0%</h3>
+                        <p>Taux de participation moy.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>&#201;v&#233;nement</th>
+                                        <th>Date</th>
+                                        <th>Lieu</th>
+                                        <th>Inscrits</th>
+                                        <th>Statut</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="eventsTable">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Proposals Section -->
+            <section id="section-proposals" class="section">
+                <div class="page-header">
+                    <div>
+                        <h1>Propositions citoyennes</h1>
+                        <p>Mod&#233;rez et suivez les propositions des membres</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid" style="margin-bottom: 2rem;">
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(85, 40, 255, 0.1); color: var(--primary);">&#128161;</div>
+                        <h3 id="totalProposals">0</h3>
+                        <p>Propositions actives</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(39, 183, 130, 0.1); color: var(--secondary);">&#128077;</div>
+                        <h3 id="totalVotes">0</h3>
+                        <p>Votes exprim&#233;s</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon" style="background: rgba(234, 78, 27, 0.1); color: var(--accent);">&#9989;</div>
+                        <h3 id="implementedProposals">0</h3>
+                        <p>Propositions r&#233;alis&#233;es</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div style="display: flex; gap: 1rem;">
+                            <select id="filterProposalStatus" onchange="filterProposals()" style="padding: 0.5rem; border-radius: 6px; border: 1px solid var(--light-gray);">
+                                <option value="">Tous les statuts</option>
+                                <option value="pending">En attente</option>
+                                <option value="approved">Approuv&#233;es</option>
+                                <option value="implemented">R&#233;alis&#233;es</option>
+                                <option value="rejected">Rejet&#233;es</option>
+                            </select>
+                            <select id="filterProposalCategory" onchange="filterProposals()" style="padding: 0.5rem; border-radius: 6px; border: 1px solid var(--light-gray);">
+                                <option value="">Toutes cat&#233;gories</option>
+                                <option value="ecology">&#201;cologie</option>
+                                <option value="mobility">Mobilit&#233;</option>
+                                <option value="local">Vie locale</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Proposition</th>
+                                        <th>Auteur</th>
+                                        <th>Cat&#233;gorie</th>
+                                        <th>Votes</th>
+                                        <th>Statut</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="proposalsTable">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Members Section -->
+            <section id="section-members" class="section">
+                <div class="page-header">
+                    <div>
+                        <h1>Membres</h1>
+                        <p>Liste des citoyens inscrits &#224; la communaut&#233;</p>
+                    </div>
+                    <button class="btn btn-outline" onclick="exportMembers()">
+                        &#128229; Exporter
+                    </button>
+                </div>
+
+                <!-- Map Card -->
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-header">
+                        <h2>&#128205; R&#233;partition g&#233;ographique</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="membersMap" style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                            <!-- Dynamic map representation -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div style="display: flex; gap: 1rem;">
+                            <select id="filterCity" onchange="filterMembers()" style="padding: 0.5rem; border-radius: 6px; border: 1px solid var(--light-gray);">
+                                <option value="">Toutes les communes</option>
+                                <option value="Bayonne">Bayonne</option>
+                                <option value="Biarritz">Biarritz</option>
+                                <option value="Anglet">Anglet</option>
+                                <option value="Saint-Jean-de-Luz">Saint-Jean-de-Luz</option>
+                            </select>
+                            <input type="text" id="searchMembers" placeholder="Rechercher..." onkeyup="filterMembers()" style="padding: 0.5rem; border-radius: 6px; border: 1px solid var(--light-gray);">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Email</th>
+                                        <th>Commune</th>
+                                        <th>Niveau</th>
+                                        <th>Profil</th>
+                                        <th>Inscription</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="membersTable">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Question Modal -->
+    <div class="modal-overlay" id="questionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nouvelle question</h3>
+                <button class="modal-close" onclick="closeQuestionModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="questionForm">
+                    <div class="form-group">
+                        <label>Titre de la question</label>
+                        <input type="text" id="qTitle" required placeholder="Ex: Composteurs collectifs">
+                    </div>
+                    <div class="form-group">
+                        <label>Question compl&#232;te</label>
+                        <textarea id="qQuestion" required placeholder="&#202;tes-vous favorable &#224;..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Cat&#233;gorie</label>
+                        <select id="qCategory">
+                            <option value="ecology">&#201;cologie</option>
+                            <option value="mobility">Mobilit&#233;</option>
+                            <option value="local">Vie locale</option>
+                            <option value="food">Alimentation</option>
+                            <option value="energy">&#201;nergie</option>
+                            <option value="other">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Options de r&#233;ponse</label>
+                        <div class="options-builder" id="optionsBuilder">
+                            <div class="option-item">
+                                <input type="text" placeholder="Option 1" class="option-input">
+                                <button type="button" class="btn btn-ghost btn-sm" onclick="removeOption(this)">&#10005;</button>
+                            </div>
+                            <div class="option-item">
+                                <input type="text" placeholder="Option 2" class="option-input">
+                                <button type="button" class="btn btn-ghost btn-sm" onclick="removeOption(this)">&#10005;</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline btn-sm add-option-btn" onclick="addOption()">
+                            + Ajouter une option
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label>Cibler une commune sp&#233;cifique</label>
+                        <select id="qCity">
+                            <option value="">Tous les membres</option>
+                            <option value="Bayonne">Bayonne uniquement</option>
+                            <option value="Biarritz">Biarritz uniquement</option>
+                            <option value="Anglet">Anglet uniquement</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeQuestionModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="saveQuestion()">Cr&#233;er et notifier</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div class="modal-overlay" id="notificationModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nouvelle notification</h3>
+                <button class="modal-close" onclick="closeNotificationModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="notificationForm">
+                    <div class="form-group">
+                        <label>Type de notification</label>
+                        <select id="nType">
+                            <option value="info">&#128161; Information</option>
+                            <option value="reminder">&#128276; Rappel</option>
+                            <option value="event">&#128197; &#201;v&#233;nement</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Titre</label>
+                        <input type="text" id="nTitle" required placeholder="Titre de la notification">
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea id="nMessage" required placeholder="Contenu du message..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Destinataires</label>
+                        <div class="target-selector" id="targetSelector">
+                            <span class="target-chip selected" data-target="all" onclick="toggleTarget(this)">Tous les membres</span>
+                            <span class="target-chip" data-target="Bayonne" onclick="toggleTarget(this)">Bayonne</span>
+                            <span class="target-chip" data-target="Biarritz" onclick="toggleTarget(this)">Biarritz</span>
+                            <span class="target-chip" data-target="Anglet" onclick="toggleTarget(this)">Anglet</span>
+                            <span class="target-chip" data-target="incomplete" onclick="toggleTarget(this)">Profils incomplets</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeNotificationModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="sendNotification()">Envoyer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Nouvel &#233;v&#233;nement</h3>
+                <button class="modal-close" onclick="closeEventModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="eventForm">
+                    <div class="form-group">
+                        <label>Titre de l'&#233;v&#233;nement</label>
+                        <input type="text" id="eTitle" required placeholder="Ex: Cleanwalk Plage de la Milady">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="eDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Heure</label>
+                            <input type="time" id="eTime" value="10:00">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Lieu</label>
+                        <input type="text" id="eLocation" required placeholder="Ex: Biarritz">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="eDescription" placeholder="D&#233;crivez l'&#233;v&#233;nement..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Cat&#233;gorie</label>
+                            <select id="eCategory">
+                                <option value="cleanup">&#127754; Nettoyage</option>
+                                <option value="workshop">&#128736; Atelier</option>
+                                <option value="meeting">&#128101; Rencontre</option>
+                                <option value="garden">&#127793; Jardinage</option>
+                                <option value="mobility">&#128690; Mobilit&#233;</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Capacit&#233; max</label>
+                            <input type="number" id="eCapacity" value="30" min="1">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeEventModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="saveEvent()">Cr&#233;er l'&#233;v&#233;nement</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proposal Detail Modal -->
+    <div class="modal-overlay" id="proposalModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>D&#233;tail de la proposition</h3>
+                <button class="modal-close" onclick="closeProposalModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="proposalModalContent">
+                <!-- Dynamic -->
+            </div>
+            <div class="modal-footer" id="proposalModalActions">
+                <!-- Dynamic -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span id="toastMessage">Message</span>
+    </div>
+
+    <script>
+        // =====================================================
+        // CONFIGURATION SUPABASE
+        // =====================================================
+        const SUPABASE_URL = 'VOTRE_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'VOTRE_SUPABASE_ANON_KEY';
+
+        let db = null;
+        let isSupabaseConfigured = false;
+
+        function initSupabase() {
+            if (SUPABASE_URL !== 'VOTRE_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'VOTRE_SUPABASE_ANON_KEY') {
+                db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                isSupabaseConfigured = true;
+            }
+        }
+
+        // State
+        let members = [];
+        let questions = [];
+        let notifications = [];
+        let events = [];
+        let proposals = [];
+        let charts = {};
+
+        // Demo data
+        const demoMembers = [
+            { id: 1, firstname: 'Marie', lastname: 'Dupont', email: 'marie@email.com', city: 'Bayonne', age_range: '26-35', created_at: '2026-01-15', transport_modes: ['bike', 'public'], interests: ['climate', 'food'], skills: ['gardening'], completion: 78, level: 4, xp: 280 },
+            { id: 2, firstname: 'Pierre', lastname: 'Martin', email: 'pierre@email.com', city: 'Biarritz', age_range: '36-45', created_at: '2026-01-14', transport_modes: ['car', 'walk'], interests: ['biodiversity', 'energy'], skills: ['diy'], completion: 65, level: 3, xp: 180 },
+            { id: 3, firstname: 'Sophie', lastname: 'Bernard', email: 'sophie@email.com', city: 'Anglet', age_range: '18-25', created_at: '2026-01-13', transport_modes: ['public', 'bike'], interests: ['mobility', 'waste'], skills: ['tech'], completion: 90, level: 5, xp: 420 },
+            { id: 4, firstname: 'Jean', lastname: 'Durand', email: 'jean@email.com', city: 'Bayonne', age_range: '46-55', created_at: '2026-01-12', transport_modes: ['car'], interests: ['water', 'democracy'], skills: ['organization'], completion: 45, level: 2, xp: 85 },
+            { id: 5, firstname: 'Claire', lastname: 'Petit', email: 'claire@email.com', city: 'Saint-Jean-de-Luz', age_range: '26-35', created_at: '2026-01-11', transport_modes: ['walk', 'bike'], interests: ['food', 'climate'], skills: ['cooking'], completion: 82, level: 4, xp: 310 },
+            { id: 6, firstname: 'Thomas', lastname: 'Etcheverry', email: 'thomas@email.com', city: 'Bayonne', age_range: '26-35', created_at: '2026-01-10', transport_modes: ['bike'], interests: ['climate', 'mobility'], skills: ['tech'], completion: 95, level: 6, xp: 580 },
+            { id: 7, firstname: 'Laura', lastname: 'Mendez', email: 'laura@email.com', city: 'Biarritz', age_range: '18-25', created_at: '2026-01-09', transport_modes: ['public', 'walk'], interests: ['biodiversity'], skills: ['communication'], completion: 70, level: 3, xp: 165 },
+            { id: 8, firstname: 'Antoine', lastname: 'Lacoste', email: 'antoine@email.com', city: 'Anglet', age_range: '36-45', created_at: '2026-01-08', transport_modes: ['car', 'bike'], interests: ['energy', 'food'], skills: ['diy'], completion: 55, level: 2, xp: 95 },
+        ];
+
+        const demoEvents = [
+            { id: 1, title: 'Cleanwalk Plage de la Milady', date: '2026-02-01', time: '10:00', location: 'Biarritz', category: 'cleanup', description: 'Nettoyage collectif de la plage', capacity: 30, attendees: 23, status: 'upcoming' },
+            { id: 2, title: 'Atelier compost collectif', date: '2026-02-08', time: '14:00', location: 'Bayonne', category: 'workshop', description: 'Apprenez a faire votre compost', capacity: 20, attendees: 18, status: 'upcoming' },
+            { id: 3, title: 'Balade velo decouverte', date: '2026-02-15', time: '09:30', location: 'Anglet', category: 'mobility', description: 'Decouverte des pistes cyclables', capacity: 25, attendees: 12, status: 'upcoming' },
+            { id: 4, title: 'Rencontre mensuelle', date: '2026-01-25', time: '18:00', location: 'Bayonne', category: 'meeting', description: 'Reunion des membres', capacity: 50, attendees: 34, status: 'upcoming' },
+            { id: 5, title: 'Plantation arbres', date: '2026-01-10', time: '10:00', location: 'Saint-Jean-de-Luz', category: 'garden', description: 'Plantation participative', capacity: 40, attendees: 38, status: 'past' },
+        ];
+
+        const demoProposals = [
+            { id: 1, title: 'Jardin partage quartier Saint-Esprit', description: 'Creation d\'un jardin partage dans le quartier Saint-Esprit a Bayonne', author: 'Marie D.', authorId: 1, category: 'ecology', votes: 34, downvotes: 3, status: 'approved', created_at: '2026-01-05' },
+            { id: 2, title: 'Piste cyclable Avenue de Bayonne', description: 'Demande d\'amenagement d\'une piste cyclable securisee sur l\'avenue de Bayonne a Anglet', author: 'Sophie B.', authorId: 3, category: 'mobility', votes: 56, downvotes: 8, status: 'pending', created_at: '2026-01-10' },
+            { id: 3, title: 'Marche local le dimanche', description: 'Organisation d\'un marche de producteurs locaux tous les dimanches matin', author: 'Claire P.', authorId: 5, category: 'local', votes: 42, downvotes: 5, status: 'implemented', created_at: '2025-12-15' },
+            { id: 4, title: 'Fontaines a eau publiques', description: 'Installation de fontaines a eau potable dans les espaces publics pour reduire les bouteilles plastique', author: 'Thomas E.', authorId: 6, category: 'ecology', votes: 28, downvotes: 2, status: 'pending', created_at: '2026-01-12' },
+            { id: 5, title: 'Repair cafe mensuel', description: 'Creation d\'un repair cafe mensuel pour reparer plutot que jeter', author: 'Pierre M.', authorId: 2, category: 'local', votes: 19, downvotes: 1, status: 'approved', created_at: '2026-01-08' },
+        ];
+
+        // Level names for display
+        const levelNames = ['', 'Nouveau membre', 'Citoyen curieux', 'Citoyen engage', 'Eco-acteur', 'Eco-leader', 'Eco-ambassadeur', 'Eco-champion'];
+
+        const demoQuestions = [
+            { id: 1, title: 'Composteurs collectifs', question: 'Etes-vous favorable a l\'installation de composteurs collectifs ?', category: 'ecology', options: ['Oui', 'Plutot oui', 'Plutot non', 'Non'], active: true, responses: 42 },
+            { id: 2, title: 'Mobilite alternative', question: 'Quel mode de transport alternatif souhaitez-vous ?', category: 'mobility', options: ['Pistes cyclables', 'Bus', 'Covoiturage', 'Navettes'], active: true, responses: 38 },
+            { id: 3, title: 'Marches locaux', question: 'Souhaitez-vous plus de marches de producteurs ?', category: 'local', options: ['Oui samedi', 'Oui dimanche', 'Non'], active: false, responses: 56 },
+        ];
+
+        const demoNotifications = [
+            { id: 1, title: 'Bienvenue !', type: 'info', target: 'all', created_at: '2026-01-10', count: 156 },
+            { id: 2, title: 'Completez votre profil', type: 'reminder', target: 'incomplete', created_at: '2026-01-15', count: 45 },
+            { id: 3, title: 'Nouvelle consultation', type: 'info', target: 'Bayonne', created_at: '2026-01-18', count: 32 },
+        ];
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            initSupabase();
+
+            // Check if already logged in (demo mode)
+            const isAdmin = localStorage.getItem('ecoprofil_admin');
+            if (isAdmin) {
+                showAdminDashboard();
+            }
+        });
+
+        // Auth
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+
+            if (isSupabaseConfigured) {
+                // Verifier que c'est un admin
+                const { data, error } = await db.auth.signInWithPassword({ email, password });
+                if (error) {
+                    showToast('Email ou mot de passe incorrect', 'error');
+                    return;
+                }
+                // TODO: verifier le role admin dans la BDD
+            }
+
+            localStorage.setItem('ecoprofil_admin', 'true');
+            showAdminDashboard();
+        }
+
+        function handleAdminLogout() {
+            localStorage.removeItem('ecoprofil_admin');
+            document.getElementById('loginView').style.display = 'flex';
+            document.getElementById('adminView').style.display = 'none';
+        }
+
+        async function showAdminDashboard() {
+            document.getElementById('loginView').style.display = 'none';
+            document.getElementById('adminView').style.display = 'grid';
+
+            try {
+                await loadAllData();
+                renderDashboard();
+                // Charts will be rendered when stats section is shown
+            } catch (err) {
+                console.error('Erreur chargement:', err);
+                showToast('Erreur lors du chargement', 'error');
+            }
+        }
+
+        async function loadAllData() {
+            if (isSupabaseConfigured) {
+                // Charger depuis Supabase
+                const { data: membersData } = await db.from('profiles').select('*');
+                const { data: questionsData } = await db.from('questions').select('*');
+                const { data: responsesData } = await db.from('responses').select('*');
+
+                members = membersData || [];
+                questions = questionsData || [];
+                // Calculer les reponses par question...
+            } else {
+                // Mode demo
+                members = demoMembers;
+                questions = demoQuestions;
+                notifications = demoNotifications;
+                events = demoEvents;
+                proposals = demoProposals;
+            }
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-' + sectionId).classList.add('active');
+
+            document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+            event.target.closest('a').classList.add('active');
+
+            // Re-render charts if stats
+            if (sectionId === 'stats') {
+                setTimeout(renderCharts, 100);
+            }
+        }
+
+        // Dashboard
+        function renderDashboard() {
+            // Stats
+            document.getElementById('totalMembers').textContent = members.length;
+            document.getElementById('totalResponses').textContent = questions.reduce((sum, q) => sum + (q.responses || 0), 0);
+            document.getElementById('avgCompletion').textContent = Math.round(members.reduce((sum, m) => sum + (m.completion || 50), 0) / members.length) + '%';
+            document.getElementById('activeQuestions').textContent = questions.filter(q => q.active).length;
+
+            // Recent members
+            document.getElementById('recentMembers').innerHTML = members.slice(0, 5).map(m => `
+                <tr>
+                    <td>${m.firstname} ${m.lastname}</td>
+                    <td>${m.city || '-'}</td>
+                    <td>${formatDate(m.created_at)}</td>
+                </tr>
+            `).join('');
+
+            // Recent questions
+            document.getElementById('recentQuestions').innerHTML = questions.slice(0, 5).map(q => `
+                <tr>
+                    <td>${q.title}</td>
+                    <td>${q.responses || 0}</td>
+                    <td><span class="badge ${q.active ? 'badge-green' : 'badge-gray'}">${q.active ? 'Active' : 'Terminee'}</span></td>
+                </tr>
+            `).join('');
+
+            // Questions table
+            document.getElementById('questionsTable').innerHTML = questions.map(q => `
+                <tr>
+                    <td>${q.title}</td>
+                    <td><span class="badge badge-purple">${getCategoryLabel(q.category)}</span></td>
+                    <td>${q.responses || 0}</td>
+                    <td><span class="badge ${q.active ? 'badge-green' : 'badge-gray'}">${q.active ? 'Active' : 'Terminee'}</span></td>
+                    <td>
+                        <button class="btn btn-ghost btn-sm" onclick="viewQuestionResults(${q.id})">Resultats</button>
+                        <button class="btn btn-ghost btn-sm" onclick="toggleQuestion(${q.id})">${q.active ? 'Desactiver' : 'Activer'}</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Notifications table
+            document.getElementById('notificationsTable').innerHTML = notifications.map(n => `
+                <tr>
+                    <td>${n.title}</td>
+                    <td><span class="badge badge-${n.type === 'info' ? 'purple' : n.type === 'reminder' ? 'orange' : 'green'}">${n.type}</span></td>
+                    <td>${n.count || 0} membres</td>
+                    <td>${formatDate(n.created_at)}</td>
+                </tr>
+            `).join('');
+
+            // Members table
+            renderMembersTable();
+        }
+
+        function renderMembersTable() {
+            const filterCity = document.getElementById('filterCity')?.value || '';
+            const search = document.getElementById('searchMembers')?.value?.toLowerCase() || '';
+
+            const filtered = members.filter(m => {
+                if (filterCity && m.city !== filterCity) return false;
+                if (search && !`${m.firstname} ${m.lastname} ${m.email}`.toLowerCase().includes(search)) return false;
+                return true;
+            });
+
+            document.getElementById('membersTable').innerHTML = filtered.map(m => `
+                <tr>
+                    <td>${m.firstname} ${m.lastname}</td>
+                    <td>${m.email}</td>
+                    <td>${m.city || '-'}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 60px; height: 6px; background: var(--light-gray); border-radius: 3px; overflow: hidden;">
+                                <div style="width: ${m.completion || 0}%; height: 100%; background: ${(m.completion || 0) > 70 ? 'var(--secondary)' : 'var(--accent)'};"></div>
+                            </div>
+                            <span style="font-size: 0.8rem; color: var(--gray);">${m.completion || 0}%</span>
+                        </div>
+                    </td>
+                    <td>${formatDate(m.created_at)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function filterMembers() {
+            renderMembersTable();
+        }
+
+        // Charts
+        function renderCharts() {
+            // Check if canvas elements exist and are visible
+            const cityCanvas = document.getElementById('cityChart');
+            if (!cityCanvas || cityCanvas.offsetParent === null) {
+                return; // Canvas not visible, skip rendering
+            }
+
+            // Destroy existing charts
+            Object.values(charts).forEach(c => c.destroy?.());
+
+            // Update stats metrics
+            const avgCompletion = Math.round(members.reduce((sum, m) => sum + (m.completion || 50), 0) / members.length);
+            const avgLevel = (members.reduce((sum, m) => sum + (m.level || 1), 0) / members.length).toFixed(1);
+            const totalEventCapacity = events.reduce((sum, e) => sum + e.capacity, 0);
+            const totalEventAttendees = events.reduce((sum, e) => sum + e.attendees, 0);
+            const eventParticipation = totalEventCapacity > 0 ? Math.round((totalEventAttendees / totalEventCapacity) * 100) : 0;
+
+            document.getElementById('engagementRate').textContent = avgCompletion + '%';
+            document.getElementById('avgLevel').textContent = avgLevel;
+            document.getElementById('eventParticipation').textContent = eventParticipation + '%';
+            document.getElementById('proposalActivity').textContent = proposals.length;
+
+            // City distribution
+            const cityCounts = {};
+            members.forEach(m => {
+                if (m.city) cityCounts[m.city] = (cityCounts[m.city] || 0) + 1;
+            });
+
+            charts.city = new Chart(document.getElementById('cityChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(cityCounts),
+                    datasets: [{
+                        data: Object.values(cityCounts),
+                        backgroundColor: ['#5528ff', '#27b782', '#ea4e1b', '#f59e0b', '#8b5cf6']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right' } }
+                }
+            });
+
+            // Transport modes
+            const transportCounts = {};
+            members.forEach(m => {
+                (m.transport_modes || []).forEach(t => {
+                    transportCounts[t] = (transportCounts[t] || 0) + 1;
+                });
+            });
+
+            charts.transport = new Chart(document.getElementById('transportChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(transportCounts).map(getTransportLabel),
+                    datasets: [{
+                        label: 'Utilisateurs',
+                        data: Object.values(transportCounts),
+                        backgroundColor: '#5528ff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // Interests
+            const interestsCounts = {};
+            members.forEach(m => {
+                (m.interests || []).forEach(i => {
+                    interestsCounts[i] = (interestsCounts[i] || 0) + 1;
+                });
+            });
+
+            charts.interests = new Chart(document.getElementById('interestsChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(interestsCounts).map(getInterestLabel),
+                    datasets: [{
+                        label: 'Membres interesses',
+                        data: Object.values(interestsCounts),
+                        backgroundColor: '#27b782'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // Age distribution
+            const ageCounts = {};
+            members.forEach(m => {
+                if (m.age_range) ageCounts[m.age_range] = (ageCounts[m.age_range] || 0) + 1;
+            });
+
+            charts.age = new Chart(document.getElementById('ageChart'), {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(ageCounts),
+                    datasets: [{
+                        data: Object.values(ageCounts),
+                        backgroundColor: ['#5528ff', '#27b782', '#ea4e1b', '#f59e0b', '#8b5cf6', '#06b6d4']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right' } }
+                }
+            });
+
+            // Level distribution chart
+            const levelCounts = {};
+            members.forEach(m => {
+                const lvl = m.level || 1;
+                const lvlName = levelNames[lvl] || `Niveau ${lvl}`;
+                levelCounts[lvlName] = (levelCounts[lvlName] || 0) + 1;
+            });
+
+            charts.level = new Chart(document.getElementById('levelChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(levelCounts),
+                    datasets: [{
+                        label: 'Membres',
+                        data: Object.values(levelCounts),
+                        backgroundColor: ['#e2e8f0', '#bfdbfe', '#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // Activity chart (simulated monthly data)
+            const months = ['Sept', 'Oct', 'Nov', 'Dec', 'Jan'];
+            const activityData = {
+                inscriptions: [3, 5, 8, 12, 15],
+                reponses: [12, 18, 25, 35, 45],
+                participations: [8, 12, 20, 28, 38]
+            };
+
+            charts.activity = new Chart(document.getElementById('activityChart'), {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Inscriptions',
+                            data: activityData.inscriptions,
+                            borderColor: '#5528ff',
+                            backgroundColor: 'rgba(85, 40, 255, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Reponses',
+                            data: activityData.reponses,
+                            borderColor: '#27b782',
+                            backgroundColor: 'rgba(39, 183, 130, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Participations',
+                            data: activityData.participations,
+                            borderColor: '#ea4e1b',
+                            backgroundColor: 'rgba(234, 78, 27, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+
+            // Render top contributors
+            const topMembers = [...members].sort((a, b) => (b.xp || 0) - (a.xp || 0)).slice(0, 5);
+            document.getElementById('topContributors').innerHTML = topMembers.map((m, i) => `
+                <div style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; ${i < topMembers.length - 1 ? 'border-bottom: 1px solid var(--light-gray);' : ''}">
+                    <div style="width: 32px; height: 32px; background: ${i === 0 ? '#f59e0b' : i === 1 ? '#9ca3af' : i === 2 ? '#b45309' : 'var(--light-gray)'}; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
+                        ${i + 1}
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">${m.firstname} ${m.lastname}</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">${m.city || 'Non renseigne'} - ${levelNames[m.level] || 'Nouveau'}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 700; color: var(--primary);">${m.xp || 0} XP</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render response summary
+            const totalResponses = questions.reduce((sum, q) => sum + (q.responses || 0), 0);
+            document.getElementById('responseSummary').innerHTML = questions.map(q => {
+                const pct = totalResponses > 0 ? Math.round((q.responses || 0) / totalResponses * 100) : 0;
+                return `
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <span style="font-size: 0.9rem;">${q.title}</span>
+                            <span style="font-weight: 500;">${q.responses || 0}</span>
+                        </div>
+                        <div style="height: 8px; background: var(--light-gray); border-radius: 4px; overflow: hidden;">
+                            <div style="width: ${pct}%; height: 100%; background: var(--primary); border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Export stats function
+        function exportStats() {
+            const report = `
+RAPPORT STATISTIQUES ECOPROFIL
+==============================
+Date: ${new Date().toLocaleDateString('fr-FR')}
+
+MEMBRES
+-------
+Total: ${members.length}
+Niveau moyen: ${(members.reduce((sum, m) => sum + (m.level || 1), 0) / members.length).toFixed(1)}
+Profil moyen: ${Math.round(members.reduce((sum, m) => sum + (m.completion || 50), 0) / members.length)}%
+
+REPARTITION PAR COMMUNE
+-----------------------
+${Object.entries(members.reduce((acc, m) => { if(m.city) acc[m.city] = (acc[m.city] || 0) + 1; return acc; }, {})).map(([city, count]) => `${city}: ${count} membres`).join('\n')}
+
+EVENEMENTS
+----------
+Total: ${events.length}
+Inscrits: ${events.reduce((sum, e) => sum + e.attendees, 0)}
+
+PROPOSITIONS
+------------
+Total: ${proposals.length}
+Realisees: ${proposals.filter(p => p.status === 'implemented').length}
+
+QUESTIONS
+---------
+${questions.map(q => `${q.title}: ${q.responses || 0} reponses`).join('\n')}
+            `.trim();
+
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ecoprofil-rapport-stats.txt';
+            a.click();
+            showToast('Rapport exporte !', 'success');
+        }
+
+        // Question Modal
+        function openQuestionModal() {
+            document.getElementById('questionModal').classList.add('active');
+        }
+
+        function closeQuestionModal() {
+            document.getElementById('questionModal').classList.remove('active');
+            document.getElementById('questionForm').reset();
+            // Reset options
+            document.getElementById('optionsBuilder').innerHTML = `
+                <div class="option-item">
+                    <input type="text" placeholder="Option 1" class="option-input">
+                    <button type="button" class="btn btn-ghost btn-sm" onclick="removeOption(this)">&#10005;</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" placeholder="Option 2" class="option-input">
+                    <button type="button" class="btn btn-ghost btn-sm" onclick="removeOption(this)">&#10005;</button>
+                </div>
+            `;
+        }
+
+        function addOption() {
+            const builder = document.getElementById('optionsBuilder');
+            const count = builder.querySelectorAll('.option-item').length + 1;
+            const div = document.createElement('div');
+            div.className = 'option-item';
+            div.innerHTML = `
+                <input type="text" placeholder="Option ${count}" class="option-input">
+                <button type="button" class="btn btn-ghost btn-sm" onclick="removeOption(this)">&#10005;</button>
+            `;
+            builder.appendChild(div);
+        }
+
+        function removeOption(btn) {
+            const items = document.querySelectorAll('.option-item');
+            if (items.length > 2) {
+                btn.parentElement.remove();
+            }
+        }
+
+        async function saveQuestion() {
+            const title = document.getElementById('qTitle').value;
+            const question = document.getElementById('qQuestion').value;
+            const category = document.getElementById('qCategory').value;
+            const city = document.getElementById('qCity').value;
+            const options = Array.from(document.querySelectorAll('.option-input'))
+                .map(i => i.value)
+                .filter(v => v.trim());
+
+            if (!title || !question || options.length < 2) {
+                showToast('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+
+            const newQuestion = {
+                id: questions.length + 1,
+                title,
+                question,
+                category,
+                city: city || null,
+                options,
+                active: true,
+                responses: 0,
+                created_at: new Date().toISOString()
+            };
+
+            if (isSupabaseConfigured) {
+                const { error } = await db.from('questions').insert({
+                    title,
+                    question,
+                    category,
+                    city: city || null,
+                    options: JSON.stringify(options),
+                    active: true
+                });
+
+                if (error) {
+                    showToast('Erreur lors de la creation', 'error');
+                    return;
+                }
+
+                // Envoyer notifications aux membres cibles
+                const targetMembers = city
+                    ? members.filter(m => m.city === city)
+                    : members;
+
+                for (const member of targetMembers) {
+                    await db.from('notifications').insert({
+                        user_id: member.id,
+                        type: 'question',
+                        title: 'Nouvelle consultation',
+                        message: title,
+                        question_id: newQuestion.id
+                    });
+                }
+            }
+
+            questions.push(newQuestion);
+            closeQuestionModal();
+            renderDashboard();
+            showToast('Question creee et notifications envoyees !', 'success');
+        }
+
+        function toggleQuestion(id) {
+            const q = questions.find(q => q.id === id);
+            if (q) {
+                q.active = !q.active;
+                renderDashboard();
+                showToast(q.active ? 'Question activee' : 'Question desactivee', 'success');
+            }
+        }
+
+        function viewQuestionResults(id) {
+            // TODO: modal avec resultats detailles
+            showToast('Fonctionnalite a venir', '');
+        }
+
+        // Notification Modal
+        function openNotificationModal() {
+            document.getElementById('notificationModal').classList.add('active');
+        }
+
+        function closeNotificationModal() {
+            document.getElementById('notificationModal').classList.remove('active');
+            document.getElementById('notificationForm').reset();
+            // Reset targets
+            document.querySelectorAll('.target-chip').forEach(c => c.classList.remove('selected'));
+            document.querySelector('.target-chip[data-target="all"]').classList.add('selected');
+        }
+
+        function toggleTarget(chip) {
+            const target = chip.dataset.target;
+            if (target === 'all') {
+                document.querySelectorAll('.target-chip').forEach(c => c.classList.remove('selected'));
+                chip.classList.add('selected');
+            } else {
+                document.querySelector('.target-chip[data-target="all"]').classList.remove('selected');
+                chip.classList.toggle('selected');
+            }
+        }
+
+        async function sendNotification() {
+            const type = document.getElementById('nType').value;
+            const title = document.getElementById('nTitle').value;
+            const message = document.getElementById('nMessage').value;
+
+            const selectedTargets = Array.from(document.querySelectorAll('.target-chip.selected'))
+                .map(c => c.dataset.target);
+
+            if (!title || !message) {
+                showToast('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+
+            // Determiner les destinataires
+            let targetMembers = members;
+            if (!selectedTargets.includes('all')) {
+                targetMembers = members.filter(m => {
+                    if (selectedTargets.includes('incomplete') && (m.completion || 0) < 70) return true;
+                    if (selectedTargets.includes(m.city)) return true;
+                    return false;
+                });
+            }
+
+            if (isSupabaseConfigured) {
+                for (const member of targetMembers) {
+                    await db.from('notifications').insert({
+                        user_id: member.id,
+                        type,
+                        title,
+                        message
+                    });
+                }
+            }
+
+            notifications.unshift({
+                id: notifications.length + 1,
+                title,
+                type,
+                target: selectedTargets.join(', '),
+                created_at: new Date().toISOString(),
+                count: targetMembers.length
+            });
+
+            closeNotificationModal();
+            renderDashboard();
+            showToast(`Notification envoyee a ${targetMembers.length} membres !`, 'success');
+        }
+
+        // Export
+        function exportMembers() {
+            const csv = [
+                ['Nom', 'Email', 'Commune', 'Age', 'Profil %', 'Inscription'].join(','),
+                ...members.map(m => [
+                    `${m.firstname} ${m.lastname}`,
+                    m.email,
+                    m.city || '',
+                    m.age_range || '',
+                    m.completion || 0,
+                    m.created_at
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ecoprofil-membres.csv';
+            a.click();
+            showToast('Export telecharge !', 'success');
+        }
+
+        // Helpers
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            return new Date(dateStr).toLocaleDateString('fr-FR');
+        }
+
+        function getCategoryLabel(cat) {
+            const labels = {
+                ecology: 'Ecologie',
+                mobility: 'Mobilite',
+                local: 'Vie locale',
+                food: 'Alimentation',
+                energy: 'Energie',
+                other: 'Autre'
+            };
+            return labels[cat] || cat;
+        }
+
+        function getTransportLabel(t) {
+            const labels = {
+                car: 'Voiture',
+                bike: 'Velo',
+                public: 'Transports',
+                walk: 'Marche',
+                carpool: 'Covoiturage',
+                ebike: 'VAE'
+            };
+            return labels[t] || t;
+        }
+
+        function getInterestLabel(i) {
+            const labels = {
+                climate: 'Climat',
+                biodiversity: 'Biodiversite',
+                food: 'Alimentation',
+                energy: 'Energie',
+                mobility: 'Mobilite',
+                waste: 'Dechets',
+                water: 'Eau',
+                democracy: 'Democratie'
+            };
+            return labels[i] || i;
+        }
+
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toast');
+            toast.className = 'toast show ' + type;
+            document.getElementById('toastMessage').textContent = message;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // =====================================================
+        // EVENTS MANAGEMENT
+        // =====================================================
+        function renderEventsSection() {
+            const upcomingEvents = events.filter(e => e.status === 'upcoming');
+            const totalRegistrations = events.reduce((sum, e) => sum + (e.attendees || 0), 0);
+            const avgAttendance = events.length > 0
+                ? Math.round(events.reduce((sum, e) => sum + ((e.attendees / e.capacity) * 100), 0) / events.length)
+                : 0;
+
+            document.getElementById('totalEvents').textContent = upcomingEvents.length;
+            document.getElementById('totalRegistrations').textContent = totalRegistrations;
+            document.getElementById('avgAttendance').textContent = avgAttendance + '%';
+
+            document.getElementById('eventsTable').innerHTML = events.map(e => `
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="font-size: 1.25rem;">${getEventIcon(e.category)}</span>
+                            <span>${e.title}</span>
+                        </div>
+                    </td>
+                    <td>${formatDate(e.date)} ${e.time}</td>
+                    <td>${e.location}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span>${e.attendees}/${e.capacity}</span>
+                            <div style="width: 60px; height: 6px; background: var(--light-gray); border-radius: 3px; overflow: hidden;">
+                                <div style="width: ${Math.min((e.attendees / e.capacity) * 100, 100)}%; height: 100%; background: ${e.attendees >= e.capacity ? 'var(--accent)' : 'var(--secondary)'};"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge ${e.status === 'upcoming' ? 'badge-green' : 'badge-gray'}">${e.status === 'upcoming' ? 'A venir' : 'Passe'}</span></td>
+                    <td>
+                        <button class="btn btn-ghost btn-sm" onclick="viewEventDetails(${e.id})">Voir</button>
+                        <button class="btn btn-ghost btn-sm" onclick="notifyEventParticipants(${e.id})">Notifier</button>
+                        ${e.status === 'upcoming' ? `<button class="btn btn-ghost btn-sm" onclick="cancelEvent(${e.id})">Annuler</button>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getEventIcon(category) {
+            const icons = {
+                cleanup: '&#127754;',
+                workshop: '&#128736;',
+                meeting: '&#128101;',
+                garden: '&#127793;',
+                mobility: '&#128690;'
+            };
+            return icons[category] || '&#128197;';
+        }
+
+        function openEventModal() {
+            document.getElementById('eventModal').classList.add('active');
+            // Set minimum date to today
+            document.getElementById('eDate').min = new Date().toISOString().split('T')[0];
+        }
+
+        function closeEventModal() {
+            document.getElementById('eventModal').classList.remove('active');
+            document.getElementById('eventForm').reset();
+        }
+
+        function saveEvent() {
+            const title = document.getElementById('eTitle').value;
+            const date = document.getElementById('eDate').value;
+            const time = document.getElementById('eTime').value;
+            const location = document.getElementById('eLocation').value;
+            const description = document.getElementById('eDescription').value;
+            const category = document.getElementById('eCategory').value;
+            const capacity = parseInt(document.getElementById('eCapacity').value);
+
+            if (!title || !date || !location) {
+                showToast('Veuillez remplir tous les champs obligatoires', 'error');
+                return;
+            }
+
+            const newEvent = {
+                id: events.length + 1,
+                title,
+                date,
+                time,
+                location,
+                description,
+                category,
+                capacity,
+                attendees: 0,
+                status: 'upcoming',
+                created_at: new Date().toISOString()
+            };
+
+            events.unshift(newEvent);
+            closeEventModal();
+            renderEventsSection();
+            showToast('Evenement cree avec succes !', 'success');
+        }
+
+        function viewEventDetails(id) {
+            const event = events.find(e => e.id === id);
+            if (event) {
+                alert(`${event.title}\n\nDate: ${formatDate(event.date)} a ${event.time}\nLieu: ${event.location}\nInscrits: ${event.attendees}/${event.capacity}\n\n${event.description || 'Pas de description'}`);
+            }
+        }
+
+        function notifyEventParticipants(id) {
+            const event = events.find(e => e.id === id);
+            if (event) {
+                showToast(`Notification envoyee aux ${event.attendees} participants de "${event.title}"`, 'success');
+            }
+        }
+
+        function cancelEvent(id) {
+            if (confirm('Etes-vous sur de vouloir annuler cet evenement ?')) {
+                const eventIndex = events.findIndex(e => e.id === id);
+                if (eventIndex !== -1) {
+                    events.splice(eventIndex, 1);
+                    renderEventsSection();
+                    showToast('Evenement annule', 'success');
+                }
+            }
+        }
+
+        // =====================================================
+        // PROPOSALS MANAGEMENT
+        // =====================================================
+        function renderProposalsSection() {
+            const activeProposals = proposals.filter(p => p.status !== 'rejected');
+            const totalVotes = proposals.reduce((sum, p) => sum + p.votes + p.downvotes, 0);
+            const implementedCount = proposals.filter(p => p.status === 'implemented').length;
+
+            document.getElementById('totalProposals').textContent = activeProposals.length;
+            document.getElementById('totalVotes').textContent = totalVotes;
+            document.getElementById('implementedProposals').textContent = implementedCount;
+
+            renderProposalsTable();
+        }
+
+        function renderProposalsTable() {
+            const filterStatus = document.getElementById('filterProposalStatus')?.value || '';
+            const filterCategory = document.getElementById('filterProposalCategory')?.value || '';
+
+            const filtered = proposals.filter(p => {
+                if (filterStatus && p.status !== filterStatus) return false;
+                if (filterCategory && p.category !== filterCategory) return false;
+                return true;
+            });
+
+            document.getElementById('proposalsTable').innerHTML = filtered.map(p => `
+                <tr>
+                    <td>
+                        <div>
+                            <strong>${p.title}</strong>
+                            <div style="font-size: 0.8rem; color: var(--gray); max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                ${p.description}
+                            </div>
+                        </div>
+                    </td>
+                    <td>${p.author}</td>
+                    <td><span class="badge badge-purple">${getCategoryLabel(p.category)}</span></td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="color: var(--secondary);">&#128077; ${p.votes}</span>
+                            <span style="color: var(--accent);">&#128078; ${p.downvotes}</span>
+                        </div>
+                    </td>
+                    <td><span class="badge ${getProposalStatusBadge(p.status)}">${getProposalStatusLabel(p.status)}</span></td>
+                    <td>
+                        <button class="btn btn-ghost btn-sm" onclick="viewProposal(${p.id})">Voir</button>
+                        ${p.status === 'pending' ? `
+                            <button class="btn btn-sm" style="background: var(--secondary); color: white;" onclick="approveProposal(${p.id})">Approuver</button>
+                            <button class="btn btn-sm btn-danger" onclick="rejectProposal(${p.id})">Rejeter</button>
+                        ` : ''}
+                        ${p.status === 'approved' ? `
+                            <button class="btn btn-sm" style="background: var(--primary); color: white;" onclick="markImplemented(${p.id})">Marquer realise</button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterProposals() {
+            renderProposalsTable();
+        }
+
+        function getProposalStatusBadge(status) {
+            const badges = {
+                pending: 'badge-orange',
+                approved: 'badge-purple',
+                implemented: 'badge-green',
+                rejected: 'badge-gray'
+            };
+            return badges[status] || 'badge-gray';
+        }
+
+        function getProposalStatusLabel(status) {
+            const labels = {
+                pending: 'En attente',
+                approved: 'Approuvee',
+                implemented: 'Realisee',
+                rejected: 'Rejetee'
+            };
+            return labels[status] || status;
+        }
+
+        function viewProposal(id) {
+            const p = proposals.find(pr => pr.id === id);
+            if (!p) return;
+
+            document.getElementById('proposalModalContent').innerHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <span class="badge ${getProposalStatusBadge(p.status)}">${getProposalStatusLabel(p.status)}</span>
+                    <span class="badge badge-purple">${getCategoryLabel(p.category)}</span>
+                </div>
+                <h4 style="margin-bottom: 0.5rem;">${p.title}</h4>
+                <p style="color: var(--gray); margin-bottom: 1rem;">Propose par ${p.author} le ${formatDate(p.created_at)}</p>
+                <p style="margin-bottom: 1.5rem;">${p.description}</p>
+                <div style="display: flex; gap: 2rem; padding: 1rem; background: var(--cream); border-radius: 8px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--secondary);">${p.votes}</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">Pour</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);">${p.downvotes}</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">Contre</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">${Math.round((p.votes / (p.votes + p.downvotes)) * 100)}%</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">Approbation</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('proposalModalActions').innerHTML = `
+                <button class="btn btn-ghost" onclick="closeProposalModal()">Fermer</button>
+                ${p.status === 'pending' ? `
+                    <button class="btn btn-danger" onclick="rejectProposal(${p.id}); closeProposalModal();">Rejeter</button>
+                    <button class="btn btn-secondary" onclick="approveProposal(${p.id}); closeProposalModal();">Approuver</button>
+                ` : ''}
+            `;
+
+            document.getElementById('proposalModal').classList.add('active');
+        }
+
+        function closeProposalModal() {
+            document.getElementById('proposalModal').classList.remove('active');
+        }
+
+        function approveProposal(id) {
+            const p = proposals.find(pr => pr.id === id);
+            if (p) {
+                p.status = 'approved';
+                renderProposalsSection();
+                showToast('Proposition approuvee !', 'success');
+            }
+        }
+
+        function rejectProposal(id) {
+            const p = proposals.find(pr => pr.id === id);
+            if (p) {
+                p.status = 'rejected';
+                renderProposalsSection();
+                showToast('Proposition rejetee', '');
+            }
+        }
+
+        function markImplemented(id) {
+            const p = proposals.find(pr => pr.id === id);
+            if (p) {
+                p.status = 'implemented';
+                renderProposalsSection();
+                showToast('Proposition marquee comme realisee !', 'success');
+            }
+        }
+
+        // =====================================================
+        // MEMBERS MAP
+        // =====================================================
+        function renderMembersMap() {
+            const cityCounts = {};
+            members.forEach(m => {
+                if (m.city) {
+                    cityCounts[m.city] = (cityCounts[m.city] || 0) + 1;
+                }
+            });
+
+            const maxCount = Math.max(...Object.values(cityCounts), 1);
+            const colors = {
+                'Bayonne': '#5528ff',
+                'Biarritz': '#27b782',
+                'Anglet': '#ea4e1b',
+                'Saint-Jean-de-Luz': '#f59e0b'
+            };
+
+            const mapHtml = Object.entries(cityCounts)
+                .sort((a, b) => b[1] - a[1])
+                .map(([city, count]) => {
+                    const percentage = Math.round((count / members.length) * 100);
+                    const color = colors[city] || '#8b5cf6';
+                    return `
+                        <div onclick="document.getElementById('filterCity').value='${city}'; filterMembers();"
+                             style="flex: 1; min-width: 200px; background: white; border: 2px solid ${color}; border-radius: 12px; padding: 1.25rem; cursor: pointer; transition: all 0.2s;"
+                             onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';"
+                             onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <span style="font-weight: 600; color: ${color};">&#128205; ${city}</span>
+                                <span style="font-size: 1.5rem; font-weight: 700;">${count}</span>
+                            </div>
+                            <div style="height: 8px; background: var(--light-gray); border-radius: 4px; overflow: hidden;">
+                                <div style="width: ${percentage}%; height: 100%; background: ${color}; border-radius: 4px;"></div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--gray); margin-top: 0.5rem;">${percentage}% des membres</div>
+                        </div>
+                    `;
+                }).join('');
+
+            document.getElementById('membersMap').innerHTML = mapHtml || '<p style="color: var(--gray);">Aucune donnee geographique disponible</p>';
+        }
+
+        // Update renderMembersTable to include level
+        function renderMembersTable() {
+            const filterCity = document.getElementById('filterCity')?.value || '';
+            const search = document.getElementById('searchMembers')?.value?.toLowerCase() || '';
+
+            const filtered = members.filter(m => {
+                if (filterCity && m.city !== filterCity) return false;
+                if (search && !`${m.firstname} ${m.lastname} ${m.email}`.toLowerCase().includes(search)) return false;
+                return true;
+            });
+
+            document.getElementById('membersTable').innerHTML = filtered.map(m => `
+                <tr>
+                    <td>${m.firstname} ${m.lastname}</td>
+                    <td>${m.email}</td>
+                    <td>${m.city || '-'}</td>
+                    <td>
+                        <span class="badge badge-purple" title="${m.xp || 0} XP">Niv. ${m.level || 1}</span>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 60px; height: 6px; background: var(--light-gray); border-radius: 3px; overflow: hidden;">
+                                <div style="width: ${m.completion || 0}%; height: 100%; background: ${(m.completion || 0) > 70 ? 'var(--secondary)' : 'var(--accent)'};"></div>
+                            </div>
+                            <span style="font-size: 0.8rem; color: var(--gray);">${m.completion || 0}%</span>
+                        </div>
+                    </td>
+                    <td>${formatDate(m.created_at)}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Update renderDashboard to also render new sections
+        const originalRenderDashboard = renderDashboard;
+        renderDashboard = function() {
+            // Stats
+            document.getElementById('totalMembers').textContent = members.length;
+            document.getElementById('totalResponses').textContent = questions.reduce((sum, q) => sum + (q.responses || 0), 0);
+            document.getElementById('avgCompletion').textContent = Math.round(members.reduce((sum, m) => sum + (m.completion || 50), 0) / members.length) + '%';
+            document.getElementById('activeQuestions').textContent = questions.filter(q => q.active).length;
+
+            // Recent members
+            document.getElementById('recentMembers').innerHTML = members.slice(0, 5).map(m => `
+                <tr>
+                    <td>${m.firstname} ${m.lastname}</td>
+                    <td>${m.city || '-'}</td>
+                    <td>${formatDate(m.created_at)}</td>
+                </tr>
+            `).join('');
+
+            // Recent questions
+            document.getElementById('recentQuestions').innerHTML = questions.slice(0, 5).map(q => `
+                <tr>
+                    <td>${q.title}</td>
+                    <td>${q.responses || 0}</td>
+                    <td><span class="badge ${q.active ? 'badge-green' : 'badge-gray'}">${q.active ? 'Active' : 'Terminee'}</span></td>
+                </tr>
+            `).join('');
+
+            // Questions table
+            document.getElementById('questionsTable').innerHTML = questions.map(q => `
+                <tr>
+                    <td>${q.title}</td>
+                    <td><span class="badge badge-purple">${getCategoryLabel(q.category)}</span></td>
+                    <td>${q.responses || 0}</td>
+                    <td><span class="badge ${q.active ? 'badge-green' : 'badge-gray'}">${q.active ? 'Active' : 'Terminee'}</span></td>
+                    <td>
+                        <button class="btn btn-ghost btn-sm" onclick="viewQuestionResults(${q.id})">Resultats</button>
+                        <button class="btn btn-ghost btn-sm" onclick="toggleQuestion(${q.id})">${q.active ? 'Desactiver' : 'Activer'}</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Notifications table
+            document.getElementById('notificationsTable').innerHTML = notifications.map(n => `
+                <tr>
+                    <td>${n.title}</td>
+                    <td><span class="badge badge-${n.type === 'info' ? 'purple' : n.type === 'reminder' ? 'orange' : 'green'}">${n.type}</span></td>
+                    <td>${n.count || 0} membres</td>
+                    <td>${formatDate(n.created_at)}</td>
+                </tr>
+            `).join('');
+
+            // Members table with map
+            renderMembersMap();
+            renderMembersTable();
+
+            // Events & Proposals
+            renderEventsSection();
+            renderProposalsSection();
+        };
+    </script>
+</body>
+</html>

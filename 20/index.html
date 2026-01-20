@@ -1,0 +1,3408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoProfil - Vue d'Ensemble</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary: #5528ff;
+            --primary-dark: #4420cc;
+            --secondary: #27b782;
+            --accent: #ea4e1b;
+            --cream: #f8f3e0;
+            --dark: #1d1d1b;
+            --gray: #6b7280;
+            --light-gray: #e5e7eb;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--cream);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--dark);
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .logo-text {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #1f9a6c;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background: #d14416;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--gray);
+        }
+
+        .btn-ghost:hover {
+            background: var(--light-gray);
+            color: var(--dark);
+        }
+
+        /* Views */
+        .view {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Landing Page */
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-icon.purple { background: rgba(85, 40, 255, 0.1); color: var(--primary); }
+        .feature-icon.green { background: rgba(39, 183, 130, 0.1); color: var(--secondary); }
+        .feature-icon.orange { background: rgba(234, 78, 27, 0.1); color: var(--accent); }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Auth Forms */
+        .auth-container {
+            max-width: 450px;
+            margin: 3rem auto;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .auth-card h2 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 1.75rem;
+        }
+
+        .auth-card .subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .auth-card .btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--gray);
+        }
+
+        .auth-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        /* Profile Wizard */
+        .wizard-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .wizard-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .wizard-progress::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--light-gray);
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 3px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--gray);
+            transition: all 0.3s;
+        }
+
+        .progress-step.active .step-number {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .progress-step.completed .step-number {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-align: center;
+            max-width: 80px;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .wizard-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .wizard-card h2 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .wizard-card .description {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        /* Checkbox & Radio Groups */
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: var(--cream);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .checkbox-item:hover,
+        .radio-item:hover {
+            border-color: var(--primary);
+        }
+
+        .checkbox-item.selected,
+        .radio-item.selected {
+            background: rgba(85, 40, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .checkbox-item input,
+        .radio-item input {
+            display: none;
+        }
+
+        /* Range Slider */
+        .range-container {
+            padding: 1rem 0;
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .range-value {
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 0.5rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--light-gray);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(85, 40, 255, 0.3);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: calc(100vh - 77px);
+        }
+
+        .sidebar {
+            background: var(--white);
+            padding: 2rem 1rem;
+            border-right: 1px solid var(--light-gray);
+        }
+
+        .user-info {
+            text-align: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 auto 1rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .user-location {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .profile-completion {
+            margin-top: 1rem;
+        }
+
+        .completion-bar {
+            height: 8px;
+            background: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .completion-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .completion-text {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-menu a:hover {
+            background: var(--cream);
+        }
+
+        .nav-menu a.active {
+            background: rgba(85, 40, 255, 0.1);
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            width: 24px;
+            text-align: center;
+        }
+
+        .badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+        }
+
+        .content-header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .content-header p {
+            color: var(--gray);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .stat-card .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Notifications */
+        .notification-card {
+            background: var(--white);
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .notification-card.unread {
+            background: rgba(85, 40, 255, 0.03);
+        }
+
+        .notification-card.question {
+            border-left-color: var(--secondary);
+        }
+
+        .notification-card.reminder {
+            border-left-color: var(--accent);
+        }
+
+        .notification-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-content h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .notification-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Question Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: 20px;
+            max-width: 550px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Poll Options */
+        .poll-option {
+            padding: 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .poll-option:hover {
+            border-color: var(--primary);
+        }
+
+        .poll-option.selected {
+            border-color: var(--primary);
+            background: rgba(85, 40, 255, 0.05);
+        }
+
+        .poll-radio {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .poll-option.selected .poll-radio {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .poll-option.selected .poll-radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        /* Profile Sections */
+        .profile-section {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .profile-section h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-section h3 .icon {
+            color: var(--primary);
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .profile-item {
+            padding: 0.75rem;
+            background: var(--cream);
+            border-radius: 8px;
+        }
+
+        .profile-item label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-item span {
+            font-weight: 500;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            background: rgba(85, 40, 255, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 0.25rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--dark);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast.success {
+            background: var(--secondary);
+        }
+
+        .admin-link {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: var(--dark);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.2rem;
+            opacity: 0.3;
+            transition: opacity 0.2s;
+            z-index: 99;
+        }
+
+        .admin-link:hover {
+            opacity: 1;
+        }
+
+        /* User Level & Badges */
+        .user-level {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .level-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .level-title {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .user-badges {
+            display: flex;
+            gap: 0.35rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .mini-badge {
+            width: 28px;
+            height: 28px;
+            background: var(--cream);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            cursor: help;
+        }
+
+        /* Events Grid */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .event-card {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .event-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .event-image {
+            height: 140px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .event-content {
+            padding: 1.25rem;
+        }
+
+        .event-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: var(--cream);
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .event-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .event-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .event-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .event-attendees {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Proposals */
+        .proposal-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .proposal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+        }
+
+        .proposal-category {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            background: rgba(85, 40, 255, 0.1);
+            color: var(--primary);
+        }
+
+        .proposal-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .proposal-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .proposal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .proposal-author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .proposal-author-avatar {
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .proposal-votes {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .vote-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .vote-btn.up {
+            background: rgba(39, 183, 130, 0.1);
+            color: var(--secondary);
+        }
+
+        .vote-btn.up:hover, .vote-btn.up.voted {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .vote-btn.down {
+            background: rgba(234, 78, 27, 0.1);
+            color: var(--accent);
+        }
+
+        .vote-btn.down:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Community */
+        .community-stats {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 1.5rem;
+        }
+
+        .community-map {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            min-height: 400px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .community-leaderboard {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .community-leaderboard h3 {
+            margin-bottom: 1rem;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .leaderboard-item:nth-child(1) { background: linear-gradient(90deg, rgba(255,215,0,0.15), transparent); }
+        .leaderboard-item:nth-child(2) { background: linear-gradient(90deg, rgba(192,192,192,0.15), transparent); }
+        .leaderboard-item:nth-child(3) { background: linear-gradient(90deg, rgba(205,127,50,0.15), transparent); }
+
+        .leaderboard-rank {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .leaderboard-item:nth-child(1) .leaderboard-rank { background: gold; color: white; }
+        .leaderboard-item:nth-child(2) .leaderboard-rank { background: silver; color: white; }
+        .leaderboard-item:nth-child(3) .leaderboard-rank { background: #cd7f32; color: white; }
+
+        .leaderboard-info {
+            flex: 1;
+        }
+
+        .leaderboard-name {
+            font-weight: 500;
+        }
+
+        .leaderboard-city {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .leaderboard-xp {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .city-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .city-stat:last-child {
+            border-bottom: none;
+        }
+
+        .city-name {
+            font-weight: 500;
+        }
+
+        .city-count {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .city-bar {
+            width: 100px;
+            height: 8px;
+            background: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .city-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        /* Badges */
+        .level-progress-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .level-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .current-level {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .level-name {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .xp-bar-big {
+            height: 12px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+
+        .xp-fill-big {
+            height: 100%;
+            background: white;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .xp-text {
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .next-level {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .badge-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .badge-card .badge-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-card h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .badge-card p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .badges-locked .badge-card {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .badge-card .badge-xp {
+            display: inline-block;
+            background: var(--cream);
+            color: var(--primary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .community-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="#" class="logo" onclick="showView('landing')">
+            <div class="logo-icon">VE</div>
+            <div class="logo-text">Eco<span>Profil</span></div>
+        </a>
+        <nav class="nav-actions" id="navActions">
+            <button class="btn btn-outline" onclick="showView('login')">Connexion</button>
+            <button class="btn btn-primary" onclick="showView('register')">S'inscrire</button>
+        </nav>
+        <a href="admin.html" class="admin-link" title="Espace administrateur">&#9881;</a>
+    </header>
+
+    <!-- Landing Page -->
+    <div id="landing" class="view active">
+        <section class="hero">
+            <h1>Rejoignez la communauté <span>Vue d'Ensemble</span></h1>
+            <p>Catalysons ensemble l'action écologique au Pays Basque. Créez votre profil citoyen, participez aux consultations locales et contribuez à un territoire plus résilient.</p>
+            <div class="hero-actions">
+                <button class="btn btn-primary" onclick="showView('register')">Créer mon profil</button>
+                <button class="btn btn-outline" onclick="showView('login')">J'ai déjà un compte</button>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon purple">&#128100;</div>
+                <h3>Profil écologique personnalisé</h3>
+                <p>Renseignez vos habitudes, vos engagements et vos compétences pour mieux comprendre notre communauté.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon green">&#128202;</div>
+                <h3>Statistiques anonymisées</h3>
+                <p>Vos données restent confidentielles et servent uniquement à produire des analyses pour le territoire.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon orange">&#128276;</div>
+                <h3>Questions locales</h3>
+                <p>Recevez des notifications pour donner votre avis sur les enjeux écologiques de votre commune.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Login View -->
+    <div id="login" class="view">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2>Bon retour !</h2>
+                <p class="subtitle">Connectez-vous à votre espace citoyen</p>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" required placeholder="votre@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Mot de passe</label>
+                        <input type="password" id="loginPassword" required placeholder="Votre mot de passe">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Se connecter</button>
+                </form>
+                <p class="auth-switch">
+                    Pas encore inscrit ? <a href="#" onclick="showView('register')">Créer un compte</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register View -->
+    <div id="register" class="view">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2>Rejoignez-nous</h2>
+                <p class="subtitle">Créez votre compte citoyen Vue d'Ensemble</p>
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Prénom</label>
+                            <input type="text" id="regFirstname" required placeholder="Votre prénom">
+                        </div>
+                        <div class="form-group">
+                            <label>Nom</label>
+                            <input type="text" id="regLastname" required placeholder="Votre nom">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" required placeholder="votre@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Mot de passe</label>
+                        <input type="password" id="regPassword" required placeholder="Minimum 8 caractères" minlength="8">
+                    </div>
+                    <div class="form-group">
+                        <label style="display: flex; align-items: flex-start; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" id="regConsent" required style="margin-top: 4px;">
+                            <span style="font-weight: normal; font-size: 0.85rem; color: var(--gray);">
+                                J'accepte que mes données soient utilisées de manière anonymisée pour des analyses statistiques au profit du territoire.
+                            </span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Créer mon compte</button>
+                </form>
+                <p class="auth-switch">
+                    Déjà inscrit ? <a href="#" onclick="showView('login')">Se connecter</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Wizard -->
+    <div id="wizard" class="view">
+        <div class="wizard-container">
+            <div class="wizard-progress">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <span class="step-label">Identité</span>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-number">2</div>
+                    <span class="step-label">Mobilité</span>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-number">3</div>
+                    <span class="step-label">Consommation</span>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <div class="step-number">4</div>
+                    <span class="step-label">Engagement</span>
+                </div>
+                <div class="progress-step" data-step="5">
+                    <div class="step-number">5</div>
+                    <span class="step-label">Compétences</span>
+                </div>
+            </div>
+
+            <div class="wizard-card">
+                <!-- Step 1: Identity -->
+                <div class="wizard-step active" data-step="1">
+                    <h2>&#128100; Informations personnelles</h2>
+                    <p class="description">Ces informations nous aident à mieux connaître notre communauté.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tranche d'âge</label>
+                            <select id="ageRange">
+                                <option value="">Sélectionner...</option>
+                                <option value="18-25">18-25 ans</option>
+                                <option value="26-35">26-35 ans</option>
+                                <option value="36-45">36-45 ans</option>
+                                <option value="46-55">46-55 ans</option>
+                                <option value="56-65">56-65 ans</option>
+                                <option value="65+">Plus de 65 ans</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Commune</label>
+                            <select id="city">
+                                <option value="">Sélectionner...</option>
+                                <option value="Bayonne">Bayonne</option>
+                                <option value="Biarritz">Biarritz</option>
+                                <option value="Anglet">Anglet</option>
+                                <option value="Saint-Jean-de-Luz">Saint-Jean-de-Luz</option>
+                                <option value="Hendaye">Hendaye</option>
+                                <option value="Hasparren">Hasparren</option>
+                                <option value="Cambo-les-Bains">Cambo-les-Bains</option>
+                                <option value="Ustaritz">Ustaritz</option>
+                                <option value="other">Autre commune</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Situation professionnelle</label>
+                        <select id="profession">
+                            <option value="">Sélectionner...</option>
+                            <option value="student">Étudiant(e)</option>
+                            <option value="employed">Salarié(e)</option>
+                            <option value="self-employed">Indépendant(e) / Auto-entrepreneur</option>
+                            <option value="unemployed">En recherche d'emploi</option>
+                            <option value="retired">Retraité(e)</option>
+                            <option value="other">Autre</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Niveau d'études</label>
+                        <select id="education">
+                            <option value="">Sélectionner...</option>
+                            <option value="no-diploma">Sans diplôme</option>
+                            <option value="brevet">Brevet des collèges</option>
+                            <option value="bac">Baccalauréat</option>
+                            <option value="bac+2">Bac+2 (BTS, DUT...)</option>
+                            <option value="bac+3">Bac+3 (Licence)</option>
+                            <option value="bac+5">Bac+5 (Master)</option>
+                            <option value="bac+8">Doctorat</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step 2: Mobility -->
+                <div class="wizard-step" data-step="2">
+                    <h2>&#128663; Mobilité</h2>
+                    <p class="description">Comment vous déplacez-vous au quotidien ?</p>
+
+                    <div class="form-group">
+                        <label>Modes de transport principaux (plusieurs choix possibles)</label>
+                        <div class="checkbox-group" id="transportModes">
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="car">
+                                &#128663; Voiture personnelle
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="carpool">
+                                &#129309; Covoiturage
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="public">
+                                &#128651; Transport en commun
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="bike">
+                                &#128690; Vélo
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="ebike">
+                                &#9889; Vélo électrique
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="walk">
+                                &#128694; Marche à pied
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="scooter">
+                                &#128756; Trottinette
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Distance domicile-travail (si applicable)</label>
+                        <select id="commuteDistance">
+                            <option value="">Non applicable</option>
+                            <option value="0-5">Moins de 5 km</option>
+                            <option value="5-15">5 à 15 km</option>
+                            <option value="15-30">15 à 30 km</option>
+                            <option value="30+">Plus de 30 km</option>
+                            <option value="remote">Télétravail principalement</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fréquence d'utilisation de l'avion (par an)</label>
+                        <select id="flightFrequency">
+                            <option value="never">Jamais</option>
+                            <option value="rare">1-2 fois</option>
+                            <option value="occasional">3-5 fois</option>
+                            <option value="frequent">Plus de 5 fois</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step 3: Consumption -->
+                <div class="wizard-step" data-step="3">
+                    <h2>&#127793; Consommation</h2>
+                    <p class="description">Vos habitudes de consommation au quotidien.</p>
+
+                    <div class="form-group">
+                        <label>Régime alimentaire</label>
+                        <select id="diet">
+                            <option value="">Sélectionner...</option>
+                            <option value="omnivore">Omnivore classique</option>
+                            <option value="flexitarian">Flexitarien (peu de viande)</option>
+                            <option value="vegetarian">Végétarien</option>
+                            <option value="vegan">Végétalien / Vegan</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fréquence d'achat en circuits courts / local</label>
+                        <div class="range-container">
+                            <div class="range-labels">
+                                <span>Jamais</span>
+                                <span>Toujours</span>
+                            </div>
+                            <input type="range" id="localPurchase" min="0" max="100" value="50">
+                            <div class="range-value" id="localPurchaseValue">50%</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Habitudes anti-gaspillage (plusieurs choix possibles)</label>
+                        <div class="checkbox-group" id="antiWaste">
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="compost">
+                                &#127807; Compost
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="bulk">
+                                &#129523; Vrac
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="repair">
+                                &#128295; Réparation
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="secondhand">
+                                &#128722; Seconde main
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="zerowaste">
+                                &#9851; Zéro déchet
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Type de logement</label>
+                        <select id="housing">
+                            <option value="">Sélectionner...</option>
+                            <option value="apartment">Appartement</option>
+                            <option value="house">Maison individuelle</option>
+                            <option value="shared">Colocation / habitat partagé</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step 4: Engagement -->
+                <div class="wizard-step" data-step="4">
+                    <h2>&#128077; Engagement citoyen</h2>
+                    <p class="description">Votre participation à la vie locale et associative.</p>
+
+                    <div class="form-group">
+                        <label>Participation aux élections locales</label>
+                        <select id="voteFrequency">
+                            <option value="">Sélectionner...</option>
+                            <option value="always">Systématiquement</option>
+                            <option value="often">Souvent</option>
+                            <option value="sometimes">Parfois</option>
+                            <option value="rarely">Rarement</option>
+                            <option value="never">Jamais</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Engagement associatif</label>
+                        <div class="checkbox-group" id="associations">
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="ecology">
+                                &#127793; Association écologique
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="social">
+                                &#129309; Action sociale
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="culture">
+                                &#127912; Culture
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="sport">
+                                &#9917; Sport
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="parents">
+                                &#128106; Parents d'élèves
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="none">
+                                Aucun engagement
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sujets qui vous intéressent le plus</label>
+                        <div class="checkbox-group" id="interests">
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="climate">
+                                &#127777; Climat
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="biodiversity">
+                                &#129419; Biodiversité
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="food">
+                                &#127813; Alimentation
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="energy">
+                                &#9889; Énergie
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="mobility">
+                                &#128652; Mobilité
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="waste">
+                                &#9851; Déchets
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="water">
+                                &#128167; Eau
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="democracy">
+                                &#127963; Démocratie locale
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Skills -->
+                <div class="wizard-step" data-step="5">
+                    <h2>&#128161; Compétences & Loisirs</h2>
+                    <p class="description">Ce que vous savez faire et aimez faire.</p>
+
+                    <div class="form-group">
+                        <label>Compétences que vous pourriez partager</label>
+                        <div class="checkbox-group" id="skills">
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="gardening">
+                                &#127793; Jardinage
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="diy">
+                                &#128295; Bricolage
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="cooking">
+                                &#127859; Cuisine
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="teaching">
+                                &#128218; Enseignement
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="tech">
+                                &#128187; Informatique
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="communication">
+                                &#128172; Communication
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="organization">
+                                &#128197; Organisation
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="art">
+                                &#127912; Arts créatifs
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Vos loisirs</label>
+                        <div class="checkbox-group" id="hobbies">
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="hiking">
+                                &#127956; Randonnée
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="sports">
+                                &#127941; Sports
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="reading">
+                                &#128214; Lecture
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="music">
+                                &#127925; Musique
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="gardening-hobby">
+                                &#127807; Jardinage
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="cinema">
+                                &#127916; Cinéma
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(event, this)">
+                                <input type="checkbox" value="travel">
+                                &#9992; Voyages
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Disponibilité pour des actions bénévoles</label>
+                        <select id="availability">
+                            <option value="">Sélectionner...</option>
+                            <option value="weekly">Quelques heures par semaine</option>
+                            <option value="monthly">Quelques heures par mois</option>
+                            <option value="occasional">Ponctuellement sur événements</option>
+                            <option value="none">Pas disponible actuellement</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="wizard-actions">
+                    <button class="btn btn-ghost" id="wizardPrev" onclick="wizardPrevStep()" style="display: none;">
+                        &#8592; Précédent
+                    </button>
+                    <button class="btn btn-primary" id="wizardNext" onclick="wizardNextStep()">
+                        Suivant &#8594;
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="view">
+        <div class="dashboard">
+            <aside class="sidebar">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">JD</div>
+                    <div class="user-name" id="userName">Jean Dupont</div>
+                    <div class="user-location" id="userLocation">&#128205; Bayonne</div>
+                    <div class="user-level">
+                        <span class="level-badge" id="userLevel">Niveau 3</span>
+                        <span class="level-title" id="userTitle">Citoyen engag&#233;</span>
+                    </div>
+                    <div class="profile-completion">
+                        <span class="completion-text"><span id="userXP">145</span> / 200 XP</span>
+                        <div class="completion-bar">
+                            <div class="completion-fill" id="completionFill" style="width: 72%"></div>
+                        </div>
+                    </div>
+                    <div class="user-badges" id="userBadges">
+                        <span class="mini-badge" title="Profil complet">&#127942;</span>
+                        <span class="mini-badge" title="5 questions">&#128172;</span>
+                        <span class="mini-badge" title="Premier &#233;v&#233;nement">&#128197;</span>
+                    </div>
+                </div>
+
+                <ul class="nav-menu">
+                    <li>
+                        <a href="#" class="active" onclick="showDashboardSection('overview')">
+                            <span class="nav-icon">&#127968;</span>
+                            Tableau de bord
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showDashboardSection('notifications')">
+                            <span class="nav-icon">&#128276;</span>
+                            Notifications
+                            <span class="badge" id="notifBadge">3</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showDashboardSection('profile')">
+                            <span class="nav-icon">&#128100;</span>
+                            Mon profil
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showDashboardSection('questions')">
+                            <span class="nav-icon">&#128172;</span>
+                            Questions locales
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showDashboardSection('events')">
+                            <span class="nav-icon">&#128197;</span>
+                            &#201;v&#233;nements
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showDashboardSection('proposals')">
+                            <span class="nav-icon">&#128161;</span>
+                            Propositions
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showDashboardSection('community')">
+                            <span class="nav-icon">&#127760;</span>
+                            Communaut&#233;
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showDashboardSection('badges')">
+                            <span class="nav-icon">&#127942;</span>
+                            Mes badges
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="handleLogout()">
+                            <span class="nav-icon">&#128682;</span>
+                            D&#233;connexion
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <main class="main-content">
+                <!-- Overview Section -->
+                <section id="section-overview" class="dashboard-section">
+                    <div class="content-header">
+                        <h1>Bienvenue, <span id="welcomeName">Jean</span> !</h1>
+                        <p>Votre espace citoyen Vue d'Ensemble</p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="stat-card">
+                            <div class="icon" style="background: rgba(85, 40, 255, 0.1); color: var(--primary);">&#128172;</div>
+                            <h3 id="statResponses">12</h3>
+                            <p>Questions répondues</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="icon" style="background: rgba(39, 183, 130, 0.1); color: var(--secondary);">&#128197;</div>
+                            <h3 id="statDays">45</h3>
+                            <p>Jours de participation</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="icon" style="background: rgba(234, 78, 27, 0.1); color: var(--accent);">&#127793;</div>
+                            <h3 id="statImpact">Modéré</h3>
+                            <p>Impact écologique estimé</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <h2 style="margin-bottom: 1rem;">&#128276; Dernières notifications</h2>
+                        <div id="recentNotifications"></div>
+                    </div>
+                </section>
+
+                <!-- Notifications Section -->
+                <section id="section-notifications" class="dashboard-section" style="display: none;">
+                    <div class="content-header">
+                        <h1>&#128276; Notifications</h1>
+                        <p>Restez informé des actualités et questions locales</p>
+                    </div>
+                    <div id="allNotifications"></div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="section-profile" class="dashboard-section" style="display: none;">
+                    <div class="content-header">
+                        <h1>&#128100; Mon profil écologique</h1>
+                        <p>Consultez et modifiez vos informations</p>
+                    </div>
+                    <div id="profileContent"></div>
+                </section>
+
+                <!-- Questions Section -->
+                <section id="section-questions" class="dashboard-section" style="display: none;">
+                    <div class="content-header">
+                        <h1>&#128172; Questions locales</h1>
+                        <p>Donnez votre avis sur les enjeux de votre territoire</p>
+                    </div>
+                    <div id="questionsContent"></div>
+                </section>
+
+                <!-- Events Section -->
+                <section id="section-events" class="dashboard-section" style="display: none;">
+                    <div class="content-header">
+                        <h1>&#128197; &#201;v&#233;nements locaux</h1>
+                        <p>Participez aux actions pr&#232;s de chez vous</p>
+                    </div>
+                    <div id="eventsContent" class="events-grid"></div>
+                </section>
+
+                <!-- Proposals Section -->
+                <section id="section-proposals" class="dashboard-section" style="display: none;">
+                    <div class="content-header" style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <h1>&#128161; Propositions citoyennes</h1>
+                            <p>Proposez vos id&#233;es et votez pour celles des autres</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openProposalModal()">+ Nouvelle id&#233;e</button>
+                    </div>
+                    <div id="proposalsContent"></div>
+                </section>
+
+                <!-- Community Section -->
+                <section id="section-community" class="dashboard-section" style="display: none;">
+                    <div class="content-header">
+                        <h1>&#127760; Notre communaut&#233;</h1>
+                        <p>D&#233;couvrez les citoyens engag&#233;s du territoire</p>
+                    </div>
+                    <div class="community-stats" id="communityStats">
+                        <div class="community-map" id="communityMap"></div>
+                        <div class="community-leaderboard" id="communityLeaderboard"></div>
+                    </div>
+                </section>
+
+                <!-- Badges Section -->
+                <section id="section-badges" class="dashboard-section" style="display: none;">
+                    <div class="content-header">
+                        <h1>&#127942; Mes badges</h1>
+                        <p>Vos r&#233;compenses pour votre engagement citoyen</p>
+                    </div>
+                    <div class="level-progress-card">
+                        <div class="level-info">
+                            <span class="current-level" id="currentLevelBig">Niveau 3</span>
+                            <span class="level-name">Citoyen engag&#233;</span>
+                        </div>
+                        <div class="xp-bar-big">
+                            <div class="xp-fill-big" id="xpFillBig" style="width: 72%;"></div>
+                        </div>
+                        <p class="xp-text"><span id="currentXP">145</span> / 200 XP pour le niveau suivant</p>
+                        <p class="next-level">Prochain niveau : <strong>Ambassadeur vert</strong></p>
+                    </div>
+                    <h2 style="margin: 2rem 0 1rem;">Badges obtenus</h2>
+                    <div class="badges-grid" id="badgesEarned"></div>
+                    <h2 style="margin: 2rem 0 1rem; opacity: 0.6;">Badges &#224; d&#233;bloquer</h2>
+                    <div class="badges-grid badges-locked" id="badgesLocked"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Question Modal -->
+    <div class="modal-overlay" id="questionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Question locale</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="submitAnswer()">Valider ma réponse</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proposal Modal -->
+    <div class="modal-overlay" id="proposalModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Proposer une id&#233;e</h3>
+                <button class="modal-close" onclick="closeProposalModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Titre de votre proposition</label>
+                    <input type="text" id="proposalTitle" placeholder="Ex: Cr&#233;er un jardin partag&#233;">
+                </div>
+                <div class="form-group">
+                    <label>Description d&#233;taill&#233;e</label>
+                    <textarea id="proposalDesc" placeholder="D&#233;crivez votre id&#233;e, ses objectifs, comment la mettre en oeuvre..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Cat&#233;gorie</label>
+                    <select id="proposalCategory">
+                        <option value="ecology">&#127793; &#201;cologie</option>
+                        <option value="mobility">&#128690; Mobilit&#233;</option>
+                        <option value="food">&#127813; Alimentation</option>
+                        <option value="energy">&#9889; &#201;nergie</option>
+                        <option value="social">&#129309; Lien social</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeProposalModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="submitProposal()">Publier (+15 XP)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="eventModalTitle">&#201;v&#233;nement</h3>
+                <button class="modal-close" onclick="closeEventModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="eventModalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="closeEventModal()">Fermer</button>
+                <button class="btn btn-secondary" id="eventRegisterBtn" onclick="registerToEvent()">Je participe (+20 XP)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span id="toastMessage">Message</span>
+    </div>
+
+    <script>
+        // =====================================================
+        // CONFIGURATION SUPABASE
+        // Remplacez ces valeurs par vos propres clés Supabase
+        // =====================================================
+        const SUPABASE_URL = 'VOTRE_SUPABASE_URL'; // ex: https://xxxxx.supabase.co
+        const SUPABASE_ANON_KEY = 'VOTRE_SUPABASE_ANON_KEY';
+
+        // Initialisation Supabase
+        let db = null;
+        let isSupabaseConfigured = false;
+
+        function initSupabase() {
+            if (SUPABASE_URL !== 'VOTRE_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'VOTRE_SUPABASE_ANON_KEY') {
+                db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                isSupabaseConfigured = true;
+                console.log('Supabase connecté');
+            } else {
+                console.warn('Supabase non configuré - Mode démo avec localStorage');
+            }
+        }
+
+        // State
+        let currentUser = null;
+        let currentProfile = null;
+        let currentWizardStep = 1;
+        let currentQuestion = null;
+        let notifications = [];
+        let questions = [];
+        let userResponses = [];
+        const totalWizardSteps = 5;
+
+        // =====================================================
+        // FONCTIONS SUPABASE
+        // =====================================================
+
+        // Inscription
+        async function signUp(email, password, firstname, lastname) {
+            if (!isSupabaseConfigured) {
+                // Mode démo
+                currentUser = { id: 'demo-' + Date.now(), email, firstname, lastname };
+                currentProfile = { firstname, lastname, email };
+                localStorage.setItem('ecoprofil_user', JSON.stringify({ ...currentUser, profile: {} }));
+                return { user: currentUser, error: null };
+            }
+
+            const { data, error } = await db.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: { firstname, lastname }
+                }
+            });
+
+            if (error) return { user: null, error };
+
+            // Créer le profil dans la table profiles
+            if (data.user) {
+                const { error: profileError } = await supabase
+                    .from('profiles')
+                    .insert({
+                        id: data.user.id,
+                        email,
+                        firstname,
+                        lastname
+                    });
+
+                if (profileError) console.error('Erreur création profil:', profileError);
+            }
+
+            return { user: data.user, error: null };
+        }
+
+        // Connexion
+        async function signIn(email, password) {
+            if (!isSupabaseConfigured) {
+                const saved = localStorage.getItem('ecoprofil_user');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    currentUser = { id: data.id || 'demo', email: data.email };
+                    currentProfile = data;
+                    return { user: currentUser, error: null };
+                }
+                return { user: null, error: { message: 'Aucun compte trouvé' } };
+            }
+
+            const { data, error } = await db.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            if (error) return { user: null, error };
+
+            currentUser = data.user;
+            await loadProfile();
+            return { user: data.user, error: null };
+        }
+
+        // Déconnexion
+        async function signOut() {
+            if (isSupabaseConfigured) {
+                await db.auth.signOut();
+            }
+            currentUser = null;
+            currentProfile = null;
+        }
+
+        // Charger le profil
+        async function loadProfile() {
+            if (!currentUser) return null;
+
+            if (!isSupabaseConfigured) {
+                const saved = localStorage.getItem('ecoprofil_user');
+                if (saved) {
+                    currentProfile = JSON.parse(saved);
+                }
+                return currentProfile;
+            }
+
+            const { data, error } = await db
+                .from('profiles')
+                .select('*')
+                .eq('id', currentUser.id)
+                .single();
+
+            if (error) {
+                console.error('Erreur chargement profil:', error);
+                return null;
+            }
+
+            currentProfile = data;
+            return data;
+        }
+
+        // Sauvegarder le profil
+        async function saveProfile(profileData) {
+            if (!currentUser) return { error: { message: 'Non connecté' } };
+
+            if (!isSupabaseConfigured) {
+                const saved = localStorage.getItem('ecoprofil_user') || '{}';
+                const existing = JSON.parse(saved);
+                const updated = { ...existing, ...profileData, profile: { ...existing.profile, ...profileData } };
+                localStorage.setItem('ecoprofil_user', JSON.stringify(updated));
+                currentProfile = updated;
+                return { error: null };
+            }
+
+            const { error } = await db
+                .from('profiles')
+                .update(profileData)
+                .eq('id', currentUser.id);
+
+            if (error) {
+                console.error('Erreur sauvegarde profil:', error);
+                return { error };
+            }
+
+            await loadProfile();
+            return { error: null };
+        }
+
+        // Charger les questions
+        async function loadQuestions() {
+            if (!isSupabaseConfigured) {
+                // Questions de démo
+                questions = [
+                    {
+                        id: 1,
+                        title: 'Composteurs collectifs',
+                        question: 'Êtes-vous favorable à l\'installation de composteurs collectifs dans votre quartier ?',
+                        options: ['Oui, totalement favorable', 'Plutôt favorable', 'Plutôt défavorable', 'Non, défavorable', 'Sans opinion']
+                    },
+                    {
+                        id: 2,
+                        title: 'Mobilité alternative',
+                        question: 'Quel mode de transport alternatif souhaiteriez-vous voir développé en priorité sur le territoire ?',
+                        options: ['Pistes cyclables sécurisées', 'Transports en commun plus fréquents', 'Stations de covoiturage', 'Parkings vélos sécurisés', 'Navettes électriques']
+                    },
+                    {
+                        id: 3,
+                        title: 'Marchés locaux',
+                        question: 'Seriez-vous intéressé par l\'organisation de marchés de producteurs locaux le week-end ?',
+                        options: ['Oui, le samedi matin', 'Oui, le dimanche matin', 'Oui, peu importe le jour', 'Non, pas intéressé']
+                    }
+                ];
+                return questions;
+            }
+
+            const { data, error } = await db
+                .from('questions')
+                .select('*')
+                .eq('active', true)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Erreur chargement questions:', error);
+                return [];
+            }
+
+            questions = data.map(q => ({
+                ...q,
+                options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
+            }));
+            return questions;
+        }
+
+        // Charger les réponses de l'utilisateur
+        async function loadUserResponses() {
+            if (!currentUser) return [];
+
+            if (!isSupabaseConfigured) {
+                const saved = localStorage.getItem('ecoprofil_responses') || '[]';
+                userResponses = JSON.parse(saved);
+                return userResponses;
+            }
+
+            const { data, error } = await db
+                .from('responses')
+                .select('*')
+                .eq('user_id', currentUser.id);
+
+            if (error) {
+                console.error('Erreur chargement réponses:', error);
+                return [];
+            }
+
+            userResponses = data;
+            return data;
+        }
+
+        // Soumettre une réponse
+        async function submitResponse(questionId, selectedOption) {
+            if (!currentUser) return { error: { message: 'Non connecté' } };
+
+            if (!isSupabaseConfigured) {
+                const saved = localStorage.getItem('ecoprofil_responses') || '[]';
+                const responses = JSON.parse(saved);
+                responses.push({ question_id: questionId, selected_option: selectedOption, responded_at: new Date().toISOString() });
+                localStorage.setItem('ecoprofil_responses', JSON.stringify(responses));
+                userResponses = responses;
+                return { error: null };
+            }
+
+            const { error } = await db
+                .from('responses')
+                .insert({
+                    user_id: currentUser.id,
+                    question_id: questionId,
+                    selected_option: selectedOption
+                });
+
+            if (error) {
+                console.error('Erreur soumission réponse:', error);
+                return { error };
+            }
+
+            await loadUserResponses();
+            return { error: null };
+        }
+
+        // Charger les notifications
+        async function loadNotifications() {
+            if (!currentUser) return [];
+
+            if (!isSupabaseConfigured) {
+                // Notifications de démo
+                notifications = [
+                    { id: 1, type: 'question', title: 'Nouvelle consultation', message: 'Donnez votre avis sur les composteurs collectifs', created_at: new Date().toISOString(), read: false, question_id: 1 },
+                    { id: 2, type: 'reminder', title: 'Complétez votre profil', message: 'Renseignez vos compétences pour mieux nous connaître', created_at: new Date(Date.now() - 86400000).toISOString(), read: false, action: 'complete_profile' },
+                    { id: 3, type: 'info', title: 'Bienvenue !', message: 'Merci d\'avoir rejoint Vue d\'Ensemble.', created_at: new Date(Date.now() - 172800000).toISOString(), read: true }
+                ];
+                return notifications;
+            }
+
+            const { data, error } = await db
+                .from('notifications')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Erreur chargement notifications:', error);
+                return [];
+            }
+
+            notifications = data;
+            return data;
+        }
+
+        // Marquer une notification comme lue
+        async function markNotificationRead(notifId) {
+            if (!isSupabaseConfigured) {
+                const notif = notifications.find(n => n.id === notifId);
+                if (notif) notif.read = true;
+                return;
+            }
+
+            await db
+                .from('notifications')
+                .update({ read: true })
+                .eq('id', notifId);
+        }
+
+        // =====================================================
+        // FONCTIONS UI
+        // =====================================================
+
+        // Init
+        document.addEventListener('DOMContentLoaded', async () => {
+            initSupabase();
+
+            // Vérifier la session existante
+            if (isSupabaseConfigured) {
+                const { data: { session } } = await db.auth.getSession();
+                if (session) {
+                    currentUser = session.user;
+                    await loadProfile();
+                    await loadAllData();
+                    updateNavForLoggedIn();
+                    showView('dashboard');
+                    renderDashboard();
+                }
+            } else {
+                // Mode démo - vérifier localStorage
+                const saved = localStorage.getItem('ecoprofil_user');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    currentUser = { id: data.id || 'demo', email: data.email };
+                    currentProfile = data;
+                    await loadAllData();
+                    updateNavForLoggedIn();
+                    showView('dashboard');
+                    renderDashboard();
+                }
+            }
+
+            // Range slider listener
+            const localPurchase = document.getElementById('localPurchase');
+            if (localPurchase) {
+                localPurchase.addEventListener('input', (e) => {
+                    document.getElementById('localPurchaseValue').textContent = e.target.value + '%';
+                });
+            }
+        });
+
+        async function loadAllData() {
+            await Promise.all([
+                loadQuestions(),
+                loadUserResponses(),
+                loadNotifications()
+            ]);
+        }
+
+        // View management
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+
+            if (viewId === 'dashboard') {
+                renderDashboard();
+            }
+        }
+
+        function updateNavForLoggedIn() {
+            const name = currentProfile?.firstname || currentUser?.email?.split('@')[0] || 'Utilisateur';
+            document.getElementById('navActions').innerHTML = `
+                <span style="color: var(--gray);">&#128075; ${name}</span>
+                <button class="btn btn-outline" onclick="showView('dashboard')">Mon espace</button>
+                <button class="btn btn-ghost" onclick="handleLogout()">Déconnexion</button>
+            `;
+        }
+
+        function updateNavForLoggedOut() {
+            document.getElementById('navActions').innerHTML = `
+                <button class="btn btn-outline" onclick="showView('login')">Connexion</button>
+                <button class="btn btn-primary" onclick="showView('register')">S'inscrire</button>
+            `;
+        }
+
+        // Auth handlers
+        async function handleRegister(e) {
+            e.preventDefault();
+            const firstname = document.getElementById('regFirstname').value;
+            const lastname = document.getElementById('regLastname').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            showToast('Création du compte...', '');
+
+            const { user, error } = await signUp(email, password, firstname, lastname);
+
+            if (error) {
+                showToast(error.message || 'Erreur lors de l\'inscription', 'error');
+                return;
+            }
+
+            currentUser = user || { id: 'demo-' + Date.now(), email };
+            currentProfile = { firstname, lastname, email };
+
+            if (isSupabaseConfigured) {
+                showToast('Vérifiez votre email pour confirmer votre compte !', 'success');
+            } else {
+                await loadAllData();
+                updateNavForLoggedIn();
+                showView('wizard');
+                showToast('Compte créé ! Complétez votre profil écologique.', 'success');
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            showToast('Connexion...', '');
+
+            const { user, error } = await signIn(email, password);
+
+            if (error) {
+                showToast(error.message || 'Email ou mot de passe incorrect', 'error');
+                return;
+            }
+
+            await loadAllData();
+            updateNavForLoggedIn();
+            showView('dashboard');
+            showToast('Bon retour parmi nous !', 'success');
+        }
+
+        async function handleLogout() {
+            await signOut();
+            updateNavForLoggedOut();
+            showView('landing');
+            showToast('À bientôt !');
+        }
+
+        // Wizard
+        async function wizardNextStep() {
+            await saveWizardStepData();
+
+            if (currentWizardStep < totalWizardSteps) {
+                currentWizardStep++;
+                updateWizardUI();
+            } else {
+                showView('dashboard');
+                showToast('Profil complété ! Merci pour votre participation.', 'success');
+            }
+        }
+
+        function wizardPrevStep() {
+            if (currentWizardStep > 1) {
+                currentWizardStep--;
+                updateWizardUI();
+            }
+        }
+
+        function updateWizardUI() {
+            document.querySelectorAll('.wizard-step').forEach(step => {
+                step.classList.remove('active');
+                if (parseInt(step.dataset.step) === currentWizardStep) {
+                    step.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.progress-step').forEach(step => {
+                const stepNum = parseInt(step.dataset.step);
+                step.classList.remove('active', 'completed');
+                if (stepNum === currentWizardStep) {
+                    step.classList.add('active');
+                } else if (stepNum < currentWizardStep) {
+                    step.classList.add('completed');
+                }
+            });
+
+            document.getElementById('wizardPrev').style.display = currentWizardStep > 1 ? 'block' : 'none';
+            document.getElementById('wizardNext').innerHTML = currentWizardStep === totalWizardSteps
+                ? 'Terminer &#10003;'
+                : 'Suivant &#8594;';
+        }
+
+        async function saveWizardStepData() {
+            let profileData = {};
+
+            switch(currentWizardStep) {
+                case 1:
+                    profileData = {
+                        age_range: document.getElementById('ageRange').value,
+                        city: document.getElementById('city').value,
+                        profession: document.getElementById('profession').value,
+                        education: document.getElementById('education').value
+                    };
+                    break;
+                case 2:
+                    profileData = {
+                        transport_modes: getSelectedCheckboxes('transportModes'),
+                        commute_distance: document.getElementById('commuteDistance').value,
+                        flight_frequency: document.getElementById('flightFrequency').value
+                    };
+                    break;
+                case 3:
+                    profileData = {
+                        diet: document.getElementById('diet').value,
+                        local_purchase: parseInt(document.getElementById('localPurchase').value),
+                        anti_waste: getSelectedCheckboxes('antiWaste'),
+                        housing: document.getElementById('housing').value
+                    };
+                    break;
+                case 4:
+                    profileData = {
+                        vote_frequency: document.getElementById('voteFrequency').value,
+                        associations: getSelectedCheckboxes('associations'),
+                        interests: getSelectedCheckboxes('interests')
+                    };
+                    break;
+                case 5:
+                    profileData = {
+                        skills: getSelectedCheckboxes('skills'),
+                        hobbies: getSelectedCheckboxes('hobbies'),
+                        availability: document.getElementById('availability').value
+                    };
+                    break;
+            }
+
+            // Aussi mettre à jour localement pour l'affichage
+            if (!isSupabaseConfigured) {
+                // Convertir les noms snake_case en camelCase pour la compatibilité locale
+                const localProfile = currentProfile?.profile || {};
+                if (profileData.age_range) localProfile.ageRange = profileData.age_range;
+                if (profileData.city) localProfile.city = profileData.city;
+                if (profileData.profession) localProfile.profession = profileData.profession;
+                if (profileData.education) localProfile.education = profileData.education;
+                if (profileData.transport_modes) localProfile.transportModes = profileData.transport_modes;
+                if (profileData.commute_distance) localProfile.commuteDistance = profileData.commute_distance;
+                if (profileData.flight_frequency) localProfile.flightFrequency = profileData.flight_frequency;
+                if (profileData.diet) localProfile.diet = profileData.diet;
+                if (profileData.local_purchase !== undefined) localProfile.localPurchase = profileData.local_purchase;
+                if (profileData.anti_waste) localProfile.antiWaste = profileData.anti_waste;
+                if (profileData.housing) localProfile.housing = profileData.housing;
+                if (profileData.vote_frequency) localProfile.voteFrequency = profileData.vote_frequency;
+                if (profileData.associations) localProfile.associations = profileData.associations;
+                if (profileData.interests) localProfile.interests = profileData.interests;
+                if (profileData.skills) localProfile.skills = profileData.skills;
+                if (profileData.hobbies) localProfile.hobbies = profileData.hobbies;
+                if (profileData.availability) localProfile.availability = profileData.availability;
+
+                currentProfile = { ...currentProfile, profile: localProfile };
+            }
+
+            await saveProfile(profileData);
+        }
+
+        function getSelectedCheckboxes(groupId) {
+            const group = document.getElementById(groupId);
+            const selected = [];
+            group.querySelectorAll('.checkbox-item.selected input').forEach(input => {
+                selected.push(input.value);
+            });
+            return selected;
+        }
+
+        function toggleCheckbox(event, element) {
+            event.preventDefault();
+            event.stopPropagation();
+            element.classList.toggle('selected');
+            const input = element.querySelector('input');
+            input.checked = element.classList.contains('selected');
+        }
+
+        // Dashboard
+        function renderDashboard() {
+            if (!currentUser) return;
+
+            const profile = isSupabaseConfigured ? currentProfile : (currentProfile?.profile || currentProfile);
+            const firstname = currentProfile?.firstname || profile?.firstname || 'Utilisateur';
+            const lastname = currentProfile?.lastname || profile?.lastname || '';
+
+            // Update user info
+            const initials = ((firstname[0] || '') + (lastname[0] || '')).toUpperCase() || 'U';
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('userName').textContent = `${firstname} ${lastname}`.trim();
+            document.getElementById('welcomeName').textContent = firstname;
+
+            const city = profile?.city || profile?.city;
+            if (city) {
+                document.getElementById('userLocation').innerHTML = '&#128205; ' + city;
+            }
+
+            // Calculate completion
+            const completion = calculateProfileCompletion(profile);
+            document.getElementById('completionPercent').textContent = completion;
+            document.getElementById('completionFill').style.width = completion + '%';
+
+            // Stats
+            document.getElementById('statResponses').textContent = userResponses.length;
+            const createdAt = currentProfile?.created_at || currentProfile?.joinedAt || new Date().toISOString();
+            const daysSinceJoin = Math.max(1, Math.floor((new Date() - new Date(createdAt)) / (1000 * 60 * 60 * 24)));
+            document.getElementById('statDays').textContent = daysSinceJoin;
+
+            // Notification badge
+            const unreadCount = notifications.filter(n => !n.read).length;
+            document.getElementById('notifBadge').textContent = unreadCount;
+
+            // Render sections
+            renderNotificationsUI('recentNotifications', notifications.slice(0, 3));
+            renderNotificationsUI('allNotifications', notifications);
+            renderProfile();
+            renderQuestions();
+        }
+
+        function calculateProfileCompletion(profile) {
+            if (!profile) return 0;
+            const fields = isSupabaseConfigured
+                ? ['age_range', 'city', 'profession', 'education', 'transport_modes', 'diet', 'vote_frequency', 'skills', 'availability']
+                : ['ageRange', 'city', 'profession', 'education', 'transportModes', 'diet', 'voteFrequency', 'skills', 'availability'];
+
+            let filled = 0;
+            fields.forEach(field => {
+                const val = profile[field];
+                if (val && (Array.isArray(val) ? val.length > 0 : val !== '')) {
+                    filled++;
+                }
+            });
+            return Math.round((filled / fields.length) * 100);
+        }
+
+        function showDashboardSection(section) {
+            document.querySelectorAll('.dashboard-section').forEach(s => s.style.display = 'none');
+            document.getElementById('section-' + section).style.display = 'block';
+
+            document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+            event.target.closest('a').classList.add('active');
+        }
+
+        function renderNotificationsUI(containerId, notifs) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.innerHTML = notifs.map(n => {
+                const time = formatTimeAgo(n.created_at);
+                return `
+                <div class="notification-card ${n.type} ${!n.read ? 'unread' : ''}">
+                    <div class="notification-icon" style="background: ${getNotifColor(n.type)}20; color: ${getNotifColor(n.type)};">
+                        ${getNotifIcon(n.type)}
+                    </div>
+                    <div class="notification-content">
+                        <h4>${n.title}</h4>
+                        <p>${n.message}</p>
+                        <div class="notification-meta">
+                            <span class="notification-time">${time}</span>
+                            ${n.question_id ? `<button class="btn btn-secondary" onclick="openQuestion(${n.question_id})">Répondre</button>` : ''}
+                            ${n.action === 'complete_profile' ? `<button class="btn btn-outline" onclick="showView('wizard')">Compléter</button>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function formatTimeAgo(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000);
+
+            if (diff < 3600) return `Il y a ${Math.floor(diff / 60)} min`;
+            if (diff < 86400) return `Il y a ${Math.floor(diff / 3600)} h`;
+            if (diff < 604800) return `Il y a ${Math.floor(diff / 86400)} j`;
+            return date.toLocaleDateString('fr-FR');
+        }
+
+        function getNotifColor(type) {
+            const colors = { question: '#27b782', reminder: '#ea4e1b', info: '#5528ff' };
+            return colors[type] || '#5528ff';
+        }
+
+        function getNotifIcon(type) {
+            const icons = { question: '&#128172;', reminder: '&#128276;', info: '&#128161;' };
+            return icons[type] || '&#128276;';
+        }
+
+        function renderProfile() {
+            const container = document.getElementById('profileContent');
+            const p = isSupabaseConfigured ? currentProfile : (currentProfile?.profile || {});
+
+            if (!p || Object.keys(p).length === 0) {
+                container.innerHTML = `
+                    <div class="profile-section">
+                        <p>Vous n'avez pas encore complété votre profil.</p>
+                        <button class="btn btn-primary" onclick="showView('wizard')" style="margin-top: 1rem;">Compléter mon profil</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const labels = {
+                age_range: 'Tranche d\'âge', ageRange: 'Tranche d\'âge',
+                city: 'Commune',
+                profession: 'Situation',
+                education: 'Niveau d\'études',
+                diet: 'Régime alimentaire',
+                housing: 'Logement',
+                vote_frequency: 'Participation électorale', voteFrequency: 'Participation électorale',
+                availability: 'Disponibilité bénévolat',
+                commute_distance: 'Distance domicile-travail', commuteDistance: 'Distance domicile-travail',
+                flight_frequency: 'Fréquence avion', flightFrequency: 'Fréquence avion',
+                local_purchase: 'Achats locaux', localPurchase: 'Achats locaux'
+            };
+
+            const getValue = (key1, key2) => p[key1] || p[key2] || '';
+            const getArray = (key1, key2) => p[key1] || p[key2] || [];
+
+            container.innerHTML = `
+                <div class="profile-section">
+                    <h3><span class="icon">&#128100;</span> Informations personnelles</h3>
+                    <div class="profile-grid">
+                        ${renderProfileItem('age_range', getValue('age_range', 'ageRange'), labels)}
+                        ${renderProfileItem('city', getValue('city', 'city'), labels)}
+                        ${renderProfileItem('profession', getValue('profession', 'profession'), labels)}
+                        ${renderProfileItem('education', getValue('education', 'education'), labels)}
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3><span class="icon">&#128663;</span> Mobilité</h3>
+                    <div class="profile-grid">
+                        ${renderProfileItem('commute_distance', getValue('commute_distance', 'commuteDistance'), labels)}
+                        ${renderProfileItem('flight_frequency', getValue('flight_frequency', 'flightFrequency'), labels)}
+                    </div>
+                    ${getArray('transport_modes', 'transportModes').length ? `<div style="margin-top: 1rem;"><label style="font-size: 0.8rem; color: var(--gray);">Modes de transport</label><div>${getArray('transport_modes', 'transportModes').map(t => `<span class="tag">${t}</span>`).join('')}</div></div>` : ''}
+                </div>
+
+                <div class="profile-section">
+                    <h3><span class="icon">&#127793;</span> Consommation</h3>
+                    <div class="profile-grid">
+                        ${renderProfileItem('diet', getValue('diet', 'diet'), labels)}
+                        ${renderProfileItem('housing', getValue('housing', 'housing'), labels)}
+                        ${getValue('local_purchase', 'localPurchase') ? `<div class="profile-item"><label>Achats locaux</label><span>${getValue('local_purchase', 'localPurchase')}%</span></div>` : ''}
+                    </div>
+                    ${getArray('anti_waste', 'antiWaste').length ? `<div style="margin-top: 1rem;"><label style="font-size: 0.8rem; color: var(--gray);">Pratiques anti-gaspillage</label><div>${getArray('anti_waste', 'antiWaste').map(t => `<span class="tag">${t}</span>`).join('')}</div></div>` : ''}
+                </div>
+
+                <div class="profile-section">
+                    <h3><span class="icon">&#128077;</span> Engagement</h3>
+                    <div class="profile-grid">
+                        ${renderProfileItem('vote_frequency', getValue('vote_frequency', 'voteFrequency'), labels)}
+                        ${renderProfileItem('availability', getValue('availability', 'availability'), labels)}
+                    </div>
+                    ${getArray('interests', 'interests').length ? `<div style="margin-top: 1rem;"><label style="font-size: 0.8rem; color: var(--gray);">Centres d'intérêt</label><div>${getArray('interests', 'interests').map(t => `<span class="tag">${t}</span>`).join('')}</div></div>` : ''}
+                    ${getArray('associations', 'associations').length ? `<div style="margin-top: 1rem;"><label style="font-size: 0.8rem; color: var(--gray);">Engagements associatifs</label><div>${getArray('associations', 'associations').map(t => `<span class="tag">${t}</span>`).join('')}</div></div>` : ''}
+                </div>
+
+                <div class="profile-section">
+                    <h3><span class="icon">&#128161;</span> Compétences & Loisirs</h3>
+                    ${getArray('skills', 'skills').length ? `<div style="margin-bottom: 1rem;"><label style="font-size: 0.8rem; color: var(--gray);">Compétences</label><div>${getArray('skills', 'skills').map(t => `<span class="tag">${t}</span>`).join('')}</div></div>` : ''}
+                    ${getArray('hobbies', 'hobbies').length ? `<div><label style="font-size: 0.8rem; color: var(--gray);">Loisirs</label><div>${getArray('hobbies', 'hobbies').map(t => `<span class="tag">${t}</span>`).join('')}</div></div>` : ''}
+                </div>
+
+                <button class="btn btn-outline" onclick="showView('wizard')" style="margin-top: 1rem;">
+                    &#9998; Modifier mon profil
+                </button>
+            `;
+        }
+
+        function renderProfileItem(key, value, labels) {
+            if (!value) return '';
+            return `<div class="profile-item"><label>${labels[key] || key}</label><span>${value}</span></div>`;
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContent');
+            const answeredIds = userResponses.map(r => r.question_id);
+
+            container.innerHTML = questions.map(q => {
+                const answered = answeredIds.includes(q.id);
+                return `
+                <div class="notification-card question" style="border-left-color: ${answered ? 'var(--secondary)' : 'var(--primary)'};">
+                    <div class="notification-icon" style="background: ${answered ? 'rgba(39,183,130,0.1)' : 'rgba(85,40,255,0.1)'}; color: ${answered ? 'var(--secondary)' : 'var(--primary)'};">
+                        ${answered ? '&#10003;' : '&#128172;'}
+                    </div>
+                    <div class="notification-content">
+                        <h4>${q.title}</h4>
+                        <p>${q.question}</p>
+                        <div class="notification-meta">
+                            <span class="notification-time">${answered ? 'Répondu' : 'En attente'}</span>
+                            ${!answered ? `<button class="btn btn-primary" onclick="openQuestion(${q.id})">Répondre</button>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // Modal
+        function openQuestion(questionId) {
+            currentQuestion = questions.find(q => q.id === questionId);
+            if (!currentQuestion) return;
+
+            const options = Array.isArray(currentQuestion.options) ? currentQuestion.options : JSON.parse(currentQuestion.options || '[]');
+
+            document.getElementById('modalTitle').textContent = currentQuestion.title;
+            document.getElementById('modalBody').innerHTML = `
+                <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">${currentQuestion.question}</p>
+                <div id="pollOptions">
+                    ${options.map((opt, i) => `
+                        <div class="poll-option" onclick="selectOption(this, ${i})">
+                            <div class="poll-radio"></div>
+                            <span>${opt}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('questionModal').classList.add('active');
+        }
+
+        function selectOption(element, index) {
+            document.querySelectorAll('.poll-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            currentQuestion.selectedOption = index;
+        }
+
+        function closeModal() {
+            document.getElementById('questionModal').classList.remove('active');
+            currentQuestion = null;
+        }
+
+        async function submitAnswer() {
+            if (currentQuestion && currentQuestion.selectedOption !== undefined) {
+                const { error } = await submitResponse(currentQuestion.id, currentQuestion.selectedOption);
+
+                if (error) {
+                    showToast('Erreur lors de la soumission', 'error');
+                    return;
+                }
+
+                // Marquer la notification comme lue
+                const notif = notifications.find(n => n.question_id === currentQuestion.id);
+                if (notif) {
+                    await markNotificationRead(notif.id);
+                    notif.read = true;
+                }
+
+                closeModal();
+                renderDashboard();
+                showToast('Merci pour votre participation !', 'success');
+            } else {
+                showToast('Veuillez sélectionner une réponse.');
+            }
+        }
+
+        // Toast
+        // =====================================================
+        // GAMIFICATION DATA
+        // =====================================================
+        const levels = [
+            { level: 1, name: 'Nouveau membre', xpRequired: 0 },
+            { level: 2, name: 'Citoyen curieux', xpRequired: 50 },
+            { level: 3, name: 'Citoyen engage', xpRequired: 150 },
+            { level: 4, name: 'Ambassadeur vert', xpRequired: 300 },
+            { level: 5, name: 'Eco-leader', xpRequired: 500 },
+            { level: 6, name: 'Champion du territoire', xpRequired: 800 },
+        ];
+
+        const allBadges = [
+            { id: 'profile', icon: '&#127942;', name: 'Profil complet', desc: 'Completez 100% de votre profil', xp: 30, earned: true },
+            { id: 'first_question', icon: '&#128172;', name: 'Premiere voix', desc: 'Repondez a votre premiere question', xp: 10, earned: true },
+            { id: 'five_questions', icon: '&#128483;', name: 'Citoyen actif', desc: 'Repondez a 5 questions', xp: 25, earned: true },
+            { id: 'first_event', icon: '&#128197;', name: 'Sur le terrain', desc: 'Participez a un evenement', xp: 20, earned: true },
+            { id: 'first_proposal', icon: '&#128161;', name: 'Force de proposition', desc: 'Proposez une idee', xp: 15, earned: false },
+            { id: 'ten_questions', icon: '&#127775;', name: 'Voix qui compte', desc: 'Repondez a 10 questions', xp: 40, earned: false },
+            { id: 'three_events', icon: '&#127881;', name: 'Fidele', desc: 'Participez a 3 evenements', xp: 50, earned: false },
+            { id: 'voted_proposal', icon: '&#128077;', name: 'Democrate', desc: 'Votez pour 5 propositions', xp: 20, earned: false },
+            { id: 'monthly', icon: '&#128293;', name: '30 jours', desc: 'Connectez-vous 30 jours', xp: 60, earned: false },
+        ];
+
+        const demoEvents = [
+            { id: 1, title: 'Cleanwalk Plage de la Cote des Basques', desc: 'Ramassage collectif des dechets sur la plage. Gants et sacs fournis.', date: '2026-02-01', time: '10:00', location: 'Biarritz', icon: '&#127754;', attendees: 23, registered: false },
+            { id: 2, title: 'Atelier compostage', desc: 'Apprenez a faire votre compost maison avec un maitre-composteur.', date: '2026-02-08', time: '14:00', location: 'Bayonne', icon: '&#127793;', attendees: 15, registered: true },
+            { id: 3, title: 'Balade biodiversite', desc: 'Decouverte de la faune et flore locale avec un naturaliste.', date: '2026-02-15', time: '09:30', location: 'Anglet', icon: '&#129419;', attendees: 12, registered: false },
+            { id: 4, title: 'Repair Cafe', desc: 'Venez reparer vos objets avec l aide de benevoles.', date: '2026-02-22', time: '14:00', location: 'Bayonne', icon: '&#128295;', attendees: 8, registered: false },
+        ];
+
+        const demoProposals = [
+            { id: 1, title: 'Jardin partage quartier Saint-Esprit', desc: 'Creer un jardin partage sur le terrain vague rue des Basques. Permettrait aux habitants de cultiver legumes et fleurs, creer du lien social.', category: 'ecology', author: 'Marie D.', authorInitials: 'MD', votes: 34, downvotes: 3, voted: null },
+            { id: 2, title: 'Navette velo electrique centre-ville', desc: 'Mettre en place un service de navettes a velo-cargo electrique pour les courses du quotidien en centre-ville.', category: 'mobility', author: 'Pierre L.', authorInitials: 'PL', votes: 28, downvotes: 8, voted: null },
+            { id: 3, title: 'Consigne pour bocaux en verre', desc: 'Installer des points de collecte de bocaux en verre pour les reutiliser aupres des producteurs locaux.', category: 'food', author: 'Sophie M.', authorInitials: 'SM', votes: 45, downvotes: 2, voted: 'up' },
+        ];
+
+        const demoCommunity = {
+            cities: [
+                { name: 'Bayonne', count: 156, percent: 100 },
+                { name: 'Biarritz', count: 98, percent: 63 },
+                { name: 'Anglet', count: 87, percent: 56 },
+                { name: 'Saint-Jean-de-Luz', count: 45, percent: 29 },
+                { name: 'Hendaye', count: 32, percent: 21 },
+            ],
+            leaderboard: [
+                { name: 'Marie D.', city: 'Bayonne', xp: 520 },
+                { name: 'Thomas R.', city: 'Biarritz', xp: 485 },
+                { name: 'Sophie M.', city: 'Anglet', xp: 412 },
+                { name: 'Pierre L.', city: 'Bayonne', xp: 380 },
+                { name: 'Claire B.', city: 'Saint-Jean-de-Luz', xp: 356 },
+            ],
+            totalMembers: 418,
+            totalResponses: 1247,
+        };
+
+        let userXP = 145;
+        let currentEvent = null;
+
+        // =====================================================
+        // RENDER FUNCTIONS
+        // =====================================================
+
+        function renderEvents() {
+            const container = document.getElementById('eventsContent');
+            if (!container) return;
+
+            container.innerHTML = demoEvents.map(e => `
+                <div class="event-card" onclick="openEventModal(${e.id})">
+                    <div class="event-image">${e.icon}</div>
+                    <div class="event-content">
+                        <span class="event-date">&#128197; ${formatEventDate(e.date)} a ${e.time}</span>
+                        <h3>${e.title}</h3>
+                        <p>${e.desc}</p>
+                        <div class="event-meta">
+                            <span class="event-attendees">&#128101; ${e.attendees} participants</span>
+                            ${e.registered ? '<span class="badge" style="background: var(--secondary); color: white;">Inscrit</span>' : '<button class="btn btn-outline btn-sm">S\'inscrire</button>'}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatEventDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+        }
+
+        function openEventModal(eventId) {
+            currentEvent = demoEvents.find(e => e.id === eventId);
+            if (!currentEvent) return;
+
+            document.getElementById('eventModalTitle').textContent = currentEvent.title;
+            document.getElementById('eventModalBody').innerHTML = `
+                <div style="text-align: center; font-size: 4rem; margin-bottom: 1rem;">${currentEvent.icon}</div>
+                <p style="margin-bottom: 1rem;"><strong>&#128197;</strong> ${formatEventDate(currentEvent.date)} a ${currentEvent.time}</p>
+                <p style="margin-bottom: 1rem;"><strong>&#128205;</strong> ${currentEvent.location}</p>
+                <p style="margin-bottom: 1rem;">${currentEvent.desc}</p>
+                <p style="color: var(--gray);"><strong>${currentEvent.attendees}</strong> personnes participent deja</p>
+            `;
+
+            const btn = document.getElementById('eventRegisterBtn');
+            if (currentEvent.registered) {
+                btn.textContent = 'Deja inscrit';
+                btn.disabled = true;
+                btn.classList.add('btn-ghost');
+                btn.classList.remove('btn-secondary');
+            } else {
+                btn.textContent = 'Je participe (+20 XP)';
+                btn.disabled = false;
+                btn.classList.remove('btn-ghost');
+                btn.classList.add('btn-secondary');
+            }
+
+            document.getElementById('eventModal').classList.add('active');
+        }
+
+        function closeEventModal() {
+            document.getElementById('eventModal').classList.remove('active');
+            currentEvent = null;
+        }
+
+        function registerToEvent() {
+            if (!currentEvent || currentEvent.registered) return;
+
+            currentEvent.registered = true;
+            currentEvent.attendees++;
+            userXP += 20;
+            updateXPDisplay();
+            closeEventModal();
+            renderEvents();
+            showToast('Inscription confirmee ! +20 XP', 'success');
+        }
+
+        function renderProposals() {
+            const container = document.getElementById('proposalsContent');
+            if (!container) return;
+
+            const categoryLabels = {
+                ecology: '&#127793; Ecologie',
+                mobility: '&#128690; Mobilite',
+                food: '&#127813; Alimentation',
+                energy: '&#9889; Energie',
+                social: '&#129309; Lien social'
+            };
+
+            container.innerHTML = demoProposals.map(p => `
+                <div class="proposal-card">
+                    <div class="proposal-header">
+                        <span class="proposal-category">${categoryLabels[p.category] || p.category}</span>
+                    </div>
+                    <h3>${p.title}</h3>
+                    <p>${p.desc}</p>
+                    <div class="proposal-footer">
+                        <div class="proposal-author">
+                            <span class="proposal-author-avatar">${p.authorInitials}</span>
+                            ${p.author}
+                        </div>
+                        <div class="proposal-votes">
+                            <button class="vote-btn up ${p.voted === 'up' ? 'voted' : ''}" onclick="voteProposal(${p.id}, 'up')">
+                                &#9650; ${p.votes}
+                            </button>
+                            <button class="vote-btn down ${p.voted === 'down' ? 'voted' : ''}" onclick="voteProposal(${p.id}, 'down')">
+                                &#9660; ${p.downvotes}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function voteProposal(proposalId, voteType) {
+            const proposal = demoProposals.find(p => p.id === proposalId);
+            if (!proposal) return;
+
+            if (proposal.voted === voteType) return; // Already voted this way
+
+            // Remove previous vote if any
+            if (proposal.voted === 'up') proposal.votes--;
+            if (proposal.voted === 'down') proposal.downvotes--;
+
+            // Add new vote
+            if (voteType === 'up') proposal.votes++;
+            if (voteType === 'down') proposal.downvotes++;
+            proposal.voted = voteType;
+
+            renderProposals();
+            showToast('Vote enregistre !', 'success');
+        }
+
+        function openProposalModal() {
+            document.getElementById('proposalModal').classList.add('active');
+        }
+
+        function closeProposalModal() {
+            document.getElementById('proposalModal').classList.remove('active');
+        }
+
+        function submitProposal() {
+            const title = document.getElementById('proposalTitle').value;
+            const desc = document.getElementById('proposalDesc').value;
+            const category = document.getElementById('proposalCategory').value;
+
+            if (!title || !desc) {
+                showToast('Veuillez remplir tous les champs');
+                return;
+            }
+
+            const firstname = currentProfile?.firstname || 'Vous';
+            const initials = firstname.substring(0, 2).toUpperCase();
+
+            demoProposals.unshift({
+                id: demoProposals.length + 1,
+                title,
+                desc,
+                category,
+                author: firstname,
+                authorInitials: initials,
+                votes: 1,
+                downvotes: 0,
+                voted: 'up'
+            });
+
+            userXP += 15;
+            updateXPDisplay();
+            closeProposalModal();
+            renderProposals();
+            showToast('Proposition publiee ! +15 XP', 'success');
+
+            // Reset form
+            document.getElementById('proposalTitle').value = '';
+            document.getElementById('proposalDesc').value = '';
+        }
+
+        function renderCommunity() {
+            const mapContainer = document.getElementById('communityMap');
+            const leaderboardContainer = document.getElementById('communityLeaderboard');
+
+            if (!mapContainer || !leaderboardContainer) return;
+
+            // City stats with visual bars
+            mapContainer.innerHTML = `
+                <h3 style="margin-bottom: 1rem;">&#128205; Membres par commune</h3>
+                <p style="color: var(--gray); margin-bottom: 1.5rem;">${demoCommunity.totalMembers} citoyens engages sur le territoire</p>
+                ${demoCommunity.cities.map(c => `
+                    <div class="city-stat">
+                        <span class="city-name">${c.name}</span>
+                        <div class="city-count">
+                            <div class="city-bar">
+                                <div class="city-bar-fill" style="width: ${c.percent}%;"></div>
+                            </div>
+                            <span>${c.count}</span>
+                        </div>
+                    </div>
+                `).join('')}
+                <div style="margin-top: 2rem; padding: 1.5rem; background: var(--cream); border-radius: 12px; text-align: center;">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary);">${demoCommunity.totalResponses}</div>
+                    <div style="color: var(--gray);">contributions totales</div>
+                </div>
+            `;
+
+            // Leaderboard
+            leaderboardContainer.innerHTML = `
+                <h3>&#127942; Top contributeurs</h3>
+                ${demoCommunity.leaderboard.map((l, i) => `
+                    <div class="leaderboard-item">
+                        <div class="leaderboard-rank">${i + 1}</div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">${l.name}</div>
+                            <div class="leaderboard-city">${l.city}</div>
+                        </div>
+                        <div class="leaderboard-xp">${l.xp} XP</div>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        function renderBadges() {
+            const earnedContainer = document.getElementById('badgesEarned');
+            const lockedContainer = document.getElementById('badgesLocked');
+
+            if (!earnedContainer || !lockedContainer) return;
+
+            const earned = allBadges.filter(b => b.earned);
+            const locked = allBadges.filter(b => !b.earned);
+
+            earnedContainer.innerHTML = earned.map(b => `
+                <div class="badge-card">
+                    <div class="badge-icon">${b.icon}</div>
+                    <h4>${b.name}</h4>
+                    <p>${b.desc}</p>
+                    <span class="badge-xp">+${b.xp} XP</span>
+                </div>
+            `).join('');
+
+            lockedContainer.innerHTML = locked.map(b => `
+                <div class="badge-card">
+                    <div class="badge-icon">${b.icon}</div>
+                    <h4>${b.name}</h4>
+                    <p>${b.desc}</p>
+                    <span class="badge-xp">+${b.xp} XP</span>
+                </div>
+            `).join('');
+        }
+
+        function updateXPDisplay() {
+            // Find current level
+            let currentLevel = levels[0];
+            let nextLevel = levels[1];
+            for (let i = levels.length - 1; i >= 0; i--) {
+                if (userXP >= levels[i].xpRequired) {
+                    currentLevel = levels[i];
+                    nextLevel = levels[i + 1] || levels[i];
+                    break;
+                }
+            }
+
+            const xpForCurrentLevel = currentLevel.xpRequired;
+            const xpForNextLevel = nextLevel.xpRequired;
+            const xpProgress = xpForNextLevel > xpForCurrentLevel
+                ? ((userXP - xpForCurrentLevel) / (xpForNextLevel - xpForCurrentLevel)) * 100
+                : 100;
+
+            // Update sidebar
+            const levelEl = document.getElementById('userLevel');
+            const titleEl = document.getElementById('userTitle');
+            const xpEl = document.getElementById('userXP');
+            const fillEl = document.getElementById('completionFill');
+
+            if (levelEl) levelEl.textContent = 'Niveau ' + currentLevel.level;
+            if (titleEl) titleEl.textContent = currentLevel.name;
+            if (xpEl) xpEl.textContent = userXP;
+            if (fillEl) fillEl.style.width = xpProgress + '%';
+
+            // Update badges page
+            const currentLevelBig = document.getElementById('currentLevelBig');
+            const xpFillBig = document.getElementById('xpFillBig');
+            const currentXP = document.getElementById('currentXP');
+
+            if (currentLevelBig) currentLevelBig.textContent = 'Niveau ' + currentLevel.level;
+            if (xpFillBig) xpFillBig.style.width = xpProgress + '%';
+            if (currentXP) currentXP.textContent = userXP;
+        }
+
+        // Override showDashboardSection to render new sections
+        const originalShowDashboardSection = showDashboardSection;
+        showDashboardSection = function(section) {
+            document.querySelectorAll('.dashboard-section').forEach(s => s.style.display = 'none');
+            const sectionEl = document.getElementById('section-' + section);
+            if (sectionEl) sectionEl.style.display = 'block';
+
+            document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+            if (event && event.target) {
+                const link = event.target.closest('a');
+                if (link) link.classList.add('active');
+            }
+
+            // Render section content
+            if (section === 'events') renderEvents();
+            if (section === 'proposals') renderProposals();
+            if (section === 'community') renderCommunity();
+            if (section === 'badges') {
+                renderBadges();
+                updateXPDisplay();
+            }
+        };
+
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toast');
+            toast.className = 'toast show ' + type;
+            document.getElementById('toastMessage').textContent = message;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
