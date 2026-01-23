@@ -5,25 +5,25 @@
 const scenarios = {
     ref: {
         temp: "Ref", tempNum: 0, color: "#3b82f6", year: "1976-2005",
-        gradientStart: "#3b82f6", gradientEnd: "#1d4ed8",
+        markerPos: 0, mercuryHeight: 10,
         maxTemp: 34.1, tropicalNights: 8, days30: 9, days35: 0.7, days40: 0,
         cooling: 62, heating: 2332, fireRisk: 2.3, summerRain: 162, frostDays: 22
     },
     "2030": {
         temp: "+2°C", tempNum: 2, color: "#f97316", year: "2030",
-        gradientStart: "#f97316", gradientEnd: "#ea580c",
+        markerPos: 140, mercuryHeight: 45,
         maxTemp: 36.2, tropicalNights: 17, days30: 15, days35: 2.2, days40: 0.2,
         cooling: 106, heating: 2023, fireRisk: 3.3, summerRain: 154, frostDays: 14
     },
     "2050": {
         temp: "+2.7°C", tempNum: 2.7, color: "#ef4444", year: "2050",
-        gradientStart: "#ef4444", gradientEnd: "#dc2626",
+        markerPos: 190, mercuryHeight: 60,
         maxTemp: 37.4, tropicalNights: 26, days30: 22, days35: 4.1, days40: 0.4,
         cooling: 163, heating: 1893, fireRisk: 8, summerRain: 155, frostDays: 11
     },
     "2100": {
         temp: "+4°C", tempNum: 4, color: "#991b1b", year: "2100",
-        gradientStart: "#991b1b", gradientEnd: "#7f1d1d",
+        markerPos: 240, mercuryHeight: 85,
         maxTemp: 39.9, tropicalNights: 42, days30: 33, days35: 8, days40: 1.5,
         cooling: 250, heating: 1627, fireRisk: 9.3, summerRain: 141, frostDays: 7
     }
@@ -41,7 +41,7 @@ const indicatorDefinitions = {
         definition: "Nuit ou la temperature minimale ne descend pas en dessous de 20°C. Ces nuits empechent le corps de recuperer de la chaleur diurne.",
         intervals: { ref: [5, 12], "2030": [12, 23], "2050": [19, 34], "2100": [32, 54] },
         variability: "La variabilite interannuelle peut faire varier ce chiffre de ±30% d'une annee a l'autre selon les conditions meteorologiques.",
-        impact: "Impact sante: troubles du sommeil, surmortalite chez les personnes agees"
+        impact: "Troubles du sommeil, surmortalite chez les personnes agees"
     },
     days30: {
         icon: "&#x1F321;&#xFE0F;",
@@ -50,7 +50,7 @@ const indicatorDefinitions = {
         definition: "Nombre de jours ou la temperature maximale depasse 30°C. Seuil de vigilance pour les activites exterieures.",
         intervals: { ref: [5, 14], "2030": [10, 21], "2050": [16, 29], "2100": [25, 42] },
         variability: "Forte variabilite selon les etes. Un ete caniculaire peut doubler ce chiffre.",
-        impact: "Impact: productivite reduite, stress thermique, augmentation de la consommation d'energie"
+        impact: "Productivite reduite, stress thermique"
     },
     days35: {
         icon: "&#x1F525;",
@@ -58,26 +58,17 @@ const indicatorDefinitions = {
         unit: "jours/an",
         definition: "Nombre de jours ou la temperature maximale depasse 35°C. Seuil de danger pour la sante.",
         intervals: { ref: [0, 2], "2030": [1, 4], "2050": [2, 7], "2100": [5, 12] },
-        variability: "Ces evenements extremes sont rares mais leur frequence augmente significativement.",
-        impact: "Impact: risque vital pour les personnes vulnerables, arret des chantiers exterieurs"
-    },
-    days40: {
-        icon: "&#x1F975;",
-        title: "Jours > 40°C",
-        unit: "jours/an",
-        definition: "Nombre de jours ou la temperature maximale depasse 40°C. Seuil de danger extreme.",
-        intervals: { ref: [0, 0], "2030": [0, 1], "2050": [0, 1], "2100": [1, 3] },
-        variability: "Evenements exceptionnels qui deviennent possibles avec le rechauffement.",
-        impact: "Impact: conditions potentiellement mortelles, saturation des services d'urgence"
+        variability: "Evenements rares mais leur frequence augmente significativement.",
+        impact: "Risque vital pour les personnes vulnerables"
     },
     cooling: {
         icon: "&#x2744;&#xFE0F;",
-        title: "Degres-jours de climatisation",
+        title: "Degres-jours climatisation",
         unit: "DJ",
         definition: "Indicateur du besoin en climatisation. Somme des ecarts entre temperature moyenne journaliere et 24°C quand celle-ci est depassee.",
         intervals: { ref: [45, 82], "2030": [78, 140], "2050": [120, 210], "2100": [190, 320] },
         variability: "Varie selon l'ensoleillement et les vagues de chaleur estivales.",
-        impact: "Impact: augmentation de la facture energetique, pics de consommation electrique"
+        impact: "Augmentation facture energetique, pics de consommation"
     },
     frostDays: {
         icon: "&#x1F9CA;",
@@ -86,57 +77,12 @@ const indicatorDefinitions = {
         definition: "Nombre de jours ou la temperature minimale descend sous 0°C.",
         intervals: { ref: [17, 28], "2030": [10, 19], "2050": [7, 16], "2100": [4, 11] },
         variability: "Diminution progressive mais des hivers rigoureux restent possibles.",
-        impact: "Impact positif: moins de chauffage, mais aussi risques pour certaines cultures et ecosystemes"
-    },
-    fireRisk: {
-        icon: "&#x1F6A8;",
-        title: "Jours a risque incendie",
-        unit: "jours/an",
-        definition: "Nombre de jours ou l'indice Feu Meteo (IFM) depasse le seuil de risque eleve. Combine temperature, humidite, vent et secheresse.",
-        intervals: { ref: [1, 4], "2030": [2, 5], "2050": [5, 12], "2100": [6, 14] },
-        variability: "Tres dependant des conditions de secheresse accumulee au printemps.",
-        impact: "Impact: risque pour les forets periurbaines, qualite de l'air degradee"
-    },
-    summerRain: {
-        icon: "&#x1F4A7;",
-        title: "Precipitations estivales",
-        unit: "mm",
-        definition: "Cumul des precipitations sur les mois de juin, juillet et aout.",
-        intervals: { ref: [140, 185], "2030": [130, 180], "2050": [130, 182], "2100": [115, 170] },
-        variability: "Grande variabilite naturelle. La tendance est a la baisse mais avec des episodes intenses.",
-        impact: "Impact: stress hydrique pour la vegetation, restrictions d'eau possibles"
+        impact: "Moins de chauffage, mais risques pour certaines cultures"
     }
 };
 
 // ============================================
-// DATA - Narratives per scenario
-// ============================================
-
-const narratives = {
-    ref: {
-        icon: "&#x2744;&#xFE0F;",
-        title: "La periode de reference",
-        text: "Entre 1976 et 2005, Paris connaissait un climat tempere oceanique avec des etes agreables et des hivers frais. Les vagues de chaleur etaient rares et les nuits tropicales exceptionnelles."
-    },
-    "2030": {
-        icon: "&#x2600;&#xFE0F;",
-        title: "Dans un futur a +2°C...",
-        text: "Paris connaitra des etes nettement plus chauds, avec des vagues de chaleur plus frequentes et plus intenses. Les nuits tropicales, ou la temperature ne descend pas sous 20°C, deviendront courantes. C'est la limite fixee par l'Accord de Paris."
-    },
-    "2050": {
-        icon: "&#x1F525;",
-        title: "Dans un futur a +2.7°C...",
-        text: "Le climat parisien ressemblera a celui de Lyon ou Montpellier aujourd'hui. Les canicules seront frequentes, les nuits tropicales nombreuses. Les besoins en climatisation auront presque triple. C'est la trajectoire actuelle si les engagements ne sont pas tenus."
-    },
-    "2100": {
-        icon: "&#x1F975;",
-        title: "Dans un futur a +4°C...",
-        text: "Paris aura un climat comparable a Seville en Espagne. Les etes seront eprouvants avec plus d'un mois de jours au-dessus de 30°C et des temperatures depassant parfois 40°C. Les ecosystemes et la sante publique seront severement impactes."
-    }
-};
-
-// ============================================
-// DATA - Tipping Points
+// DATA - Tipping Points & Global Impacts
 // ============================================
 
 const tippingPoints = [
@@ -176,7 +122,6 @@ let currentChart = "tropical";
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    renderReferenceSection();
     selectScenario(currentScenario);
     initChart();
     renderTippingPoints();
@@ -190,140 +135,165 @@ function selectScenario(id) {
     currentScenario = id;
     const s = scenarios[id];
 
-    // Update horizon buttons
-    document.querySelectorAll('.horizon-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.scenario === id);
+    // Update scenario cards
+    document.querySelectorAll('.scenario-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.scenario === id);
     });
 
-    // Update CSS variables for scenario color
-    document.documentElement.style.setProperty('--scenario-color', s.color);
-    document.documentElement.style.setProperty('--scenario-gradient-start', s.gradientStart);
-    document.documentElement.style.setProperty('--scenario-gradient-end', s.gradientEnd);
+    // Update thermometer
+    document.getElementById('thermo-mercury').style.height = s.mercuryHeight + '%';
+    document.getElementById('thermo-marker').style.bottom = s.markerPos + 'px';
+    document.getElementById('thermo-marker').textContent = s.temp;
+    document.getElementById('thermo-marker').style.borderColor = s.color;
+    document.getElementById('thermo-marker').style.color = s.color;
+    document.getElementById('thermo-bulb').style.background = s.color;
+    document.getElementById('bulb-temp').textContent = s.temp;
+    document.documentElement.style.setProperty('--current-color', s.color);
 
-    // Update narrative transition
-    updateNarrative();
+    // Update weather scene
+    updateWeatherScene(s);
 
-    // Update comparison indicators
-    renderComparisonGrid();
-
-    // Update illustrations
-    updateIllustrations();
-
-    // Update city comparison
+    // Update all sections
+    renderCalendar();
+    renderGauges();
     renderCityComparison();
-
-    // Update tipping points
+    updateIllustrations();
     updateTippingPoints();
     renderGlobalImpacts();
-
-    // Update chart
     if (chart) updateChart();
 }
 
 // ============================================
-// REFERENCE SECTION
+// WEATHER SCENE
 // ============================================
 
-function renderReferenceSection() {
-    const ref = scenarios.ref;
-    const stats = [
-        { key: 'tropicalNights', value: ref.tropicalNights, label: 'Nuits tropicales' },
-        { key: 'days30', value: ref.days30, label: 'Jours > 30°C' },
-        { key: 'days35', value: ref.days35, label: 'Jours > 35°C' },
-        { key: 'frostDays', value: ref.frostDays, label: 'Jours de gel' },
-        { key: 'cooling', value: ref.cooling, label: 'Climatisation (DJ)' },
-        { key: 'fireRisk', value: ref.fireRisk, label: 'Risque feu (j)' }
-    ];
+function updateWeatherScene(s) {
+    const scene = document.getElementById('weather-scene');
+    scene.className = 'weather-scene';
+    if (s.tempNum >= 4) scene.classList.add('extreme');
+    else if (s.tempNum >= 2.7) scene.classList.add('very-hot');
+    else if (s.tempNum >= 2) scene.classList.add('hot');
 
-    document.getElementById('reference-stats').innerHTML = stats.map(stat => {
-        const def = indicatorDefinitions[stat.key];
-        return `
-            <div class="ref-stat">
-                <div class="ref-stat-value">${stat.value.toFixed(stat.value < 10 ? 1 : 0)}</div>
-                <div class="ref-stat-label">${stat.label}</div>
-                <div class="tooltip">
-                    <div class="tooltip-title">${def.icon} ${def.title}</div>
-                    <div class="tooltip-section">
-                        <div class="tooltip-label">Definition</div>
-                        <div class="tooltip-definition">${def.definition}</div>
-                    </div>
-                    <div class="tooltip-section">
-                        <div class="tooltip-label">Intervalle de confiance</div>
-                        <span class="tooltip-interval">[${def.intervals.ref[0]} - ${def.intervals.ref[1]}] ${def.unit}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
+    const sun = document.getElementById('sun');
+    sun.className = 'sun';
+    if (s.tempNum >= 4) sun.classList.add('extreme');
+    else if (s.tempNum >= 2) sun.classList.add('intense');
+
+    document.getElementById('weather-temp').textContent = s.maxTemp.toFixed(1) + '°C';
+    document.getElementById('weather-desc').textContent = getWeatherDesc(s.tempNum);
+    document.getElementById('tropical-nights').textContent = Math.round(s.tropicalNights) + ' nuits tropicales';
+    document.getElementById('summer-rain').textContent = Math.round(s.summerRain) + ' mm de pluie';
+    document.getElementById('fire-risk').textContent = s.fireRisk.toFixed(1) + ' jours risque feu';
+}
+
+function getWeatherDesc(temp) {
+    if (temp >= 4) return "Chaleur extreme - conditions dangereuses";
+    if (temp >= 2.7) return "Canicules frequentes - stress thermique";
+    if (temp >= 2) return "Etes plus chauds - adaptation necessaire";
+    return "Ete typique parisien";
 }
 
 // ============================================
-// NARRATIVE TRANSITION
+// CALENDAR HEATMAP
 // ============================================
 
-function updateNarrative() {
-    const narrative = narratives[currentScenario];
+function renderCalendar() {
     const s = scenarios[currentScenario];
+    const months = ['Juin', 'Juillet', 'Aout'];
+    const daysInMonth = [30, 31, 31];
 
-    document.getElementById('narrative-icon').innerHTML = narrative.icon;
-    document.getElementById('narrative-title').textContent = narrative.title;
-    document.getElementById('narrative-text').textContent = narrative.text;
-    document.getElementById('narrative-horizon').textContent = currentScenario === 'ref' ? 'Reference 1976-2005' : `Horizon ${s.year}`;
+    let html = '';
 
-    // Update transition background color via CSS variable
-    const transition = document.getElementById('narrative-transition');
-    transition.style.setProperty('--scenario-gradient-start', s.gradientStart);
-    transition.style.setProperty('--scenario-gradient-end', s.gradientEnd);
+    months.forEach((month, mi) => {
+        html += `<div class="calendar-month"><div class="month-name">${month}</div><div class="month-grid">`;
+
+        for (let d = 1; d <= daysInMonth[mi]; d++) {
+            const rand = Math.random();
+            let cls = 'normal';
+            const hotProb = s.days30 / 92;
+            const veryHotProb = s.days35 / 92;
+            const extremeProb = s.days40 / 92;
+            const tropicalProb = s.tropicalNights / 92;
+
+            if (rand < extremeProb) cls = 'extreme';
+            else if (rand < extremeProb + veryHotProb) cls = 'very-hot';
+            else if (rand < extremeProb + veryHotProb + hotProb) cls = 'hot';
+            else if (rand < 0.5) cls = 'warm';
+
+            const tropical = Math.random() < tropicalProb ? ' tropical-night' : '';
+
+            html += `<div class="day-cell ${cls}${tropical}" title="Jour ${d}">${d}</div>`;
+        }
+
+        html += '</div></div>';
+    });
+
+    document.getElementById('calendar-months').innerHTML = html;
+
+    // Stats with tooltips
+    document.getElementById('calendar-stats').innerHTML = `
+        <div class="calendar-stat" data-indicator="days30">
+            <div class="stat-value" style="color: #f97316">${Math.round(s.days30)}</div>
+            <div class="stat-label">jours > 30°C</div>
+        </div>
+        <div class="calendar-stat" data-indicator="days35">
+            <div class="stat-value" style="color: #ef4444">${s.days35.toFixed(1)}</div>
+            <div class="stat-label">jours > 35°C</div>
+        </div>
+        <div class="calendar-stat">
+            <div class="stat-value" style="color: #991b1b">${s.days40.toFixed(1)}</div>
+            <div class="stat-label">jours > 40°C</div>
+        </div>
+        <div class="calendar-stat" data-indicator="tropicalNights">
+            <div class="stat-value" style="color: #7c3aed">${Math.round(s.tropicalNights)}</div>
+            <div class="stat-label">nuits tropicales</div>
+        </div>
+    `;
 }
 
 // ============================================
-// COMPARISON GRID WITH TOOLTIPS
+// CIRCULAR GAUGES WITH TOOLTIPS
 // ============================================
 
-function renderComparisonGrid() {
+function renderGauges() {
+    const s = scenarios[currentScenario];
     const ref = scenarios.ref;
-    const current = scenarios[currentScenario];
 
-    const indicators = [
-        { key: 'tropicalNights', refVal: ref.tropicalNights, futureVal: current.tropicalNights },
-        { key: 'days30', refVal: ref.days30, futureVal: current.days30 },
-        { key: 'days35', refVal: ref.days35, futureVal: current.days35 },
-        { key: 'days40', refVal: ref.days40, futureVal: current.days40 },
-        { key: 'cooling', refVal: ref.cooling, futureVal: current.cooling },
-        { key: 'frostDays', refVal: ref.frostDays, futureVal: current.frostDays },
-        { key: 'fireRisk', refVal: ref.fireRisk, futureVal: current.fireRisk },
-        { key: 'summerRain', refVal: ref.summerRain, futureVal: current.summerRain }
+    const gauges = [
+        { key: 'tropicalNights', label: 'Nuits tropicales', value: s.tropicalNights, max: 60, unit: '/an', color: '#ef4444' },
+        { key: 'days35', label: 'Jours > 35°C', value: s.days35, max: 15, unit: '/an', color: '#dc2626' },
+        { key: 'cooling', label: 'Climatisation', value: s.cooling, max: 300, unit: 'DJ', color: '#0ea5e9' },
+        { key: 'frostDays', label: 'Jours de gel', value: s.frostDays, max: 30, unit: '/an', color: '#3b82f6' }
     ];
 
-    document.getElementById('comparison-grid').innerHTML = indicators.map(ind => {
-        const def = indicatorDefinitions[ind.key];
-        const change = ind.refVal !== 0 ? ((ind.futureVal - ind.refVal) / ind.refVal * 100) : 0;
-        const isIncrease = ind.futureVal > ind.refVal;
-        const changeClass = (ind.key === 'frostDays' || ind.key === 'summerRain')
-            ? (isIncrease ? 'decrease' : 'increase')
-            : (isIncrease ? 'increase' : 'decrease');
-        const changeText = change >= 0 ? `+${change.toFixed(0)}%` : `${change.toFixed(0)}%`;
+    document.getElementById('gauges-section').innerHTML = gauges.map(g => {
+        const def = indicatorDefinitions[g.key];
+        const refVal = ref[g.key];
+        const pct = Math.min(g.value / g.max * 100, 100);
+        const circumference = 2 * Math.PI * 70;
+        const offset = circumference - (pct / 100) * circumference;
+        const change = refVal !== 0 ? ((g.value - refVal) / refVal * 100) : 0;
+        const changeClass = g.key === 'frostDays' ? (change < 0 ? 'down' : 'up') : (change > 0 ? 'up' : 'down');
+        const changeSign = change > 0 ? '+' : '';
         const interval = def.intervals[currentScenario] || def.intervals.ref;
 
         return `
-            <div class="comparison-card">
-                ${currentScenario !== 'ref' ? `<span class="comparison-change ${changeClass}">${changeText}</span>` : ''}
-                <div class="comparison-header">
-                    <span class="comparison-icon">${def.icon}</span>
-                    <span class="comparison-title">${def.title}</span>
-                </div>
-                <div class="comparison-values">
-                    <div class="comparison-ref">
-                        <div class="comparison-ref-value">${ind.refVal.toFixed(ind.refVal < 10 ? 1 : 0)}</div>
-                        <div class="comparison-ref-label">Reference</div>
-                    </div>
-                    <span class="comparison-arrow">&#x27A1;</span>
-                    <div class="comparison-future">
-                        <div class="comparison-future-value">${ind.futureVal.toFixed(ind.futureVal < 10 ? 1 : 0)}</div>
-                        <div class="comparison-future-label">${scenarios[currentScenario].temp}</div>
+            <div class="gauge-card">
+                <div class="gauge-container">
+                    <svg class="gauge-svg" width="180" height="180" viewBox="0 0 180 180">
+                        <circle class="gauge-bg" cx="90" cy="90" r="70"/>
+                        <circle class="gauge-fill" cx="90" cy="90" r="70" stroke="${g.color}"
+                            stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"/>
+                    </svg>
+                    <div class="gauge-center">
+                        <div class="gauge-value" style="color: ${g.color}">${g.value.toFixed(g.value < 10 ? 1 : 0)}</div>
+                        <div class="gauge-unit">${g.unit}</div>
                     </div>
                 </div>
-                <!-- Tooltip -->
+                <div class="gauge-title">${g.label}</div>
+                ${currentScenario !== 'ref' ? `<span class="gauge-change ${changeClass}">${changeSign}${change.toFixed(0)}%</span>` : ''}
+
+                <!-- Tooltip pedagogique -->
                 <div class="tooltip">
                     <div class="tooltip-title">${def.icon} ${def.title}</div>
                     <div class="tooltip-section">

@@ -452,6 +452,17 @@ body {
     box-shadow: 0 12px 24px rgba(0,0,0,0.1);
 }
 
+.gauge-card:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.gauge-card {
+    position: relative;
+    cursor: help;
+}
+
 .gauge-container {
     width: 180px;
     height: 180px;
