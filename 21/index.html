@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClimaViz - Trajectoires Climatiques Paris</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">CV</div>
+                <span class="logo-text">ClimaViz</span>
+            </div>
+            <div class="header-controls">
+                <button class="dark-toggle" onclick="toggleDarkMode()"><span id="dark-icon">&#x1F319;</span></button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Trajectoires Climatiques de Paris</h1>
+            <p class="hero-subtitle">Visualisez l'evolution du climat selon les scenarios de rechauffement (TRACC 2023)</p>
+
+            <div class="thermometer-hero">
+                <div class="giant-thermometer">
+                    <div class="thermo-scale">
+                        <span>+4°C</span>
+                        <span>+3°C</span>
+                        <span>+2°C</span>
+                        <span>+1°C</span>
+                        <span>Ref</span>
+                    </div>
+                    <div class="thermo-tube">
+                        <div class="thermo-mercury" id="thermo-mercury"></div>
+                        <div class="thermo-marker" id="thermo-marker">+2°C</div>
+                    </div>
+                    <div class="thermo-bulb" id="thermo-bulb">
+                        <span class="thermo-bulb-temp" id="bulb-temp">+2°C</span>
+                    </div>
+                </div>
+
+                <div class="scenario-cards" id="scenario-cards">
+                    <div class="scenario-card" data-scenario="ref" onclick="selectScenario('ref')" style="--scenario-color: #3b82f6; --scenario-bg: rgba(59,130,246,0.1)">
+                        <div class="scenario-emoji">&#x2744;&#xFE0F;</div>
+                        <div class="scenario-temp">Ref</div>
+                        <div class="scenario-year">1976-2005</div>
+                        <div class="scenario-desc">Le climat que nous connaissions</div>
+                    </div>
+                    <div class="scenario-card active" data-scenario="2030" onclick="selectScenario('2030')" style="--scenario-color: #f97316; --scenario-bg: rgba(249,115,22,0.1)">
+                        <div class="scenario-emoji">&#x2600;&#xFE0F;</div>
+                        <div class="scenario-temp">+2°C</div>
+                        <div class="scenario-year">Horizon 2030</div>
+                        <div class="scenario-desc">Limite de l'Accord de Paris</div>
+                    </div>
+                    <div class="scenario-card" data-scenario="2050" onclick="selectScenario('2050')" style="--scenario-color: #ef4444; --scenario-bg: rgba(239,68,68,0.1)">
+                        <div class="scenario-emoji">&#x1F525;</div>
+                        <div class="scenario-temp">+2.7°C</div>
+                        <div class="scenario-year">Horizon 2050</div>
+                        <div class="scenario-desc">Trajectoire actuelle</div>
+                    </div>
+                    <div class="scenario-card" data-scenario="2100" onclick="selectScenario('2100')" style="--scenario-color: #991b1b; --scenario-bg: rgba(153,27,27,0.1)">
+                        <div class="scenario-emoji">&#x1F975;</div>
+                        <div class="scenario-temp">+4°C</div>
+                        <div class="scenario-year">Horizon 2100</div>
+                        <div class="scenario-desc">Scenario extreme</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <!-- Immersive Weather Scene -->
+        <section class="weather-scene" id="weather-scene">
+            <div class="sun" id="sun"></div>
+            <div class="heat-waves">
+                <div class="heat-wave"></div>
+                <div class="heat-wave"></div>
+            </div>
+            <div class="weather-info">
+                <div class="weather-title">Un jour d'ete typique a Paris</div>
+                <div class="weather-temp" id="weather-temp">36°C</div>
+                <div class="weather-desc" id="weather-desc">Temperature maximale record</div>
+                <div class="weather-details">
+                    <div class="weather-detail">
+                        <span class="weather-detail-icon">&#x1F319;</span>
+                        <span class="weather-detail-value" id="tropical-nights">17 nuits tropicales</span>
+                    </div>
+                    <div class="weather-detail">
+                        <span class="weather-detail-icon">&#x1F4A7;</span>
+                        <span class="weather-detail-value" id="summer-rain">154 mm de pluie</span>
+                    </div>
+                    <div class="weather-detail">
+                        <span class="weather-detail-icon">&#x1F525;</span>
+                        <span class="weather-detail-value" id="fire-risk">3 jours risque feu</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visual Illustrations -->
+        <section class="impact-illustrations" id="impact-illustrations">
+            <!-- Earth -->
+            <div class="illustration-card">
+                <div class="illustration-container earth-scene">
+                    <div class="stars"></div>
+                    <div class="earth" id="earth-illustration">
+                        <div class="earth-clouds"></div>
+                        <div class="earth-fire"></div>
+                    </div>
+                </div>
+                <div class="illustration-title">Notre planete</div>
+                <div class="illustration-desc" id="earth-desc">Ecosystemes en equilibre</div>
+                <span class="illustration-status ok" id="earth-status">Stable</span>
+            </div>
+
+            <!-- River -->
+            <div class="illustration-card">
+                <div class="illustration-container river-scene" id="river-illustration">
+                    <div class="tree tree-1">
+                        <div class="tree-leaves"></div>
+                        <div class="tree-trunk"></div>
+                    </div>
+                    <div class="tree tree-2">
+                        <div class="tree-leaves"></div>
+                        <div class="tree-trunk"></div>
+                    </div>
+                    <div class="river-bed">
+                        <div class="river-water"></div>
+                    </div>
+                    <div class="cracks">
+                        <div class="crack crack-1"></div>
+                        <div class="crack crack-2"></div>
+                        <div class="crack crack-3"></div>
+                        <div class="crack crack-4"></div>
+                        <div class="crack crack-5"></div>
+                    </div>
+                </div>
+                <div class="illustration-title">Cours d'eau</div>
+                <div class="illustration-desc" id="river-desc">Debit normal, vegetation saine</div>
+                <span class="illustration-status ok" id="river-status">Normal</span>
+            </div>
+
+            <!-- Ice -->
+            <div class="illustration-card">
+                <div class="illustration-container ice-scene" id="ice-illustration">
+                    <div class="polar-bear">&#x1F43B;&#x200D;&#x2744;&#xFE0F;</div>
+                    <div class="iceberg">
+                        <div class="iceberg-top"></div>
+                    </div>
+                    <div class="water-level"></div>
+                </div>
+                <div class="illustration-title">Banquise arctique</div>
+                <div class="illustration-desc" id="ice-desc">Glaces stables, habitat preserve</div>
+                <span class="illustration-status ok" id="ice-status">Preservee</span>
+            </div>
+
+            <!-- Forest -->
+            <div class="illustration-card">
+                <div class="illustration-container forest-scene" id="forest-illustration">
+                    <div class="smoke">
+                        <div class="smoke-cloud"></div>
+                        <div class="smoke-cloud"></div>
+                        <div class="smoke-cloud"></div>
+                        <div class="smoke-cloud"></div>
+                    </div>
+                    <div class="forest-trees">
+                        <div class="forest-tree">
+                            <div class="forest-crown"></div>
+                            <div class="forest-trunk"></div>
+                        </div>
+                        <div class="forest-tree">
+                            <div class="forest-crown"></div>
+                            <div class="forest-trunk"></div>
+                        </div>
+                        <div class="forest-tree">
+                            <div class="forest-crown"></div>
+                            <div class="forest-trunk"></div>
+                        </div>
+                        <div class="forest-tree">
+                            <div class="forest-crown"></div>
+                            <div class="forest-trunk"></div>
+                        </div>
+                    </div>
+                    <div class="forest-fire">
+                        <div class="flame"></div>
+                        <div class="flame"></div>
+                        <div class="flame"></div>
+                        <div class="flame"></div>
+                        <div class="flame"></div>
+                    </div>
+                </div>
+                <div class="illustration-title">Forets mediterraneennes</div>
+                <div class="illustration-desc" id="forest-desc">Vegetation luxuriante</div>
+                <span class="illustration-status ok" id="forest-status">Saines</span>
+            </div>
+        </section>
+
+        <!-- Visual Calendar -->
+        <section class="calendar-section">
+            <div class="calendar-header">
+                <div>
+                    <h2 class="section-title">Calendrier de l'ete</h2>
+                    <p class="section-subtitle">Chaque case = 1 jour. Survolez pour les details techniques.</p>
+                </div>
+                <div class="calendar-legend">
+                    <div class="legend-item"><div class="legend-color" style="background: #22c55e"></div>&lt;25°C</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #fbbf24"></div>25-30°C</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #f97316"></div>30-35°C</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #ef4444"></div>35-40°C</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #991b1b"></div>&gt;40°C</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #22c55e; box-shadow: inset 0 0 0 2px #7c3aed"></div>Nuit tropicale</div>
+                </div>
+            </div>
+            <div class="calendar-months" id="calendar-months"></div>
+            <div class="calendar-stats" id="calendar-stats"></div>
+        </section>
+
+        <!-- Circular Gauges with Tooltips -->
+        <section class="gauges-section" id="gauges-section"></section>
+
+        <!-- City Comparison -->
+        <section class="city-visual-section">
+            <h2 class="section-title">Equivalence climatique</h2>
+            <p class="section-subtitle">Le climat futur de Paris ressemblera a...</p>
+            <div class="city-comparison-visual" id="city-comparison"></div>
+        </section>
+
+        <!-- Trajectory Chart -->
+        <section class="chart-section">
+            <div class="calendar-header">
+                <div>
+                    <h2 class="section-title">Trajectoires dans le temps</h2>
+                    <p class="section-subtitle">Evolution des indicateurs selon les horizons</p>
+                </div>
+                <div class="chart-tabs">
+                    <button class="chart-tab active" data-chart="tropical" onclick="changeChart('tropical')">Nuits tropicales</button>
+                    <button class="chart-tab" data-chart="hot30" onclick="changeChart('hot30')">Jours > 30°C</button>
+                    <button class="chart-tab" data-chart="hot35" onclick="changeChart('hot35')">Jours > 35°C</button>
+                    <button class="chart-tab" data-chart="cooling" onclick="changeChart('cooling')">Climatisation</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="mainChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Tipping Points -->
+        <section class="tipping-section visible" id="tipping-section">
+            <h2 class="section-title">Points de bascule planetaires</h2>
+            <p class="section-subtitle" style="color: #94a3b8">Seuils critiques au-dela desquels des changements irreversibles peuvent se produire</p>
+            <div class="tipping-grid" id="tipping-grid"></div>
+            <div class="global-impacts" id="global-impacts"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">
+            Visualisation pedagogique basee sur les donnees
+            <a href="https://www.ecologie.gouv.fr/trajectoire-rechauffement-adaptation-au-changement-climatique-tracc" target="_blank">TRACC 2023</a>
+        </p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
