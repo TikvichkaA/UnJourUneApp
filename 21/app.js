@@ -309,6 +309,7 @@ function renderGauges() {
         { key: 'tropicalNights', label: 'Nuits tropicales', value: s.tropicalNights, max: 60, unit: '/an', color: '#ef4444' },
         { key: 'days30', label: 'Jours > 30°C', value: s.days30, max: 45, unit: '/an', color: '#f97316' },
         { key: 'days35', label: 'Jours > 35°C', value: s.days35, max: 15, unit: '/an', color: '#dc2626' },
+        { key: 'days40', label: 'Jours > 40°C', value: s.days40, max: 5, unit: '/an', color: '#7f1d1d' },
         { key: 'maxTemp', label: 'Temp. max record', value: s.maxTemp, max: 45, unit: '°C', color: '#991b1b' },
         // Energie
         { key: 'cooling', label: 'Climatisation', value: s.cooling, max: 300, unit: 'DJ', color: '#0ea5e9' },
