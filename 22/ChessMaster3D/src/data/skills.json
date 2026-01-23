@@ -1,0 +1,103 @@
+{
+  "skills": [
+    {
+      "id": "basic_mate",
+      "name": "Mat de Base",
+      "description": "Reconnaître et exécuter les mats fondamentaux",
+      "icon": "crown",
+      "category": "fundamentals"
+    },
+    {
+      "id": "tactics_basic",
+      "name": "Tactiques de Base",
+      "description": "Identifier les pièces non défendues et les menaces simples",
+      "icon": "target",
+      "category": "tactics"
+    },
+    {
+      "id": "fork",
+      "name": "Fourchette",
+      "description": "Attaquer deux pièces à la fois avec une seule pièce",
+      "icon": "git-fork",
+      "category": "tactics"
+    },
+    {
+      "id": "pin",
+      "name": "Clouage",
+      "description": "Immobiliser une pièce devant le Roi ou la Dame",
+      "icon": "pin",
+      "category": "tactics"
+    },
+    {
+      "id": "skewer",
+      "name": "Enfilade",
+      "description": "Attaquer une pièce forte pour capturer derrière",
+      "icon": "arrow-right",
+      "category": "tactics"
+    },
+    {
+      "id": "attraction",
+      "name": "Attraction",
+      "description": "Forcer une pièce vers une case défavorable",
+      "icon": "magnet",
+      "category": "tactics"
+    },
+    {
+      "id": "double_attack",
+      "name": "Coup Double",
+      "description": "Créer deux menaces simultanées indépendantes",
+      "icon": "zap",
+      "category": "tactics"
+    },
+    {
+      "id": "sacrifice",
+      "name": "Sacrifice",
+      "description": "Donner du matériel pour un gain supérieur",
+      "icon": "flame",
+      "category": "tactics"
+    },
+    {
+      "id": "smothered_mate",
+      "name": "Mat Étouffé",
+      "description": "Mater un Roi entouré de ses propres pièces",
+      "icon": "shield",
+      "category": "patterns"
+    },
+    {
+      "id": "endgame_pawn",
+      "name": "Finales de Pions",
+      "description": "Maîtriser l'opposition et les cases clés",
+      "icon": "chevron-up",
+      "category": "endgame"
+    },
+    {
+      "id": "endgame_rook",
+      "name": "Finales de Tours",
+      "description": "Techniques essentielles des finales de Tours",
+      "icon": "castle",
+      "category": "endgame"
+    }
+  ],
+  "categories": [
+    {
+      "id": "fundamentals",
+      "name": "Fondamentaux",
+      "color": "#4CAF50"
+    },
+    {
+      "id": "tactics",
+      "name": "Tactiques",
+      "color": "#FF9800"
+    },
+    {
+      "id": "patterns",
+      "name": "Motifs",
+      "color": "#9C27B0"
+    },
+    {
+      "id": "endgame",
+      "name": "Finales",
+      "color": "#2196F3"
+    }
+  ]
+}

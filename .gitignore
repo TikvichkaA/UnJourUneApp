@@ -32,3 +32,16 @@ npm-debug.log*
 # Backups avec données personnelles
 11-backup/
 12-backup/
+
+# Android
+.gradle/
+**/build/
+local.properties
+*.apk
+*.aab
+
+# App 21 (privé)
+21/
+
+# Windows artifacts
+nul

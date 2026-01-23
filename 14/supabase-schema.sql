@@ -125,7 +125,18 @@ INSERT INTO communes (nom, departement, code_dept, score, population, maire_actu
 ('Carpentras', 'Vaucluse', '84', 'D', '30 000', 'Serge Andrieu (DVG)', 'Département historique du FN'),
 
 -- Score C
-('Romorantin-Lanthenay', 'Loir-et-Cher', '41', 'C', '17 000', 'Jeanny Lorgeoux (PS)', 'Territoire rural, vote RN en hausse');
+('Romorantin-Lanthenay', 'Loir-et-Cher', '41', 'C', '17 000', 'Jeanny Lorgeoux (PS)', 'Territoire rural, vote RN en hausse'),
+
+-- Nouvelles communes - Candidats Reconquête (source: Candidator.fr - 01/03/2026)
+('Bourg-en-Bresse', 'Ain', '01', 'C', '42 000', 'Jean-François Debat (PS)', 'Liste union des droites LR-Reconquête annoncée'),
+('Évreux', 'Eure', '27', 'D', '51 000', 'Guy Lefrand (LR)', 'Candidature officielle Reconquête annoncée. Jean Messiha figure médiatique'),
+('Saint-Priest', 'Rhône', '69', 'C', '47 000', 'Gilles Gascon (LR)', 'Candidature Reconquête dans la métropole lyonnaise'),
+('Paris 16e', 'Paris', '75', 'C', '166 000', 'Francis Szpiner (LR)', 'Arrondissement huppé, candidature symbolique de Sarah Knafo'),
+
+-- Candidats UDR (source: Candidator.fr - 01/03/2026)
+('Nice', 'Alpes-Maritimes', '06', 'D', '342 000', 'Christian Estrosi (Horizons)', 'Plus grande ville visée par l''UDR. Éric Ciotti tête de liste'),
+('La Teste-de-Buch', 'Gironde', '33', 'C', '28 000', 'Patrick Davet (DVD)', 'Candidature union des droites sans investiture officielle'),
+('Poitiers', 'Vienne', '86', 'C', '89 000', 'Léonore Moncond''huy (EELV)', 'Liste Liberté pour Poitiers sous étiquette UDR');
 
 -- ===========================================
 -- DONNEES INITIALES - Candidat·es identifié·es
@@ -139,6 +150,20 @@ INSERT INTO candidats (commune_id, nom, prenom, role, parti, detail, twitter, es
 ((SELECT id FROM communes WHERE nom = 'Roquebrune-sur-Argens'), 'Lechanteux', 'Julie', 'tete', 'RN', 'Députée RN élue au 1er tour 2024', '@music_juls', TRUE),
 ((SELECT id FROM communes WHERE nom = 'Menton'), 'Masson', 'Alexandra', 'tete', 'RN', 'Députée RN élue au 1er tour 2024', '@AMasson_RN', TRUE),
 ((SELECT id FROM communes WHERE nom = 'Liévin'), 'Paiva', 'Dany', 'tete', 'RN', 'Trentenaire originaire du Gard', NULL, FALSE);
+
+-- Candidats Reconquête (source: Candidator.fr - 01/03/2026)
+INSERT INTO candidats (commune_id, nom, prenom, role, parti, detail, twitter) VALUES
+((SELECT id FROM communes WHERE nom = 'Bourg-en-Bresse'), 'de Boysson', 'Benoit', 'tete', 'Reconquete', 'Tête de liste union des droites (LR-Reconquête)', NULL),
+((SELECT id FROM communes WHERE nom = 'Évreux'), 'Messiha', 'Jean', 'tete', 'Reconquete', 'Candidat officiel Reconquête, 55 ans, économiste et figure médiatique du parti', '@JeanMessiha'),
+((SELECT id FROM communes WHERE nom = 'Saint-Priest'), 'Pozzi', 'André', 'tete', 'Reconquete', 'Candidat Reconquête', NULL),
+((SELECT id FROM communes WHERE nom = 'Paris 16e'), 'Knafo', 'Sarah', 'tete', 'Reconquete', 'Eurodéputée Reconquête, 32 ans, défense de l''identité française', '@SarahKnaorth');
+
+-- Candidats UDR (source: Candidator.fr - 01/03/2026)
+INSERT INTO candidats (commune_id, nom, prenom, role, parti, detail, twitter) VALUES
+((SELECT id FROM communes WHERE nom = 'Nice'), 'Ciotti', 'Éric', 'tete', 'UDR', 'Président de l''UDR, 59 ans, ex-LR rallié au RN, prône une droite ferme sur l''autorité et l''identité', '@ECiotti'),
+((SELECT id FROM communes WHERE nom = 'Nice'), 'Rivère', 'Jean-Pierre', 'colistier', 'UDR', 'Ancien président de l''OGC Nice, candidat comme 1er adjoint', NULL),
+((SELECT id FROM communes WHERE nom = 'La Teste-de-Buch'), 'Muret', 'Marc', 'tete', 'UDR', 'Candidat prônant l''union des droites, sans investiture officielle UDR', NULL),
+((SELECT id FROM communes WHERE nom = 'Poitiers'), 'Prost', 'Marie-Dolorès', 'tete', 'UDR', 'Candidate sous l''étiquette UDR, liste Liberté pour Poitiers', NULL);
 
 -- Candidats nationaux avec dingueries (pas forcément candidats municipales mais utiles)
 INSERT INTO candidats (nom, prenom, parti, circonscription, detail, est_depute) VALUES

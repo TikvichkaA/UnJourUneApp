@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FocusGuard</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Accueil</string>
+    <string name="nav_apps">Apps</string>
+    <string name="nav_activities">Activites</string>
+    <string name="nav_projects">Projets</string>
+    <string name="nav_stats">Stats</string>
+    <string name="nav_settings">Parametres</string>
+
+    <!-- Home Screen -->
+    <string name="home_today_usage">Temps d\'ecran aujourd\'hui</string>
+    <string name="home_suggestion">Suggestion d\'activite</string>
+    <string name="home_project_reminder">Rappel projet</string>
+
+    <!-- Apps Screen -->
+    <string name="apps_title">Applications surveillees</string>
+    <string name="apps_add">Ajouter une app</string>
+    <string name="apps_daily_limit">Limite journaliere</string>
+    <string name="apps_session_limit">Limite par session</string>
+    <string name="apps_minutes">min</string>
+
+    <!-- Activities Screen -->
+    <string name="activities_title">Activites alternatives</string>
+    <string name="activities_add">Nouvelle activite</string>
+    <string name="activities_empty">Aucune activite configuree.\nAjoutez des activites que vous preferez faire !</string>
+
+    <!-- Projects Screen -->
+    <string name="projects_title">Mes projets</string>
+    <string name="projects_add">Nouveau projet</string>
+    <string name="projects_empty">Aucun projet.\nAjoutez vos projets personnels pour recevoir des rappels !</string>
+
+    <!-- Stats Screen -->
+    <string name="stats_title">Statistiques</string>
+    <string name="stats_week">7 jours</string>
+    <string name="stats_month">30 jours</string>
+    <string name="stats_total_time">Temps total</string>
+    <string name="stats_blocked_sessions">Sessions interrompues</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_title">Parametres</string>
+    <string name="settings_severity">Niveau de severite</string>
+    <string name="settings_severity_soft">Souple</string>
+    <string name="settings_severity_strict">Strict</string>
+    <string name="settings_severity_custom">Personnalise</string>
+    <string name="settings_snooze_duration">Duree du snooze</string>
+    <string name="settings_notifications">Notifications</string>
+
+    <!-- Blocker Overlay -->
+    <string name="blocker_title">Pause !</string>
+    <string name="blocker_message">Tu as passe %1$d min sur %2$s</string>
+    <string name="blocker_suggestion">Pourquoi ne pas plutot...</string>
+    <string name="blocker_project">N\'oublie pas ton projet :</string>
+    <string name="blocker_dismiss">OK, je fais autre chose</string>
+    <string name="blocker_snooze">Encore %1$d min</string>
+
+    <!-- Permissions -->
+    <string name="permission_usage_title">Acces aux stats d\'utilisation</string>
+    <string name="permission_usage_desc">FocusGuard a besoin d\'acceder aux statistiques d\'utilisation pour surveiller le temps passe sur les apps.</string>
+    <string name="permission_overlay_title">Affichage par-dessus les apps</string>
+    <string name="permission_overlay_desc">FocusGuard a besoin d\'afficher un ecran par-dessus les autres apps pour vous interrompre.</string>
+    <string name="permission_grant">Autoriser</string>
+
+    <!-- Categories -->
+    <string name="category_social">Reseaux sociaux</string>
+    <string name="category_game">Jeux</string>
+    <string name="category_video">Video</string>
+    <string name="category_news">Actualites</string>
+    <string name="category_other">Autre</string>
+
+    <!-- Activity Categories -->
+    <string name="activity_category_exercise">Sport</string>
+    <string name="activity_category_reading">Lecture</string>
+    <string name="activity_category_creative">Creatif</string>
+    <string name="activity_category_social">Social (IRL)</string>
+    <string name="activity_category_productive">Productif</string>
+    <string name="activity_category_relax">Detente</string>
+
+    <!-- Common -->
+    <string name="save">Enregistrer</string>
+    <string name="cancel">Annuler</string>
+    <string name="delete">Supprimer</string>
+    <string name="edit">Modifier</string>
+    <string name="enabled">Active</string>
+    <string name="disabled">Desactive</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">Surveillance active</string>
+    <string name="notification_channel_desc">Notification indiquant que FocusGuard surveille votre utilisation</string>
+    <string name="notification_title">FocusGuard actif</string>
+    <string name="notification_text">Surveillance du temps d\'ecran en cours</string>
+</resources>
