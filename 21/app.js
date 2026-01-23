@@ -61,6 +61,15 @@ const indicatorDefinitions = {
         variability: "Evenements rares mais leur frequence augmente significativement.",
         impact: "Risque vital pour les personnes vulnerables"
     },
+    days40: {
+        icon: "&#x1F975;",
+        title: "Jours > 40°C",
+        unit: "jours/an",
+        definition: "Nombre de jours ou la temperature maximale depasse 40°C. Seuil de danger extreme, jamais atteint historiquement a Paris.",
+        intervals: { ref: [0, 0], "2030": [0, 0.5], "2050": [0, 1], "2100": [0.5, 3] },
+        variability: "Evenements exceptionnels qui deviennent possibles avec le rechauffement.",
+        impact: "Conditions potentiellement mortelles, saturation des urgences"
+    },
     cooling: {
         icon: "&#x2744;&#xFE0F;",
         title: "Degres-jours climatisation",
@@ -70,6 +79,15 @@ const indicatorDefinitions = {
         variability: "Varie selon l'ensoleillement et les vagues de chaleur estivales.",
         impact: "Augmentation facture energetique, pics de consommation"
     },
+    heating: {
+        icon: "&#x1F525;",
+        title: "Degres-jours chauffage",
+        unit: "DJ",
+        definition: "Indicateur du besoin en chauffage. Somme des ecarts entre 18°C et la temperature moyenne journaliere quand celle-ci est inferieure.",
+        intervals: { ref: [2200, 2450], "2030": [1900, 2150], "2050": [1750, 2050], "2100": [1450, 1800] },
+        variability: "Varie selon la rigueur des hivers. Tendance a la baisse.",
+        impact: "Economies de chauffage mais isolation toujours necessaire"
+    },
     frostDays: {
         icon: "&#x1F9CA;",
         title: "Jours de gel",
@@ -78,6 +96,33 @@ const indicatorDefinitions = {
         intervals: { ref: [17, 28], "2030": [10, 19], "2050": [7, 16], "2100": [4, 11] },
         variability: "Diminution progressive mais des hivers rigoureux restent possibles.",
         impact: "Moins de chauffage, mais risques pour certaines cultures"
+    },
+    fireRisk: {
+        icon: "&#x1F6A8;",
+        title: "Jours risque incendie",
+        unit: "jours/an",
+        definition: "Nombre de jours ou l'Indice Feu Meteo (IFM) depasse le seuil de risque eleve. Combine temperature, humidite, vent et secheresse.",
+        intervals: { ref: [1, 4], "2030": [2, 5], "2050": [5, 12], "2100": [6, 14] },
+        variability: "Tres dependant des conditions de secheresse accumulee au printemps.",
+        impact: "Risque pour les forets periurbaines, qualite de l'air degradee"
+    },
+    summerRain: {
+        icon: "&#x1F4A7;",
+        title: "Precipitations estivales",
+        unit: "mm",
+        definition: "Cumul des precipitations sur juin, juillet et aout. Indicateur de secheresse estivale.",
+        intervals: { ref: [140, 185], "2030": [130, 180], "2050": [130, 182], "2100": [115, 170] },
+        variability: "Grande variabilite naturelle. Tendance a la baisse mais avec des episodes intenses.",
+        impact: "Stress hydrique pour la vegetation, restrictions d'eau possibles"
+    },
+    maxTemp: {
+        icon: "&#x1F321;&#xFE0F;",
+        title: "Temperature max record",
+        unit: "°C",
+        definition: "Temperature maximale journaliere la plus elevee de l'annee en moyenne. Indicateur d'intensite des vagues de chaleur.",
+        intervals: { ref: [32, 36], "2030": [34, 38], "2050": [35, 40], "2100": [38, 43] },
+        variability: "Peut varier de plusieurs degres selon la presence ou non de canicule.",
+        impact: "Seuil critique pour la sante publique et les infrastructures"
     }
 };
 
@@ -260,20 +305,35 @@ function renderGauges() {
     const ref = scenarios.ref;
 
     const gauges = [
+        // Chaleur
         { key: 'tropicalNights', label: 'Nuits tropicales', value: s.tropicalNights, max: 60, unit: '/an', color: '#ef4444' },
+        { key: 'days30', label: 'Jours > 30°C', value: s.days30, max: 45, unit: '/an', color: '#f97316' },
         { key: 'days35', label: 'Jours > 35°C', value: s.days35, max: 15, unit: '/an', color: '#dc2626' },
+        { key: 'maxTemp', label: 'Temp. max record', value: s.maxTemp, max: 45, unit: '°C', color: '#991b1b' },
+        // Energie
         { key: 'cooling', label: 'Climatisation', value: s.cooling, max: 300, unit: 'DJ', color: '#0ea5e9' },
-        { key: 'frostDays', label: 'Jours de gel', value: s.frostDays, max: 30, unit: '/an', color: '#3b82f6' }
+        { key: 'heating', label: 'Chauffage', value: s.heating, max: 2500, unit: 'DJ', color: '#f59e0b' },
+        // Froid
+        { key: 'frostDays', label: 'Jours de gel', value: s.frostDays, max: 30, unit: '/an', color: '#3b82f6' },
+        // Risques
+        { key: 'fireRisk', label: 'Risque incendie', value: s.fireRisk, max: 15, unit: 'j/an', color: '#ea580c' },
+        { key: 'summerRain', label: 'Pluie ete', value: s.summerRain, max: 200, unit: 'mm', color: '#06b6d4' }
     ];
 
-    document.getElementById('gauges-section').innerHTML = gauges.map(g => {
+    // Section title
+    let html = '<h2 class="section-title" style="grid-column: 1/-1; margin-bottom: 0.5rem;">Indicateurs climatiques detailles</h2>';
+    html += '<p class="section-subtitle" style="grid-column: 1/-1; margin-bottom: 1.5rem;">Survolez chaque indicateur pour plus de details techniques</p>';
+
+    html += gauges.map(g => {
         const def = indicatorDefinitions[g.key];
         const refVal = ref[g.key];
         const pct = Math.min(g.value / g.max * 100, 100);
         const circumference = 2 * Math.PI * 70;
         const offset = circumference - (pct / 100) * circumference;
         const change = refVal !== 0 ? ((g.value - refVal) / refVal * 100) : 0;
-        const changeClass = g.key === 'frostDays' ? (change < 0 ? 'down' : 'up') : (change > 0 ? 'up' : 'down');
+        // Pour certains indicateurs, une baisse est positive (chauffage, gel, pluie)
+        const decreaseIsGood = ['frostDays', 'heating', 'summerRain'].includes(g.key);
+        const changeClass = decreaseIsGood ? (change < 0 ? 'down' : 'up') : (change > 0 ? 'up' : 'down');
         const changeSign = change > 0 ? '+' : '';
         const interval = def.intervals[currentScenario] || def.intervals.ref;
 
@@ -314,6 +374,8 @@ function renderGauges() {
             </div>
         `;
     }).join('');
+
+    document.getElementById('gauges-section').innerHTML = html;
 }
 
 // ============================================
