@@ -1,20 +1,38 @@
-const CACHE_NAME = 'elecpro-v1';
+const CACHE_NAME = 'elecpro-offline-v4';
+
+// Chemins relatifs pour fonctionner sur n'importe quel hébergement
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/vite.svg'
+  './',
+  './index.html',
+  './manifest.json',
+  './vite.svg',
+  './assets/index-Qv5vnTPI.css',
+  './assets/index-CfYZG41o.js',
+  './icons/icon-72x72.png',
+  './icons/icon-96x96.png',
+  './icons/icon-128x128.png',
+  './icons/icon-144x144.png',
+  './icons/icon-152x152.png',
+  './icons/icon-192x192.png',
+  './icons/icon-384x384.png',
+  './icons/icon-512x512.png'
 ];
 
-// Installation du service worker
+// Installation du service worker - pré-charge tout
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('Cache ouvert');
+        console.log('ElecPro: Téléchargement hors-ligne...');
         return cache.addAll(urlsToCache);
       })
-      .then(() => self.skipWaiting())
+      .then(() => {
+        console.log('ElecPro: Prêt pour le mode hors-ligne!');
+        self.skipWaiting();
+      })
+      .catch((err) => {
+        console.error('ElecPro: Erreur de cache', err);
+      })
   );
 });
 
@@ -34,34 +52,36 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Stratégie de cache: Network First avec fallback sur cache
+// Stratégie Cache First pour le mode hors-ligne
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // Clone la réponse car elle ne peut être utilisée qu'une fois
-        const responseClone = response.clone();
+    caches.match(event.request)
+      .then((cachedResponse) => {
+        // Si en cache, utilise le cache
+        if (cachedResponse) {
+          return cachedResponse;
+        }
 
-        caches.open(CACHE_NAME)
-          .then((cache) => {
-            // Ne cache que les requêtes GET réussies
-            if (event.request.method === 'GET' && response.status === 200) {
-              cache.put(event.request, responseClone);
-            }
-          });
-
-        return response;
-      })
-      .catch(() => {
-        // Si le réseau échoue, essaye le cache
-        return caches.match(event.request)
+        // Sinon, fetch depuis le réseau et met en cache
+        return fetch(event.request)
           .then((response) => {
-            if (response) {
+            // Ne cache que les requêtes GET réussies
+            if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
-            // Page hors ligne par défaut pour les navigations
+
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then((cache) => {
+                cache.put(event.request, responseToCache);
+              });
+
+            return response;
+          })
+          .catch(() => {
+            // Pour les navigations, retourne index.html
             if (event.request.mode === 'navigate') {
-              return caches.match('/index.html');
+              return caches.match('./index.html');
             }
           });
       })

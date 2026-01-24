@@ -12,10 +12,24 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="ElecPro" />
     <title>ElecPro - TP Électricien</title>
-    <script type="module" crossorigin src="./assets/index-DExjrgE0.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BMbQjnp_.css">
+    <script type="module" crossorigin src="./assets/index-CfYZG41o.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Qv5vnTPI.css">
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Enregistrement du Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('./sw.js')
+            .then(function(reg) {
+              console.log('ElecPro SW enregistré');
+            })
+            .catch(function(err) {
+              console.log('Erreur SW:', err);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
