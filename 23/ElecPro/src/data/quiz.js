@@ -1,5 +1,5 @@
 // Questions de quiz - Préparation TP Électricien
-// Catégories: normes, habilitations, referentiel, calculs
+// Catégories: normes, habilitations, pratique, calculs, schemas, outillage
 
 export const quizData = {
   categories: [
@@ -30,6 +30,20 @@ export const quizData = {
       description: "Dimensionnement et calculs",
       icon: "🧮",
       color: "purple"
+    },
+    {
+      id: "schemas",
+      titre: "Schémas",
+      description: "Lecture de schémas et symboles",
+      icon: "📐",
+      color: "indigo"
+    },
+    {
+      id: "outillage",
+      titre: "Outillage",
+      description: "Outils et appareils de mesure",
+      icon: "🔨",
+      color: "orange"
     }
   ],
 
@@ -154,6 +168,86 @@ export const quizData = {
       options: ["10 mA", "30 mA", "100 mA", "300 mA"],
       correct: 3,
       explication: "La VMC peut être protégée par un DDR 300mA si le circuit est dédié. Sinon, elle doit être sous DDR 30mA comme tout circuit."
+    },
+    {
+      id: "n16",
+      category: "normes",
+      question: "Combien de points d'éclairage maximum sur un circuit protégé 16A ?",
+      options: ["5", "8", "10", "12"],
+      correct: 1,
+      explication: "Un circuit d'éclairage en 1.5mm² protégé 16A peut alimenter jusqu'à 8 points d'éclairage maximum."
+    },
+    {
+      id: "n17",
+      category: "normes",
+      question: "Quelle est la hauteur recommandée pour un interrupteur de commande ?",
+      options: ["0.50 à 0.80m", "0.90 à 1.30m", "1.30 à 1.50m", "1.50 à 1.80m"],
+      correct: 1,
+      explication: "Les interrupteurs doivent être installés entre 0.90m et 1.30m du sol fini, pour être accessibles aux personnes à mobilité réduite."
+    },
+    {
+      id: "n18",
+      category: "normes",
+      question: "Le DAAF (Détecteur Autonome Avertisseur de Fumée) est obligatoire dans quel type de local ?",
+      options: ["Uniquement les ERP", "Tous les logements", "Uniquement les maisons", "Uniquement les immeubles"],
+      correct: 1,
+      explication: "Le DAAF est obligatoire dans tous les logements depuis 2015. Il doit être installé dans la circulation menant aux chambres."
+    },
+    {
+      id: "n19",
+      category: "normes",
+      question: "Quelle est la profondeur minimale d'enfouissement d'un câble électrique sous une allée piétonne ?",
+      options: ["30 cm", "50 cm", "65 cm", "85 cm"],
+      correct: 1,
+      explication: "La profondeur minimale est de 50cm sous allée piétonne. Elle passe à 85cm sous voie carrossable."
+    },
+    {
+      id: "n20",
+      category: "normes",
+      question: "Combien de DDR 30mA minimum dans un logement ?",
+      options: ["1", "2", "3", "4"],
+      correct: 1,
+      explication: "Il faut minimum 2 DDR 30mA par logement, dont au moins un de Type A pour les circuits avec électronique (lave-linge, plaques...)."
+    },
+    {
+      id: "n21",
+      category: "normes",
+      question: "Le parafoudre est obligatoire dans quelle zone ?",
+      options: ["Zone AQ1 uniquement", "Zone AQ2", "Toutes les zones", "Jamais obligatoire"],
+      correct: 1,
+      explication: "Le parafoudre est obligatoire en zone AQ2 (≥25 jours d'orage/an) et si l'alimentation est par ligne aérienne ou si paratonnerre."
+    },
+    {
+      id: "n22",
+      category: "normes",
+      question: "Quelle section pour la liaison équipotentielle principale (LEP) ?",
+      options: ["2.5 mm² Cu", "4 mm² Cu", "6 mm² Cu minimum", "10 mm² Cu"],
+      correct: 2,
+      explication: "La LEP doit avoir une section de 6mm² Cu minimum (ou 25mm² si aluminium). Elle relie les canalisations métalliques à la terre."
+    },
+    {
+      id: "n23",
+      category: "normes",
+      question: "Quel est le courant de fuite maximum acceptable pour un DDR 30mA ?",
+      options: ["10 mA", "15 mA", "20 mA", "30 mA"],
+      correct: 1,
+      explication: "Le DDR se déclenche entre 15mA et 30mA. Le courant de fuite permanent ne doit pas dépasser 15mA pour éviter les déclenchements intempestifs."
+    },
+    {
+      id: "n24",
+      category: "normes",
+      question: "Combien de prises RJ45 minimum dans un séjour ?",
+      options: ["1", "2", "3", "4"],
+      correct: 1,
+      explication: "Le séjour doit avoir minimum 2 prises RJ45. Chaque pièce principale (chambre, séjour, bureau) doit avoir au moins 1 prise RJ45."
+    },
+    {
+      id: "n25",
+      category: "normes",
+      question: "L'AFDD (détecteur d'arc) est recommandé/obligatoire pour quels locaux ?",
+      options: ["Cuisines uniquement", "Salles de bain", "Locaux à sommeil (chambres)", "Garages"],
+      correct: 2,
+      explication: "L'AFDD est recommandé voire obligatoire (selon amendement) dans les locaux à sommeil (chambres) pour prévenir les incendies d'origine électrique."
     },
 
     // ===== HABILITATIONS =====
@@ -288,6 +382,90 @@ export const quizData = {
       correct: 2,
       explication: "L'habilitation est délivrée par l'employeur, sur la base d'une formation et de la reconnaissance des compétences du salarié."
     },
+    {
+      id: "h13",
+      category: "habilitations",
+      question: "Quelle est la limite de la TBT (Très Basse Tension) en alternatif ?",
+      options: ["12V", "25V", "50V", "120V"],
+      correct: 2,
+      explication: "La TBT va jusqu'à 50V en alternatif et 120V en continu. Au-delà, c'est la BT."
+    },
+    {
+      id: "h14",
+      category: "habilitations",
+      question: "Quelle classe de gants isolants pour travailler en BT ?",
+      options: ["Classe 00 (500V)", "Classe 0 (1000V)", "Classe 1 (7500V)", "Classe 2 (17000V)"],
+      correct: 1,
+      explication: "Pour la BT (jusqu'à 1000V AC), les gants classe 0 (1000V) sont adaptés. Classe 00 pour 500V max."
+    },
+    {
+      id: "h15",
+      category: "habilitations",
+      question: "Que signifie MALT dans la procédure de consignation ?",
+      options: [
+        "Mise À La Terre",
+        "Mesure Avant Le Travail",
+        "Maintien Après Les Travaux",
+        "Mode Automatique Longue Tension"
+      ],
+      correct: 0,
+      explication: "MALT = Mise À La Terre (et en court-circuit). Elle protège contre toute réalimentation accidentelle."
+    },
+    {
+      id: "h16",
+      category: "habilitations",
+      question: "Quelle est la durée de validité recommandée d'une habilitation électrique ?",
+      options: ["1 an", "3 ans", "5 ans", "Illimitée"],
+      correct: 1,
+      explication: "L'habilitation doit être révisée au moins tous les 3 ans (recyclage). Elle peut être retirée ou modifiée à tout moment par l'employeur."
+    },
+    {
+      id: "h17",
+      category: "habilitations",
+      question: "L'habilitation H0 permet de :",
+      options: [
+        "Travailler sous tension en HT",
+        "Accéder aux locaux HT pour travaux non électriques",
+        "Réaliser des consignations en HT",
+        "Diriger des travaux en HT"
+      ],
+      correct: 1,
+      explication: "H0 = Non électricien pouvant accéder aux locaux HT pour effectuer des travaux non électriques (peinture, ménage...)."
+    },
+    {
+      id: "h18",
+      category: "habilitations",
+      question: "Que signifie VAT ?",
+      options: [
+        "Voltmètre À Tension",
+        "Vérification Absence de Tension",
+        "Validation Avant Travaux",
+        "Verrouillage Automatique Tableau"
+      ],
+      correct: 1,
+      explication: "VAT = Vérification d'Absence de Tension. Elle doit être réalisée avec un appareil conforme (VAT) et non un simple multimètre."
+    },
+    {
+      id: "h19",
+      category: "habilitations",
+      question: "La DMA en HTA (jusqu'à 50kV) est de :",
+      options: ["0.30 m", "0.60 m", "2 m", "3 m"],
+      correct: 1,
+      explication: "En HTA, la DMA est de 0.60m. La DLVS (distance limite voisinage simple) est de 2m."
+    },
+    {
+      id: "h20",
+      category: "habilitations",
+      question: "Quel document le BC remet-il au B2 après consignation ?",
+      options: [
+        "Bon de travail",
+        "Attestation de consignation",
+        "Ordre de mission",
+        "Permis de feu"
+      ],
+      correct: 1,
+      explication: "Le BC remet une attestation de consignation au B2, qui confirme que l'ouvrage est consigné et peut être travaillé."
+    },
 
     // ===== PRATIQUE TERRAIN =====
     {
@@ -389,6 +567,97 @@ export const quizData = {
       correct: 0,
       explication: "Vérifier d'abord si la somme des puissances (bouilloire + four + micro-ondes...) ne dépasse pas le calibre du disjoncteur (20A = 4600W max)."
     },
+    {
+      id: "p9",
+      category: "pratique",
+      question: "Comment repérer la phase avec un tournevis testeur ?",
+      options: [
+        "La lampe s'allume au contact de la phase",
+        "La lampe s'allume au contact du neutre",
+        "Le tournevis vibre",
+        "Le tournevis chauffe"
+      ],
+      correct: 0,
+      explication: "Le tournevis testeur s'allume (lampe néon) quand on touche la phase tout en ayant le doigt sur l'extrémité métallique du manche."
+    },
+    {
+      id: "p10",
+      category: "pratique",
+      question: "Quel est le code couleur du conducteur de protection (terre) ?",
+      options: [
+        "Bleu",
+        "Vert",
+        "Jaune",
+        "Vert/Jaune"
+      ],
+      correct: 3,
+      explication: "Le conducteur de protection (PE/terre) est toujours bicolore vert/jaune. Le bleu est réservé au neutre."
+    },
+    {
+      id: "p11",
+      category: "pratique",
+      question: "Une prise de courant chauffe anormalement. Quelle est la cause la plus probable ?",
+      options: [
+        "Tension trop élevée",
+        "Mauvais serrage des connexions",
+        "Section de câble trop importante",
+        "DDR défectueux"
+      ],
+      correct: 1,
+      explication: "L'échauffement est généralement dû à un mauvais contact (serrage insuffisant ou oxydation), qui crée une résistance et donc un échauffement."
+    },
+    {
+      id: "p12",
+      category: "pratique",
+      question: "Comment réaliser un va-et-vient avec 2 interrupteurs ?",
+      options: [
+        "2 interrupteurs simples en parallèle",
+        "2 interrupteurs simples en série",
+        "2 interrupteurs va-et-vient reliés par navettes",
+        "1 télérupteur et 2 boutons poussoirs"
+      ],
+      correct: 2,
+      explication: "Un va-et-vient utilise 2 interrupteurs spéciaux (va-et-vient) reliés par 2 fils navettes. La phase arrive sur l'un, le retour lampe part de l'autre."
+    },
+    {
+      id: "p13",
+      category: "pratique",
+      question: "Le CONSUEL a refusé votre installation. Que faire ?",
+      options: [
+        "Changer de fournisseur d'électricité",
+        "Corriger les anomalies et demander une contre-visite",
+        "Contester la décision au tribunal",
+        "Faire appel à un autre organisme"
+      ],
+      correct: 1,
+      explication: "Il faut corriger les anomalies signalées sur le rapport, puis demander une contre-visite au CONSUEL pour obtenir l'attestation de conformité."
+    },
+    {
+      id: "p14",
+      category: "pratique",
+      question: "Comment raccorder un fil souple (multibrins) sur un bornier à vis ?",
+      options: [
+        "Directement sans préparation",
+        "Avec une cosse à sertir ou embout",
+        "En torsadant puis étamant à la soudure",
+        "En coupant les brins qui dépassent"
+      ],
+      correct: 1,
+      explication: "Les fils souples doivent être équipés d'embouts de câblage (cosses) pour éviter l'écrasement des brins et assurer un bon contact."
+    },
+    {
+      id: "p15",
+      category: "pratique",
+      question: "Un circuit d'éclairage fonctionne par intermittence. Que vérifier ?",
+      options: [
+        "La puissance des lampes",
+        "Les connexions et serrages",
+        "Le compteur électrique",
+        "La section des câbles"
+      ],
+      correct: 1,
+      explication: "Un fonctionnement intermittent indique généralement un faux contact. Vérifier toutes les connexions, boîtes de dérivation et serrages."
+    },
 
     // ===== CALCULS =====
     {
@@ -402,7 +671,7 @@ export const quizData = {
     {
       id: "c2",
       category: "calculs",
-      question: "Quelle chute de tension pour un circuit de 30m en 2.5mm² alimentant 3000W en 230V ? (ρ Cu = 0.0225 Ω.mm²/m)",
+      question: "Quelle chute de tension pour un circuit de 30m en 2.5mm² alimentant 3000W en 230V ?",
       options: ["1.5%", "2.8%", "4.5%", "6%"],
       correct: 1,
       explication: "ΔU = 2 × ρ × L × I / S = 2 × 0.0225 × 30 × 13 / 2.5 = 7V → 7/230 = 3% environ. Limite acceptable (3% éclairage, 5% autres)."
@@ -459,6 +728,342 @@ export const quizData = {
       options: ["15/45A", "20/60A", "30/90A", "60/90A"],
       correct: 0,
       explication: "12kVA tri = 12000 / (√3 × 400) = 17.3A par phase. Calibre 15/45A convient (réglable de 15A à 45A)."
+    },
+    {
+      id: "c9",
+      category: "calculs",
+      question: "Un radiateur de 2000W fonctionne 8h/jour pendant 30 jours. Quelle consommation en kWh ?",
+      options: ["160 kWh", "480 kWh", "600 kWh", "1600 kWh"],
+      correct: 1,
+      explication: "E = P × t = 2 kW × 8h × 30 jours = 480 kWh."
+    },
+    {
+      id: "c10",
+      category: "calculs",
+      question: "Résistance d'un câble cuivre de 50m, section 2.5mm² (ρ=0.0175 Ω.mm²/m) ?",
+      options: ["0.175 Ω", "0.35 Ω", "0.70 Ω", "1.75 Ω"],
+      correct: 1,
+      explication: "R = ρ × L / S = 0.0175 × 50 / 2.5 = 0.35Ω. Attention : pour un aller-retour (circuit), multiplier par 2."
+    },
+    {
+      id: "c11",
+      category: "calculs",
+      question: "Quelle est la puissance réactive d'un moteur 5kW avec cos φ = 0.8 ?",
+      options: ["2.5 kvar", "3.75 kvar", "4 kvar", "6.25 kvar"],
+      correct: 1,
+      explication: "Q = P × tan φ. Avec cos φ = 0.8, sin φ = 0.6, tan φ = 0.75. Donc Q = 5 × 0.75 = 3.75 kvar."
+    },
+    {
+      id: "c12",
+      category: "calculs",
+      question: "Un chauffe-eau 200L, 2400W met combien de temps pour chauffer de 15°C à 65°C ?",
+      options: ["2h30", "4h40", "6h", "8h"],
+      correct: 1,
+      explication: "E = m × c × ΔT = 200 × 1.16 × 50 = 11600 Wh = 11.6 kWh. Temps = 11600/2400 = 4.83h ≈ 4h50."
+    },
+    {
+      id: "c13",
+      category: "calculs",
+      question: "Quelle est l'impédance d'un circuit RL série (R=30Ω, XL=40Ω) ?",
+      options: ["35 Ω", "50 Ω", "70 Ω", "1200 Ω"],
+      correct: 1,
+      explication: "Z = √(R² + XL²) = √(900 + 1600) = √2500 = 50Ω (triangle rectangle 3-4-5)."
+    },
+    {
+      id: "c14",
+      category: "calculs",
+      question: "Un délesteur doit couper à partir de quelle intensité pour un abonnement 9kVA mono ?",
+      options: ["32A", "40A", "45A", "60A"],
+      correct: 1,
+      explication: "9kVA mono = 9000/230 = 39A. Le délesteur est réglé légèrement en dessous du disjoncteur de branchement (40A → délestage vers 38-40A)."
+    },
+    {
+      id: "c15",
+      category: "calculs",
+      question: "Facteur de puissance d'une installation absorbant 10kW actif et 5kvar réactif ?",
+      options: ["0.5", "0.67", "0.89", "0.95"],
+      correct: 2,
+      explication: "S = √(P² + Q²) = √(100 + 25) = 11.18 kVA. cos φ = P/S = 10/11.18 = 0.89."
+    },
+
+    // ===== SCHÉMAS =====
+    {
+      id: "s1",
+      category: "schemas",
+      question: "Comment est représenté un interrupteur différentiel sur un schéma unifilaire ?",
+      options: [
+        "Un rectangle avec un trait oblique",
+        "Un rectangle avec le symbole Δ et la sensibilité",
+        "Un cercle avec une croix",
+        "Un carré avec deux traits parallèles"
+      ],
+      correct: 1,
+      explication: "L'interrupteur différentiel est représenté par un rectangle contenant le symbole Δ (delta) et sa sensibilité (30mA, 300mA...)."
+    },
+    {
+      id: "s2",
+      category: "schemas",
+      question: "Quel symbole représente une prise de courant 2P+T ?",
+      options: [
+        "Cercle avec un point",
+        "Demi-cercle avec deux traits horizontaux",
+        "Rectangle avec trois traits",
+        "Triangle avec un point"
+      ],
+      correct: 1,
+      explication: "La prise 2P+T est représentée par un demi-cercle (côté mur) avec deux traits horizontaux pour les pôles et un trait pour la terre."
+    },
+    {
+      id: "s3",
+      category: "schemas",
+      question: "Comment distinguer un fil de phase d'un fil de neutre sur un schéma développé ?",
+      options: [
+        "La phase est en trait plein, le neutre en pointillés",
+        "La phase est au-dessus, le neutre en dessous",
+        "Aucune différence graphique, seule la lettre change (L/N)",
+        "La phase est en rouge, le neutre en bleu"
+      ],
+      correct: 2,
+      explication: "Sur un schéma en noir et blanc, phase et neutre ont le même tracé. Ils sont identifiés par les lettres L (phase) et N (neutre)."
+    },
+    {
+      id: "s4",
+      category: "schemas",
+      question: "Quel est le symbole d'un télérupteur ?",
+      options: [
+        "Un rectangle avec deux bobines",
+        "Un rectangle avec une bobine et un contact",
+        "Un cercle avec une flèche",
+        "Un triangle avec un trait"
+      ],
+      correct: 1,
+      explication: "Le télérupteur est représenté par un rectangle contenant une bobine (symbole zigzag) et un contact impulsionnel."
+    },
+    {
+      id: "s5",
+      category: "schemas",
+      question: "Comment est représenté un point lumineux commandé (DCL) ?",
+      options: [
+        "Un cercle plein",
+        "Un cercle avec une croix à l'intérieur",
+        "Un cercle avec un X",
+        "Un carré avec un point"
+      ],
+      correct: 1,
+      explication: "Le point lumineux est représenté par un cercle avec une croix (+) à l'intérieur. Le DCL (Dispositif de Connexion Luminaire) suit ce symbole."
+    },
+    {
+      id: "s6",
+      category: "schemas",
+      question: "Que signifie le trait oblique sur le symbole d'un disjoncteur ?",
+      options: [
+        "Disjoncteur différentiel",
+        "Fonction de coupure (sectionneur)",
+        "Disjoncteur télécommandé",
+        "Disjoncteur magnétique seul"
+      ],
+      correct: 1,
+      explication: "Le trait oblique traversant le symbole indique une fonction de coupure visible (sectionneur). C'est une fonction de sécurité pour isoler."
+    },
+    {
+      id: "s7",
+      category: "schemas",
+      question: "Sur un schéma multifilaire, combien de traits pour un circuit triphasé + neutre + terre ?",
+      options: ["3 traits", "4 traits", "5 traits", "6 traits"],
+      correct: 2,
+      explication: "Un circuit triphasé complet comporte : 3 phases (L1, L2, L3) + 1 neutre (N) + 1 terre (PE) = 5 conducteurs, donc 5 traits."
+    },
+    {
+      id: "s8",
+      category: "schemas",
+      question: "Comment représente-t-on un câble enterré sur un plan d'implantation ?",
+      options: [
+        "Trait continu épais",
+        "Trait pointillé ou tirets",
+        "Double trait",
+        "Trait ondulé"
+      ],
+      correct: 1,
+      explication: "Les canalisations enterrées ou encastrées sont généralement représentées en pointillés ou tirets pour les différencier des canalisations apparentes."
+    },
+    {
+      id: "s9",
+      category: "schemas",
+      question: "Quel est le symbole d'un contacteur jour/nuit ?",
+      options: [
+        "Un rectangle avec une horloge",
+        "Un rectangle avec une bobine et contacts, relié au compteur",
+        "Un cercle avec J/N",
+        "Un carré avec une lune"
+      ],
+      correct: 1,
+      explication: "Le contacteur J/N est un contacteur classique (bobine + contacts) dont la commande vient du signal tarifaire du compteur (contact C1/C2)."
+    },
+    {
+      id: "s10",
+      category: "schemas",
+      question: "Comment est représentée la terre sur un schéma électrique ?",
+      options: [
+        "Un cercle",
+        "Un triangle",
+        "Trois traits horizontaux décroissants",
+        "Une croix"
+      ],
+      correct: 2,
+      explication: "La terre est représentée par trois traits horizontaux de taille décroissante (comme un râteau inversé), parfois accompagnés d'un trait vertical."
+    },
+
+    // ===== OUTILLAGE =====
+    {
+      id: "o1",
+      category: "outillage",
+      question: "Quel outil utilise-t-on pour mesurer la résistance d'isolement ?",
+      options: ["Multimètre", "Mégohmmètre", "Pince ampèremétrique", "VAT"],
+      correct: 1,
+      explication: "Le mégohmmètre (ou contrôleur d'isolement) applique une tension DC (250V, 500V ou 1000V) pour mesurer la résistance d'isolement en MΩ."
+    },
+    {
+      id: "o2",
+      category: "outillage",
+      question: "À quoi sert une pince ampèremétrique ?",
+      options: [
+        "Mesurer la tension",
+        "Mesurer le courant sans ouvrir le circuit",
+        "Couper les câbles",
+        "Sertir les cosses"
+      ],
+      correct: 1,
+      explication: "La pince ampèremétrique mesure le courant par induction, en entourant un seul conducteur. Elle permet de mesurer sans interrompre le circuit."
+    },
+    {
+      id: "o3",
+      category: "outillage",
+      question: "Quelle est la particularité d'un VAT (Vérificateur d'Absence de Tension) ?",
+      options: [
+        "Il affiche la valeur exacte de la tension",
+        "Il indique uniquement présence/absence de tension avec seuils définis",
+        "Il mesure aussi le courant",
+        "Il fonctionne sans piles"
+      ],
+      correct: 1,
+      explication: "Le VAT est un appareil normé qui indique la présence ou absence de tension entre des seuils définis. Il n'affiche pas la valeur exacte."
+    },
+    {
+      id: "o4",
+      category: "outillage",
+      question: "Quel outil permet de dénuder un câble sans abîmer les conducteurs ?",
+      options: [
+        "Cutter",
+        "Pince à dénuder automatique",
+        "Cisaille",
+        "Tournevis"
+      ],
+      correct: 1,
+      explication: "La pince à dénuder automatique ajuste sa coupe à la section du câble et enlève proprement la gaine sans entailler les conducteurs."
+    },
+    {
+      id: "o5",
+      category: "outillage",
+      question: "Pour sertir une cosse sur un câble, quel outil utiliser ?",
+      options: [
+        "Pince coupante",
+        "Pince à sertir adaptée",
+        "Marteau",
+        "Tournevis"
+      ],
+      correct: 1,
+      explication: "Une pince à sertir avec les mâchoires adaptées à la cosse et à la section du câble assure un sertissage conforme et durable."
+    },
+    {
+      id: "o6",
+      category: "outillage",
+      question: "Un testeur de DDR permet de vérifier :",
+      options: [
+        "La tension du réseau",
+        "Le seuil et le temps de déclenchement du DDR",
+        "La continuité des câbles",
+        "La résistance de terre"
+      ],
+      correct: 1,
+      explication: "Le testeur de DDR injecte un courant de défaut calibré (15mA, 30mA, 150mA...) et mesure le temps de déclenchement du différentiel."
+    },
+    {
+      id: "o7",
+      category: "outillage",
+      question: "Comment mesurer la résistance de la prise de terre ?",
+      options: [
+        "Avec un multimètre entre phase et terre",
+        "Avec un telluromètre et piquets auxiliaires",
+        "Avec un mégohmmètre",
+        "Avec une pince ampèremétrique"
+      ],
+      correct: 1,
+      explication: "Le telluromètre utilise des piquets auxiliaires plantés dans le sol pour mesurer la résistance de terre par méthode de chute de potentiel."
+    },
+    {
+      id: "o8",
+      category: "outillage",
+      question: "À quoi sert un tire-fil électricien ?",
+      options: [
+        "À couper les fils",
+        "À passer les câbles dans les gaines",
+        "À mesurer la longueur des fils",
+        "À dénuder les fils"
+      ],
+      correct: 1,
+      explication: "Le tire-fil (ou aiguille d'électricien) est un fil rigide en nylon ou acier utilisé pour guider les câbles dans les gaines et conduits."
+    },
+    {
+      id: "o9",
+      category: "outillage",
+      question: "Quel appareil permet de localiser un câble sous tension derrière un mur ?",
+      options: [
+        "Multimètre",
+        "Détecteur de métaux/câbles",
+        "Mégohmmètre",
+        "Oscilloscope"
+      ],
+      correct: 1,
+      explication: "Le détecteur de câbles (ou scanner mural) repère les canalisations électriques, métaux et parfois le bois derrière les cloisons."
+    },
+    {
+      id: "o10",
+      category: "outillage",
+      question: "Pour percer du béton, quel type de foret utiliser ?",
+      options: [
+        "Foret HSS",
+        "Foret béton à plaquette carbure",
+        "Foret bois",
+        "Foret inox"
+      ],
+      correct: 1,
+      explication: "Les forets béton ont une plaquette en carbure de tungstène et sont conçus pour le perçage à percussion dans les matériaux durs."
+    },
+    {
+      id: "o11",
+      category: "outillage",
+      question: "Quelle est la fonction d'un niveau laser ?",
+      options: [
+        "Mesurer la distance",
+        "Tracer des lignes horizontales et verticales de référence",
+        "Détecter les fuites",
+        "Mesurer la température"
+      ],
+      correct: 1,
+      explication: "Le niveau laser projette des lignes parfaitement horizontales et/ou verticales pour aligner les appareillages et équipements."
+    },
+    {
+      id: "o12",
+      category: "outillage",
+      question: "Un contrôleur de rotation de phases sert à :",
+      options: [
+        "Mesurer la tension triphasée",
+        "Vérifier l'ordre des phases (sens de rotation)",
+        "Contrôler l'équilibre des charges",
+        "Mesurer le déphasage"
+      ],
+      correct: 1,
+      explication: "Le contrôleur de rotation indique l'ordre des phases (direct ou inverse), essentiel pour le branchement correct des moteurs triphasés."
     }
   ]
 }
