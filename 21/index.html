@@ -26,6 +26,11 @@
             <h1 class="hero-title">Trajectoires Climatiques de Paris</h1>
             <p class="hero-subtitle">Visualisez l'evolution du climat selon les scenarios de rechauffement (TRACC 2023)</p>
 
+            <div class="tracc-info-box">
+                <div class="tracc-badge">TRACC</div>
+                <p class="tracc-text">Conformement au Plan National d'Adaptation (PNACC), les aleas climatiques ont ete actualises en tenant compte de la <strong>Trajectoire de rechauffement de reference pour l'adaptation au changement climatique (TRACC)</strong> qui adopte une approche par niveaux de rechauffement.</p>
+            </div>
+
             <div class="thermometer-hero">
                 <div class="giant-thermometer">
                     <div class="thermo-scale">
@@ -46,25 +51,21 @@
 
                 <div class="scenario-cards" id="scenario-cards">
                     <div class="scenario-card" data-scenario="ref" onclick="selectScenario('ref')" style="--scenario-color: #3b82f6; --scenario-bg: rgba(59,130,246,0.1)">
-                        <div class="scenario-emoji">&#x2744;&#xFE0F;</div>
                         <div class="scenario-temp">Ref</div>
                         <div class="scenario-year">1976-2005</div>
                         <div class="scenario-desc">Le climat que nous connaissions</div>
                     </div>
                     <div class="scenario-card active" data-scenario="2030" onclick="selectScenario('2030')" style="--scenario-color: #f97316; --scenario-bg: rgba(249,115,22,0.1)">
-                        <div class="scenario-emoji">&#x2600;&#xFE0F;</div>
                         <div class="scenario-temp">+2°C</div>
                         <div class="scenario-year">Horizon 2030</div>
                         <div class="scenario-desc">Limite de l'Accord de Paris</div>
                     </div>
                     <div class="scenario-card" data-scenario="2050" onclick="selectScenario('2050')" style="--scenario-color: #ef4444; --scenario-bg: rgba(239,68,68,0.1)">
-                        <div class="scenario-emoji">&#x1F525;</div>
                         <div class="scenario-temp">+2.7°C</div>
                         <div class="scenario-year">Horizon 2050</div>
                         <div class="scenario-desc">Trajectoire actuelle</div>
                     </div>
                     <div class="scenario-card" data-scenario="2100" onclick="selectScenario('2100')" style="--scenario-color: #991b1b; --scenario-bg: rgba(153,27,27,0.1)">
-                        <div class="scenario-emoji">&#x1F975;</div>
                         <div class="scenario-temp">+4°C</div>
                         <div class="scenario-year">Horizon 2100</div>
                         <div class="scenario-desc">Scenario extreme</div>
@@ -75,6 +76,91 @@
     </section>
 
     <main class="main-content">
+        <!-- Reference Period Section -->
+        <section class="reference-period-section" id="reference-section">
+            <div class="reference-header">
+                <h2 class="section-title">Periode de reference (1976-2005)</h2>
+                <p class="section-subtitle">A Paris, il etait normal de constater en moyenne sur une annee :</p>
+            </div>
+
+            <div class="reference-category">
+                <h3 class="reference-category-title">Climat habituel</h3>
+                <div class="reference-grid">
+                    <div class="reference-stat">
+                        <span class="reference-icon">&#x1F321;&#xFE0F;</span>
+                        <span class="reference-value">12,4°C</span>
+                        <span class="reference-label">Temperature moyenne</span>
+                    </div>
+                    <div class="reference-stat">
+                        <span class="reference-icon">&#x2600;&#xFE0F;</span>
+                        <span class="reference-value">19°C</span>
+                        <span class="reference-label">Moyenne ete</span>
+                    </div>
+                    <div class="reference-stat">
+                        <span class="reference-icon">&#x1F9CA;</span>
+                        <span class="reference-value">5°C</span>
+                        <span class="reference-label">Moyenne hiver</span>
+                    </div>
+                    <div class="reference-stat">
+                        <span class="reference-icon">&#x1F4A7;</span>
+                        <span class="reference-value">161 mm</span>
+                        <span class="reference-label">Pluie en ete</span>
+                    </div>
+                    <div class="reference-stat">
+                        <span class="reference-icon">&#x1F327;&#xFE0F;</span>
+                        <span class="reference-value">148 mm</span>
+                        <span class="reference-label">Pluie en hiver</span>
+                    </div>
+                    <div class="reference-stat">
+                        <span class="reference-icon">&#x2744;&#xFE0F;</span>
+                        <span class="reference-value">22</span>
+                        <span class="reference-label">Jours de gel</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reference-category">
+                <h3 class="reference-category-title">Les evenements extremes etaient peu courants</h3>
+                <div class="reference-grid">
+                    <div class="reference-stat warning">
+                        <span class="reference-icon">&#x1F321;&#xFE0F;</span>
+                        <span class="reference-value">9</span>
+                        <span class="reference-label">Journees tres chaudes (&gt;30°C)</span>
+                    </div>
+                    <div class="reference-stat warning">
+                        <span class="reference-icon">&#x1F7E0;</span>
+                        <span class="reference-value">1</span>
+                        <span class="reference-label">Jour a plus de 35°C</span>
+                    </div>
+                    <div class="reference-stat warning">
+                        <span class="reference-icon">&#x1F319;</span>
+                        <span class="reference-value">8</span>
+                        <span class="reference-label">Nuits tropicales par an</span>
+                    </div>
+                    <div class="reference-stat warning">
+                        <span class="reference-icon">&#x1F4C8;</span>
+                        <span class="reference-value">34°C</span>
+                        <span class="reference-label">Record temperature max moyen</span>
+                    </div>
+                    <div class="reference-stat warning">
+                        <span class="reference-icon">&#x1F525;</span>
+                        <span class="reference-value">2</span>
+                        <span class="reference-label">Jours risque feu vegetation</span>
+                    </div>
+                    <div class="reference-stat warning">
+                        <span class="reference-icon">&#x1F3DC;&#xFE0F;</span>
+                        <span class="reference-value">23</span>
+                        <span class="reference-label">Jours de secheresse</span>
+                    </div>
+                    <div class="reference-stat warning">
+                        <span class="reference-icon">&#x26C8;&#xFE0F;</span>
+                        <span class="reference-value">3</span>
+                        <span class="reference-label">Jours precipitations extremes</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Immersive Weather Scene -->
         <section class="weather-scene" id="weather-scene">
             <div class="sun" id="sun"></div>
@@ -224,14 +310,7 @@
         <!-- Circular Gauges with Tooltips -->
         <section class="gauges-section" id="gauges-section"></section>
 
-        <!-- City Comparison -->
-        <section class="city-visual-section">
-            <h2 class="section-title">Equivalence climatique</h2>
-            <p class="section-subtitle">Le climat futur de Paris ressemblera a...</p>
-            <div class="city-comparison-visual" id="city-comparison"></div>
-        </section>
-
-        <!-- Trajectory Chart -->
+        <!-- Trajectory Chart (remonté après indicateurs) -->
         <section class="chart-section">
             <div class="calendar-header">
                 <div>
@@ -242,7 +321,7 @@
                     <button class="chart-tab active" data-chart="tropical" onclick="changeChart('tropical')">Nuits tropicales</button>
                     <button class="chart-tab" data-chart="hot30" onclick="changeChart('hot30')">Jours > 30°C</button>
                     <button class="chart-tab" data-chart="hot35" onclick="changeChart('hot35')">Jours > 35°C</button>
-                    <button class="chart-tab" data-chart="cooling" onclick="changeChart('cooling')">Climatisation</button>
+                    <button class="chart-tab" data-chart="cooling" onclick="changeChart('cooling')">Besoin en climatisation</button>
                 </div>
             </div>
             <div class="chart-container">
@@ -250,10 +329,36 @@
             </div>
         </section>
 
+        <!-- City Comparison (remonté après trajectoires) -->
+        <section class="city-visual-section">
+            <h2 class="section-title">Equivalence climatique</h2>
+            <p class="section-subtitle">Le climat futur de Paris ressemblera a...</p>
+            <div class="city-comparison-visual" id="city-comparison"></div>
+        </section>
+
+        <!-- Bandeau Impacts Globaux -->
+        <section class="global-impacts-banner">
+            <div class="banner-content">
+                <span class="banner-icon">&#x1F30D;</span>
+                <div class="banner-text">
+                    <h2 class="banner-title">Impacts globaux et points de bascule</h2>
+                    <p class="banner-subtitle">Consequences planetaires du rechauffement climatique</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Tipping Points -->
         <section class="tipping-section visible" id="tipping-section">
-            <h2 class="section-title">Points de bascule planetaires</h2>
-            <p class="section-subtitle" style="color: #94a3b8">Seuils critiques au-dela desquels des changements irreversibles peuvent se produire</p>
+            <div class="tipping-header">
+                <div>
+                    <h2 class="section-title">Points de bascule planetaires</h2>
+                    <p class="section-subtitle" style="color: #94a3b8">Seuils critiques au-dela desquels des changements irreversibles peuvent se produire</p>
+                </div>
+                <div class="tipping-version-toggle">
+                    <button class="tipping-version-btn active" data-version="A" onclick="switchTippingVersion('A')">Graphique</button>
+                    <button class="tipping-version-btn" data-version="B" onclick="switchTippingVersion('B')">Carte</button>
+                </div>
+            </div>
             <div class="tipping-grid" id="tipping-grid"></div>
             <div class="global-impacts" id="global-impacts"></div>
         </section>

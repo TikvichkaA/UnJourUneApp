@@ -1,5 +1,6 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, FileText, Brain, Calculator, Shield, ChevronRight, Award, Target } from 'lucide-react'
+import { BookOpen, FileText, Brain, Calculator, Shield, ChevronRight, Award, Target, Download, Wifi, WifiOff, Shapes, Cable } from 'lucide-react'
 import { referentiel } from '../data/referentiel'
 
 const modules = [
@@ -37,12 +38,109 @@ const modules = [
     title: 'Habilitations',
     description: 'B1V, BR, BC, H0',
     color: 'bg-red-500'
+  },
+  {
+    path: '/courants-faibles',
+    icon: Wifi,
+    title: 'Courants Faibles',
+    description: 'VDI, RJ45, alarmes',
+    color: 'bg-indigo-500'
+  },
+  {
+    path: '/symboles',
+    icon: Shapes,
+    title: 'Symboles',
+    description: 'Flashcards électriques',
+    color: 'bg-cyan-500'
+  },
+  {
+    path: '/raccordements',
+    icon: Cable,
+    title: 'Raccordements',
+    description: 'Jeu de câblage',
+    color: 'bg-orange-500'
   }
 ]
 
 function Home() {
+  const [installPrompt, setInstallPrompt] = useState(null)
+  const [isInstalled, setIsInstalled] = useState(false)
+  const [isOnline, setIsOnline] = useState(navigator.onLine)
+
+  useEffect(() => {
+    // Check if already installed
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true)
+    }
+
+    // Capture install prompt
+    const handleBeforeInstall = (e) => {
+      e.preventDefault()
+      setInstallPrompt(e)
+    }
+
+    // Online/offline status
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall)
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall)
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [])
+
+  const handleInstall = async () => {
+    if (!installPrompt) return
+    installPrompt.prompt()
+    const result = await installPrompt.userChoice
+    if (result.outcome === 'accepted') {
+      setIsInstalled(true)
+    }
+    setInstallPrompt(null)
+  }
+
   return (
     <div className="p-4 space-y-6">
+      {/* Install / Offline banner */}
+      {!isInstalled && (
+        <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-4 text-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Download size={24} />
+              <div>
+                <p className="font-semibold">Installer l'app</p>
+                <p className="text-sm text-green-100">Fonctionne hors-ligne</p>
+              </div>
+            </div>
+            {installPrompt ? (
+              <button
+                onClick={handleInstall}
+                className="bg-white text-green-600 font-semibold px-4 py-2 rounded-lg"
+              >
+                Installer
+              </button>
+            ) : (
+              <div className="text-xs text-green-100 text-right max-w-32">
+                Menu → "Ajouter à l'écran d'accueil"
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Offline indicator */}
+      {!isOnline && (
+        <div className="bg-orange-100 border border-orange-300 rounded-lg p-3 flex items-center gap-2 text-orange-800">
+          <WifiOff size={18} />
+          <span className="text-sm font-medium">Mode hors-ligne</span>
+        </div>
+      )}
+
       {/* Hero section */}
       <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-5 text-white">
         <div className="flex items-start gap-4">

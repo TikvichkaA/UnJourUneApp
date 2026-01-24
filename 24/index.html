@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pang Club - Gestion des Matchs & Tournois</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation latérale -->
+        <nav class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">🏓</span>
+                <span class="logo-text">Ping Pang</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span>Tableau de bord</span>
+                </li>
+                <li class="nav-item" data-page="match">
+                    <span class="nav-icon">🎯</span>
+                    <span>Nouveau Match</span>
+                </li>
+                <li class="nav-item" data-page="ranking">
+                    <span class="nav-icon">🏆</span>
+                    <span>Classement</span>
+                </li>
+                <li class="nav-item" data-page="tournament">
+                    <span class="nav-icon">🎪</span>
+                    <span>Tournois</span>
+                </li>
+                <li class="nav-item" data-page="players">
+                    <span class="nav-icon">👥</span>
+                    <span>Joueurs</span>
+                </li>
+                <li class="nav-item" data-page="history">
+                    <span class="nav-icon">📜</span>
+                    <span>Historique</span>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn-reset" onclick="app.resetData()">Réinitialiser</button>
+            </div>
+        </nav>
+
+        <!-- Contenu principal -->
+        <main class="main-content">
+            <!-- Dashboard -->
+            <section class="page active" id="page-dashboard">
+                <header class="page-header">
+                    <h1>Tableau de bord</h1>
+                    <p class="subtitle">Vue d'ensemble du club</p>
+                </header>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <span class="stat-value" id="stat-players">0</span>
+                        <span class="stat-label">Joueurs</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="stat-matches">0</span>
+                        <span class="stat-label">Matchs joués</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="stat-tournaments">0</span>
+                        <span class="stat-label">Tournois</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="stat-avg-elo">1000</span>
+                        <span class="stat-label">ELO moyen</span>
+                    </div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Top 5 Joueurs</h3>
+                        <div id="top-players-list" class="mini-ranking"></div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Derniers Matchs</h3>
+                        <div id="recent-matches-list" class="mini-history"></div>
+                    </div>
+                    <div class="dashboard-card wide">
+                        <h3>Tournoi en cours</h3>
+                        <div id="active-tournament-preview"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Nouveau Match -->
+            <section class="page" id="page-match">
+                <header class="page-header">
+                    <h1>Enregistrer un Match</h1>
+                    <p class="subtitle">Saisissez les résultats d'une partie</p>
+                </header>
+                <div class="match-form-container">
+                    <form id="match-form" class="match-form">
+                        <div class="match-players">
+                            <div class="player-select-group">
+                                <label>Joueur 1</label>
+                                <select id="player1-select" required>
+                                    <option value="">Sélectionner...</option>
+                                </select>
+                                <div class="player-preview" id="player1-preview"></div>
+                            </div>
+                            <div class="vs-badge">VS</div>
+                            <div class="player-select-group">
+                                <label>Joueur 2</label>
+                                <select id="player2-select" required>
+                                    <option value="">Sélectionner...</option>
+                                </select>
+                                <div class="player-preview" id="player2-preview"></div>
+                            </div>
+                        </div>
+                        <div class="score-input">
+                            <h3>Score (sets gagnés)</h3>
+                            <div class="score-fields">
+                                <div class="score-field">
+                                    <label>Joueur 1</label>
+                                    <input type="number" id="score1" min="0" max="4" value="0" required>
+                                </div>
+                                <div class="score-separator">-</div>
+                                <div class="score-field">
+                                    <label>Joueur 2</label>
+                                    <input type="number" id="score2" min="0" max="4" value="0" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="elo-preview" id="elo-preview">
+                            <p>Sélectionnez les joueurs pour voir l'impact ELO</p>
+                        </div>
+                        <button type="submit" class="btn-primary">Enregistrer le match</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Classement -->
+            <section class="page" id="page-ranking">
+                <header class="page-header">
+                    <h1>Classement ELO</h1>
+                    <p class="subtitle">Le ranking officiel du club</p>
+                </header>
+                <div class="ranking-filters">
+                    <button class="filter-btn active" data-filter="all">Tous</button>
+                    <button class="filter-btn" data-filter="active">Actifs (30j)</button>
+                </div>
+                <div class="ranking-table-container">
+                    <table class="ranking-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Joueur</th>
+                                <th>ELO</th>
+                                <th>V/D</th>
+                                <th>Ratio</th>
+                                <th>Évolution</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ranking-body">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Tournois -->
+            <section class="page" id="page-tournament">
+                <header class="page-header">
+                    <h1>Tournois</h1>
+                    <p class="subtitle">Gérez les compétitions internes</p>
+                </header>
+                <div class="tournament-tabs">
+                    <button class="tab-btn active" data-tab="active-tournaments">En cours</button>
+                    <button class="tab-btn" data-tab="create-tournament">Créer</button>
+                    <button class="tab-btn" data-tab="past-tournaments">Historique</button>
+                </div>
+
+                <div class="tab-content active" id="active-tournaments">
+                    <div id="active-tournament-list"></div>
+                </div>
+
+                <div class="tab-content" id="create-tournament">
+                    <form id="tournament-form" class="tournament-form">
+                        <div class="form-group">
+                            <label>Nom du tournoi</label>
+                            <input type="text" id="tournament-name" required placeholder="Ex: Tournoi de Printemps 2024">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Format</label>
+                                <select id="tournament-format">
+                                    <option value="pool-bracket">Poules + Tableau</option>
+                                    <option value="bracket-only">Tableau seul</option>
+                                    <option value="pool-only">Poules seules</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Nombre de poules</label>
+                                <input type="number" id="pool-count" min="2" max="8" value="4">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Participants</label>
+                            <div class="participants-selector" id="participants-selector">
+                                <!-- Filled by JS -->
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Créer le tournoi</button>
+                    </form>
+                </div>
+
+                <div class="tab-content" id="past-tournaments">
+                    <div id="past-tournament-list"></div>
+                </div>
+            </section>
+
+            <!-- Vue Tournoi Actif -->
+            <section class="page" id="page-tournament-view">
+                <header class="page-header">
+                    <h1 id="tournament-view-title">Tournoi</h1>
+                    <p class="subtitle" id="tournament-view-status">En cours</p>
+                    <button class="btn-back" onclick="app.showPage('tournament')">← Retour aux tournois</button>
+                </header>
+                <div class="tournament-phases">
+                    <button class="phase-btn active" data-phase="pools">Phase de Poules</button>
+                    <button class="phase-btn" data-phase="bracket">Tableau Final</button>
+                </div>
+                <div class="phase-content active" id="phase-pools">
+                    <div id="pools-container" class="pools-grid"></div>
+                </div>
+                <div class="phase-content" id="phase-bracket">
+                    <div id="bracket-container" class="bracket"></div>
+                </div>
+            </section>
+
+            <!-- Joueurs -->
+            <section class="page" id="page-players">
+                <header class="page-header">
+                    <h1>Joueurs</h1>
+                    <p class="subtitle">Gérez les membres du club</p>
+                </header>
+                <div class="players-actions">
+                    <button class="btn-primary" onclick="app.showAddPlayerModal()">+ Ajouter un joueur</button>
+                </div>
+                <div class="players-grid" id="players-grid">
+                    <!-- Filled by JS -->
+                </div>
+            </section>
+
+            <!-- Profil Joueur -->
+            <section class="page" id="page-player-profile">
+                <header class="page-header">
+                    <h1 id="profile-name">Joueur</h1>
+                    <button class="btn-back" onclick="app.showPage('players')">← Retour</button>
+                </header>
+                <div class="player-profile-content">
+                    <div class="profile-stats" id="profile-stats"></div>
+                    <div class="profile-chart">
+                        <h3>Évolution ELO</h3>
+                        <canvas id="elo-chart"></canvas>
+                    </div>
+                    <div class="profile-history">
+                        <h3>Historique des matchs</h3>
+                        <div id="profile-matches"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Historique -->
+            <section class="page" id="page-history">
+                <header class="page-header">
+                    <h1>Historique</h1>
+                    <p class="subtitle">Tous les matchs du club</p>
+                </header>
+                <div class="history-filters">
+                    <input type="text" id="history-search" placeholder="Rechercher un joueur...">
+                    <select id="history-period">
+                        <option value="all">Toute la période</option>
+                        <option value="week">Cette semaine</option>
+                        <option value="month">Ce mois</option>
+                        <option value="year">Cette année</option>
+                    </select>
+                </div>
+                <div class="history-list" id="history-list">
+                    <!-- Filled by JS -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal Ajout Joueur -->
+    <div class="modal" id="add-player-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nouveau Joueur</h2>
+                <button class="modal-close" onclick="app.closeModal('add-player-modal')">&times;</button>
+            </div>
+            <form id="add-player-form">
+                <div class="form-group">
+                    <label>Prénom</label>
+                    <input type="text" id="new-player-firstname" required>
+                </div>
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" id="new-player-lastname" required>
+                </div>
+                <div class="form-group">
+                    <label>ELO initial (optionnel)</label>
+                    <input type="number" id="new-player-elo" value="1000" min="100" max="3000">
+                </div>
+                <button type="submit" class="btn-primary">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Match Tournoi -->
+    <div class="modal" id="tournament-match-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Résultat du match</h2>
+                <button class="modal-close" onclick="app.closeModal('tournament-match-modal')">&times;</button>
+            </div>
+            <div id="tournament-match-form-container"></div>
+        </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

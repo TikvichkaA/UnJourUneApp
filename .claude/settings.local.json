@@ -1,7 +1,17 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "WebSearch",
+      "WebFetch(domain:www.streetpress.com)",
+      "WebFetch(domain:basta.media)",
+      "Bash(git add:*)",
+      "Bash(node import-data.js:*)",
+      "Bash(node fix-communes.js:*)",
+      "Bash(done)",
+      "WebFetch(domain:www.vuedensemble.fr)",
+      "WebFetch(domain:bretagne-environnement.fr)",
+      "WebFetch(domain:pingpang.paris)"
     ]
   }
 }

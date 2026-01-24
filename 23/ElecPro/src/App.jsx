@@ -10,6 +10,12 @@ import QuizSession from './pages/QuizSession'
 import Calculateurs from './pages/Calculateurs'
 import Habilitations from './pages/Habilitations'
 import HabilitationDetail from './pages/HabilitationDetail'
+import CourantsFaibles from './pages/CourantsFaibles'
+import CourantsFaiblesDetail from './pages/CourantsFaiblesDetail'
+import Symboles from './pages/Symboles'
+import SymbolesFlashcards from './pages/SymbolesFlashcards'
+import Raccordements from './pages/Raccordements'
+import RaccordementGame from './pages/RaccordementGame'
 
 function App() {
   return (
@@ -25,6 +31,12 @@ function App() {
         <Route path="calculateurs" element={<Calculateurs />} />
         <Route path="habilitations" element={<Habilitations />} />
         <Route path="habilitations/:habId" element={<HabilitationDetail />} />
+        <Route path="courants-faibles" element={<CourantsFaibles />} />
+        <Route path="courants-faibles/:categoryId" element={<CourantsFaiblesDetail />} />
+        <Route path="symboles" element={<Symboles />} />
+        <Route path="symboles/:category" element={<SymbolesFlashcards />} />
+        <Route path="raccordements" element={<Raccordements />} />
+        <Route path="raccordements/:circuitId" element={<RaccordementGame />} />
       </Route>
     </Routes>
   )
