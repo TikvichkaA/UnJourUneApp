@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, FileText, Brain, Calculator, Shield, ChevronRight, Award, Target, Download, Wifi, WifiOff, Shapes, Cable } from 'lucide-react'
+import { BookOpen, FileText, Brain, Calculator, Shield, ChevronRight, Award, Target, Download, Wifi, WifiOff, Shapes, Cable, ClipboardCheck, Sun, Image, Wrench, PenTool } from 'lucide-react'
 import { referentiel } from '../data/referentiel'
 
 const modules = [
@@ -59,6 +59,41 @@ const modules = [
     title: 'Raccordements',
     description: 'Jeu de câblage',
     color: 'bg-orange-500'
+  },
+  {
+    path: '/examen',
+    icon: ClipboardCheck,
+    title: 'Examen Blanc',
+    description: 'Simulation épreuve',
+    color: 'bg-rose-500'
+  },
+  {
+    path: '/pv-irve',
+    icon: Sun,
+    title: 'PV & IRVE',
+    description: 'Solaire et bornes VE',
+    color: 'bg-yellow-500'
+  },
+  {
+    path: '/galerie',
+    icon: Image,
+    title: 'Galerie',
+    description: 'Photos installations',
+    color: 'bg-slate-500'
+  },
+  {
+    path: '/cas-pratiques',
+    icon: Wrench,
+    title: 'Cas Pratiques',
+    description: 'Diagnostic terrain',
+    color: 'bg-teal-500'
+  },
+  {
+    path: '/schemas-exercices',
+    icon: PenTool,
+    title: 'Schémas',
+    description: 'Exercices interactifs',
+    color: 'bg-pink-500'
   }
 ]
 

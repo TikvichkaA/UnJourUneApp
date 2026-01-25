@@ -302,7 +302,7 @@
             <span class="day-number">20</span>
             <span class="day-name">EcoProfil</span>
         </a>
-        <div class="day upcoming"><span class="day-number">21</span></div>
+        <div class="day upcoming" id="day-21"><span class="day-number">21</span></div>
         <a href="./22/ChessMaster3D/dist/" class="day available">
             <span class="day-number">22</span>
             <span class="day-name">ChessMaster3D</span>
@@ -353,6 +353,28 @@
                     timer = setTimeout(function() {
                         clicks = 0;
                     }, 1000);
+                }
+            });
+        })();
+
+        (function() {
+            const day21 = document.getElementById('day-21');
+            let clicks21 = 0;
+            let timer21 = null;
+
+            day21.addEventListener('click', function(e) {
+                e.preventDefault();
+                clicks21++;
+
+                if (timer21) clearTimeout(timer21);
+
+                if (clicks21 >= 5) {
+                    window.location.href = './21/';
+                    clicks21 = 0;
+                } else {
+                    timer21 = setTimeout(function() {
+                        clicks21 = 0;
+                    }, 1500);
                 }
             });
         })();

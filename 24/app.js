@@ -16,6 +16,7 @@ class PingPangApp {
     // ==========================================
 
     init() {
+        this.setupMobileMenu();
         this.setupNavigation();
         this.setupForms();
         this.setupFilters();
@@ -25,6 +26,32 @@ class PingPangApp {
         if (this.data.players.length === 0) {
             this.loadDemoData();
         }
+    }
+
+    setupMobileMenu() {
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        const toggleMenu = () => {
+            menuBtn.classList.toggle('active');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        };
+
+        const closeMenu = () => {
+            menuBtn.classList.remove('active');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        };
+
+        menuBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', closeMenu);
+
+        // Fermer le menu quand on clique sur un item de navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', closeMenu);
+        });
     }
 
     loadData() {

@@ -44,6 +44,20 @@ export const quizData = {
       description: "Outils et appareils de mesure",
       icon: "🔨",
       color: "orange"
+    },
+    {
+      id: "courants-faibles",
+      titre: "Courants Faibles",
+      description: "VDI, RJ45, communication",
+      icon: "📡",
+      color: "cyan"
+    },
+    {
+      id: "raccordements",
+      titre: "Raccordements",
+      description: "Câblage et montages",
+      icon: "🔌",
+      color: "rose"
     }
   ],
 
@@ -1064,6 +1078,949 @@ export const quizData = {
       ],
       correct: 1,
       explication: "Le contrôleur de rotation indique l'ordre des phases (direct ou inverse), essentiel pour le branchement correct des moteurs triphasés."
+    },
+
+    // ===== COURANTS FAIBLES - VDI =====
+    {
+      id: "cf1",
+      category: "courants-faibles",
+      question: "Quelle est la norme de câblage RJ45 la plus utilisée en France ?",
+      options: ["T568A", "T568B", "EIA/TIA 568", "ISO 11801"],
+      correct: 0,
+      explication: "En France, la norme T568A est privilégiée. Elle définit l'ordre des paires : blanc-vert/vert (1-2), blanc-orange/bleu (3-4), blanc-bleu/orange (5-6), blanc-marron/marron (7-8)."
+    },
+    {
+      id: "cf2",
+      category: "courants-faibles",
+      question: "Combien de paires torsadées contient un câble RJ45 Cat6 ?",
+      options: ["2 paires", "3 paires", "4 paires", "8 paires"],
+      correct: 2,
+      explication: "Un câble RJ45 contient toujours 4 paires torsadées (8 fils). Le Cat6 permet des débits jusqu'à 10 Gbit/s sur courte distance."
+    },
+    {
+      id: "cf3",
+      category: "courants-faibles",
+      question: "Que signifie F/UTP pour un câble réseau ?",
+      options: [
+        "Fibre / Ultra Thin Protocol",
+        "Foil / Unshielded Twisted Pair",
+        "Fast / Unshielded Transfer Protocol",
+        "Full / Universal Twisted Pair"
+      ],
+      correct: 1,
+      explication: "F/UTP = Foiled/Unshielded Twisted Pair : câble avec écran général (feuille aluminium) mais paires non blindées individuellement."
+    },
+    {
+      id: "cf4",
+      category: "courants-faibles",
+      question: "Quel est le grade VDI minimum obligatoire en logement neuf ?",
+      options: ["Grade 1", "Grade 2TV", "Grade 3TV", "Grade 4"],
+      correct: 1,
+      explication: "Le Grade 2TV (câble F/UTP Cat6 + coaxial 17 VATC) est le minimum obligatoire depuis 2016 pour les logements neufs (arrêté du 3 août 2016)."
+    },
+    {
+      id: "cf5",
+      category: "courants-faibles",
+      question: "Qu'est-ce que le DTI dans un coffret de communication ?",
+      options: [
+        "Distributeur Téléphonique Intérieur",
+        "Dispositif de Terminaison Intérieur",
+        "Détecteur de Transmission Internet",
+        "Disjoncteur Télécom Individuel"
+      ],
+      correct: 1,
+      explication: "Le DTI (Dispositif de Terminaison Intérieur) est le point de démarcation entre le réseau de l'opérateur et l'installation privée."
+    },
+    {
+      id: "cf6",
+      category: "courants-faibles",
+      question: "Quelle est la longueur maximale d'un lien RJ45 permanent selon la norme ?",
+      options: ["50 m", "90 m", "100 m", "150 m"],
+      correct: 1,
+      explication: "Le lien permanent (du coffret à la prise murale) est limité à 90 m. Avec les cordons de brassage (10 m max), le canal complet fait 100 m max."
+    },
+    {
+      id: "cf7",
+      category: "courants-faibles",
+      question: "Quelle catégorie de câble est requise pour le Grade 3TV ?",
+      options: ["Cat5e", "Cat6", "Cat6a", "Cat7"],
+      correct: 2,
+      explication: "Le Grade 3TV nécessite un câble Cat6a (ou supérieur) pour supporter le 10 Gbit/s sur 100m. Il n'utilise plus de câble coaxial."
+    },
+    {
+      id: "cf8",
+      category: "courants-faibles",
+      question: "Combien de prises RJ45 minimum dans une chambre selon la NF C 15-100 ?",
+      options: ["0", "1", "2", "3"],
+      correct: 1,
+      explication: "Chaque pièce principale (chambre, séjour, bureau) doit avoir au minimum 1 prise RJ45. Le séjour en nécessite 2 minimum."
+    },
+    {
+      id: "cf9",
+      category: "courants-faibles",
+      question: "Quel est le rôle du répartiteur dans le coffret de communication ?",
+      options: [
+        "Amplifier le signal TV",
+        "Distribuer les connexions RJ45 vers les différentes prises",
+        "Filtrer les parasites ADSL",
+        "Convertir la fibre en cuivre"
+      ],
+      correct: 1,
+      explication: "Le répartiteur (ou bandeau de brassage) permet de connecter les câbles venant des prises murales aux équipements actifs (box, switch)."
+    },
+    {
+      id: "cf10",
+      category: "courants-faibles",
+      question: "Quel type de câble coaxial est utilisé pour la TV en Grade 2TV ?",
+      options: ["RG6", "17 VATC", "RG59", "75 ohms standard"],
+      correct: 1,
+      explication: "Le câble 17 VATC (17 mm, blindé, 75 ohms) est le standard pour la distribution TV terrestre et satellite en installation domestique."
+    },
+    {
+      id: "cf11",
+      category: "courants-faibles",
+      question: "Qu'est-ce qu'un PTO en installation fibre optique ?",
+      options: [
+        "Point de Terminaison Optique",
+        "Prise Télécom Obligatoire",
+        "Protection Technique Opérateur",
+        "Passage Technique Optique"
+      ],
+      correct: 0,
+      explication: "Le PTO (Point de Terminaison Optique) est la prise fibre installée chez l'abonné, point de raccordement entre le réseau opérateur et la box."
+    },
+    {
+      id: "cf12",
+      category: "courants-faibles",
+      question: "Quel est l'ordre des couleurs des fils en T568A (paires 1-2 et 3-6) ?",
+      options: [
+        "Orange-Vert-Bleu-Marron",
+        "Vert-Orange-Bleu-Marron",
+        "Bleu-Vert-Orange-Marron",
+        "Vert-Bleu-Orange-Marron"
+      ],
+      correct: 1,
+      explication: "T568A : pins 1-2 = blanc-vert/vert, pins 3-6 = blanc-orange/orange. La différence avec T568B est l'inversion des paires orange et verte."
+    },
+    {
+      id: "cf13",
+      category: "courants-faibles",
+      question: "Quelle est la fonction d'un ONT dans une installation fibre ?",
+      options: [
+        "Amplifier le signal optique",
+        "Convertir le signal optique en signal électrique",
+        "Distribuer la fibre dans le logement",
+        "Filtrer les longueurs d'onde"
+      ],
+      correct: 1,
+      explication: "L'ONT (Optical Network Terminal) convertit le signal lumineux de la fibre en signal électrique utilisable par la box et les équipements."
+    },
+    {
+      id: "cf14",
+      category: "courants-faibles",
+      question: "Quelle est la différence entre un interphone et un visiophone ?",
+      options: [
+        "L'interphone est sans fil",
+        "Le visiophone intègre une caméra vidéo",
+        "L'interphone est pour l'extérieur uniquement",
+        "Aucune différence technique"
+      ],
+      correct: 1,
+      explication: "Le visiophone (ou vidéophone) ajoute une caméra à la platine de rue, permettant de voir le visiteur en plus de l'entendre."
+    },
+    {
+      id: "cf15",
+      category: "courants-faibles",
+      question: "Combien de fils minimum pour un interphone audio simple ?",
+      options: ["2 fils", "4 fils", "6 fils", "8 fils"],
+      correct: 0,
+      explication: "Un interphone audio basique fonctionne avec 2 fils (bus). Les systèmes plus complexes (vidéo, plusieurs postes) nécessitent plus de fils ou du bus numérique."
+    },
+
+    // ===== RACCORDEMENTS =====
+    {
+      id: "r1",
+      category: "raccordements",
+      question: "Dans un va-et-vient, comment sont reliés les deux interrupteurs ?",
+      options: [
+        "Par un seul fil de phase",
+        "Par deux fils navettes",
+        "Par un fil de neutre",
+        "Par trois fils : phase, neutre, terre"
+      ],
+      correct: 1,
+      explication: "Les deux interrupteurs va-et-vient sont reliés par 2 fils navettes (généralement violet ou orange). La phase arrive sur l'un, le retour lampe part de l'autre."
+    },
+    {
+      id: "r2",
+      category: "raccordements",
+      question: "Sur un télérupteur, à quoi servent les bornes A1 et A2 ?",
+      options: [
+        "Alimentation de la lampe",
+        "Raccordement des boutons poussoirs",
+        "Alimentation de la bobine de commande",
+        "Mise à la terre"
+      ],
+      correct: 2,
+      explication: "A1 et A2 sont les bornes de la bobine du télérupteur. A1 reçoit le retour des boutons poussoirs, A2 est relié au neutre."
+    },
+    {
+      id: "r3",
+      category: "raccordements",
+      question: "Quelle est la couleur normalisée du fil de retour lampe ?",
+      options: [
+        "Bleu",
+        "Vert/jaune",
+        "Toute couleur sauf bleu et vert/jaune",
+        "Obligatoirement rouge"
+      ],
+      correct: 2,
+      explication: "Le retour lampe peut être de n'importe quelle couleur sauf bleu (réservé neutre) et vert/jaune (réservé terre). Orange ou violet sont souvent utilisés."
+    },
+    {
+      id: "r4",
+      category: "raccordements",
+      question: "Dans un montage simple allumage, où arrive la phase ?",
+      options: [
+        "Directement sur la lampe",
+        "Sur la borne L de l'interrupteur",
+        "Sur le neutre",
+        "Sur la boîte de dérivation uniquement"
+      ],
+      correct: 1,
+      explication: "La phase arrive toujours sur la borne L (ou P) de l'interrupteur. C'est l'interrupteur qui coupe la phase, jamais le neutre."
+    },
+    {
+      id: "r5",
+      category: "raccordements",
+      question: "Comment sont câblés les boutons poussoirs sur un télérupteur ?",
+      options: [
+        "En série",
+        "En parallèle",
+        "En étoile",
+        "En triangle"
+      ],
+      correct: 1,
+      explication: "Les boutons poussoirs sont câblés en parallèle : tous alimentés par la phase, et toutes les sorties reliées ensemble vers A1 du télérupteur."
+    },
+    {
+      id: "r6",
+      category: "raccordements",
+      question: "Sur une minuterie, quelle borne reçoit le retour des boutons poussoirs ?",
+      options: [
+        "Borne 1 (phase)",
+        "Borne 2 (neutre)",
+        "Borne 3 (commande)",
+        "Borne 4 (sortie)"
+      ],
+      correct: 2,
+      explication: "La borne 3 de la minuterie reçoit le retour des BP. La borne 1 = phase, borne 2 = neutre (alim), borne 4 = sortie vers lampe."
+    },
+    {
+      id: "r7",
+      category: "raccordements",
+      question: "Dans un contacteur jour/nuit, qu'est-ce qui commande la bobine ?",
+      options: [
+        "Un interrupteur manuel",
+        "Le signal du compteur (contact C1-C2)",
+        "Un thermostat",
+        "Une horloge interne"
+      ],
+      correct: 1,
+      explication: "Le compteur électrique envoie un signal via le contact sec C1-C2 pendant les heures creuses, qui active la bobine du contacteur."
+    },
+    {
+      id: "r8",
+      category: "raccordements",
+      question: "Quel disjoncteur protège la bobine du contacteur jour/nuit ?",
+      options: [
+        "Le même que le chauffe-eau (20A)",
+        "Un disjoncteur dédié 2A",
+        "Le disjoncteur général",
+        "Pas de protection nécessaire"
+      ],
+      correct: 1,
+      explication: "La bobine du contacteur est protégée par un disjoncteur 2A séparé (circuit de commande), distinct du 20A qui protège le chauffe-eau (circuit de puissance)."
+    },
+    {
+      id: "r9",
+      category: "raccordements",
+      question: "Dans un double allumage, combien de fils de retour lampe ?",
+      options: ["1", "2", "3", "4"],
+      correct: 1,
+      explication: "Un interrupteur double a 2 sorties (1 et 2), donc 2 fils de retour lampe : un pour chaque circuit d'éclairage commandé."
+    },
+    {
+      id: "r10",
+      category: "raccordements",
+      question: "Quelle est la particularité du câblage d'une prise commandée ?",
+      options: [
+        "Elle nécessite une section de 4mm²",
+        "Elle est câblée comme un simple allumage",
+        "Elle doit avoir sa propre terre",
+        "Elle nécessite un DDR dédié"
+      ],
+      correct: 1,
+      explication: "La prise commandée se câble exactement comme un simple allumage : phase → interrupteur → prise. Le neutre va directement à la prise."
+    },
+    {
+      id: "r11",
+      category: "raccordements",
+      question: "Pourquoi utiliser un télérupteur plutôt qu'un va-et-vient ?",
+      options: [
+        "C'est moins cher",
+        "Pour commander depuis plus de 2 points",
+        "Pour les fortes puissances uniquement",
+        "C'est obligatoire en tertiaire"
+      ],
+      correct: 1,
+      explication: "Le télérupteur permet de commander un éclairage depuis un nombre illimité de points (boutons poussoirs). Le va-et-vient est limité à 2 points."
+    },
+    {
+      id: "r12",
+      category: "raccordements",
+      question: "Sur un interrupteur va-et-vient, combien de bornes ?",
+      options: ["2 bornes", "3 bornes", "4 bornes", "5 bornes"],
+      correct: 1,
+      explication: "Un interrupteur va-et-vient a 3 bornes : L (commun) et 1, 2 (les deux positions). C'est un inverseur."
+    },
+    {
+      id: "r13",
+      category: "raccordements",
+      question: "Quel est le rôle du permutateur dans un montage d'éclairage ?",
+      options: [
+        "Remplacer le télérupteur",
+        "Commander depuis un 3ème point avec des va-et-vient",
+        "Inverser phase et neutre",
+        "Protéger contre les surtensions"
+      ],
+      correct: 1,
+      explication: "Le permutateur s'intercale entre 2 va-et-vient pour ajouter un 3ème (ou plus) point de commande. Il croise les navettes."
+    },
+    {
+      id: "r14",
+      category: "raccordements",
+      question: "Dans un circuit de volet roulant, combien de fils entre l'interrupteur et le moteur ?",
+      options: ["2 fils", "3 fils", "4 fils", "5 fils"],
+      correct: 2,
+      explication: "Un volet roulant nécessite 4 fils : phase montée, phase descente, neutre commun, et terre. L'interrupteur envoie la phase sur montée OU descente."
+    },
+    {
+      id: "r15",
+      category: "raccordements",
+      question: "Comment vérifier qu'un montage va-et-vient fonctionne correctement ?",
+      options: [
+        "Mesurer la tension aux bornes de la lampe",
+        "Tester toutes les combinaisons des 2 interrupteurs",
+        "Mesurer la résistance des navettes",
+        "Vérifier uniquement un interrupteur"
+      ],
+      correct: 1,
+      explication: "Il faut tester les 4 combinaisons possibles (les 2 interrupteurs ont chacun 2 positions) : la lampe doit changer d'état à chaque action."
+    },
+
+    // ===== QUESTIONS SUPPLÉMENTAIRES SCHEMAS/SYMBOLES =====
+    {
+      id: "s11",
+      category: "schemas",
+      question: "Quel symbole représente un interrupteur différentiel ?",
+      options: [
+        "Rectangle avec zigzag",
+        "Rectangle avec symbole Δ (delta)",
+        "Cercle avec croix",
+        "Carré avec diagonale"
+      ],
+      correct: 1,
+      explication: "L'interrupteur différentiel est représenté par un rectangle avec le symbole Δ et sa sensibilité (30mA, 300mA). Le disjoncteur différentiel ajoute le symbole thermique/magnétique."
+    },
+    {
+      id: "s12",
+      category: "schemas",
+      question: "Comment est représenté un bouton poussoir sur un schéma ?",
+      options: [
+        "Cercle plein",
+        "Contact avec flèche de rappel",
+        "Rectangle avec P",
+        "Triangle pointant vers le bas"
+      ],
+      correct: 1,
+      explication: "Le bouton poussoir est représenté par un contact avec une flèche indiquant le rappel automatique (retour à la position repos)."
+    },
+    {
+      id: "s13",
+      category: "schemas",
+      question: "Quel symbole représente un conducteur de protection (terre) ?",
+      options: [
+        "Ligne continue",
+        "Ligne pointillée",
+        "Ligne avec tirets verts et jaunes",
+        "Trois traits horizontaux décroissants"
+      ],
+      correct: 3,
+      explication: "Le symbole de la terre est composé de trois traits horizontaux de taille décroissante, parfois avec un trait vertical. Sur les schémas, le PE peut aussi être en tirets."
+    },
+    {
+      id: "s14",
+      category: "schemas",
+      question: "Comment différencier un disjoncteur d'un interrupteur sectionneur sur un schéma ?",
+      options: [
+        "Le disjoncteur a un rectangle, pas le sectionneur",
+        "Le sectionneur a un trait oblique (coupure visible)",
+        "Ils ont le même symbole",
+        "Le disjoncteur est toujours en rouge"
+      ],
+      correct: 1,
+      explication: "Le sectionneur (ou interrupteur-sectionneur) a un trait oblique traversant le symbole, indiquant une coupure visible et un isolement garanti."
+    },
+    {
+      id: "s15",
+      category: "schemas",
+      question: "Que représente un cercle avec un X à l'intérieur ?",
+      options: [
+        "Une prise de courant",
+        "Un point lumineux (lampe)",
+        "Un moteur",
+        "Un transformateur"
+      ],
+      correct: 1,
+      explication: "Le cercle avec une croix (X ou +) représente un point lumineux. C'est le symbole standard pour les lampes et luminaires sur les plans."
+    },
+    {
+      id: "s16",
+      category: "schemas",
+      question: "Comment est représentée une minuterie sur un schéma ?",
+      options: [
+        "Horloge simple",
+        "Rectangle avec symbole de temporisation et bobine",
+        "Cercle avec M",
+        "Triangle avec flèche"
+      ],
+      correct: 1,
+      explication: "La minuterie est représentée par un rectangle contenant le symbole de temporisation (arc de cercle avec flèche) et parfois une bobine."
+    },
+    {
+      id: "s17",
+      category: "schemas",
+      question: "Quel est le symbole d'un parafoudre ?",
+      options: [
+        "Éclair dans un cercle",
+        "Rectangle avec symbole de varistance (2 traits opposés)",
+        "Triangle avec P",
+        "Carré avec zigzag"
+      ],
+      correct: 1,
+      explication: "Le parafoudre est représenté par le symbole de la varistance : deux traits se faisant face, parfois dans un rectangle avec le symbole terre."
+    },
+    {
+      id: "s18",
+      category: "schemas",
+      question: "Comment représente-t-on un contacteur sur un schéma ?",
+      options: [
+        "Simple contact",
+        "Rectangle avec bobine (zigzag) et contacts séparés",
+        "Cercle avec C",
+        "Double rectangle"
+      ],
+      correct: 1,
+      explication: "Le contacteur est représenté avec sa bobine (symbole zigzag avec bornes A1/A2) et ses contacts de puissance séparés (avec numérotation 1-2, 3-4...)."
+    },
+
+    // ===== QUESTIONS PRATIQUES SUPPLÉMENTAIRES =====
+    {
+      id: "p16",
+      category: "pratique",
+      question: "Comment identifier un défaut d'isolement sur une installation ?",
+      options: [
+        "Avec un voltmètre entre phase et terre",
+        "Avec un mégohmmètre sous 500V DC",
+        "En observant les disjoncteurs",
+        "Avec un tournevis testeur"
+      ],
+      correct: 1,
+      explication: "Le mégohmmètre applique une tension continue (500V en BT) et mesure la résistance d'isolement. Elle doit être > 0.5 MΩ (500 kΩ)."
+    },
+    {
+      id: "p17",
+      category: "pratique",
+      question: "Quelle est la valeur de résistance de terre maximale en schéma TT avec DDR 30mA ?",
+      options: ["50 Ω", "100 Ω", "500 Ω", "1667 Ω"],
+      correct: 3,
+      explication: "En TT, R × I∆n ≤ 50V (tension limite de sécurité). Avec un DDR 30mA : R ≤ 50/0.03 = 1667 Ω. En pratique, on vise < 100 Ω."
+    },
+    {
+      id: "p18",
+      category: "pratique",
+      question: "Qu'est-ce qu'un contact direct en électricité ?",
+      options: [
+        "Contact entre deux phases",
+        "Contact avec une partie normalement sous tension",
+        "Contact entre neutre et terre",
+        "Contact avec un appareil en défaut"
+      ],
+      correct: 1,
+      explication: "Un contact direct est le contact d'une personne avec un conducteur normalement sous tension (phase, neutre). La protection = isolation, éloignement, obstacles."
+    },
+    {
+      id: "p19",
+      category: "pratique",
+      question: "Le DDR protège contre quel type de contact ?",
+      options: [
+        "Contact direct uniquement",
+        "Contact indirect uniquement",
+        "Contacts directs et indirects",
+        "Ni l'un ni l'autre"
+      ],
+      correct: 2,
+      explication: "Le DDR 30mA protège contre les contacts indirects (défaut d'isolement) ET les contacts directs (courant de fuite à travers le corps)."
+    },
+    {
+      id: "p20",
+      category: "pratique",
+      question: "Quelle est la tension de contact limite conventionnelle en local sec ?",
+      options: ["12V", "25V", "50V", "120V"],
+      correct: 2,
+      explication: "La tension limite UL est de 50V en conditions normales (local sec). Elle descend à 25V en local humide et 12V en local immergé."
+    },
+
+    // ===== QUESTIONS NORMES SUPPLÉMENTAIRES =====
+    {
+      id: "n26",
+      category: "normes",
+      question: "Quel schéma de liaison à la terre est utilisé en France pour les logements ?",
+      options: ["TT", "TN-C", "TN-S", "IT"],
+      correct: 0,
+      explication: "En France, le régime TT (Terre-Terre) est utilisé : le neutre est mis à la terre au niveau du transformateur, et les masses sont reliées à une terre locale."
+    },
+    {
+      id: "n27",
+      category: "normes",
+      question: "Que signifie le sigle AGCP ?",
+      options: [
+        "Appareil Général de Commande Principale",
+        "Appareil Général de Coupure et de Protection",
+        "Alimentation Générale Courant Principal",
+        "Armoire Générale de Contrôle Puissance"
+      ],
+      correct: 1,
+      explication: "L'AGCP (Appareil Général de Coupure et de Protection) est le disjoncteur de branchement fourni par Enedis, situé en limite de propriété ou dans la GTL."
+    },
+    {
+      id: "n28",
+      category: "normes",
+      question: "Le tableau électrique doit être installé à quelle hauteur (manette du disjoncteur de branchement) ?",
+      options: [
+        "Entre 0.50m et 1.30m",
+        "Entre 0.90m et 1.80m",
+        "Entre 1.00m et 1.80m",
+        "Entre 1.30m et 2.00m"
+      ],
+      correct: 1,
+      explication: "La manette de l'AGCP doit être entre 0.90m et 1.80m du sol (NF C 15-100). Cette plage assure l'accessibilité en cas d'urgence."
+    },
+    {
+      id: "n29",
+      category: "normes",
+      question: "Quel pourcentage de la surface d'un logement doit être accessible aux PMR concernant les prises ?",
+      options: ["50%", "75%", "100%", "Ce n'est pas une exigence"],
+      correct: 2,
+      explication: "Toutes les prises doivent être accessibles (entre 5cm et 1.30m du sol). L'axe des prises de courant doit être à minimum 5cm du sol fini."
+    },
+    {
+      id: "n30",
+      category: "normes",
+      question: "Quelle est la puissance maximale d'un convecteur raccordable sur un circuit 1.5mm² / 16A ?",
+      options: ["2000W", "2500W", "3000W", "3500W"],
+      correct: 3,
+      explication: "P max = 230V × 16A = 3680W. En pratique, on limite à 3500W pour un seul convecteur. Au-delà, utiliser du 2.5mm² / 20A."
+    },
+
+    // ===== QUESTIONS HABILITATIONS SUPPLÉMENTAIRES =====
+    {
+      id: "h21",
+      category: "habilitations",
+      question: "Quelle est la définition d'un local réservé aux électriciens ?",
+      options: [
+        "Un local avec du matériel électrique",
+        "Un local où l'accès est interdit aux non-habilités",
+        "Un local avec un tableau électrique",
+        "Tout local technique"
+      ],
+      correct: 1,
+      explication: "Un local réservé aux électriciens est un local dont l'accès est réservé aux personnes habilitées, généralement signalé par un panneau d'interdiction."
+    },
+    {
+      id: "h22",
+      category: "habilitations",
+      question: "Le titre d'habilitation doit comporter quelles informations obligatoires ?",
+      options: [
+        "Nom et prénom uniquement",
+        "Symboles d'habilitation et signature employeur",
+        "Numéro de sécurité sociale",
+        "Photo d'identité uniquement"
+      ],
+      correct: 1,
+      explication: "Le titre doit indiquer : identité, employeur, symboles d'habilitation, champ d'application, date de délivrance, signature de l'employeur."
+    },
+    {
+      id: "h23",
+      category: "habilitations",
+      question: "Un B2V peut-il effectuer des travaux sous tension ?",
+      options: [
+        "Oui, c'est sa fonction",
+        "Non, il dirige des travaux hors tension avec voisinage",
+        "Uniquement en TBT",
+        "Seulement avec autorisation spéciale"
+      ],
+      correct: 1,
+      explication: "B2V est un chargé de travaux (dirige une équipe) pour des travaux HORS TENSION avec attribut Voisinage. Les TST nécessitent une habilitation spécifique (T)."
+    },
+    {
+      id: "h24",
+      category: "habilitations",
+      question: "Que doit faire un B1V avant de commencer les travaux ?",
+      options: [
+        "Réaliser la consignation",
+        "Recevoir les instructions du chargé de travaux et vérifier l'absence de tension",
+        "Rédiger l'attestation de consignation",
+        "Former les autres intervenants"
+      ],
+      correct: 1,
+      explication: "L'exécutant B1V reçoit ses instructions du B2 (chargé de travaux), vérifie l'absence de tension sur son lieu de travail, et respecte le périmètre défini."
+    },
+    {
+      id: "h25",
+      category: "habilitations",
+      question: "Seuil de courant dangereux traversant le corps humain ?",
+      options: ["10 mA", "30 mA", "50 mA", "100 mA"],
+      correct: 1,
+      explication: "À partir de 30 mA traversant le cœur, il y a risque de fibrillation ventriculaire. C'est pourquoi les DDR 30mA sont dits \"haute sensibilité\"."
+    },
+
+    // ===== TÂCHES PRATIQUES - SCÉNARIOS TERRAIN =====
+    {
+      id: "tp1",
+      category: "pratique",
+      question: "TÂCHE : Vous devez installer une prise dans une salle de bain à 2m du bord de la baignoire. Quelle protection est obligatoire ?",
+      options: [
+        "Disjoncteur 16A seul",
+        "DDR 30mA + disjoncteur 16A",
+        "Interrupteur différentiel 300mA",
+        "Aucune protection spéciale"
+      ],
+      correct: 1,
+      explication: "En volume 3 (au-delà de 60cm du bord de baignoire), une prise est autorisée mais DOIT être protégée par un DDR 30mA. La section sera de 2.5mm²."
+    },
+    {
+      id: "tp2",
+      category: "pratique",
+      question: "TÂCHE : Client signale que le DDR 30mA déclenche quand il branche son sèche-linge. Votre première action ?",
+      options: [
+        "Remplacer le DDR par un modèle plus puissant",
+        "Vérifier que le sèche-linge est sur circuit dédié protégé par DDR type A",
+        "Augmenter la section du câble",
+        "Shunter le DDR temporairement"
+      ],
+      correct: 1,
+      explication: "Le sèche-linge nécessite un circuit dédié avec DDR type A (détecte les courants à composante continue). Vérifiez aussi l'état de l'appareil (défaut isolement)."
+    },
+    {
+      id: "tp3",
+      category: "pratique",
+      question: "TÂCHE : Vous réceptionnez un tableau électrique neuf. Quelle vérification effectuez-vous en premier ?",
+      options: [
+        "Mesurer l'isolement de tous les circuits",
+        "Vérifier la continuité des conducteurs PE",
+        "Contrôler le serrage de toutes les connexions",
+        "Toutes ces vérifications sont nécessaires"
+      ],
+      correct: 3,
+      explication: "La réception d'un tableau implique : vérification des serrages (couple), continuité PE, mesure d'isolement, test des DDR, conformité à la NF C 15-100."
+    },
+    {
+      id: "tp4",
+      category: "pratique",
+      question: "TÂCHE : Vous devez câbler un va-et-vient. Combien de fils arrivent à chaque interrupteur ?",
+      options: [
+        "2 fils à chaque interrupteur",
+        "3 fils à chaque interrupteur",
+        "4 fils à chaque interrupteur",
+        "2 fils au premier, 3 au second"
+      ],
+      correct: 1,
+      explication: "Chaque interrupteur va-et-vient reçoit 3 fils : 1 navette entrante, 1 navette sortante, et la phase (premier inter) ou le retour lampe (second inter)."
+    },
+    {
+      id: "tp5",
+      category: "pratique",
+      question: "TÂCHE : Vous mesurez 0,8Ω entre la prise de terre et la barre de terre du tableau. L'installation est-elle conforme ?",
+      options: [
+        "Oui, c'est excellent",
+        "Non, la résistance est trop élevée",
+        "Dépend du type de DDR installé",
+        "Impossible à déterminer sans plus d'infos"
+      ],
+      correct: 0,
+      explication: "Avec un DDR 30mA, la résistance de terre doit être ≤ 100Ω (500V/30mA = 16Ω théorique, 100Ω accepté). 0,8Ω est une excellente valeur."
+    },
+    {
+      id: "tp6",
+      category: "pratique",
+      question: "TÂCHE : Installer un tableau divisionnaire à 15m du tableau principal. Section du câble d'alimentation ?",
+      options: [
+        "2.5 mm² suffit jusqu'à 20A",
+        "Calcul de chute de tension obligatoire",
+        "10 mm² minimum obligatoire",
+        "Même section que le disjoncteur de branchement"
+      ],
+      correct: 1,
+      explication: "Pour un tableau divisionnaire, il faut calculer la chute de tension (max 3% en éclairage, 5% autres usages) en fonction de la puissance et de la longueur."
+    },
+    {
+      id: "tp7",
+      category: "pratique",
+      question: "TÂCHE : Vous devez raccorder une VMC. Sur quel type de circuit et protection ?",
+      options: [
+        "Circuit éclairage, disjoncteur 10A",
+        "Circuit dédié, disjoncteur 2A",
+        "Circuit prises, disjoncteur 16A",
+        "N'importe quel circuit avec fusible"
+      ],
+      correct: 1,
+      explication: "La VMC doit avoir un circuit dédié en 1.5mm², protégé par un disjoncteur 2A (ou 16A selon NF C 15-100 art. 10.1.5.1.2). Le circuit doit être non coupé."
+    },
+    {
+      id: "tp8",
+      category: "pratique",
+      question: "TÂCHE : Identifier l'erreur - Tableau avec : DDR 63A Type AC en tête, dessous : 1 disj 32A (plaque), 1 disj 20A (lave-linge).",
+      options: [
+        "Le DDR est sous-dimensionné",
+        "Le DDR Type AC ne convient pas pour ces circuits",
+        "Le disjoncteur plaque devrait être 40A",
+        "Aucune erreur"
+      ],
+      correct: 1,
+      explication: "La plaque et le lave-linge nécessitent un DDR Type A (courants à composante continue pulsée). Le Type AC ne détecte que les courants alternatifs purs."
+    },
+    {
+      id: "tp9",
+      category: "pratique",
+      question: "TÂCHE : Mesure de continuité PE : vous trouvez 25Ω entre prise et tableau. Diagnostic ?",
+      options: [
+        "Conforme si câble > 50m",
+        "Défaut de continuité - connexion à vérifier",
+        "Normal pour du 1.5mm²",
+        "Mesure à refaire sous tension"
+      ],
+      correct: 1,
+      explication: "La continuité PE doit être proche de 0Ω (typiquement < 2Ω). 25Ω indique un mauvais contact, une connexion desserrée ou un fil endommagé."
+    },
+    {
+      id: "tp10",
+      category: "pratique",
+      question: "TÂCHE : Le client veut ajouter un point lumineux commandé par télérupteur. Où placer le télérupteur ?",
+      options: [
+        "Obligatoirement dans le tableau électrique",
+        "À proximité du premier bouton poussoir",
+        "Au tableau ou sur le trajet des canalisations",
+        "Directement dans la boîte du luminaire"
+      ],
+      correct: 2,
+      explication: "Le télérupteur peut être au tableau (rail DIN) ou en saillie/encastré sur le trajet. Le placer au tableau facilite la maintenance et le repérage."
+    },
+    {
+      id: "tp11",
+      category: "schemas",
+      question: "TÂCHE : Sur un schéma unifilaire, vous voyez le symbole ⏚. De quoi s'agit-il ?",
+      options: [
+        "Prise de courant",
+        "Prise de terre",
+        "Borne de raccordement",
+        "Point de mesure"
+      ],
+      correct: 1,
+      explication: "Le symbole ⏚ (trois traits horizontaux décroissants) représente la prise de terre ou connexion à la terre selon la norme CEI 60617."
+    },
+    {
+      id: "tp12",
+      category: "schemas",
+      question: "TÂCHE : Lire ce schéma - Un trait avec 3 barres obliques représente :",
+      options: [
+        "Un câble triphasé",
+        "Un câble avec 3 conducteurs",
+        "Une liaison en parallèle",
+        "Un défaut d'isolement"
+      ],
+      correct: 1,
+      explication: "Les barres obliques sur un trait indiquent le nombre de conducteurs. 3 barres = 3 conducteurs (ex: phase, neutre, PE pour un circuit monophasé)."
+    },
+    {
+      id: "tp13",
+      category: "pratique",
+      question: "TÂCHE : Mise en service tableau neuf - Le test DDR au bouton test fonctionne, mais le DDR ne déclenche pas avec un testeur 30mA. Cause probable ?",
+      options: [
+        "DDR défectueux - à remplacer",
+        "Testeur mal calibré",
+        "Le neutre n'est pas raccordé au DDR",
+        "Normal, le bouton test suffit"
+      ],
+      correct: 2,
+      explication: "Si le bouton test fonctionne mais pas le test réel, c'est souvent que le neutre n'est pas connecté au DDR (erreur de câblage fréquente)."
+    },
+    {
+      id: "tp14",
+      category: "pratique",
+      question: "TÂCHE : Rénovation - vous trouvez des fils sans repérage de couleur (tous gris). Comment identifier la terre ?",
+      options: [
+        "C'est forcément le plus gros fil",
+        "Mesure de continuité avec la barrette de terre",
+        "Le fil relié à la carcasse métallique",
+        "Impossible sans destructuration"
+      ],
+      correct: 1,
+      explication: "Sans repérage couleur, on identifie la terre par continuité avec la barrette de terre du tableau. La phase se trouve avec un VAT ou testeur de phase."
+    },
+    {
+      id: "tp15",
+      category: "pratique",
+      question: "TÂCHE : Installer un circuit extérieur pour éclairage jardin. Protection obligatoire ?",
+      options: [
+        "Disjoncteur 10A suffit",
+        "DDR 30mA obligatoire + disjoncteur adapté",
+        "Protection IP44 des luminaires suffit",
+        "Fusible 10A avec boîtier étanche"
+      ],
+      correct: 1,
+      explication: "Tout circuit extérieur doit être protégé par un DDR 30mA haute sensibilité. Les luminaires doivent avoir un IP adapté (IP44 minimum en extérieur)."
+    },
+    {
+      id: "tp16",
+      category: "calculs",
+      question: "TÂCHE CALCUL : Circuit prises 20A, longueur 25m, section 2.5mm². Chute de tension approximative (cosφ=1, Cu=56) ?",
+      options: [
+        "Environ 3.5%",
+        "Environ 7%",
+        "Environ 1.7%",
+        "Calcul impossible sans puissance"
+      ],
+      correct: 0,
+      explication: "ΔU = (2×L×I)/(γ×S) = (2×25×20)/(56×2.5) = 7.14V soit 3.1% sur 230V. Proche de la limite des 3% pour éclairage, OK pour prises (5%)."
+    },
+    {
+      id: "tp17",
+      category: "pratique",
+      question: "TÂCHE : Client demande l'installation d'une borne de recharge véhicule électrique 7kW. Prérequis ?",
+      options: [
+        "Simple prise 32A suffit",
+        "Circuit dédié 10mm², DDR type A ou F, disjoncteur 40A",
+        "Raccordement direct au compteur",
+        "Extension du tableau principal obligatoire"
+      ],
+      correct: 1,
+      explication: "Une borne 7kW (32A mono) nécessite : circuit dédié 10mm², DDR Type A ou F (selon borne), disjoncteur 40A. Déclaration CONSUEL si puissance > 3.7kW."
+    },
+    {
+      id: "tp18",
+      category: "pratique",
+      question: "TÂCHE : Vérifier l'équilibrage des phases d'un tableau triphasé. Écart maximum toléré entre phases ?",
+      options: [
+        "5% de la charge totale",
+        "10% de la charge totale",
+        "Pas de limite normative stricte, bon sens",
+        "15% maximum"
+      ],
+      correct: 2,
+      explication: "La NF C 15-100 n'impose pas de % précis, mais un bon équilibrage limite le courant dans le neutre et optimise l'installation. Viser < 10-15% d'écart."
+    },
+    {
+      id: "tp19",
+      category: "pratique",
+      question: "TÂCHE : Identifier le défaut - Circuit éclairage : l'ampoule reste faiblement allumée même interrupteur éteint.",
+      options: [
+        "Court-circuit",
+        "Courant de fuite par l'interrupteur ou câblage",
+        "Ampoule défectueuse",
+        "Surtension réseau"
+      ],
+      correct: 1,
+      explication: "Une LED restant faiblement allumée indique souvent un courant de fuite : interrupteur avec voyant, proximité de câbles, ou neutre coupé avant la phase."
+    },
+    {
+      id: "tp20",
+      category: "pratique",
+      question: "TÂCHE : Pose d'un interrupteur. Quel fil raccorder sur la borne L ?",
+      options: [
+        "Le neutre bleu",
+        "La phase (rouge/marron/noir)",
+        "Le retour lampe",
+        "La terre"
+      ],
+      correct: 1,
+      explication: "La borne L (Line) reçoit la phase. Le retour lampe part de la borne 1 ou ↑. Le neutre va directement au luminaire, jamais par l'interrupteur."
+    },
+    {
+      id: "tp21",
+      category: "schemas",
+      question: "TÂCHE : Sur schéma, rectangle avec symbole ~ à l'intérieur. Signification ?",
+      options: [
+        "Transformateur",
+        "Source de courant alternatif / Générateur AC",
+        "Moteur asynchrone",
+        "Onduleur"
+      ],
+      correct: 1,
+      explication: "Le rectangle avec ~ représente une source AC (générateur, réseau). Le moteur serait un cercle avec ~. Le transformateur a deux bobines couplées."
+    },
+    {
+      id: "tp22",
+      category: "pratique",
+      question: "TÂCHE : Dépannage - Le disjoncteur de branchement déclenche mais pas les DDR ni disjoncteurs divisionnaires. Diagnostic ?",
+      options: [
+        "Surcharge globale de l'installation",
+        "Court-circuit en amont des DDR",
+        "DDR défectueux",
+        "Problème chez le fournisseur"
+      ],
+      correct: 1,
+      explication: "Si seul le DB déclenche, le défaut est entre le DB et le premier DDR/disjoncteur (borniers, peigne, câbles du tableau). Vérifier visuellement."
+    },
+    {
+      id: "tp23",
+      category: "pratique",
+      question: "TÂCHE : Passage de câble dans une cloison. Distance minimale d'un ouvrant (porte/fenêtre) ?",
+      options: [
+        "Aucune distance imposée",
+        "5 cm minimum",
+        "10 cm minimum",
+        "20 cm minimum"
+      ],
+      correct: 0,
+      explication: "La NF C 15-100 n'impose pas de distance minimale par rapport aux ouvrants. Les zones de passage sont définies par rapport aux angles (20cm) et hauteurs."
+    },
+    {
+      id: "tp24",
+      category: "pratique",
+      question: "TÂCHE : Test d'isolement d'un circuit. Valeur minimale acceptable selon NF C 15-100 ?",
+      options: [
+        "0.25 MΩ",
+        "0.5 MΩ",
+        "1 MΩ",
+        "Dépend de la tension"
+      ],
+      correct: 1,
+      explication: "Pour une installation BT, l'isolement minimum est de 0.5 MΩ (500 kΩ) mesuré sous 500V DC. En pratique, on attend > 1 MΩ pour une installation neuve."
+    },
+    {
+      id: "tp25",
+      category: "pratique",
+      question: "TÂCHE : Raccordement coffret de communication. Quel câble entre le coffret et les prises RJ45 ?",
+      options: [
+        "Câble téléphonique 4 paires",
+        "Câble Grade 2TV ou Grade 3 (Cat 6)",
+        "Câble coaxial",
+        "Câble 3G2.5mm²"
+      ],
+      correct: 1,
+      explication: "Les prises RJ45 résidentielles doivent être câblées en Grade 2TV minimum (Cat 5e + coax) ou Grade 3 (Cat 6a + coax). Le câble 4 paires téléphonique est obsolète."
     }
   ]
 }

@@ -16,6 +16,15 @@ import Symboles from './pages/Symboles'
 import SymbolesFlashcards from './pages/SymbolesFlashcards'
 import Raccordements from './pages/Raccordements'
 import RaccordementGame from './pages/RaccordementGame'
+import ExamenBlanc from './pages/ExamenBlanc'
+import ExamenSession from './pages/ExamenSession'
+import PvIrve from './pages/PvIrve'
+import PvIrveDetail from './pages/PvIrveDetail'
+import Galerie from './pages/Galerie'
+import CasPratiques from './pages/CasPratiques'
+import CasPratiqueSession from './pages/CasPratiqueSession'
+import SchemasExercices from './pages/SchemasExercices'
+import SchemaExercice from './pages/SchemaExercice'
 
 function App() {
   return (
@@ -37,6 +46,15 @@ function App() {
         <Route path="symboles/:category" element={<SymbolesFlashcards />} />
         <Route path="raccordements" element={<Raccordements />} />
         <Route path="raccordements/:circuitId" element={<RaccordementGame />} />
+        <Route path="examen" element={<ExamenBlanc />} />
+        <Route path="examen/session" element={<ExamenSession />} />
+        <Route path="pv-irve" element={<PvIrve />} />
+        <Route path="pv-irve/:categoryId" element={<PvIrveDetail />} />
+        <Route path="galerie" element={<Galerie />} />
+        <Route path="cas-pratiques" element={<CasPratiques />} />
+        <Route path="cas-pratiques/:caseId" element={<CasPratiqueSession />} />
+        <Route path="schemas-exercices" element={<SchemasExercices />} />
+        <Route path="schemas-exercices/:exerciceId" element={<SchemaExercice />} />
       </Route>
     </Routes>
   )
