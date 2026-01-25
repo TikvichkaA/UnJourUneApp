@@ -3,372 +3,624 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClimaViz - Trajectoires Climatiques Paris</title>
+    <title>beta-traj | Trajectoire Climatique de Paris</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marianne:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Ecran de protection par mot de passe -->
+    <div id="password-overlay" class="password-overlay">
+        <div class="password-modal">
+            <div class="password-header">
+                <div class="password-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </div>
+                <h2>Acces securise</h2>
+                <p>Ce site contient des donnees sensibles. Veuillez entrer le mot de passe pour acceder au contenu.</p>
+            </div>
+            <form id="password-form" onsubmit="return checkPassword(event)">
+                <div class="password-input-group">
+                    <input type="password" id="password-input" placeholder="Mot de passe" autocomplete="off" required>
+                    <button type="submit" class="password-submit">Acceder</button>
+                </div>
+                <p id="password-error" class="password-error" style="display: none;">Mot de passe incorrect</p>
+            </form>
+            <p class="password-note">Version beta - Ville de Paris</p>
+        </div>
+    </div>
+
+    <!-- Header institutionnel -->
     <header class="header">
         <div class="header-content">
             <div class="logo">
-                <div class="logo-icon">CV</div>
-                <span class="logo-text">ClimaViz</span>
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 6 L16 16 L22 22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">beta-traj</span>
+                    <span class="logo-subtitle">Trajectoire Climatique de Paris</span>
+                </div>
             </div>
-            <div class="header-controls">
-                <button class="dark-toggle" onclick="toggleDarkMode()"><span id="dark-icon">&#x1F319;</span></button>
+            <div class="header-right">
+                <span class="beta-badge">VERSION BETA</span>
+                <button class="night-mode-toggle" id="night-mode-btn" onclick="toggleNightMode()" title="Mode nuit - Donnees mondiales">
+                    <svg id="night-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Trajectoires Climatiques de Paris</h1>
-            <p class="hero-subtitle">Visualisez l'evolution du climat selon les scenarios de rechauffement (TRACC 2023)</p>
-
-            <div class="tracc-info-box">
-                <div class="tracc-badge">TRACC</div>
-                <p class="tracc-text">Conformement au Plan National d'Adaptation (PNACC), les aleas climatiques ont ete actualises en tenant compte de la <strong>Trajectoire de rechauffement de reference pour l'adaptation au changement climatique (TRACC)</strong> qui adopte une approche par niveaux de rechauffement.</p>
-            </div>
-
-            <div class="thermometer-hero">
-                <div class="giant-thermometer">
-                    <div class="thermo-scale">
-                        <span>+4°C</span>
-                        <span>+3°C</span>
-                        <span>+2°C</span>
-                        <span>+1°C</span>
-                        <span>Ref</span>
-                    </div>
-                    <div class="thermo-tube">
-                        <div class="thermo-mercury" id="thermo-mercury"></div>
-                        <div class="thermo-marker" id="thermo-marker">+2°C</div>
-                    </div>
-                    <div class="thermo-bulb" id="thermo-bulb">
-                        <span class="thermo-bulb-temp" id="bulb-temp">+2°C</span>
-                    </div>
-                </div>
-
-                <div class="scenario-cards" id="scenario-cards">
-                    <div class="scenario-card" data-scenario="ref" onclick="selectScenario('ref')" style="--scenario-color: #3b82f6; --scenario-bg: rgba(59,130,246,0.1)">
-                        <div class="scenario-temp">Ref</div>
-                        <div class="scenario-year">1976-2005</div>
-                        <div class="scenario-desc">Le climat que nous connaissions</div>
-                    </div>
-                    <div class="scenario-card active" data-scenario="2030" onclick="selectScenario('2030')" style="--scenario-color: #f97316; --scenario-bg: rgba(249,115,22,0.1)">
-                        <div class="scenario-temp">+2°C</div>
-                        <div class="scenario-year">Horizon 2030</div>
-                        <div class="scenario-desc">Limite de l'Accord de Paris</div>
-                    </div>
-                    <div class="scenario-card" data-scenario="2050" onclick="selectScenario('2050')" style="--scenario-color: #ef4444; --scenario-bg: rgba(239,68,68,0.1)">
-                        <div class="scenario-temp">+2.7°C</div>
-                        <div class="scenario-year">Horizon 2050</div>
-                        <div class="scenario-desc">Trajectoire actuelle</div>
-                    </div>
-                    <div class="scenario-card" data-scenario="2100" onclick="selectScenario('2100')" style="--scenario-color: #991b1b; --scenario-bg: rgba(153,27,27,0.1)">
-                        <div class="scenario-temp">+4°C</div>
-                        <div class="scenario-year">Horizon 2100</div>
-                        <div class="scenario-desc">Scenario extreme</div>
-                    </div>
-                </div>
+    <!-- Navigation principale -->
+    <nav class="main-nav">
+        <div class="nav-content">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="aleas" onclick="switchTab('aleas')">Aleas</button>
+                <button class="nav-tab" data-tab="impacts" onclick="switchTab('impacts')">Impacts</button>
+                <button class="nav-tab" data-tab="trajectoire" onclick="switchTab('trajectoire')">Trajectoire tendancielle</button>
+                <button class="nav-tab" data-tab="paris" onclick="switchTab('paris')">Trajectoire de Paris</button>
             </div>
         </div>
-    </section>
+    </nav>
 
-    <main class="main-content">
-        <!-- Reference Period Section -->
-        <section class="reference-period-section" id="reference-section">
-            <div class="reference-header">
-                <h2 class="section-title">Periode de reference (1976-2005)</h2>
-                <p class="section-subtitle">A Paris, il etait normal de constater en moyenne sur une annee :</p>
-            </div>
+    <!-- Layout principal avec sidebar -->
+    <div class="app-layout">
+        <!-- Sidebar ressources -->
+        <aside class="sidebar">
+            <button class="sidebar-btn" data-resource="sources" onclick="openResource('sources')" title="Sources et methodologie">
+                <svg class="sidebar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+                <span class="sidebar-label">Sources</span>
+            </button>
+            <button class="sidebar-btn" data-resource="suivi" onclick="openResource('suivi')" title="Suivi de la trajectoire">
+                <svg class="sidebar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+                </svg>
+                <span class="sidebar-label">Suivi</span>
+            </button>
+            <button class="sidebar-btn" data-resource="science" onclick="openResource('science')" title="Que dit la science">
+                <svg class="sidebar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 3h6v11l3 3H6l3-3V3z"/><path d="M6 21h12"/>
+                </svg>
+                <span class="sidebar-label">Science</span>
+            </button>
+            <button class="sidebar-btn" data-resource="acteurs" onclick="openResource('acteurs')" title="Acteurs">
+                <svg class="sidebar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                <span class="sidebar-label">Acteurs</span>
+            </button>
+        </aside>
 
-            <div class="reference-category">
-                <h3 class="reference-category-title">Climat habituel</h3>
-                <div class="reference-grid">
-                    <div class="reference-stat">
-                        <span class="reference-icon">&#x1F321;&#xFE0F;</span>
-                        <span class="reference-value">12,4°C</span>
-                        <span class="reference-label">Temperature moyenne</span>
-                    </div>
-                    <div class="reference-stat">
-                        <span class="reference-icon">&#x2600;&#xFE0F;</span>
-                        <span class="reference-value">19°C</span>
-                        <span class="reference-label">Moyenne ete</span>
-                    </div>
-                    <div class="reference-stat">
-                        <span class="reference-icon">&#x1F9CA;</span>
-                        <span class="reference-value">5°C</span>
-                        <span class="reference-label">Moyenne hiver</span>
-                    </div>
-                    <div class="reference-stat">
-                        <span class="reference-icon">&#x1F4A7;</span>
-                        <span class="reference-value">161 mm</span>
-                        <span class="reference-label">Pluie en ete</span>
-                    </div>
-                    <div class="reference-stat">
-                        <span class="reference-icon">&#x1F327;&#xFE0F;</span>
-                        <span class="reference-value">148 mm</span>
-                        <span class="reference-label">Pluie en hiver</span>
-                    </div>
-                    <div class="reference-stat">
-                        <span class="reference-icon">&#x2744;&#xFE0F;</span>
-                        <span class="reference-value">22</span>
-                        <span class="reference-label">Jours de gel</span>
-                    </div>
-                </div>
-            </div>
+        <!-- Contenu principal -->
+        <main class="main-content">
 
-            <div class="reference-category">
-                <h3 class="reference-category-title">Les evenements extremes etaient peu courants</h3>
-                <div class="reference-grid">
-                    <div class="reference-stat warning">
-                        <span class="reference-icon">&#x1F321;&#xFE0F;</span>
-                        <span class="reference-value">9</span>
-                        <span class="reference-label">Journees tres chaudes (&gt;30°C)</span>
-                    </div>
-                    <div class="reference-stat warning">
-                        <span class="reference-icon">&#x1F7E0;</span>
-                        <span class="reference-value">1</span>
-                        <span class="reference-label">Jour a plus de 35°C</span>
-                    </div>
-                    <div class="reference-stat warning">
-                        <span class="reference-icon">&#x1F319;</span>
-                        <span class="reference-value">8</span>
-                        <span class="reference-label">Nuits tropicales par an</span>
-                    </div>
-                    <div class="reference-stat warning">
-                        <span class="reference-icon">&#x1F4C8;</span>
-                        <span class="reference-value">34°C</span>
-                        <span class="reference-label">Record temperature max moyen</span>
-                    </div>
-                    <div class="reference-stat warning">
-                        <span class="reference-icon">&#x1F525;</span>
-                        <span class="reference-value">2</span>
-                        <span class="reference-label">Jours risque feu vegetation</span>
-                    </div>
-                    <div class="reference-stat warning">
-                        <span class="reference-icon">&#x1F3DC;&#xFE0F;</span>
-                        <span class="reference-value">23</span>
-                        <span class="reference-label">Jours de secheresse</span>
-                    </div>
-                    <div class="reference-stat warning">
-                        <span class="reference-icon">&#x26C8;&#xFE0F;</span>
-                        <span class="reference-value">3</span>
-                        <span class="reference-label">Jours precipitations extremes</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+            <!-- ================================ -->
+            <!-- ONGLET 1 : ALEAS / CLIMAT       -->
+            <!-- ================================ -->
+            <section class="tab-content active" id="tab-aleas">
 
-        <!-- Immersive Weather Scene -->
-        <section class="weather-scene" id="weather-scene">
-            <div class="sun" id="sun"></div>
-            <div class="heat-waves">
-                <div class="heat-wave"></div>
-                <div class="heat-wave"></div>
-            </div>
-            <div class="weather-info">
-                <div class="weather-title">Un jour d'ete typique a Paris</div>
-                <div class="weather-temp" id="weather-temp">36°C</div>
-                <div class="weather-desc" id="weather-desc">Temperature maximale record</div>
-                <div class="weather-details">
-                    <div class="weather-detail">
-                        <span class="weather-detail-icon">&#x1F319;</span>
-                        <span class="weather-detail-value" id="tropical-nights">17 nuits tropicales</span>
+                <!-- 1.1 Contexte -->
+                <div class="content-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Quel climat pour Paris ?</h1>
+                        <p class="page-intro">Comprendre l'evolution des aleas climatiques sur le territoire parisien</p>
                     </div>
-                    <div class="weather-detail">
-                        <span class="weather-detail-icon">&#x1F4A7;</span>
-                        <span class="weather-detail-value" id="summer-rain">154 mm de pluie</span>
-                    </div>
-                    <div class="weather-detail">
-                        <span class="weather-detail-icon">&#x1F525;</span>
-                        <span class="weather-detail-value" id="fire-risk">3 jours risque feu</span>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Visual Illustrations -->
-        <section class="impact-illustrations" id="impact-illustrations">
-            <!-- Earth -->
-            <div class="illustration-card">
-                <div class="illustration-container earth-scene">
-                    <div class="stars"></div>
-                    <div class="earth" id="earth-illustration">
-                        <div class="earth-clouds"></div>
-                        <div class="earth-fire"></div>
-                    </div>
-                </div>
-                <div class="illustration-title">Notre planete</div>
-                <div class="illustration-desc" id="earth-desc">Ecosystemes en equilibre</div>
-                <span class="illustration-status ok" id="earth-status">Stable</span>
-            </div>
-
-            <!-- River -->
-            <div class="illustration-card">
-                <div class="illustration-container river-scene" id="river-illustration">
-                    <div class="tree tree-1">
-                        <div class="tree-leaves"></div>
-                        <div class="tree-trunk"></div>
-                    </div>
-                    <div class="tree tree-2">
-                        <div class="tree-leaves"></div>
-                        <div class="tree-trunk"></div>
-                    </div>
-                    <div class="river-bed">
-                        <div class="river-water"></div>
-                    </div>
-                    <div class="cracks">
-                        <div class="crack crack-1"></div>
-                        <div class="crack crack-2"></div>
-                        <div class="crack crack-3"></div>
-                        <div class="crack crack-4"></div>
-                        <div class="crack crack-5"></div>
-                    </div>
-                </div>
-                <div class="illustration-title">Cours d'eau</div>
-                <div class="illustration-desc" id="river-desc">Debit normal, vegetation saine</div>
-                <span class="illustration-status ok" id="river-status">Normal</span>
-            </div>
-
-            <!-- Ice -->
-            <div class="illustration-card">
-                <div class="illustration-container ice-scene" id="ice-illustration">
-                    <div class="polar-bear">&#x1F43B;&#x200D;&#x2744;&#xFE0F;</div>
-                    <div class="iceberg">
-                        <div class="iceberg-top"></div>
-                    </div>
-                    <div class="water-level"></div>
-                </div>
-                <div class="illustration-title">Banquise arctique</div>
-                <div class="illustration-desc" id="ice-desc">Glaces stables, habitat preserve</div>
-                <span class="illustration-status ok" id="ice-status">Preservee</span>
-            </div>
-
-            <!-- Forest -->
-            <div class="illustration-card">
-                <div class="illustration-container forest-scene" id="forest-illustration">
-                    <div class="smoke">
-                        <div class="smoke-cloud"></div>
-                        <div class="smoke-cloud"></div>
-                        <div class="smoke-cloud"></div>
-                        <div class="smoke-cloud"></div>
-                    </div>
-                    <div class="forest-trees">
-                        <div class="forest-tree">
-                            <div class="forest-crown"></div>
-                            <div class="forest-trunk"></div>
+                    <div class="info-card context-card">
+                        <div class="info-card-header">
+                            <span class="info-badge">Contexte</span>
+                            <h2>Un nouveau cadre national pour l'adaptation</h2>
                         </div>
-                        <div class="forest-tree">
-                            <div class="forest-crown"></div>
-                            <div class="forest-trunk"></div>
-                        </div>
-                        <div class="forest-tree">
-                            <div class="forest-crown"></div>
-                            <div class="forest-trunk"></div>
-                        </div>
-                        <div class="forest-tree">
-                            <div class="forest-crown"></div>
-                            <div class="forest-trunk"></div>
+                        <div class="info-card-body">
+                            <p>En 2025, l'Etat fixe un nouveau cadre national pour l'adaptation au changement climatique avec son <strong>3e Plan National d'Adaptation (PNACC)</strong>.</p>
+                            <p>Des cibles d'adaptation sont fixees par la <strong>Trajectoire de rechauffement de reference pour l'adaptation au changement climatique (TRACC)</strong> qui adopte une approche par niveaux de rechauffement :</p>
+
+                            <div class="warming-targets">
+                                <div class="warming-target">
+                                    <span class="warming-value">+2°C</span>
+                                    <span class="warming-horizon">Horizon 2030</span>
+                                </div>
+                                <div class="warming-target">
+                                    <span class="warming-value">+2,7°C</span>
+                                    <span class="warming-horizon">Horizon 2050</span>
+                                </div>
+                                <div class="warming-target">
+                                    <span class="warming-value">+4°C</span>
+                                    <span class="warming-horizon">Horizon 2100</span>
+                                </div>
+                            </div>
+
+                            <p class="context-note">Pour le territoire parisien, une trentaine d'aleas ont ete actualises sur ce nouveau scenario.</p>
                         </div>
                     </div>
-                    <div class="forest-fire">
-                        <div class="flame"></div>
-                        <div class="flame"></div>
-                        <div class="flame"></div>
-                        <div class="flame"></div>
-                        <div class="flame"></div>
+
+                    <!-- Encart explicatif +4°C -->
+                    <div class="explainer-card">
+                        <div class="explainer-icon">?</div>
+                        <div class="explainer-content">
+                            <h3>Que signifie +4°C ?</h3>
+                            <p>C'est un choix de scenario parmi plusieurs scenarios mondiaux, qui varient selon les efforts de reduction des emissions de gaz a effet de serre. L'Etat retient un scenario dit <strong>"tendanciel"</strong> si les Etats respectent leurs engagements climatiques actuels.</p>
+                            <p class="explainer-note">Ce n'est ni le scenario le plus pessimiste, ni le plus optimiste.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="illustration-title">Forets mediterraneennes</div>
-                <div class="illustration-desc" id="forest-desc">Vegetation luxuriante</div>
-                <span class="illustration-status ok" id="forest-status">Saines</span>
-            </div>
-        </section>
 
-        <!-- Visual Calendar -->
-        <section class="calendar-section">
-            <div class="calendar-header">
-                <div>
-                    <h2 class="section-title">Calendrier de l'ete</h2>
-                    <p class="section-subtitle">Chaque case = 1 jour. Survolez pour les details techniques.</p>
-                </div>
-                <div class="calendar-legend">
-                    <div class="legend-item"><div class="legend-color" style="background: #22c55e"></div>&lt;25°C</div>
-                    <div class="legend-item"><div class="legend-color" style="background: #fbbf24"></div>25-30°C</div>
-                    <div class="legend-item"><div class="legend-color" style="background: #f97316"></div>30-35°C</div>
-                    <div class="legend-item"><div class="legend-color" style="background: #ef4444"></div>35-40°C</div>
-                    <div class="legend-item"><div class="legend-color" style="background: #991b1b"></div>&gt;40°C</div>
-                    <div class="legend-item"><div class="legend-color" style="background: #22c55e; box-shadow: inset 0 0 0 2px #7c3aed"></div>Nuit tropicale</div>
-                </div>
-            </div>
-            <div class="calendar-months" id="calendar-months"></div>
-            <div class="calendar-stats" id="calendar-stats"></div>
-        </section>
+                <!-- 1.2 Climat de reference -->
+                <div class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Periode de reference (1976-2005)</h2>
+                        <p class="section-subtitle">A Paris, il etait normal de constater en moyenne sur une annee :</p>
+                    </div>
 
-        <!-- Circular Gauges with Tooltips -->
-        <section class="gauges-section" id="gauges-section"></section>
+                    <div class="climate-reference">
+                        <!-- Climat habituel -->
+                        <div class="reference-block">
+                            <h3 class="reference-block-title">Climat habituel</h3>
+                            <div class="reference-grid">
+                                <div class="reference-item">
+                                    <span class="reference-value">12,4°C</span>
+                                    <span class="reference-label">Temperature moyenne</span>
+                                </div>
+                                <div class="reference-item">
+                                    <span class="reference-value">19°C</span>
+                                    <span class="reference-label">Moyenne ete</span>
+                                </div>
+                                <div class="reference-item">
+                                    <span class="reference-value">5°C</span>
+                                    <span class="reference-label">Moyenne hiver</span>
+                                </div>
+                                <div class="reference-item">
+                                    <span class="reference-value">161 mm</span>
+                                    <span class="reference-label">Pluie ete</span>
+                                </div>
+                                <div class="reference-item">
+                                    <span class="reference-value">148 mm</span>
+                                    <span class="reference-label">Pluie hiver</span>
+                                </div>
+                                <div class="reference-item">
+                                    <span class="reference-value">22 jours</span>
+                                    <span class="reference-label">Jours de gel</span>
+                                </div>
+                                <div class="reference-item data-missing">
+                                    <span class="reference-value">--</span>
+                                    <span class="reference-label">Jours de chauffage</span>
+                                    <span class="data-note">Donnee a completer</span>
+                                </div>
+                                <div class="reference-item data-missing">
+                                    <span class="reference-value">--</span>
+                                    <span class="reference-label">Jours de climatisation</span>
+                                    <span class="data-note">Donnee a completer</span>
+                                </div>
+                            </div>
+                        </div>
 
-        <!-- Trajectory Chart (remonté après indicateurs) -->
-        <section class="chart-section">
-            <div class="calendar-header">
-                <div>
-                    <h2 class="section-title">Trajectoires dans le temps</h2>
-                    <p class="section-subtitle">Evolution des indicateurs selon les horizons</p>
+                        <!-- Evenements extremes -->
+                        <div class="reference-block extremes">
+                            <h3 class="reference-block-title">Les evenements extremes etaient peu courants</h3>
+                            <div class="reference-grid">
+                                <div class="reference-item extreme">
+                                    <span class="reference-value">9</span>
+                                    <span class="reference-label">Journees tres chaudes (&gt;30°C)</span>
+                                </div>
+                                <div class="reference-item extreme">
+                                    <span class="reference-value">1</span>
+                                    <span class="reference-label">Jour a plus de 35°C</span>
+                                </div>
+                                <div class="reference-item extreme">
+                                    <span class="reference-value">8</span>
+                                    <span class="reference-label">Nuits tropicales par an</span>
+                                </div>
+                                <div class="reference-item extreme">
+                                    <span class="reference-value">34°C</span>
+                                    <span class="reference-label">Record temp. max moyen</span>
+                                </div>
+                                <div class="reference-item extreme">
+                                    <span class="reference-value">2</span>
+                                    <span class="reference-label">Jours risque feu vegetation</span>
+                                </div>
+                                <div class="reference-item extreme">
+                                    <span class="reference-value">23</span>
+                                    <span class="reference-label">Jours de secheresse</span>
+                                </div>
+                                <div class="reference-item extreme">
+                                    <span class="reference-value">3</span>
+                                    <span class="reference-label">Jours precipitations extremes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="chart-tabs">
-                    <button class="chart-tab active" data-chart="tropical" onclick="changeChart('tropical')">Nuits tropicales</button>
-                    <button class="chart-tab" data-chart="hot30" onclick="changeChart('hot30')">Jours > 30°C</button>
-                    <button class="chart-tab" data-chart="hot35" onclick="changeChart('hot35')">Jours > 35°C</button>
-                    <button class="chart-tab" data-chart="cooling" onclick="changeChart('cooling')">Besoin en climatisation</button>
-                </div>
-            </div>
-            <div class="chart-container">
-                <canvas id="mainChart"></canvas>
-            </div>
-        </section>
 
-        <!-- City Comparison (remonté après trajectoires) -->
-        <section class="city-visual-section">
-            <h2 class="section-title">Equivalence climatique</h2>
-            <p class="section-subtitle">Le climat futur de Paris ressemblera a...</p>
-            <div class="city-comparison-visual" id="city-comparison"></div>
-        </section>
+                <!-- 1.3 Climat futur -->
+                <div class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Climat futur a Paris</h2>
+                        <p class="section-subtitle">Selectionnez un niveau de rechauffement pour visualiser l'evolution des aleas</p>
+                    </div>
 
-        <!-- Bandeau Impacts Globaux -->
-        <section class="global-impacts-banner">
-            <div class="banner-content">
-                <span class="banner-icon">&#x1F30D;</span>
-                <div class="banner-text">
-                    <h2 class="banner-title">Impacts globaux et points de bascule</h2>
-                    <p class="banner-subtitle">Consequences planetaires du rechauffement climatique</p>
-                </div>
-            </div>
-        </section>
+                    <!-- Selecteur de scenario -->
+                    <div class="scenario-selector">
+                        <button class="scenario-btn" data-scenario="ref" onclick="selectScenario('ref')">
+                            <span class="scenario-temp">Ref</span>
+                            <span class="scenario-period">1976-2005</span>
+                        </button>
+                        <button class="scenario-btn active" data-scenario="2030" onclick="selectScenario('2030')">
+                            <span class="scenario-temp">+2°C</span>
+                            <span class="scenario-period">Horizon 2030</span>
+                        </button>
+                        <button class="scenario-btn" data-scenario="2050" onclick="selectScenario('2050')">
+                            <span class="scenario-temp">+2,7°C</span>
+                            <span class="scenario-period">Horizon 2050</span>
+                        </button>
+                        <button class="scenario-btn" data-scenario="2100" onclick="selectScenario('2100')">
+                            <span class="scenario-temp">+4°C</span>
+                            <span class="scenario-period">Horizon 2100</span>
+                        </button>
+                    </div>
 
-        <!-- Tipping Points -->
-        <section class="tipping-section visible" id="tipping-section">
-            <div class="tipping-header">
-                <div>
-                    <h2 class="section-title">Points de bascule planetaires</h2>
-                    <p class="section-subtitle" style="color: #94a3b8">Seuils critiques au-dela desquels des changements irreversibles peuvent se produire</p>
-                </div>
-                <div class="tipping-version-toggle">
-                    <button class="tipping-version-btn active" data-version="A" onclick="switchTippingVersion('A')">Graphique</button>
-                    <button class="tipping-version-btn" data-version="B" onclick="switchTippingVersion('B')">Carte</button>
-                </div>
-            </div>
-            <div class="tipping-grid" id="tipping-grid"></div>
-            <div class="global-impacts" id="global-impacts"></div>
-        </section>
-    </main>
+                    <!-- Indicateurs dynamiques -->
+                    <div class="indicators-section" id="indicators-section">
+                        <!-- Rempli par JS -->
+                    </div>
 
+                    <!-- Graphique trajectoires -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Evolution dans le temps</h3>
+                            <div class="chart-tabs">
+                                <button class="chart-tab active" data-chart="tropical" onclick="changeChart('tropical')">Nuits tropicales</button>
+                                <button class="chart-tab" data-chart="hot30" onclick="changeChart('hot30')">Jours &gt; 30°C</button>
+                                <button class="chart-tab" data-chart="hot35" onclick="changeChart('hot35')">Jours &gt; 35°C</button>
+                                <button class="chart-tab" data-chart="cooling" onclick="changeChart('cooling')">Besoin climatisation</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="mainChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Equivalence climatique -->
+                    <div class="equivalence-card">
+                        <h3>Equivalence climatique</h3>
+                        <p class="equivalence-intro">Le climat futur de Paris ressemblera a...</p>
+                        <div class="equivalence-visual" id="city-comparison">
+                            <!-- Rempli par JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.4 Climat mondial et points de bascule -->
+                <div class="content-section" id="global-climate-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Climat mondial</h2>
+                        <p class="section-subtitle">Evolution des aleas a l'echelle planetaire</p>
+                    </div>
+
+                    <div class="global-impacts-grid">
+                        <div class="global-impact-card">
+                            <div class="impact-content">
+                                <span class="impact-title">Pluies intenses</span>
+                                <span class="impact-trend">Intensification</span>
+                            </div>
+                        </div>
+                        <div class="global-impact-card">
+                            <div class="impact-content">
+                                <span class="impact-title">Secheresses</span>
+                                <span class="impact-trend">Intensification</span>
+                            </div>
+                        </div>
+                        <div class="global-impact-card">
+                            <div class="impact-content">
+                                <span class="impact-title">Risques incendies</span>
+                                <span class="impact-trend">Intensification</span>
+                            </div>
+                        </div>
+                        <div class="global-impact-card">
+                            <div class="impact-content">
+                                <span class="impact-title">Temperatures</span>
+                                <span class="impact-trend">Intensification</span>
+                            </div>
+                        </div>
+                        <div class="global-impact-card">
+                            <div class="impact-content">
+                                <span class="impact-title">Niveau des mers</span>
+                                <span class="impact-trend" id="sea-level-rise">+20 cm a +1m</span>
+                            </div>
+                        </div>
+                        <div class="global-impact-card">
+                            <div class="impact-content">
+                                <span class="impact-title">Stress hydrique</span>
+                                <span class="impact-trend">Augmentation</span>
+                            </div>
+                        </div>
+                        <div class="global-impact-card">
+                            <div class="impact-content">
+                                <span class="impact-title">Rendements agricoles</span>
+                                <span class="impact-trend">Baisse</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Points de bascule -->
+                    <div class="tipping-section">
+                        <h3>Points de bascule planetaires</h3>
+                        <p class="tipping-intro">Seuils critiques au-dela desquels des changements irreversibles peuvent se produire</p>
+                        <div class="tipping-toggle">
+                            <button class="tipping-toggle-btn active" data-version="A" onclick="switchTippingVersion('A')">Vue graphique</button>
+                            <button class="tipping-toggle-btn" data-version="B" onclick="switchTippingVersion('B')">Vue carte</button>
+                        </div>
+                        <div class="tipping-content" id="tipping-grid">
+                            <!-- Rempli par JS -->
+                        </div>
+                        <div class="global-impacts-summary" id="global-impacts">
+                            <!-- Rempli par JS -->
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ================================ -->
+            <!-- ONGLET 2 : IMPACTS              -->
+            <!-- ================================ -->
+            <section class="tab-content" id="tab-impacts">
+                <div class="content-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Quels impacts futurs ?</h1>
+                        <p class="page-intro">Consequences du changement climatique sur Paris et ses habitants</p>
+                    </div>
+
+                    <div class="explainer-card">
+                        <div class="explainer-icon">?</div>
+                        <div class="explainer-content">
+                            <h3>Comment lire cette section ?</h3>
+                            <p>Selectionnez une menace climatique pour visualiser les impacts associes sur le territoire parisien. Les donnees evoluent selon le scenario de rechauffement selectionne dans l'onglet "Aleas".</p>
+                        </div>
+                    </div>
+
+                    <!-- Contenu dynamique genere par JS -->
+                    <div id="impacts-content"></div>
+                </div>
+            </section>
+
+            <!-- ================================ -->
+            <!-- ONGLET 3 : TRAJECTOIRE TENDANCIELLE -->
+            <!-- ================================ -->
+            <section class="tab-content" id="tab-trajectoire">
+                <div class="content-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Trajectoire tendancielle</h1>
+                        <p class="page-intro">Etat des lieux des actions engagees et des besoins identifies</p>
+                    </div>
+
+                    <div class="explainer-card">
+                        <div class="explainer-icon">?</div>
+                        <div class="explainer-content">
+                            <h3>Comment lire cette section ?</h3>
+                            <p>Chaque frise presente l'evolution des risques dans le temps et les actions d'adaptation actuellement engagees. Les actions sont classees par type (verte, bleue, grise, organisationnelle) mais ne sont pas encore toutes planifiees dans le temps.</p>
+                        </div>
+                    </div>
+
+                    <!-- Contenu dynamique genere par JS -->
+                    <div id="trajectoire-content"></div>
+                </div>
+            </section>
+
+            <!-- ================================ -->
+            <!-- ONGLET 4 : TRAJECTOIRE DE PARIS -->
+            <!-- ================================ -->
+            <section class="tab-content" id="tab-paris">
+                <div class="content-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Trajectoire de Paris</h1>
+                        <p class="page-intro">Construction collective de la strategie d'adaptation au changement climatique</p>
+                    </div>
+
+                    <!-- Message principal -->
+                    <div class="paris-hero">
+                        <div class="paris-hero-content">
+                            <div class="paris-hero-icon">&#x1F3D7;</div>
+                            <div class="paris-hero-text">
+                                <h2>En cours de construction</h2>
+                                <p>La trajectoire d'adaptation de Paris se construit collectivement. Les sequences d'actions a court, moyen et long terme sont en cours de definition avec l'ensemble des acteurs du territoire.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Frise chronologique principale -->
+                    <div class="paris-timeline-section">
+                        <h3 class="section-title">Horizons temporels</h3>
+                        <p class="section-subtitle">Les jalons de la trajectoire d'adaptation</p>
+
+                        <div class="paris-timeline">
+                            <div class="paris-timeline-bar"></div>
+                            <div class="paris-timeline-markers">
+                                <div class="paris-marker current" style="left: 0%">
+                                    <div class="paris-marker-dot"></div>
+                                    <div class="paris-marker-content">
+                                        <span class="paris-marker-year">2025</span>
+                                        <span class="paris-marker-label">Aujourd'hui</span>
+                                        <span class="paris-marker-temp">+1.2C</span>
+                                    </div>
+                                </div>
+                                <div class="paris-marker" style="left: 6.7%">
+                                    <div class="paris-marker-dot"></div>
+                                    <div class="paris-marker-content">
+                                        <span class="paris-marker-year">2030</span>
+                                        <span class="paris-marker-label">Court terme</span>
+                                        <span class="paris-marker-temp">+2C</span>
+                                    </div>
+                                </div>
+                                <div class="paris-marker" style="left: 33.3%">
+                                    <div class="paris-marker-dot"></div>
+                                    <div class="paris-marker-content">
+                                        <span class="paris-marker-year">2050</span>
+                                        <span class="paris-marker-label">Moyen terme</span>
+                                        <span class="paris-marker-temp">+2.7C</span>
+                                    </div>
+                                </div>
+                                <div class="paris-marker" style="left: 100%">
+                                    <div class="paris-marker-dot"></div>
+                                    <div class="paris-marker-content">
+                                        <span class="paris-marker-year">2100</span>
+                                        <span class="paris-marker-label">Long terme</span>
+                                        <span class="paris-marker-temp">+4C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cases vides a remplir -->
+                    <div class="paris-slots-section">
+                        <h3 class="section-title">Sequences d'actions</h3>
+                        <p class="section-subtitle">Les actions a definir collectivement pour chaque horizon</p>
+
+                        <div class="paris-slots">
+                            <div class="paris-slot">
+                                <div class="paris-slot-header">
+                                    <span class="paris-slot-period">2025 - 2030</span>
+                                    <span class="paris-slot-badge">Court terme</span>
+                                </div>
+                                <div class="paris-slot-body">
+                                    <div class="paris-slot-placeholder">
+                                        <span class="placeholder-icon-small">&#x2753;</span>
+                                        <span class="placeholder-text">Actions a definir</span>
+                                    </div>
+                                    <div class="paris-slot-placeholder">
+                                        <span class="placeholder-icon-small">&#x2753;</span>
+                                        <span class="placeholder-text">Objectifs a fixer</span>
+                                    </div>
+                                    <div class="paris-slot-placeholder">
+                                        <span class="placeholder-icon-small">&#x2753;</span>
+                                        <span class="placeholder-text">Moyens a identifier</span>
+                                    </div>
+                                </div>
+                                <div class="paris-slot-footer">
+                                    <span class="paris-slot-status pending">En attente de definition</span>
+                                </div>
+                            </div>
+
+                            <div class="paris-slot">
+                                <div class="paris-slot-header">
+                                    <span class="paris-slot-period">2030 - 2050</span>
+                                    <span class="paris-slot-badge">Moyen terme</span>
+                                </div>
+                                <div class="paris-slot-body">
+                                    <div class="paris-slot-placeholder">
+                                        <span class="placeholder-icon-small">&#x2753;</span>
+                                        <span class="placeholder-text">Actions a definir</span>
+                                    </div>
+                                    <div class="paris-slot-placeholder">
+                                        <span class="placeholder-icon-small">&#x2753;</span>
+                                        <span class="placeholder-text">Objectifs a fixer</span>
+                                    </div>
+                                    <div class="paris-slot-placeholder">
+                                        <span class="placeholder-icon-small">&#x2753;</span>
+                                        <span class="placeholder-text">Moyens a identifier</span>
+                                    </div>
+                                </div>
+                                <div class="paris-slot-footer">
+                                    <span class="paris-slot-status pending">En attente de definition</span>
+                                </div>
+                            </div>
+
+                            <div class="paris-slot">
+                                <div class="paris-slot-header">
+                                    <span class="paris-slot-period">2050 - 2100</span>
+                                    <span class="paris-slot-badge">Long terme</span>
+                                </div>
+                                <div class="paris-slot-body">
+                                    <div class="paris-slot-placeholder">
+                                        <span class="placeholder-icon-small">&#x2753;</span>
+                                        <span class="placeholder-text">Actions a definir</span>
+                                    </div>
+                                    <div class="paris-slot-placeholder">
+                                        <span class="placeholder-icon-small">&#x2753;</span>
+                                        <span class="placeholder-text">Objectifs a fixer</span>
+                                    </div>
+                                    <div class="paris-slot-placeholder">
+                                        <span class="placeholder-icon-small">&#x2753;</span>
+                                        <span class="placeholder-text">Moyens a identifier</span>
+                                    </div>
+                                </div>
+                                <div class="paris-slot-footer">
+                                    <span class="paris-slot-status pending">En attente de definition</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prochaines etapes -->
+                    <div class="paris-next-steps">
+                        <h3 class="section-title">Prochaines etapes</h3>
+                        <div class="next-steps-grid">
+                            <div class="next-step-card">
+                                <div class="next-step-number">1</div>
+                                <div class="next-step-content">
+                                    <h4>Diagnostic partage</h4>
+                                    <p>Analyse des vulnerabilites et des capacites d'adaptation du territoire</p>
+                                </div>
+                            </div>
+                            <div class="next-step-card">
+                                <div class="next-step-number">2</div>
+                                <div class="next-step-content">
+                                    <h4>Concertation</h4>
+                                    <p>Mobilisation des acteurs pour definir les priorites d'action</p>
+                                </div>
+                            </div>
+                            <div class="next-step-card">
+                                <div class="next-step-number">3</div>
+                                <div class="next-step-content">
+                                    <h4>Strategie</h4>
+                                    <p>Elaboration de la trajectoire d'adaptation avec objectifs chiffres</p>
+                                </div>
+                            </div>
+                            <div class="next-step-card">
+                                <div class="next-step-number">4</div>
+                                <div class="next-step-content">
+                                    <h4>Mise en oeuvre</h4>
+                                    <p>Deploiement des actions et suivi des indicateurs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Panneau ressources (modal/slide) -->
+    <div class="resource-panel" id="resource-panel">
+        <div class="resource-panel-header">
+            <h2 id="resource-title">Ressource</h2>
+            <button class="resource-close" onclick="closeResource()">&times;</button>
+        </div>
+        <div class="resource-panel-content" id="resource-content">
+            <!-- Contenu charge dynamiquement -->
+        </div>
+    </div>
+
+    <!-- Footer -->
     <footer class="footer">
-        <p class="footer-text">
-            Visualisation pedagogique basee sur les donnees
-            <a href="https://www.ecologie.gouv.fr/trajectoire-rechauffement-adaptation-au-changement-climatique-tracc" target="_blank">TRACC 2023</a>
-        </p>
+        <div class="footer-content">
+            <p class="footer-text">
+                Donnees basees sur la <a href="https://www.ecologie.gouv.fr/trajectoire-rechauffement-adaptation-au-changement-climatique-tracc" target="_blank">TRACC 2023</a>
+            </p>
+            <p class="footer-version">beta-traj v0.1 - Version de travail</p>
+        </div>
     </footer>
 
     <script src="app.js"></script>
