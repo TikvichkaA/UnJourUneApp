@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathOral | Entraînement Oraux Concours</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo" onclick="goHome()">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+                        <text x="16" y="21" text-anchor="middle" font-size="14" font-weight="600" fill="currentColor">M</text>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">MathOral</span>
+                    <span class="logo-subtitle">Oraux X - ENS - Centrale</span>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <button class="nav-btn active" data-view="home" onclick="switchView('home')">Accueil</button>
+                <button class="nav-btn" data-view="exercices" onclick="switchView('exercices')">Exercices</button>
+                <button class="nav-btn" data-view="methodes" onclick="switchView('methodes')">Methodes</button>
+                <button class="nav-btn" data-view="fiches" onclick="switchView('fiches')">Fiches</button>
+                <button class="nav-btn" data-view="oraux" onclick="switchView('oraux')">Oraux</button>
+                <button class="nav-btn" data-view="carte" onclick="switchView('carte')">Carte</button>
+                <button class="nav-btn" data-view="profil" onclick="switchView('profil')">Profil</button>
+            </nav>
+            <button class="express-btn" onclick="startExpressMode()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
+                </svg>
+                Mode Express
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- HOME VIEW -->
+        <section class="view active" id="view-home">
+            <div class="hero">
+                <h1>Prepare tes oraux de concours</h1>
+                <p class="hero-subtitle">Reconnaissance, strategie, formulation : maîtrise l'art de l'oral mathematique</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-value" id="stat-exercices">25</span>
+                        <span class="stat-label">Exercices</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="stat-methodes">12</span>
+                        <span class="stat-label">Methodes</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value" id="stat-oraux">8</span>
+                        <span class="stat-label">Oraux types</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Start -->
+            <div class="quick-start">
+                <h2>Par où commencer ?</h2>
+                <div class="quick-cards">
+                    <div class="quick-card" onclick="switchView('exercices')">
+                        <div class="quick-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <h3>Exercices classiques</h3>
+                        <p>Travaille les incontournables par theme</p>
+                    </div>
+                    <div class="quick-card" onclick="switchView('methodes')">
+                        <div class="quick-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        <h3>Methodes</h3>
+                        <p>"Quand je vois X, je pense a Y"</p>
+                    </div>
+                    <div class="quick-card" onclick="switchView('oraux')">
+                        <div class="quick-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                <line x1="12" y1="19" x2="12" y2="23"/>
+                                <line x1="8" y1="23" x2="16" y2="23"/>
+                            </svg>
+                        </div>
+                        <h3>Simulation oral</h3>
+                        <p>Entraine-toi en conditions reelles</p>
+                    </div>
+                    <div class="quick-card express" onclick="startExpressMode()">
+                        <div class="quick-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                            </svg>
+                        </div>
+                        <h3>Mode Express</h3>
+                        <p>5-15 min de reflexes rapides</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent / Suggested -->
+            <div class="section-grid">
+                <div class="section-card">
+                    <h2>Exercices suggeres</h2>
+                    <div class="exercise-list" id="suggested-exercises">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+                <div class="section-card">
+                    <h2>Themes a reviser</h2>
+                    <div class="theme-grid" id="theme-grid">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXERCICES VIEW -->
+        <section class="view" id="view-exercices">
+            <div class="view-header">
+                <h1>Banque d'exercices</h1>
+                <p>Exercices classiques X / ENS / Centrale - Format oral augmente</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Theme</label>
+                    <select id="filter-theme" onchange="filterExercises()">
+                        <option value="all">Tous les themes</option>
+                        <option value="suites">Suites</option>
+                        <option value="series">Series</option>
+                        <option value="fonctions">Fonctions</option>
+                        <option value="integrales">Integrales</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Concours</label>
+                    <select id="filter-concours" onchange="filterExercises()">
+                        <option value="all">Tous</option>
+                        <option value="X">X</option>
+                        <option value="ENS">ENS</option>
+                        <option value="Centrale">Centrale</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Methode</label>
+                    <select id="filter-methode" onchange="filterExercises()">
+                        <option value="all">Toutes</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Exercise Grid -->
+            <div class="exercises-grid" id="exercises-grid">
+                <!-- Filled by JS -->
+            </div>
+        </section>
+
+        <!-- METHODES VIEW -->
+        <section class="view" id="view-methodes">
+            <div class="view-header">
+                <h1>Methodes transversales</h1>
+                <p>"Quand je vois X, je pense a Y" - Les reflexes du mathematicien</p>
+            </div>
+
+            <div class="methodes-grid" id="methodes-grid">
+                <!-- Filled by JS -->
+            </div>
+        </section>
+
+        <!-- ORAUX VIEW -->
+        <section class="view" id="view-oraux">
+            <div class="view-header">
+                <h1>Simulation d'oraux</h1>
+                <p>Entraine-toi en conditions reelles avec chronometre et questions de jury</p>
+            </div>
+
+            <div class="oraux-options">
+                <div class="oral-option" onclick="startOral('standard')">
+                    <div class="oral-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12,6 12,12 16,14"/>
+                        </svg>
+                    </div>
+                    <h3>Oral standard</h3>
+                    <p>30 min de preparation + presentation</p>
+                    <span class="oral-tag">Recommande</span>
+                </div>
+                <div class="oral-option" onclick="startOral('guide')">
+                    <div class="oral-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                    </div>
+                    <h3>Oral guide</h3>
+                    <p>Avec indices et accompagnement</p>
+                    <span class="oral-tag secondary">Pour debuter</span>
+                </div>
+                <div class="oral-option" onclick="startOral('jury')">
+                    <div class="oral-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h3>Avec questions jury</h3>
+                    <p>Simule les interruptions du jury</p>
+                    <span class="oral-tag warning">Avance</span>
+                </div>
+            </div>
+
+            <div class="oral-history">
+                <h2>Tes derniers oraux</h2>
+                <div id="oral-history-list" class="oral-history-list">
+                    <p class="empty-state">Aucun oral effectue pour l'instant</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FICHES VIEW - Memo, Erreurs, Questions Jury -->
+        <section class="view" id="view-fiches">
+            <div class="view-header">
+                <h1>Boite a outils</h1>
+                <p>Fiches memo, erreurs frequentes, questions de jury</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="fiches-tabs">
+                <button class="fiches-tab active" data-tab="memo" onclick="switchFichesTab('memo')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                    </svg>
+                    Fiches memo
+                </button>
+                <button class="fiches-tab" data-tab="erreurs" onclick="switchFichesTab('erreurs')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="15" y1="9" x2="9" y2="15"/>
+                        <line x1="9" y1="9" x2="15" y2="15"/>
+                    </svg>
+                    Erreurs frequentes
+                </button>
+                <button class="fiches-tab" data-tab="jury" onclick="switchFichesTab('jury')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    Questions jury
+                </button>
+            </div>
+
+            <!-- Fiches Memo Content -->
+            <div class="fiches-content active" id="tab-memo">
+                <div class="fiches-grid" id="fiches-memo-grid">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Erreurs Content -->
+            <div class="fiches-content" id="tab-erreurs">
+                <div class="erreurs-filter">
+                    <label>Filtrer par theme :</label>
+                    <select id="erreurs-theme-filter" onchange="filterErreurs()">
+                        <option value="all">Tous les themes</option>
+                    </select>
+                    <label style="margin-left: 1rem;">Severite :</label>
+                    <select id="erreurs-severity-filter" onchange="filterErreurs()">
+                        <option value="all">Toutes</option>
+                        <option value="haute">Haute</option>
+                        <option value="moyenne">Moyenne</option>
+                    </select>
+                </div>
+                <div class="erreurs-list" id="erreurs-list">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Questions Jury Content -->
+            <div class="fiches-content" id="tab-jury">
+                <div class="jury-filter">
+                    <label>Filtrer par theme :</label>
+                    <select id="jury-theme-filter" onchange="filterJuryQuestions()">
+                        <option value="all">Tous les themes</option>
+                        <option value="general">Questions generales</option>
+                    </select>
+                    <label style="margin-left: 1rem;">Type :</label>
+                    <select id="jury-type-filter" onchange="filterJuryQuestions()">
+                        <option value="all">Tous</option>
+                        <option value="justification">Justification</option>
+                        <option value="methode">Methode</option>
+                        <option value="piege">Piege</option>
+                    </select>
+                </div>
+                <div class="jury-list" id="jury-list">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- FICHE DETAIL MODAL -->
+        <div class="fiche-modal" id="fiche-modal">
+            <div class="fiche-modal-content">
+                <button class="fiche-modal-close" onclick="closeFicheModal()">&times;</button>
+                <div id="fiche-modal-body">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- CARTE VIEW -->
+        <section class="view" id="view-carte">
+            <div class="view-header">
+                <h1>Carte du programme</h1>
+                <p>Vision transversale : notions, methodes, exercices</p>
+            </div>
+
+            <div class="carte-container">
+                <div class="carte-sidebar">
+                    <h3>Notions</h3>
+                    <div class="notion-list" id="notion-list">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+                <div class="carte-main" id="carte-main">
+                    <div class="carte-placeholder">
+                        <p>Selectionne une notion pour voir les liens</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXERCISE DETAIL VIEW -->
+        <section class="view" id="view-exercise">
+            <div class="exercise-container">
+                <!-- Breadcrumb -->
+                <div class="breadcrumb">
+                    <button onclick="switchView('exercices')">Exercices</button>
+                    <span>/</span>
+                    <span id="exercise-theme-breadcrumb">Suites</span>
+                </div>
+
+                <!-- Exercise Header -->
+                <div class="exercise-header">
+                    <div class="exercise-meta">
+                        <span class="exercise-concours" id="exercise-concours">X</span>
+                        <span class="exercise-year" id="exercise-year">2023</span>
+                    </div>
+                    <h1 id="exercise-title">Titre de l'exercice</h1>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="exercise-progress">
+                    <div class="progress-steps">
+                        <div class="progress-step active" data-step="enonce">
+                            <span class="step-number">1</span>
+                            <span class="step-label">Enonce</span>
+                        </div>
+                        <div class="progress-step" data-step="reconnaissance">
+                            <span class="step-number">2</span>
+                            <span class="step-label">Reconnaissance</span>
+                        </div>
+                        <div class="progress-step" data-step="strategie">
+                            <span class="step-number">3</span>
+                            <span class="step-label">Strategie</span>
+                        </div>
+                        <div class="progress-step" data-step="indices">
+                            <span class="step-number">4</span>
+                            <span class="step-label">Indices</span>
+                        </div>
+                        <div class="progress-step" data-step="oral">
+                            <span class="step-number">5</span>
+                            <span class="step-label">Oral</span>
+                        </div>
+                        <div class="progress-step" data-step="debrief">
+                            <span class="step-number">6</span>
+                            <span class="step-label">Debrief</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="exercise-progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Exercise Content Area -->
+                <div class="exercise-content" id="exercise-content">
+                    <!-- Dynamically filled -->
+                </div>
+
+                <!-- Navigation -->
+                <div class="exercise-nav">
+                    <button class="nav-prev" id="btn-prev" onclick="prevStep()" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15,18 9,12 15,6"/>
+                        </svg>
+                        Precedent
+                    </button>
+                    <button class="nav-next" id="btn-next" onclick="nextStep()">
+                        Je me lance
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9,18 15,12 9,6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- METHODE DETAIL VIEW -->
+        <section class="view" id="view-methode">
+            <div class="methode-container">
+                <div class="breadcrumb">
+                    <button onclick="switchView('methodes')">Methodes</button>
+                    <span>/</span>
+                    <span id="methode-title-breadcrumb">Methode</span>
+                </div>
+
+                <div class="methode-content" id="methode-content">
+                    <!-- Dynamically filled -->
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPRESS MODE VIEW -->
+        <section class="view" id="view-express">
+            <div class="express-container">
+                <div class="express-header">
+                    <div class="express-timer">
+                        <span id="express-time">05:00</span>
+                    </div>
+                    <div class="express-score">
+                        <span id="express-correct">0</span> / <span id="express-total">0</span>
+                    </div>
+                    <button class="express-quit" onclick="quitExpress()">Quitter</button>
+                </div>
+
+                <div class="express-question" id="express-question">
+                    <!-- Dynamically filled -->
+                </div>
+
+                <div class="express-actions" id="express-actions">
+                    <!-- Dynamically filled -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PROFIL VIEW -->
+        <section class="view" id="view-profil">
+            <div class="view-header">
+                <h1>Mon profil</h1>
+                <p>Suis ta progression et analyse tes performances</p>
+            </div>
+
+            <div class="profil-container">
+                <!-- Stats Overview -->
+                <div class="profil-overview">
+                    <div class="profil-stat-card main">
+                        <div class="profil-stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <div class="profil-stat-info">
+                            <span class="profil-stat-value" id="profil-exercises-done">0</span>
+                            <span class="profil-stat-label">exercices termines</span>
+                        </div>
+                    </div>
+                    <div class="profil-stat-card">
+                        <div class="profil-stat-icon streak">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L12 22M12 2L8 6M12 2L16 6"/>
+                            </svg>
+                        </div>
+                        <div class="profil-stat-info">
+                            <span class="profil-stat-value" id="profil-streak">0</span>
+                            <span class="profil-stat-label">jours de suite</span>
+                        </div>
+                    </div>
+                    <div class="profil-stat-card">
+                        <div class="profil-stat-icon express">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                        </div>
+                        <div class="profil-stat-info">
+                            <span class="profil-stat-value" id="profil-express-sessions">0</span>
+                            <span class="profil-stat-label">sessions Express</span>
+                        </div>
+                    </div>
+                    <div class="profil-stat-card">
+                        <div class="profil-stat-icon best">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                        </div>
+                        <div class="profil-stat-info">
+                            <span class="profil-stat-value" id="profil-best-score">0%</span>
+                            <span class="profil-stat-label">meilleur Express</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme Mastery -->
+                <div class="profil-section">
+                    <h2>Maitrise par theme</h2>
+                    <div class="profil-themes" id="profil-themes">
+                        <!-- Dynamically filled -->
+                    </div>
+                </div>
+
+                <!-- Express History -->
+                <div class="profil-section">
+                    <h2>Historique Express</h2>
+                    <div class="profil-express-history" id="profil-express-history">
+                        <!-- Dynamically filled -->
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="profil-section">
+                    <h2>Activite recente</h2>
+                    <div class="profil-recent" id="profil-recent">
+                        <!-- Dynamically filled -->
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="profil-actions">
+                    <button class="profil-reset-btn" onclick="resetProgress()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="1 4 1 10 7 10"/>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                        </svg>
+                        Reinitialiser la progression
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
+    <div class="modal" id="modal">
+        <div class="modal-header">
+            <h2 id="modal-title">Modal</h2>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-content" id="modal-content">
+            <!-- Dynamically filled -->
+        </div>
+    </div>
+
+    <script src="exercises.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

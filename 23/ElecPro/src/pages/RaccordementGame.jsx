@@ -5,6 +5,100 @@ import { getCircuitById, raccordementsData, validateConnections } from '../data/
 
 // Wire colors from data
 const wireColors = raccordementsData.wireColors
+const schemasConstructeur = raccordementsData.schemasConstructeur
+
+// Fonction pour générer un chemin avec angles droits entre deux points
+function generateRightAnglePath(from, to, offset = 0) {
+  const dx = to.x - from.x
+  const dy = to.y - from.y
+
+  // Décalage pour éviter que les fils se superposent
+  const verticalOffset = offset * 8
+
+  // Si les points sont principalement horizontaux
+  if (Math.abs(dx) > Math.abs(dy)) {
+    // Chemin horizontal d'abord, puis vertical
+    const midX = from.x + dx / 2
+    return `M ${from.x} ${from.y} H ${midX + verticalOffset} V ${to.y} H ${to.x}`
+  } else {
+    // Chemin vertical d'abord, puis horizontal
+    const midY = from.y + dy / 2
+    return `M ${from.x} ${from.y} V ${midY + verticalOffset} H ${to.x} V ${to.y}`
+  }
+}
+
+// Composant pour rendre un schéma constructeur
+function SchemaConstructeur({ type, x, y }) {
+  const schema = schemasConstructeur[type]
+  if (!schema) return null
+
+  const offsetX = -schema.width / 2
+  const offsetY = -schema.height / 2
+
+  return (
+    <g transform={`translate(${x + offsetX}, ${y + offsetY})`}>
+      {schema.schema.map((element, idx) => {
+        switch (element.type) {
+          case 'rect':
+            return (
+              <rect
+                key={idx}
+                x={element.x}
+                y={element.y}
+                width={element.width}
+                height={element.height}
+                stroke={element.stroke}
+                fill={element.fill}
+                strokeWidth="1"
+              />
+            )
+          case 'circle':
+            return (
+              <circle
+                key={idx}
+                cx={element.cx}
+                cy={element.cy}
+                r={element.r}
+                stroke={element.stroke}
+                fill={element.fill || 'none'}
+                strokeWidth="1"
+              />
+            )
+          case 'line':
+            return (
+              <line
+                key={idx}
+                x1={element.x1}
+                y1={element.y1}
+                x2={element.x2}
+                y2={element.y2}
+                stroke="#374151"
+                strokeWidth="1.5"
+                strokeDasharray={element.dashed ? '3 2' : 'none'}
+              />
+            )
+          case 'text':
+            return (
+              <text
+                key={idx}
+                x={element.x}
+                y={element.y}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize={element.size || 8}
+                fill="#374151"
+                fontFamily="monospace"
+              >
+                {element.text}
+              </text>
+            )
+          default:
+            return null
+        }
+      })}
+    </g>
+  )
+}
 
 // Wire color options for toolbar
 const wireOptions = [
@@ -30,9 +124,9 @@ function RaccordementGame() {
   const [hintsUsed, setHintsUsed] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
 
-  // SVG viewBox dimensions
-  const viewBoxWidth = 400
-  const viewBoxHeight = 350
+  // SVG viewBox dimensions - augmenté pour les schémas constructeur
+  const viewBoxWidth = 420
+  const viewBoxHeight = 380
 
   useEffect(() => {
     // Reset state when circuit changes
@@ -277,45 +371,59 @@ function RaccordementGame() {
           <rect width="100%" height="100%" fill="url(#grid)" />
 
           {/* Components */}
-          {circuit.composants.map(comp => (
-            <g key={comp.id} transform={`translate(${comp.x}, ${comp.y})`}>
-              {/* Component box */}
-              <rect
-                x="-30"
-                y="-20"
-                width="60"
-                height="40"
-                rx="4"
-                fill="white"
-                stroke="#374151"
-                strokeWidth="2"
-              />
-              {/* Component icon/label */}
-              <text
-                x="0"
-                y="0"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                className="text-xs font-medium"
-                fill="#374151"
-              >
-                {comp.icon || comp.label}
-              </text>
-              {/* Component type label */}
-              <text
-                x="0"
-                y="30"
-                textAnchor="middle"
-                className="text-[10px]"
-                fill="#6b7280"
-              >
-                {comp.label}
-              </text>
-            </g>
-          ))}
+          {circuit.composants.map(comp => {
+            // Vérifier si ce composant a un schéma constructeur
+            const hasSchema = schemasConstructeur[comp.type]
+            const boxWidth = hasSchema ? 80 : 60
+            const boxHeight = hasSchema ? 60 : 40
 
-          {/* User connections (wires) */}
-          {userConnections.map(conn => {
+            return (
+              <g key={comp.id} transform={`translate(${comp.x}, ${comp.y})`}>
+                {/* Component box */}
+                <rect
+                  x={-boxWidth / 2}
+                  y={-boxHeight / 2}
+                  width={boxWidth}
+                  height={boxHeight}
+                  rx="4"
+                  fill="white"
+                  stroke="#374151"
+                  strokeWidth="2"
+                />
+
+                {/* Schéma constructeur si disponible */}
+                {hasSchema ? (
+                  <SchemaConstructeur type={comp.type} x={0} y={0} />
+                ) : (
+                  /* Sinon, afficher l'icône/label simple */
+                  <text
+                    x="0"
+                    y="0"
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    className="text-xs font-medium"
+                    fill="#374151"
+                  >
+                    {comp.icon || comp.label}
+                  </text>
+                )}
+
+                {/* Component type label en dessous */}
+                <text
+                  x="0"
+                  y={boxHeight / 2 + 12}
+                  textAnchor="middle"
+                  className="text-[10px]"
+                  fill="#6b7280"
+                >
+                  {comp.label}
+                </text>
+              </g>
+            )
+          })}
+
+          {/* User connections (wires) - avec angles droits */}
+          {userConnections.map((conn, index) => {
             const from = getTerminalPosition(conn.from)
             const to = getTerminalPosition(conn.to)
             const isCorrect = validationResult?.correct.some(
@@ -326,30 +434,32 @@ function RaccordementGame() {
               c => c.id === conn.id
             )
 
+            // Générer le chemin avec angles droits
+            const pathData = generateRightAnglePath(from, to, index)
+            const wireColor = validationResult
+              ? isCorrect ? '#22c55e' : isIncorrect ? '#ef4444' : getWireColor(conn.wireType)
+              : getWireColor(conn.wireType)
+
+            // Point milieu pour le bouton de suppression
+            const midX = (from.x + to.x) / 2
+            const midY = (from.y + to.y) / 2
+
             return (
               <g key={conn.id}>
-                <line
-                  x1={from.x}
-                  y1={from.y}
-                  x2={to.x}
-                  y2={to.y}
-                  stroke={
-                    validationResult
-                      ? isCorrect ? '#22c55e' : isIncorrect ? '#ef4444' : getWireColor(conn.wireType)
-                      : getWireColor(conn.wireType)
-                  }
+                <path
+                  d={pathData}
+                  fill="none"
+                  stroke={conn.wireType === 'terre' ? 'url(#earthPattern)' : wireColor}
                   strokeWidth={validationResult ? 4 : 3}
-                  strokeLinecap="round"
-                  style={{
-                    stroke: conn.wireType === 'terre' ? 'url(#earthPattern)' : undefined
-                  }}
+                  strokeLinecap="square"
+                  strokeLinejoin="miter"
                 />
                 {/* Delete button on wire */}
                 {!validationResult && (
                   <g
                     onClick={() => handleDeleteConnection(conn.id)}
                     className="cursor-pointer"
-                    transform={`translate(${(from.x + to.x) / 2}, ${(from.y + to.y) / 2})`}
+                    transform={`translate(${midX}, ${midY})`}
                   >
                     <circle r="10" fill="white" stroke="#ef4444" strokeWidth="1" />
                     <text

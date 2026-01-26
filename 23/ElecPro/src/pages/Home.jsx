@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, FileText, Brain, Calculator, Shield, ChevronRight, Award, Target, Download, Wifi, WifiOff, Shapes, Cable, ClipboardCheck, Sun, Image, Wrench, PenTool } from 'lucide-react'
+import { BookOpen, FileText, Brain, Calculator, Shield, ChevronRight, Award, Target, Download, Wifi, WifiOff, Shapes, Cable, ClipboardCheck, Sun, Image, Wrench, PenTool, Search } from 'lucide-react'
 import { referentiel } from '../data/referentiel'
 
 const modules = [
@@ -94,6 +94,13 @@ const modules = [
     title: 'Schémas',
     description: 'Exercices interactifs',
     color: 'bg-pink-500'
+  },
+  {
+    path: '/erreurs-visuelles',
+    icon: Search,
+    title: 'Trouver les erreurs',
+    description: 'Repérez les défauts',
+    color: 'bg-rose-600'
   }
 ]
 

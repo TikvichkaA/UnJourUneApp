@@ -11,6 +11,78 @@ export const raccordementsData = {
     navette2: { color: '#EC4899', label: 'Navette 2', code: 'N2' }
   },
 
+  // Schémas constructeur pour les dispositifs centraux
+  schemasConstructeur: {
+    telerupteur: {
+      width: 80,
+      height: 60,
+      schema: [
+        // Bobine (A1-A2)
+        { type: 'rect', x: 5, y: 15, width: 30, height: 30, stroke: '#374151', fill: 'none' },
+        { type: 'text', x: 20, y: 32, text: 'A1-A2', size: 8 },
+        // Contact (1-2)
+        { type: 'line', x1: 50, y1: 15, x2: 50, y2: 25 },
+        { type: 'line', x1: 50, y1: 25, x2: 65, y2: 35, dashed: true },
+        { type: 'line', x1: 50, y1: 35, x2: 50, y2: 45 },
+        { type: 'text', x: 57, y: 22, text: '1', size: 8 },
+        { type: 'text', x: 57, y: 48, text: '2', size: 8 }
+      ],
+      bornesLabels: { 'A1': 'Bobine +', 'A2': 'Bobine -', '1': 'Contact entrée', '2': 'Contact sortie' }
+    },
+    minuterie: {
+      width: 80,
+      height: 60,
+      schema: [
+        // Timer symbol
+        { type: 'circle', cx: 20, cy: 30, r: 12, stroke: '#374151', fill: 'none' },
+        { type: 'text', x: 20, y: 33, text: 't', size: 10 },
+        // Contact (3→4)
+        { type: 'line', x1: 50, y1: 15, x2: 50, y2: 25 },
+        { type: 'line', x1: 50, y1: 25, x2: 65, y2: 35, dashed: true },
+        { type: 'line', x1: 50, y1: 35, x2: 50, y2: 45 },
+        { type: 'text', x: 40, y: 10, text: '1', size: 7 },
+        { type: 'text', x: 57, y: 10, text: '3', size: 7 },
+        { type: 'text', x: 40, y: 55, text: '2', size: 7 },
+        { type: 'text', x: 57, y: 55, text: '4', size: 7 }
+      ],
+      bornesLabels: { '1': 'Phase perm.', '2': 'Neutre', '3': 'Commande BP', '4': 'Sortie lampe' }
+    },
+    contacteur: {
+      width: 80,
+      height: 60,
+      schema: [
+        // Bobine
+        { type: 'rect', x: 5, y: 18, width: 25, height: 24, stroke: '#374151', fill: 'none' },
+        { type: 'text', x: 17, y: 32, text: 'A1', size: 7 },
+        { type: 'text', x: 17, y: 42, text: 'A2', size: 7 },
+        // Contact de puissance
+        { type: 'line', x1: 55, y1: 15, x2: 55, y2: 25 },
+        { type: 'line', x1: 55, y1: 25, x2: 70, y2: 35, dashed: true },
+        { type: 'line', x1: 55, y1: 35, x2: 55, y2: 45 },
+        { type: 'text', x: 62, y: 22, text: '1', size: 8 },
+        { type: 'text', x: 62, y: 48, text: '2', size: 8 }
+      ],
+      bornesLabels: { 'A1': 'Bobine +', 'A2': 'Bobine -', '1': 'Puissance in', '2': 'Puissance out' }
+    },
+    'va-et-vient': {
+      width: 60,
+      height: 50,
+      schema: [
+        // Point commun L
+        { type: 'circle', cx: 15, cy: 25, r: 4, stroke: '#374151', fill: '#374151' },
+        { type: 'text', x: 8, y: 18, text: 'L', size: 8 },
+        // Deux sorties 1 et 2
+        { type: 'line', x1: 19, y1: 25, x2: 45, y2: 10 },
+        { type: 'line', x1: 19, y1: 25, x2: 45, y2: 40, dashed: true },
+        { type: 'circle', cx: 45, cy: 10, r: 3, stroke: '#374151', fill: 'none' },
+        { type: 'circle', cx: 45, cy: 40, r: 3, stroke: '#374151', fill: 'none' },
+        { type: 'text', x: 50, y: 13, text: '1', size: 8 },
+        { type: 'text', x: 50, y: 43, text: '2', size: 8 }
+      ],
+      bornesLabels: { 'L': 'Commun', '1': 'Navette 1', '2': 'Navette 2' }
+    }
+  },
+
   circuits: [
     // === NIVEAU 1 : BASIQUE ===
     {
@@ -94,22 +166,22 @@ export const raccordementsData = {
       icon: '🔀',
       dureeEstimee: '4 min',
       composants: [
-        { id: 'disj', type: 'disjoncteur', label: 'Disj. 10A', x: 30, y: 80 },
-        { id: 'inter1', type: 'va-et-vient', label: 'VV 1', x: 130, y: 80 },
-        { id: 'inter2', type: 'va-et-vient', label: 'VV 2', x: 270, y: 80 },
-        { id: 'lampe', type: 'lampe', label: 'Lampe', x: 380, y: 80 }
+        { id: 'disj', type: 'disjoncteur', label: 'Disj. 10A', x: 40, y: 100 },
+        { id: 'inter1', type: 'va-et-vient', label: 'VV 1', x: 150, y: 100 },
+        { id: 'inter2', type: 'va-et-vient', label: 'VV 2', x: 280, y: 100 },
+        { id: 'lampe', type: 'lampe', label: 'Lampe', x: 390, y: 100 }
       ],
       bornes: [
-        { id: 'disj-L-out', componentId: 'disj', position: 'right', label: 'L', x: 70, y: 70 },
-        { id: 'disj-N-out', componentId: 'disj', position: 'right', label: 'N', x: 70, y: 90 },
-        { id: 'inter1-L', componentId: 'inter1', position: 'left', label: 'L', x: 110, y: 80 },
-        { id: 'inter1-1', componentId: 'inter1', position: 'right', label: '1', x: 150, y: 60 },
-        { id: 'inter1-2', componentId: 'inter1', position: 'right', label: '2', x: 150, y: 100 },
-        { id: 'inter2-1', componentId: 'inter2', position: 'left', label: '1', x: 250, y: 60 },
-        { id: 'inter2-2', componentId: 'inter2', position: 'left', label: '2', x: 250, y: 100 },
-        { id: 'inter2-L', componentId: 'inter2', position: 'right', label: 'L', x: 290, y: 80 },
-        { id: 'lampe-L', componentId: 'lampe', position: 'left', label: 'L', x: 360, y: 80 },
-        { id: 'lampe-N', componentId: 'lampe', position: 'right', label: 'N', x: 400, y: 80 }
+        { id: 'disj-L-out', componentId: 'disj', position: 'right', label: 'L', x: 80, y: 90 },
+        { id: 'disj-N-out', componentId: 'disj', position: 'right', label: 'N', x: 80, y: 110 },
+        { id: 'inter1-L', componentId: 'inter1', position: 'left', label: 'L', x: 120, y: 100 },
+        { id: 'inter1-1', componentId: 'inter1', position: 'right', label: '1', x: 180, y: 75 },
+        { id: 'inter1-2', componentId: 'inter1', position: 'right', label: '2', x: 180, y: 125 },
+        { id: 'inter2-1', componentId: 'inter2', position: 'left', label: '1', x: 250, y: 75 },
+        { id: 'inter2-2', componentId: 'inter2', position: 'left', label: '2', x: 250, y: 125 },
+        { id: 'inter2-L', componentId: 'inter2', position: 'right', label: 'L', x: 310, y: 100 },
+        { id: 'lampe-L', componentId: 'lampe', position: 'left', label: 'L', x: 360, y: 100 },
+        { id: 'lampe-N', componentId: 'lampe', position: 'right', label: 'N', x: 410, y: 100 }
       ],
       connexionsCorrectes: [
         { from: 'disj-L-out', to: 'inter1-L', wireType: 'phase' },
@@ -169,25 +241,25 @@ export const raccordementsData = {
       icon: '🔔',
       dureeEstimee: '5 min',
       composants: [
-        { id: 'disj', type: 'disjoncteur', label: 'Disj. 10A', x: 30, y: 50 },
-        { id: 'teler', type: 'telerupteur', label: 'Télérupteur', x: 30, y: 140 },
-        { id: 'bp1', type: 'bouton-poussoir', label: 'BP 1', x: 180, y: 50 },
-        { id: 'bp2', type: 'bouton-poussoir', label: 'BP 2', x: 180, y: 140 },
-        { id: 'lampe', type: 'lampe', label: 'Lampe', x: 330, y: 100 }
+        { id: 'disj', type: 'disjoncteur', label: 'Disj. 10A', x: 50, y: 50 },
+        { id: 'teler', type: 'telerupteur', label: 'Télérupteur', x: 50, y: 160 },
+        { id: 'bp1', type: 'bouton-poussoir', label: 'BP 1', x: 200, y: 50 },
+        { id: 'bp2', type: 'bouton-poussoir', label: 'BP 2', x: 200, y: 160 },
+        { id: 'lampe', type: 'lampe', label: 'Lampe', x: 350, y: 110 }
       ],
       bornes: [
-        { id: 'disj-L-out', componentId: 'disj', position: 'right', label: 'L', x: 70, y: 40 },
-        { id: 'disj-N-out', componentId: 'disj', position: 'right', label: 'N', x: 70, y: 60 },
-        { id: 'teler-A1', componentId: 'teler', position: 'top', label: 'A1', x: 20, y: 120 },
-        { id: 'teler-A2', componentId: 'teler', position: 'top', label: 'A2', x: 40, y: 120 },
-        { id: 'teler-1', componentId: 'teler', position: 'bottom', label: '1', x: 20, y: 160 },
-        { id: 'teler-2', componentId: 'teler', position: 'bottom', label: '2', x: 40, y: 160 },
-        { id: 'bp1-1', componentId: 'bp1', position: 'left', label: '1', x: 160, y: 40 },
-        { id: 'bp1-2', componentId: 'bp1', position: 'right', label: '2', x: 200, y: 60 },
-        { id: 'bp2-1', componentId: 'bp2', position: 'left', label: '1', x: 160, y: 130 },
-        { id: 'bp2-2', componentId: 'bp2', position: 'right', label: '2', x: 200, y: 150 },
-        { id: 'lampe-L', componentId: 'lampe', position: 'left', label: 'L', x: 310, y: 100 },
-        { id: 'lampe-N', componentId: 'lampe', position: 'right', label: 'N', x: 350, y: 100 }
+        { id: 'disj-L-out', componentId: 'disj', position: 'right', label: 'L', x: 90, y: 40 },
+        { id: 'disj-N-out', componentId: 'disj', position: 'right', label: 'N', x: 90, y: 60 },
+        { id: 'teler-A1', componentId: 'teler', position: 'top', label: 'A1', x: 30, y: 130 },
+        { id: 'teler-A2', componentId: 'teler', position: 'top', label: 'A2', x: 70, y: 130 },
+        { id: 'teler-1', componentId: 'teler', position: 'bottom', label: '1', x: 30, y: 190 },
+        { id: 'teler-2', componentId: 'teler', position: 'bottom', label: '2', x: 70, y: 190 },
+        { id: 'bp1-1', componentId: 'bp1', position: 'left', label: '1', x: 170, y: 40 },
+        { id: 'bp1-2', componentId: 'bp1', position: 'right', label: '2', x: 230, y: 60 },
+        { id: 'bp2-1', componentId: 'bp2', position: 'left', label: '1', x: 170, y: 150 },
+        { id: 'bp2-2', componentId: 'bp2', position: 'right', label: '2', x: 230, y: 170 },
+        { id: 'lampe-L', componentId: 'lampe', position: 'left', label: 'L', x: 320, y: 110 },
+        { id: 'lampe-N', componentId: 'lampe', position: 'right', label: 'N', x: 380, y: 110 }
       ],
       connexionsCorrectes: [
         { from: 'disj-L-out', to: 'teler-1', wireType: 'phase' },
@@ -216,25 +288,25 @@ export const raccordementsData = {
       icon: '⏱️',
       dureeEstimee: '5 min',
       composants: [
-        { id: 'disj', type: 'disjoncteur', label: 'Disj. 10A', x: 30, y: 50 },
-        { id: 'minu', type: 'minuterie', label: 'Minuterie', x: 30, y: 140 },
-        { id: 'bp1', type: 'bouton-poussoir', label: 'BP 1', x: 180, y: 50 },
-        { id: 'bp2', type: 'bouton-poussoir', label: 'BP 2', x: 180, y: 140 },
-        { id: 'lampe', type: 'lampe', label: 'Lampe', x: 330, y: 100 }
+        { id: 'disj', type: 'disjoncteur', label: 'Disj. 10A', x: 50, y: 50 },
+        { id: 'minu', type: 'minuterie', label: 'Minuterie', x: 50, y: 165 },
+        { id: 'bp1', type: 'bouton-poussoir', label: 'BP 1', x: 200, y: 50 },
+        { id: 'bp2', type: 'bouton-poussoir', label: 'BP 2', x: 200, y: 165 },
+        { id: 'lampe', type: 'lampe', label: 'Lampe', x: 350, y: 110 }
       ],
       bornes: [
-        { id: 'disj-L-out', componentId: 'disj', position: 'right', label: 'L', x: 70, y: 40 },
-        { id: 'disj-N-out', componentId: 'disj', position: 'right', label: 'N', x: 70, y: 60 },
-        { id: 'minu-1', componentId: 'minu', position: 'top', label: '1', x: 15, y: 120 },
-        { id: 'minu-2', componentId: 'minu', position: 'top', label: '2', x: 30, y: 120 },
-        { id: 'minu-3', componentId: 'minu', position: 'bottom', label: '3', x: 15, y: 160 },
-        { id: 'minu-4', componentId: 'minu', position: 'bottom', label: '4', x: 45, y: 160 },
-        { id: 'bp1-1', componentId: 'bp1', position: 'left', label: '1', x: 160, y: 40 },
-        { id: 'bp1-2', componentId: 'bp1', position: 'right', label: '2', x: 200, y: 60 },
-        { id: 'bp2-1', componentId: 'bp2', position: 'left', label: '1', x: 160, y: 130 },
-        { id: 'bp2-2', componentId: 'bp2', position: 'right', label: '2', x: 200, y: 150 },
-        { id: 'lampe-L', componentId: 'lampe', position: 'left', label: 'L', x: 310, y: 100 },
-        { id: 'lampe-N', componentId: 'lampe', position: 'right', label: 'N', x: 350, y: 100 }
+        { id: 'disj-L-out', componentId: 'disj', position: 'right', label: 'L', x: 90, y: 40 },
+        { id: 'disj-N-out', componentId: 'disj', position: 'right', label: 'N', x: 90, y: 60 },
+        { id: 'minu-1', componentId: 'minu', position: 'top', label: '1', x: 25, y: 135 },
+        { id: 'minu-2', componentId: 'minu', position: 'top', label: '2', x: 75, y: 135 },
+        { id: 'minu-3', componentId: 'minu', position: 'bottom', label: '3', x: 25, y: 195 },
+        { id: 'minu-4', componentId: 'minu', position: 'bottom', label: '4', x: 75, y: 195 },
+        { id: 'bp1-1', componentId: 'bp1', position: 'left', label: '1', x: 170, y: 40 },
+        { id: 'bp1-2', componentId: 'bp1', position: 'right', label: '2', x: 230, y: 60 },
+        { id: 'bp2-1', componentId: 'bp2', position: 'left', label: '1', x: 170, y: 155 },
+        { id: 'bp2-2', componentId: 'bp2', position: 'right', label: '2', x: 230, y: 175 },
+        { id: 'lampe-L', componentId: 'lampe', position: 'left', label: 'L', x: 320, y: 110 },
+        { id: 'lampe-N', componentId: 'lampe', position: 'right', label: 'N', x: 380, y: 110 }
       ],
       connexionsCorrectes: [
         { from: 'disj-L-out', to: 'minu-1', wireType: 'phase' },
@@ -263,25 +335,25 @@ export const raccordementsData = {
       icon: '🌙',
       dureeEstimee: '5 min',
       composants: [
-        { id: 'disj', type: 'disjoncteur', label: 'Disj. 20A', x: 30, y: 50 },
-        { id: 'contact', type: 'contacteur', label: 'Contacteur', x: 150, y: 80 },
-        { id: 'disj2', type: 'disjoncteur', label: 'Disj. 2A', x: 30, y: 140 },
-        { id: 'compteur', type: 'compteur', label: 'Compteur', x: 280, y: 50 },
-        { id: 'ce', type: 'chauffe-eau', label: 'Chauffe-eau', x: 280, y: 140 }
+        { id: 'disj', type: 'disjoncteur', label: 'Disj. 20A', x: 50, y: 50 },
+        { id: 'contact', type: 'contacteur', label: 'Contacteur', x: 170, y: 100 },
+        { id: 'disj2', type: 'disjoncteur', label: 'Disj. 2A', x: 50, y: 180 },
+        { id: 'compteur', type: 'compteur', label: 'Compteur', x: 300, y: 50 },
+        { id: 'ce', type: 'chauffe-eau', label: 'Chauffe-eau', x: 300, y: 180 }
       ],
       bornes: [
-        { id: 'disj-L-out', componentId: 'disj', position: 'right', label: 'L', x: 70, y: 40 },
-        { id: 'disj-N-out', componentId: 'disj', position: 'right', label: 'N', x: 70, y: 60 },
-        { id: 'disj2-L-out', componentId: 'disj2', position: 'right', label: 'L', x: 70, y: 130 },
-        { id: 'disj2-N-out', componentId: 'disj2', position: 'right', label: 'N', x: 70, y: 150 },
-        { id: 'contact-1', componentId: 'contact', position: 'top', label: '1', x: 140, y: 60 },
-        { id: 'contact-2', componentId: 'contact', position: 'top', label: '2', x: 160, y: 60 },
-        { id: 'contact-A1', componentId: 'contact', position: 'bottom', label: 'A1', x: 140, y: 100 },
-        { id: 'contact-A2', componentId: 'contact', position: 'bottom', label: 'A2', x: 160, y: 100 },
-        { id: 'compteur-C1', componentId: 'compteur', position: 'bottom', label: 'C1', x: 270, y: 70 },
-        { id: 'compteur-C2', componentId: 'compteur', position: 'bottom', label: 'C2', x: 290, y: 70 },
-        { id: 'ce-L', componentId: 'ce', position: 'top', label: 'L', x: 270, y: 120 },
-        { id: 'ce-N', componentId: 'ce', position: 'top', label: 'N', x: 290, y: 120 }
+        { id: 'disj-L-out', componentId: 'disj', position: 'right', label: 'L', x: 90, y: 40 },
+        { id: 'disj-N-out', componentId: 'disj', position: 'right', label: 'N', x: 90, y: 60 },
+        { id: 'disj2-L-out', componentId: 'disj2', position: 'right', label: 'L', x: 90, y: 170 },
+        { id: 'disj2-N-out', componentId: 'disj2', position: 'right', label: 'N', x: 90, y: 190 },
+        { id: 'contact-1', componentId: 'contact', position: 'top', label: '1', x: 150, y: 70 },
+        { id: 'contact-2', componentId: 'contact', position: 'top', label: '2', x: 190, y: 70 },
+        { id: 'contact-A1', componentId: 'contact', position: 'bottom', label: 'A1', x: 150, y: 130 },
+        { id: 'contact-A2', componentId: 'contact', position: 'bottom', label: 'A2', x: 190, y: 130 },
+        { id: 'compteur-C1', componentId: 'compteur', position: 'bottom', label: 'C1', x: 280, y: 70 },
+        { id: 'compteur-C2', componentId: 'compteur', position: 'bottom', label: 'C2', x: 320, y: 70 },
+        { id: 'ce-L', componentId: 'ce', position: 'top', label: 'L', x: 280, y: 160 },
+        { id: 'ce-N', componentId: 'ce', position: 'top', label: 'N', x: 320, y: 160 }
       ],
       connexionsCorrectes: [
         { from: 'disj-L-out', to: 'contact-1', wireType: 'phase' },

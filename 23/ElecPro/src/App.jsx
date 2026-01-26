@@ -25,6 +25,8 @@ import CasPratiques from './pages/CasPratiques'
 import CasPratiqueSession from './pages/CasPratiqueSession'
 import SchemasExercices from './pages/SchemasExercices'
 import SchemaExercice from './pages/SchemaExercice'
+import ErreursVisuelles from './pages/ErreursVisuelles'
+import ErreurVisuelleSession from './pages/ErreurVisuelleSession'
 
 function App() {
   return (
@@ -55,6 +57,8 @@ function App() {
         <Route path="cas-pratiques/:caseId" element={<CasPratiqueSession />} />
         <Route path="schemas-exercices" element={<SchemasExercices />} />
         <Route path="schemas-exercices/:exerciceId" element={<SchemaExercice />} />
+        <Route path="erreurs-visuelles" element={<ErreursVisuelles />} />
+        <Route path="erreurs-visuelles/:exerciceId" element={<ErreurVisuelleSession />} />
       </Route>
     </Routes>
   )

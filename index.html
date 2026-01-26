@@ -302,7 +302,10 @@
             <span class="day-number">20</span>
             <span class="day-name">EcoProfil</span>
         </a>
-        <div class="day upcoming" id="day-21"><span class="day-number">21</span></div>
+        <a href="./21bis/" class="day available" id="day-21">
+            <span class="day-number">21</span>
+            <span class="day-name">MathOral</span>
+        </a>
         <a href="./22/ChessMaster3D/dist/" class="day available">
             <span class="day-number">22</span>
             <span class="day-name">ChessMaster3D</span>
@@ -367,17 +370,26 @@
             const day21 = document.getElementById('day-21');
             let clicks21 = 0;
             let timer21 = null;
+            let navigateTimer = null;
 
             day21.addEventListener('click', function(e) {
                 e.preventDefault();
                 clicks21++;
 
                 if (timer21) clearTimeout(timer21);
+                if (navigateTimer) clearTimeout(navigateTimer);
 
                 if (clicks21 >= 5) {
+                    // Easter egg: 5 clics rapides -> beta-traj
                     window.location.href = './21/';
                     clicks21 = 0;
                 } else {
+                    // Attendre un peu pour voir si d'autres clics arrivent
+                    navigateTimer = setTimeout(function() {
+                        // Clic simple -> MathOral
+                        window.location.href = './21bis/';
+                    }, 400);
+
                     timer21 = setTimeout(function() {
                         clicks21 = 0;
                     }, 1500);
