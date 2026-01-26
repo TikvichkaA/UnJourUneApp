@@ -312,7 +312,7 @@ function initApp() {
 function renderAllMath() {
     if (typeof renderMathInElement === 'undefined') return;
 
-    document.querySelectorAll('.view.active, .exercise-content, .methode-content, .express-question').forEach(el => {
+    document.querySelectorAll('.view.active, .exercise-content, .methode-content, .express-question, #fiche-modal-body, .fiche-detail, #erreurs-list, #jury-list, #fiches-memo-grid').forEach(el => {
         renderMathInElement(el, {
             delimiters: [
                 {left: '$$', right: '$$', display: true},
@@ -1259,10 +1259,21 @@ function switchFichesTab(tab) {
     document.querySelectorAll('.fiches-content').forEach(c => {
         c.classList.remove('active');
     });
-    document.getElementById(`tab-${tab}`).classList.add('active');
+    const activeContent = document.getElementById(`tab-${tab}`);
+    activeContent.classList.add('active');
 
-    // Render math
-    setTimeout(renderAllMath, 50);
+    // Force render math on active tab content
+    setTimeout(() => {
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(activeContent, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+    }, 50);
 }
 
 function populateFichesMemo() {
@@ -1321,7 +1332,19 @@ function openFiche(ficheId) {
     `;
 
     modal.classList.add('active');
-    setTimeout(renderAllMath, 50);
+
+    // Force render math on modal content
+    setTimeout(() => {
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+    }, 50);
 }
 
 function closeFicheModal() {
@@ -1384,7 +1407,18 @@ function filterErreurs() {
         `;
     }).join('');
 
-    setTimeout(renderAllMath, 50);
+    // Force render math on erreurs list
+    setTimeout(() => {
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(list, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+    }, 50);
 }
 
 function populateJuryQuestions() {

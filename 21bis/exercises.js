@@ -10,7 +10,9 @@ const THEMES = {
     fonctions: { name: 'Fonctions', icon: 'F', color: '#06d6a0' },
     integrales: { name: 'Integrales', icon: 'I', color: '#ef476f' },
     algebre: { name: 'Algebre lineaire', icon: 'A', color: '#f77f00' },
-    probabilites: { name: 'Probabilites', icon: 'P', color: '#d62828' }
+    probabilites: { name: 'Probabilites', icon: 'P', color: '#d62828' },
+    'algebre-generale': { name: 'Algebre generale', icon: 'G', color: '#8b5cf6' },
+    topologie: { name: 'Topologie', icon: 'T', color: '#14b8a6' }
 };
 
 // METHODES TRANSVERSALES
@@ -1738,6 +1740,458 @@ Soit $S_n = X_1 + \\cdots + X_n$ sa position apres $n$ pas.
             variantes: ['Inegalite de Minkowski'],
             liens: { methodes: ['convexite'], exercices: [], notions: ['Cauchy-Schwarz', 'Espaces prehilbertiens'] }
         }
+    },
+    // ===== ALGEBRE GENERALE =====
+    {
+        id: 'groupe-quotient',
+        title: 'Groupe quotient et theoreme de Lagrange',
+        theme: 'algebre-generale',
+        concours: 'ENS',
+        year: 2024,
+        difficulty: 2,
+        methodes: ['structures-algebriques'],
+        enonce: `Soit $G$ un groupe fini et $H$ un sous-groupe de $G$.
+1. Montrer que la relation $x \\sim y \\Leftrightarrow x^{-1}y \\in H$ est une relation d'equivalence.
+2. Montrer que toutes les classes d'equivalence ont le meme cardinal que $H$.
+3. En deduire le theoreme de Lagrange : $|H|$ divise $|G|$.
+4. Application : Montrer que tout groupe d'ordre premier est cyclique.`,
+        reconnaissance: {
+            question: 'Que represente l\'ensemble quotient $G/H$ ?',
+            options: [
+                { text: 'L\'ensemble des classes a gauche modulo $H$', correct: true },
+                { text: 'L\'ensemble des elements de $G$ qui commutent avec $H$', correct: false },
+                { text: 'Le plus grand sous-groupe de $G$ contenu dans $H$', correct: false },
+                { text: 'L\'intersection de $G$ et $H$', correct: false }
+            ],
+            feedback: { correct: 'Exact ! $G/H = \\{gH : g \\in G\\}$ est l\'ensemble des classes a gauche.', incorrect: '$G/H$ represente les classes d\'equivalence pour la relation $x \\sim y \\Leftrightarrow x^{-1}y \\in H$.' }
+        },
+        strategie: {
+            question: 'Comment demontrer que les classes ont meme cardinal ?',
+            attendu: 'Construire une bijection entre $H$ et une classe $gH$ quelconque.',
+            exemple: `1. Reflexivite : $x^{-1}x = e \\in H$
+   Symetrie : $x^{-1}y \\in H \\Rightarrow (x^{-1}y)^{-1} = y^{-1}x \\in H$
+   Transitivite : $x^{-1}y, y^{-1}z \\in H \\Rightarrow x^{-1}z = (x^{-1}y)(y^{-1}z) \\in H$
+2. $\\phi: H \\to gH$, $h \\mapsto gh$ est une bijection
+3. $|G| = |G/H| \\cdot |H|$, donc $|H| | |G|$
+4. Si $|G| = p$ premier, les seuls diviseurs sont $1$ et $p$`
+        },
+        indices: [
+            { title: 'Idee cle', content: 'La multiplication a gauche par $g$ est une bijection de $G$.' },
+            { title: 'Outil precis', content: 'Partitionner $G$ en classes disjointes.' },
+            { title: 'Point technique', content: 'Pour Q4, $\\langle a \\rangle$ avec $a \\neq e$ a ordre divisant $p$.' }
+        ],
+        oral: { prompt: 'Donner un exemple de groupe quotient.', tips: ['$\\mathbb{Z}/n\\mathbb{Z}$', '$S_n / A_n \\simeq \\mathbb{Z}/2\\mathbb{Z}$'] },
+        debrief: {
+            attendu: 'Maitrise des relations d\'equivalence et des structures de groupe.',
+            erreurs: ['Confondre classe a gauche et classe a droite', 'Oublier de verifier que $H$ est un sous-groupe'],
+            variantes: ['Sous-groupe distingue', 'Theoreme de Cayley'],
+            liens: { methodes: ['structures-algebriques'], exercices: [], notions: ['Groupes', 'Theoreme de Lagrange'] }
+        }
+    },
+    {
+        id: 'groupe-symetrique',
+        title: 'Decomposition en cycles et signature',
+        theme: 'algebre-generale',
+        concours: 'X',
+        year: 2024,
+        difficulty: 2,
+        methodes: ['structures-algebriques'],
+        enonce: `Soit $\\sigma \\in S_n$ une permutation.
+1. Montrer que toute permutation se decompose en produit de cycles a supports disjoints.
+2. Montrer que cette decomposition est unique (a l'ordre pres).
+3. Definir la signature $\\varepsilon(\\sigma)$ et montrer que c'est un morphisme de groupes.
+4. Montrer que $\\varepsilon(\\tau) = -1$ pour toute transposition $\\tau$.
+5. En deduire que $A_n = \\ker(\\varepsilon)$ est d'indice 2 dans $S_n$.`,
+        reconnaissance: {
+            question: 'Quel est l\'ordre d\'un cycle de longueur $k$ ?',
+            options: [
+                { text: '$k$', correct: true },
+                { text: '$k-1$', correct: false },
+                { text: '$k!$', correct: false },
+                { text: '$2$', correct: false }
+            ],
+            feedback: { correct: 'Exact ! Un $k$-cycle a pour ordre $k$.', incorrect: 'Un $k$-cycle $(a_1 \\cdots a_k)$ verifie $\\sigma^k = \\text{id}$.' }
+        },
+        strategie: {
+            question: 'Comment definir la signature ?',
+            attendu: 'Par le signe du produit $\\prod_{i<j} \\frac{\\sigma(j) - \\sigma(i)}{j-i}$ ou par le nombre de transpositions.',
+            exemple: `1. Suivre l'orbite de chaque element sous $\\sigma$
+2. Unicite : les orbites partitionnent $\\{1,...,n\\}$
+3. $\\varepsilon(\\sigma) = \\prod_{i<j} \\frac{\\sigma(j) - \\sigma(i)}{j-i} \\in \\{-1, +1\\}$
+4. Une transposition echange exactement une paire $(i,j)$
+5. $\\varepsilon$ surjectif donc $|S_n/A_n| = |\\{\\pm 1\\}| = 2$`
+        },
+        indices: [
+            { title: 'Idee cle', content: 'Etudier l\'action de $\\sigma$ sur $\\{1,...,n\\}$.' },
+            { title: 'Outil precis', content: 'Le PPCM des longueurs donne l\'ordre.' },
+            { title: 'Point technique', content: 'Un $k$-cycle est produit de $k-1$ transpositions.' }
+        ],
+        oral: { prompt: 'Decomposer $(1~2~3~4~5) \\circ (2~4)$ en cycles.', tips: ['Calculer l\'image de chaque element', 'Suivre les orbites'] },
+        debrief: {
+            attendu: 'Manipulation fluide des permutations et de la signature.',
+            erreurs: ['Se tromper dans l\'ordre de composition', 'Confondre ordre et signature'],
+            variantes: ['Conjugaison dans $S_n$', 'Groupe alterne simple pour $n \\geq 5$'],
+            liens: { methodes: ['structures-algebriques'], exercices: [], notions: ['Groupe symetrique', 'Signature'] }
+        }
+    },
+    {
+        id: 'anneau-quotient',
+        title: 'Ideaux et anneaux quotients',
+        theme: 'algebre-generale',
+        concours: 'ENS',
+        year: 2024,
+        difficulty: 3,
+        methodes: ['structures-algebriques'],
+        enonce: `Soit $A$ un anneau commutatif unitaire et $I$ un ideal de $A$.
+1. Montrer que $A/I$ herite d'une structure d'anneau.
+2. Montrer que $I$ est maximal si et seulement si $A/I$ est un corps.
+3. Montrer que $I$ est premier si et seulement si $A/I$ est integre.
+4. Application : Determiner les ideaux maximaux de $\\mathbb{Z}$ et de $\\mathbb{R}[X]$.`,
+        reconnaissance: {
+            question: 'Qu\'est-ce qu\'un ideal premier ?',
+            options: [
+                { text: '$ab \\in I \\Rightarrow a \\in I$ ou $b \\in I$', correct: true },
+                { text: '$I$ est engendre par un element premier', correct: false },
+                { text: '$I$ contient tous les elements premiers', correct: false },
+                { text: '$|I|$ est un nombre premier', correct: false }
+            ],
+            feedback: { correct: 'Exact ! C\'est la definition d\'un ideal premier.', incorrect: 'Un ideal $I$ est premier si $ab \\in I$ implique $a \\in I$ ou $b \\in I$.' }
+        },
+        strategie: {
+            question: 'Comment caracteriser les ideaux maximaux de $\\mathbb{Z}$ ?',
+            attendu: 'Les ideaux de $\\mathbb{Z}$ sont de la forme $n\\mathbb{Z}$, maximaux ssi $n$ premier.',
+            exemple: `1. Operations bien definies car $I$ ideal bilate
+2. $I$ maximal $\\Leftrightarrow$ seuls ideaux de $A/I$ sont $\\{0\\}$ et $A/I$ $\\Leftrightarrow$ corps
+3. $A/I$ integre $\\Leftrightarrow$ $\\bar{a}\\bar{b} = 0 \\Rightarrow \\bar{a} = 0$ ou $\\bar{b} = 0$
+4. Dans $\\mathbb{Z}$ : $p\\mathbb{Z}$ avec $p$ premier
+   Dans $\\mathbb{R}[X]$ : $(X-a)$ pour $a \\in \\mathbb{R}$`
+        },
+        indices: [
+            { title: 'Idee cle', content: 'Le passage au quotient preserve les proprietes algebriques.' },
+            { title: 'Outil precis', content: 'Correspondance ideaux de $A/I$ $\\leftrightarrow$ ideaux de $A$ contenant $I$.' },
+            { title: 'Point technique', content: '$\\mathbb{R}[X]$ est principal donc ideaux = $(P)$.' }
+        ],
+        oral: { prompt: 'Pourquoi $(X^2+1)$ est maximal dans $\\mathbb{R}[X]$ ?', tips: ['$\\mathbb{R}[X]/(X^2+1) \\simeq \\mathbb{C}$', '$X^2+1$ irreductible sur $\\mathbb{R}$'] },
+        debrief: {
+            attendu: 'Comprehension des structures quotient et caracterisation des ideaux.',
+            erreurs: ['Oublier de verifier que l\'ideal est bilateral', 'Confondre premier et maximal'],
+            variantes: ['Anneaux principaux', 'Anneaux euclidiens'],
+            liens: { methodes: ['structures-algebriques'], exercices: [], notions: ['Ideaux', 'Anneaux quotients'] }
+        }
+    },
+    {
+        id: 'corps-finis',
+        title: 'Construction et proprietes des corps finis',
+        theme: 'algebre-generale',
+        concours: 'X',
+        year: 2025,
+        difficulty: 3,
+        methodes: ['structures-algebriques'],
+        enonce: `1. Montrer que tout corps fini $K$ a pour cardinal une puissance d'un nombre premier.
+2. Montrer que le groupe multiplicatif $(K^*, \\times)$ est cyclique.
+3. Montrer qu'il existe un corps a $p^n$ elements pour tout premier $p$ et $n \\geq 1$.
+4. Montrer que deux corps finis de meme cardinal sont isomorphes.`,
+        reconnaissance: {
+            question: 'Quelle est la caracteristique d\'un corps fini ?',
+            options: [
+                { text: 'Un nombre premier $p$', correct: true },
+                { text: 'Toujours 2', correct: false },
+                { text: 'Le cardinal du corps', correct: false },
+                { text: 'Nulle', correct: false }
+            ],
+            feedback: { correct: 'Exact ! La caracteristique est le plus petit $p$ tel que $p \\cdot 1 = 0$.', incorrect: 'Un corps fini a caracteristique $p$ premier, et contient $\\mathbb{F}_p$ comme sous-corps.' }
+        },
+        strategie: {
+            question: 'Comment montrer que $K^*$ est cyclique ?',
+            attendu: 'Utiliser que tout sous-groupe fini du groupe multiplicatif d\'un corps est cyclique.',
+            exemple: `1. $K$ contient $\\mathbb{F}_p$ donc $|K| = p^n$ (ev sur $\\mathbb{F}_p$)
+2. Soit $d$ l'exposant de $K^*$. Alors $x^d = 1$ pour tout $x \\in K^*$
+   Donc $|K^*| \\leq d$, mais $d \\leq |K^*|$, donc $d = |K^*|$
+3. $\\mathbb{F}_{p^n} = \\mathbb{F}_p[X]/(P)$ avec $P$ irreductible de degre $n$
+4. Corps de decomposition de $X^{p^n} - X$ sur $\\mathbb{F}_p$`
+        },
+        indices: [
+            { title: 'Idee cle', content: '$K$ est un $\\mathbb{F}_p$-espace vectoriel de dimension finie.' },
+            { title: 'Outil precis', content: 'Lemme : si $G \\subset K^*$ fini alors $G$ cyclique.' },
+            { title: 'Point technique', content: 'Tout element de $\\mathbb{F}_{p^n}$ est racine de $X^{p^n} - X$.' }
+        ],
+        oral: { prompt: 'Construire $\\mathbb{F}_4$ explicitement.', tips: ['$\\mathbb{F}_2[X]/(X^2+X+1)$', 'Elements : $0, 1, \\alpha, 1+\\alpha$ avec $\\alpha^2 = \\alpha + 1$'] },
+        debrief: {
+            attendu: 'Construction concrete des corps finis et structure multiplicative.',
+            erreurs: ['Confondre $\\mathbb{Z}/n\\mathbb{Z}$ (anneau) et $\\mathbb{F}_n$ (corps)', 'Oublier que $n$ doit etre puissance de premier'],
+            variantes: ['Extensions de corps finis', 'Frobenius'],
+            liens: { methodes: ['structures-algebriques'], exercices: [], notions: ['Corps finis', 'Extensions'] }
+        }
+    },
+    {
+        id: 'morphisme-groupes',
+        title: 'Theoremes d\'isomorphisme',
+        theme: 'algebre-generale',
+        concours: 'Centrale',
+        year: 2024,
+        difficulty: 2,
+        methodes: ['structures-algebriques'],
+        enonce: `Soit $\\phi: G \\to G'$ un morphisme de groupes.
+1. Montrer que $\\ker(\\phi)$ est un sous-groupe distingue de $G$.
+2. Montrer que $\\text{Im}(\\phi)$ est un sous-groupe de $G'$.
+3. Premier theoreme d'isomorphisme : $G/\\ker(\\phi) \\simeq \\text{Im}(\\phi)$.
+4. Application : Montrer que $\\mathbb{R}/\\mathbb{Z} \\simeq S^1$ (cercle unite).`,
+        reconnaissance: {
+            question: 'Qu\'est-ce qu\'un sous-groupe distingue ?',
+            options: [
+                { text: '$gHg^{-1} = H$ pour tout $g \\in G$', correct: true },
+                { text: 'Un sous-groupe abelien', correct: false },
+                { text: 'Un sous-groupe d\'indice 2', correct: false },
+                { text: 'Le centre de $G$', correct: false }
+            ],
+            feedback: { correct: 'Exact ! $H$ distingue signifie $H$ stable par conjugaison.', incorrect: '$H \\triangleleft G$ si $gHg^{-1} = H$ pour tout $g$, ie classes a gauche = classes a droite.' }
+        },
+        strategie: {
+            question: 'Comment definir l\'isomorphisme du premier theoreme ?',
+            attendu: '$\\bar{\\phi}: G/\\ker(\\phi) \\to \\text{Im}(\\phi)$, $g \\ker(\\phi) \\mapsto \\phi(g)$.',
+            exemple: `1. $g(\\ker \\phi)g^{-1} = \\ker(\\phi)$ car $\\phi(gkg^{-1}) = \\phi(g)\\phi(k)\\phi(g)^{-1} = e'$
+2. $\\phi(g)\\phi(h)^{-1} = \\phi(gh^{-1}) \\in \\text{Im}(\\phi)$
+3. $\\bar{\\phi}$ bien definie, bijective car $\\ker(\\bar{\\phi}) = \\{e\\}$
+4. $\\phi: \\mathbb{R} \\to S^1$, $t \\mapsto e^{2i\\pi t}$ a pour noyau $\\mathbb{Z}$`
+        },
+        indices: [
+            { title: 'Idee cle', content: 'Le noyau mesure le defaut d\'injectivite.' },
+            { title: 'Outil precis', content: '$\\phi(g) = \\phi(h) \\Leftrightarrow gh^{-1} \\in \\ker(\\phi)$.' },
+            { title: 'Point technique', content: 'Verifier que le morphisme quotient est bien defini.' }
+        ],
+        oral: { prompt: 'Donner un exemple de morphisme non surjectif.', tips: ['det : $GL_n \\to \\mathbb{R}^*$', '$\\exp: (\\mathbb{R}, +) \\to (\\mathbb{R}^*_+, \\times)$'] },
+        debrief: {
+            attendu: 'Application fluide des theoremes d\'isomorphisme.',
+            erreurs: ['Oublier de verifier que le noyau est distingue', 'Mal definir le morphisme quotient'],
+            variantes: ['Deuxieme et troisieme theoremes d\'isomorphisme'],
+            liens: { methodes: ['structures-algebriques'], exercices: ['groupe-quotient'], notions: ['Morphismes', 'Isomorphismes'] }
+        }
+    },
+    // ===== TOPOLOGIE =====
+    {
+        id: 'espace-metrique-complet',
+        title: 'Espaces metriques complets et theoreme du point fixe',
+        theme: 'topologie',
+        concours: 'ENS',
+        year: 2024,
+        difficulty: 2,
+        methodes: ['point-fixe'],
+        enonce: `Soit $(E, d)$ un espace metrique complet et $f: E \\to E$ une application contractante de rapport $k < 1$.
+1. Montrer que $f$ admet un unique point fixe $\\ell$.
+2. Montrer que pour tout $x_0 \\in E$, la suite $x_{n+1} = f(x_n)$ converge vers $\\ell$.
+3. Majorer $d(x_n, \\ell)$ en fonction de $d(x_0, x_1)$, $k$ et $n$.
+4. Application : Montrer que l'equation $\\cos(x) = x$ admet une unique solution dans $[0, 1]$.`,
+        reconnaissance: {
+            question: 'Qu\'est-ce qu\'une application contractante ?',
+            options: [
+                { text: '$d(f(x), f(y)) \\leq k \\cdot d(x,y)$ avec $k < 1$', correct: true },
+                { text: '$f$ est decroissante', correct: false },
+                { text: '$\\|f\\| < 1$', correct: false },
+                { text: '$f$ diminue les distances de moitie', correct: false }
+            ],
+            feedback: { correct: 'Exact ! C\'est la definition d\'une contraction.', incorrect: 'Contractante signifie $d(f(x), f(y)) \\leq k \\cdot d(x,y)$ pour un $k < 1$ fixe.' }
+        },
+        strategie: {
+            question: 'Comment montrer que $(x_n)$ est de Cauchy ?',
+            attendu: '$d(x_{n+p}, x_n) \\leq \\frac{k^n}{1-k} d(x_1, x_0) \\to 0$.',
+            exemple: `1. Unicite : si $f(\\ell) = \\ell$ et $f(\\ell') = \\ell'$, alors $d(\\ell, \\ell') \\leq k d(\\ell, \\ell')$
+2. $d(x_{n+1}, x_n) \\leq k^n d(x_1, x_0)$ par recurrence
+   $(x_n)$ de Cauchy, donc converge car $E$ complet
+3. $d(x_n, \\ell) \\leq \\frac{k^n}{1-k} d(x_0, x_1)$
+4. $f(x) = \\cos(x)$ sur $[0,1]$ : $|f'(x)| = |\\sin(x)| \\leq \\sin(1) < 1$`
+        },
+        indices: [
+            { title: 'Idee cle', content: 'Serie geometrique $\\sum k^n$ convergente.' },
+            { title: 'Outil precis', content: 'Inegalite triangulaire repetee.' },
+            { title: 'Point technique', content: 'Verifier que l\'espace est bien complet.' }
+        ],
+        oral: { prompt: 'Que se passe-t-il si $k = 1$ ?', tips: ['Contre-exemple : $f(x) = x + 1$ sur $\\mathbb{R}$', 'L\'unicite peut echouer'] },
+        debrief: {
+            attendu: 'Demonstration rigoureuse du theoreme du point fixe de Banach.',
+            erreurs: ['Oublier l\'hypothese de completude', 'Ne pas verifier $k < 1$ strictement'],
+            variantes: ['Point fixe de Brouwer', 'Theoreme de Schauder'],
+            liens: { methodes: ['point-fixe'], exercices: ['suite-recurrence'], notions: ['Completude', 'Contraction'] }
+        }
+    },
+    {
+        id: 'compacite-heine-borel',
+        title: 'Compacite et theoreme de Heine-Borel',
+        theme: 'topologie',
+        concours: 'X',
+        year: 2024,
+        difficulty: 2,
+        methodes: ['compacite'],
+        enonce: `1. Montrer qu'un compact $K$ d'un espace metrique $(E, d)$ est ferme et borne.
+2. Montrer que dans $\\mathbb{R}^n$, ferme borne implique compact (Heine-Borel).
+3. Montrer qu'une fonction continue sur un compact est bornee et atteint ses bornes.
+4. Montrer que toute suite d'un compact admet une sous-suite convergente.`,
+        reconnaissance: {
+            question: 'Quelle est la definition de la compacite par recouvrements ?',
+            options: [
+                { text: 'Tout recouvrement ouvert admet un sous-recouvrement fini', correct: true },
+                { text: 'Toute suite converge', correct: false },
+                { text: 'L\'espace est ferme et borne', correct: false },
+                { text: 'L\'espace est complet', correct: false }
+            ],
+            feedback: { correct: 'Exact ! C\'est la definition de la compacite.', incorrect: 'Compact = tout recouvrement par des ouverts admet un sous-recouvrement fini.' }
+        },
+        strategie: {
+            question: 'Comment montrer Heine-Borel ?',
+            attendu: 'Argument par dichotomie ou utilisation de Bolzano-Weierstrass.',
+            exemple: `1. Ferme : si $x_n \\in K$, $x_n \\to x$, alors $x \\in K$ (extraire ss-suite cv)
+   Borne : sinon $B(a, n)$ recouvre pas $K$
+2. Dichotomie sur un pave, extraire une sous-suite de Cauchy
+3. $f(K)$ compact dans $\\mathbb{R}$, donc ferme borne, admet $\\sup$ et $\\inf$
+4. Bolzano-Weierstrass generalise`
+        },
+        indices: [
+            { title: 'Idee cle', content: 'Compacite sequentielle dans les metriques.' },
+            { title: 'Outil precis', content: 'Dichotomie : couper le pave en $2^n$ parties.' },
+            { title: 'Point technique', content: 'Equivalence sequentiel/recouvrement en metrique.' }
+        ],
+        oral: { prompt: 'Donner un ferme borne non compact.', tips: ['Dans un espace de dimension infinie', 'Boule unite de $\\ell^2$'] },
+        debrief: {
+            attendu: 'Comprehension des differentes caracterisations de la compacite.',
+            erreurs: ['Croire que ferme borne = compact en dimension infinie', 'Oublier l\'hypothese metrique'],
+            variantes: ['Compacite dans $C([0,1])$', 'Theoreme d\'Ascoli'],
+            liens: { methodes: ['compacite'], exercices: [], notions: ['Compacite', 'Heine-Borel'] }
+        }
+    },
+    {
+        id: 'connexite-valeurs-intermediaires',
+        title: 'Connexite et theoreme des valeurs intermediaires',
+        theme: 'topologie',
+        concours: 'Centrale',
+        year: 2024,
+        difficulty: 2,
+        methodes: ['connexite'],
+        enonce: `1. Montrer que $\\mathbb{R}$ est connexe.
+2. Montrer que l'image continue d'un connexe est connexe.
+3. En deduire le theoreme des valeurs intermediaires.
+4. Montrer que $\\mathbb{R}^n \\setminus \\{0\\}$ est connexe pour $n \\geq 2$ mais pas pour $n = 1$.`,
+        reconnaissance: {
+            question: 'Qu\'est-ce qu\'un espace connexe ?',
+            options: [
+                { text: 'Les seuls ouverts-fermes sont $\\emptyset$ et l\'espace entier', correct: true },
+                { text: 'Toute fonction continue est bornee', correct: false },
+                { text: 'L\'espace est compact', correct: false },
+                { text: 'Toute suite converge', correct: false }
+            ],
+            feedback: { correct: 'Exact ! Connexe = pas de partition en deux ouverts non vides.', incorrect: 'Connexe signifie qu\'on ne peut pas separer l\'espace en deux ouverts disjoints non vides.' }
+        },
+        strategie: {
+            question: 'Comment montrer que $\\mathbb{R}$ est connexe ?',
+            attendu: 'Par l\'absurde, utiliser la propriete de la borne superieure.',
+            exemple: `1. Si $\\mathbb{R} = U \\cup V$ avec $U, V$ ouverts disjoints non vides,
+   Soit $a \\in U$, $b \\in V$ avec $a < b$. Soit $c = \\sup(U \\cap [a,b])$.
+   $c \\notin U$ (car $U$ ouvert) et $c \\notin V$ (car $V$ ouvert). Contradiction.
+2. Si $f(E)$ = $A \\cup B$ separation, alors $f^{-1}(A), f^{-1}(B)$ separent $E$
+3. $f([a,b])$ connexe de $\\mathbb{R}$, donc intervalle
+4. $\\mathbb{R}^* = ]-\\infty, 0[ \\cup ]0, +\\infty[$ mais chemin dans $\\mathbb{R}^n \\setminus \\{0\\}$ pour $n \\geq 2$`
+        },
+        indices: [
+            { title: 'Idee cle', content: 'Les connexes de $\\mathbb{R}$ sont les intervalles.' },
+            { title: 'Outil precis', content: 'Connexite par arcs implique connexite.' },
+            { title: 'Point technique', content: 'Image reciproque d\'un ouvert par $f$ continue est ouvert.' }
+        ],
+        oral: { prompt: 'Donner un connexe non connexe par arcs.', tips: ['Courbe du topologiste', '$\\{(x, \\sin(1/x)) : x > 0\\} \\cup \\{0\\} \\times [-1,1]$'] },
+        debrief: {
+            attendu: 'Lien entre connexite et TVI.',
+            erreurs: ['Confondre connexe et connexe par arcs', 'Oublier que connexite depend de la topologie'],
+            variantes: ['Composantes connexes', 'Connexite locale'],
+            liens: { methodes: ['connexite'], exercices: [], notions: ['Connexite', 'TVI'] }
+        }
+    },
+    {
+        id: 'topologie-matrices',
+        title: 'Topologie de $\\mathcal{M}_n(\\mathbb{R})$',
+        theme: 'topologie',
+        concours: 'ENS',
+        year: 2025,
+        difficulty: 3,
+        methodes: ['topologie-evn'],
+        enonce: `On munit $\\mathcal{M}_n(\\mathbb{R})$ d'une norme sous-multiplicative.
+1. Montrer que $GL_n(\\mathbb{R})$ est un ouvert dense de $\\mathcal{M}_n(\\mathbb{R})$.
+2. Montrer que l'application $A \\mapsto A^{-1}$ est continue sur $GL_n(\\mathbb{R})$.
+3. Montrer que $O_n(\\mathbb{R})$ est compact.
+4. Montrer que $SL_n(\\mathbb{R})$ est ferme non borne.
+5. L'application $A \\mapsto e^A$ est-elle surjective de $\\mathcal{M}_n$ dans $GL_n$ ?`,
+        reconnaissance: {
+            question: 'Pourquoi $GL_n$ est-il ouvert ?',
+            options: [
+                { text: 'Le determinant est continu et $GL_n = \\det^{-1}(\\mathbb{R}^*)$', correct: true },
+                { text: 'C\'est un sous-groupe', correct: false },
+                { text: 'Il contient l\'identite', correct: false },
+                { text: 'Les matrices inversibles forment un convexe', correct: false }
+            ],
+            feedback: { correct: 'Exact ! $GL_n = \\{\\det \\neq 0\\}$ et $\\det$ est continue.', incorrect: '$GL_n = \\det^{-1}(\\mathbb{R}^*)$ avec $\\det$ continue, donc ouvert.' }
+        },
+        strategie: {
+            question: 'Comment montrer que $O_n$ est compact ?',
+            attendu: '$O_n = \\{A : A^T A = I_n\\}$ est ferme (equation) et borne ($\\|A\\| = 1$).',
+            exemple: `1. $\\det$ continue, $GL_n = \\det^{-1}(\\mathbb{R}^*)$. Dense car perturber par $\\varepsilon I_n$
+2. $A \\mapsto A^{-1}$ : formule avec comatrice, quotient de polynomes
+3. $O_n$ : ferme (equations $A^T A = I_n$), borne ($\\|Ax\\| = \\|x\\|$)
+4. $SL_n = \\det^{-1}(\\{1\\})$ ferme. $\\text{diag}(n, 1/n, 1, ..., 1) \\in SL_n$ non borne
+5. Non : $e^A$ a determinant $e^{\\text{tr}(A)} > 0$`
+        },
+        indices: [
+            { title: 'Idee cle', content: 'Utiliser la continuite du determinant.' },
+            { title: 'Outil precis', content: 'Formule $A^{-1} = \\frac{1}{\\det A} \\text{Com}(A)^T$.' },
+            { title: 'Point technique', content: 'Heine-Borel dans l\'espace de dimension finie $\\mathcal{M}_n$.' }
+        ],
+        oral: { prompt: 'Montrer que $GL_n^+$ est connexe par arcs.', tips: ['Reduction de Gauss', 'Relier a $I_n$ par un chemin'] },
+        debrief: {
+            attendu: 'Maitrise de la topologie en dimension finie et des groupes de matrices.',
+            erreurs: ['Oublier la dimension finie pour Heine-Borel', 'Confondre $O_n$ et $SO_n$'],
+            variantes: ['Composantes connexes de $GL_n$', 'Topologie de $SL_n(\\mathbb{C})$'],
+            liens: { methodes: ['topologie-evn'], exercices: ['exp-matrice-diag'], notions: ['GL_n', 'Groupes de matrices'] }
+        }
+    },
+    {
+        id: 'baire-applications',
+        title: 'Theoreme de Baire et applications',
+        theme: 'topologie',
+        concours: 'ENS',
+        year: 2025,
+        difficulty: 3,
+        methodes: ['baire'],
+        enonce: `Soit $(E, d)$ un espace metrique complet.
+1. Montrer que toute intersection denombrable d'ouverts denses est dense (Baire).
+2. Montrer que $\\mathbb{R}$ n'est pas reunion denombrable de fermes d'interieur vide.
+3. Montrer qu'il existe des fonctions continues nulle part derivables.
+4. Montrer que si $(f_n)$ converge simplement vers $f$ continue, alors $f$ est continue en un $G_\\delta$ dense.`,
+        reconnaissance: {
+            question: 'Qu\'est-ce qu\'un ensemble maigre ?',
+            options: [
+                { text: 'Une reunion denombrable de fermes d\'interieur vide', correct: true },
+                { text: 'Un ensemble de mesure nulle', correct: false },
+                { text: 'Un ensemble denombrable', correct: false },
+                { text: 'Un ensemble non dense', correct: false }
+            ],
+            feedback: { correct: 'Exact ! Maigre = de premiere categorie.', incorrect: 'Maigre signifie reunion denombrable de fermes sans point interieur.' }
+        },
+        strategie: {
+            question: 'Comment construire une fonction continue nulle part derivable ?',
+            attendu: 'Montrer que l\'ensemble des fonctions derivables en au moins un point est maigre dans $C([0,1])$.',
+            exemple: `1. Construire par recurrence des boules $B_n$ avec $\\bar{B}_{n+1} \\subset B_n \\cap U_n$
+   $\\bigcap U_n \\supset \\bigcap \\bar{B}_n \\neq \\emptyset$ par completude
+2. $\\mathbb{R} = \\bigcup F_n$ avec $\\mathring{F}_n = \\emptyset$ contredirait Baire
+3. $A_n = \\{f : \\exists x, |f(x+h) - f(x)| \\leq n|h|\\}$ ferme, $\\mathring{A}_n = \\emptyset$
+4. $\\omega_f(x) = \\lim_{r \\to 0} \\text{osc}(f, B(x,r))$, ensemble de continuite = $\\{\\omega_f = 0\\}$`
+        },
+        indices: [
+            { title: 'Idee cle', content: 'Les "petits" ensembles (maigres) ne peuvent recouvrir un complet.' },
+            { title: 'Outil precis', content: 'Construction par boules emboitees.' },
+            { title: 'Point technique', content: '$C([0,1])$ complet pour $\\|\\cdot\\|_\\infty$.' }
+        ],
+        oral: { prompt: 'Montrer que $\\mathbb{Q}$ n\'est pas un $G_\\delta$ de $\\mathbb{R}$.', tips: ['Si $\\mathbb{Q} = \\bigcap U_n$, alors $\\mathbb{R} \\setminus \\mathbb{Q} = \\bigcup F_n$', 'Contradiction avec Baire'] },
+        debrief: {
+            attendu: 'Application du theoreme de Baire en analyse.',
+            erreurs: ['Oublier l\'hypothese de completude', 'Confondre maigre et mesure nulle'],
+            variantes: ['Theoreme de Banach-Steinhaus', 'Theoreme du graphe ferme'],
+            liens: { methodes: ['baire'], exercices: [], notions: ['Baire', 'Categories'] }
+        }
     }
 ];
 
@@ -1784,7 +2238,19 @@ const NOTIONS = [
     { id: 'matrices', name: 'Matrices', theme: 'algebre', x: 200, y: 400 },
     { id: 'diagonalisation', name: 'Diagonalisation', theme: 'algebre', x: 300, y: 450 },
     { id: 'exp-matrices', name: 'Exp matricielle', theme: 'algebre', x: 400, y: 400 },
-    { id: 'probabilites-base', name: 'Probabilites', theme: 'probabilites', x: 600, y: 400 }
+    { id: 'probabilites-base', name: 'Probabilites', theme: 'probabilites', x: 600, y: 400 },
+    // Algebre generale
+    { id: 'groupes', name: 'Groupes', theme: 'algebre-generale', x: 100, y: 500 },
+    { id: 'groupe-symetrique', name: 'Groupe symetrique', theme: 'algebre-generale', x: 200, y: 550 },
+    { id: 'anneaux', name: 'Anneaux', theme: 'algebre-generale', x: 300, y: 500 },
+    { id: 'corps', name: 'Corps', theme: 'algebre-generale', x: 400, y: 550 },
+    { id: 'corps-finis', name: 'Corps finis', theme: 'algebre-generale', x: 500, y: 500 },
+    // Topologie
+    { id: 'espaces-metriques', name: 'Espaces metriques', theme: 'topologie', x: 700, y: 500 },
+    { id: 'completude', name: 'Completude', theme: 'topologie', x: 800, y: 450 },
+    { id: 'compacite', name: 'Compacite', theme: 'topologie', x: 800, y: 550 },
+    { id: 'connexite', name: 'Connexite', theme: 'topologie', x: 900, y: 500 },
+    { id: 'baire', name: 'Baire', theme: 'topologie', x: 950, y: 450 }
 ];
 
 // LIENS POUR LA CARTE (connexions entre notions)
@@ -1805,7 +2271,21 @@ const CARTE_LIENS = [
     { source: 'matrices', target: 'diagonalisation' },
     { source: 'diagonalisation', target: 'exp-matrices' },
     { source: 'series-entieres', target: 'exp-matrices' },
-    { source: 'convergence-suites', target: 'probabilites-base' }
+    { source: 'convergence-suites', target: 'probabilites-base' },
+    // Algebre generale
+    { source: 'groupes', target: 'groupe-symetrique' },
+    { source: 'groupes', target: 'anneaux' },
+    { source: 'anneaux', target: 'corps' },
+    { source: 'corps', target: 'corps-finis' },
+    { source: 'matrices', target: 'groupes' },
+    // Topologie
+    { source: 'espaces-metriques', target: 'completude' },
+    { source: 'espaces-metriques', target: 'compacite' },
+    { source: 'espaces-metriques', target: 'connexite' },
+    { source: 'completude', target: 'baire' },
+    { source: 'fonctions-continues', target: 'espaces-metriques' },
+    { source: 'convergence-suites', target: 'completude' },
+    { source: 'compacite', target: 'theoremes-analyse' }
 ];
 
 // ============================================
