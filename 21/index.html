@@ -19,8 +19,8 @@
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                     </svg>
                 </div>
-                <h2>Acces securise</h2>
-                <p>Ce site contient des donnees sensibles. Veuillez entrer le mot de passe pour acceder au contenu.</p>
+                <h2>Accès sécurisé</h2>
+                <p>Ce site contient des données sensibles. Veuillez entrer le mot de passe pour accéder au contenu.</p>
             </div>
             <form id="password-form" onsubmit="return checkPassword(event)">
                 <div class="password-input-group">
@@ -50,9 +50,10 @@
             </div>
             <div class="header-right">
                 <span class="beta-badge">VERSION BETA</span>
-                <button class="night-mode-toggle" id="night-mode-btn" onclick="toggleNightMode()" title="Mode nuit - Donnees mondiales">
-                    <svg id="night-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                <button class="pedagogy-toggle" id="pedagogy-btn" onclick="togglePedagogyMode()" title="Mode pédagogique - Explications détaillées">
+                    <svg id="pedagogy-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
                     </svg>
                 </button>
             </div>
@@ -67,6 +68,7 @@
                 <button class="nav-tab" data-tab="impacts" onclick="switchTab('impacts')">Impacts</button>
                 <button class="nav-tab" data-tab="trajectoire" onclick="switchTab('trajectoire')">Trajectoire tendancielle</button>
                 <button class="nav-tab" data-tab="paris" onclick="switchTab('paris')">Trajectoire de Paris</button>
+                <button class="nav-tab nav-tab-decideurs" data-tab="decideurs" onclick="switchTab('decideurs')">📊 Décideurs</button>
             </div>
         </div>
     </nav>
@@ -140,7 +142,7 @@
                                 </div>
                             </div>
 
-                            <p class="context-note">Pour le territoire parisien, une trentaine d'aleas ont ete actualises sur ce nouveau scenario.</p>
+                            <p class="context-note">Pour le territoire parisien, une trentaine d'aléas ont été actualisés sur ce nouveau scénario.</p>
                         </div>
                     </div>
 
@@ -149,9 +151,14 @@
                         <div class="explainer-icon">?</div>
                         <div class="explainer-content">
                             <h3>Que signifie +4°C ?</h3>
-                            <p>C'est un choix de scenario parmi plusieurs scenarios mondiaux, qui varient selon les efforts de reduction des emissions de gaz a effet de serre. L'Etat retient un scenario dit <strong>"tendanciel"</strong> si les Etats respectent leurs engagements climatiques actuels.</p>
-                            <p class="explainer-note">Ce n'est ni le scenario le plus pessimiste, ni le plus optimiste.</p>
+                            <p>C'est un choix de scénario parmi plusieurs scénarios mondiaux, qui varient selon les efforts de réduction des émissions de gaz à effet de serre. L'État retient un scénario dit <strong>"tendanciel"</strong> si les États respectent leurs engagements climatiques actuels.</p>
+                            <p class="explainer-note">Ce n'est ni le scénario le plus pessimiste, ni le plus optimiste.</p>
                         </div>
+                    </div>
+
+                    <!-- Encart pédagogique (visible en mode pédagogique) -->
+                    <div class="pedagogy-content">
+                        <p><strong>D'où viennent ces chiffres ?</strong> Ces projections sont issues de l'étude TRACC 2023 réalisée par Météo-France. Les scientifiques utilisent des superordinateurs pour simuler l'évolution du climat selon différents scénarios d'émissions de CO2. Ce ne sont pas des prédictions exactes, mais des tendances fiables basées sur des décennies de recherche.</p>
                     </div>
                 </div>
 
@@ -244,11 +251,11 @@
                 <!-- 1.3 Climat futur -->
                 <div class="content-section">
                     <div class="section-header">
-                        <h2 class="section-title">Climat futur a Paris</h2>
-                        <p class="section-subtitle">Selectionnez un niveau de rechauffement pour visualiser l'evolution des aleas</p>
+                        <h2 class="section-title">Climat futur à Paris</h2>
+                        <p class="section-subtitle">Sélectionnez un niveau de réchauffement pour visualiser l'évolution des aléas</p>
                     </div>
 
-                    <!-- Selecteur de scenario -->
+                    <!-- Sélecteur de scénario -->
                     <div class="scenario-selector">
                         <button class="scenario-btn" data-scenario="ref" onclick="selectScenario('ref')">
                             <span class="scenario-temp">Ref</span>
@@ -271,6 +278,11 @@
                     <!-- Indicateurs dynamiques -->
                     <div class="indicators-section" id="indicators-section">
                         <!-- Rempli par JS -->
+                    </div>
+
+                    <!-- Encart pédagogique indicateurs -->
+                    <div class="pedagogy-content">
+                        <p><strong>Comment lire ces chiffres ?</strong> Chaque indicateur montre l'evolution par rapport a la periode de reference (1976-2005). Par exemple, "+15 jours" signifie 15 jours de plus qu'avant. Survolez chaque carte pour obtenir une explication detaillee de ce que mesure l'indicateur et pourquoi il est important.</p>
                     </div>
 
                     <!-- Graphique trajectoires -->
@@ -384,8 +396,13 @@
                         <div class="explainer-icon">?</div>
                         <div class="explainer-content">
                             <h3>Comment lire cette section ?</h3>
-                            <p>Selectionnez une menace climatique pour visualiser les impacts associes sur le territoire parisien. Les donnees evoluent selon le scenario de rechauffement selectionne dans l'onglet "Aleas".</p>
+                            <p>Sélectionnez une menace climatique pour visualiser les impacts associés sur le territoire parisien. Les données évoluent selon le scénario de réchauffement sélectionné dans l'onglet "Aléas".</p>
                         </div>
+                    </div>
+
+                    <!-- Encart pédagogique impacts -->
+                    <div class="pedagogy-content">
+                        <p><strong>Pourquoi parle-t-on d'impacts et pas seulement de temperatures ?</strong> Le changement climatique ne se limite pas a "il fera plus chaud". Il affecte notre sante, notre eau, nos batiments, notre economie et la nature autour de nous. Ces impacts sont interconnectes : la chaleur aggrave les secheresses, qui stressent la vegetation, qui reduit la fraicheur en ville, etc.</p>
                     </div>
 
                     <!-- Contenu dynamique genere par JS -->
@@ -598,6 +615,842 @@
 
                 </div>
             </section>
+
+            <!-- ================================ -->
+            <!-- ONGLET 5 : RESUME AUX DECIDEURS -->
+            <!-- ================================ -->
+            <section class="tab-content" id="tab-decideurs">
+                <div class="decideurs-page">
+
+                    <!-- En-tete Dashboard -->
+                    <div class="decideurs-header">
+                        <div class="decideurs-header-top">
+                            <div class="decideurs-title">
+                                <h1>📊 Résumé aux Décideurs</h1>
+                                <p class="decideurs-subtitle">Trajectoire Climatique de Paris - Synthèse exécutive</p>
+                            </div>
+                            <div class="decideurs-meta">
+                                <span class="decideurs-update">Dernière MAJ: 26 janvier 2026</span>
+                                <button class="decideurs-export-btn" onclick="exportDecideursPDF()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="7 10 12 15 17 10"/>
+                                        <line x1="12" y1="15" x2="12" y2="3"/>
+                                    </svg>
+                                    Export PDF
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- KPIs principaux -->
+                        <div class="decideurs-kpis">
+                            <div class="decideurs-kpi">
+                                <span class="kpi-icon">🌡️</span>
+                                <span class="kpi-value">+2,7°C</span>
+                                <span class="kpi-label">Scénario tendanciel</span>
+                            </div>
+                            <div class="decideurs-kpi">
+                                <span class="kpi-icon">⏱️</span>
+                                <span class="kpi-value">2050</span>
+                                <span class="kpi-label">Horizon cible</span>
+                            </div>
+                            <div class="decideurs-kpi">
+                                <span class="kpi-icon">💰</span>
+                                <span class="kpi-value">2,3 Mds€</span>
+                                <span class="kpi-label">Budget adaptation</span>
+                            </div>
+                            <div class="decideurs-kpi">
+                                <span class="kpi-icon">📈</span>
+                                <span class="kpi-value">67%</span>
+                                <span class="kpi-label">Adhésion citoyenne</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grille principale -->
+                    <div class="decideurs-grid">
+
+                        <!-- Colonne gauche -->
+                        <div class="decideurs-col-left">
+
+                            <!-- Trajectoires comparées -->
+                            <div class="decideurs-card">
+                                <div class="decideurs-card-header">
+                                    <h2>🎯 Trajectoires comparées</h2>
+                                </div>
+                                <div class="decideurs-card-body">
+                                    <table class="decideurs-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Trajectoire</th>
+                                                <th>Temp.</th>
+                                                <th>Prob.</th>
+                                                <th>Coût inaction</th>
+                                                <th>Coût adapt.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="traj-optimiste">
+                                                <td><span class="traj-dot green"></span> Optimiste</td>
+                                                <td><strong>+2°C</strong></td>
+                                                <td>15%</td>
+                                                <td>800 M€</td>
+                                                <td>1,2 Mds€</td>
+                                            </tr>
+                                            <tr class="traj-tendanciel active">
+                                                <td><span class="traj-dot orange"></span> Tendanciel</td>
+                                                <td><strong>+2,7°C</strong></td>
+                                                <td>60%</td>
+                                                <td>1,8 Mds€</td>
+                                                <td>2,3 Mds€</td>
+                                            </tr>
+                                            <tr class="traj-pessimiste">
+                                                <td><span class="traj-dot red"></span> Pessimiste</td>
+                                                <td><strong>+4°C</strong></td>
+                                                <td>25%</td>
+                                                <td>4,5 Mds€</td>
+                                                <td>3,8 Mds€</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="decideurs-chart-mini" id="cost-comparison-chart"></div>
+                                </div>
+                            </div>
+
+                            <!-- Top 5 Recommandations -->
+                            <div class="decideurs-card">
+                                <div class="decideurs-card-header">
+                                    <h2>🎯 Top 5 Recommandations prioritaires</h2>
+                                </div>
+                                <div class="decideurs-card-body">
+                                    <div class="recommandations-list">
+                                        <div class="recommandation-item urgence-critique">
+                                            <div class="recommandation-rank">1</div>
+                                            <div class="recommandation-content">
+                                                <div class="recommandation-header">
+                                                    <h4>Végétalisation massive</h4>
+                                                    <span class="recommandation-urgence urgence-critique">🔴 Critique</span>
+                                                </div>
+                                                <div class="recommandation-meta">
+                                                    <span class="recommandation-type">Adaptation</span>
+                                                    <span class="recommandation-budget">180 M€</span>
+                                                    <span class="recommandation-horizon">2025-2030</span>
+                                                </div>
+                                                <div class="recommandation-roi">ROI: -3°C îlots de chaleur urbains</div>
+                                                <div class="recommandation-progress">
+                                                    <div class="progress-bar">
+                                                        <div class="progress-fill" style="width: 67%"></div>
+                                                    </div>
+                                                    <span class="progress-label">67% avancement</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="recommandation-item urgence-critique">
+                                            <div class="recommandation-rank">2</div>
+                                            <div class="recommandation-content">
+                                                <div class="recommandation-header">
+                                                    <h4>Rénovation thermique bâtiments publics</h4>
+                                                    <span class="recommandation-urgence urgence-critique">🔴 Critique</span>
+                                                </div>
+                                                <div class="recommandation-meta">
+                                                    <span class="recommandation-type">Atténuation</span>
+                                                    <span class="recommandation-budget">450 M€</span>
+                                                    <span class="recommandation-horizon">2025-2035</span>
+                                                </div>
+                                                <div class="recommandation-roi">ROI: -40% consommation énergétique</div>
+                                                <div class="recommandation-progress">
+                                                    <div class="progress-bar">
+                                                        <div class="progress-fill" style="width: 34%"></div>
+                                                    </div>
+                                                    <span class="progress-label">34% avancement</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="recommandation-item urgence-haute">
+                                            <div class="recommandation-rank">3</div>
+                                            <div class="recommandation-content">
+                                                <div class="recommandation-header">
+                                                    <h4>Gestion intégrée de l'eau</h4>
+                                                    <span class="recommandation-urgence urgence-haute">🟡 Haute</span>
+                                                </div>
+                                                <div class="recommandation-meta">
+                                                    <span class="recommandation-type">Adaptation</span>
+                                                    <span class="recommandation-budget">220 M€</span>
+                                                    <span class="recommandation-horizon">2026-2032</span>
+                                                </div>
+                                                <div class="recommandation-roi">ROI: -30% vulnérabilité sécheresse</div>
+                                                <div class="recommandation-progress">
+                                                    <div class="progress-bar">
+                                                        <div class="progress-fill" style="width: 22%"></div>
+                                                    </div>
+                                                    <span class="progress-label">22% avancement</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="recommandation-item urgence-haute">
+                                            <div class="recommandation-rank">4</div>
+                                            <div class="recommandation-content">
+                                                <div class="recommandation-header">
+                                                    <h4>Plan canicule renforcé</h4>
+                                                    <span class="recommandation-urgence urgence-haute">🟡 Haute</span>
+                                                </div>
+                                                <div class="recommandation-meta">
+                                                    <span class="recommandation-type">Adaptation</span>
+                                                    <span class="recommandation-budget">85 M€</span>
+                                                    <span class="recommandation-horizon">2025-2027</span>
+                                                </div>
+                                                <div class="recommandation-roi">ROI: 500 îlots fraîcheur accessibles</div>
+                                                <div class="recommandation-progress">
+                                                    <div class="progress-bar">
+                                                        <div class="progress-fill" style="width: 78%"></div>
+                                                    </div>
+                                                    <span class="progress-label">78% avancement</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="recommandation-item urgence-moyenne">
+                                            <div class="recommandation-rank">5</div>
+                                            <div class="recommandation-content">
+                                                <div class="recommandation-header">
+                                                    <h4>Mobilités douces & transports</h4>
+                                                    <span class="recommandation-urgence urgence-moyenne">🟢 Moyenne</span>
+                                                </div>
+                                                <div class="recommandation-meta">
+                                                    <span class="recommandation-type">Atténuation</span>
+                                                    <span class="recommandation-budget">320 M€</span>
+                                                    <span class="recommandation-horizon">2025-2035</span>
+                                                </div>
+                                                <div class="recommandation-roi">ROI: -25% émissions transport</div>
+                                                <div class="recommandation-progress">
+                                                    <div class="progress-bar">
+                                                        <div class="progress-fill" style="width: 45%"></div>
+                                                    </div>
+                                                    <span class="progress-label">45% avancement</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Colonne droite -->
+                        <div class="decideurs-col-right">
+
+                            <!-- Timeline Jalons -->
+                            <div class="decideurs-card">
+                                <div class="decideurs-card-header">
+                                    <h2>📅 Jalons & Milestones</h2>
+                                </div>
+                                <div class="decideurs-card-body">
+                                    <div class="timeline-horizontal">
+                                        <div class="timeline-line"></div>
+                                        <div class="timeline-markers">
+                                            <div class="timeline-marker done">
+                                                <div class="marker-dot">✓</div>
+                                                <div class="marker-year">2024</div>
+                                                <div class="marker-label">Diagnostic partagé</div>
+                                            </div>
+                                            <div class="timeline-marker done">
+                                                <div class="marker-dot">✓</div>
+                                                <div class="marker-year">2025</div>
+                                                <div class="marker-label">Plan validé</div>
+                                            </div>
+                                            <div class="timeline-marker current">
+                                                <div class="marker-dot">●</div>
+                                                <div class="marker-year">2027</div>
+                                                <div class="marker-label">-10% émissions</div>
+                                            </div>
+                                            <div class="timeline-marker future">
+                                                <div class="marker-dot">○</div>
+                                                <div class="marker-year">2030</div>
+                                                <div class="marker-label">-20% émissions</div>
+                                            </div>
+                                            <div class="timeline-marker future">
+                                                <div class="marker-dot">○</div>
+                                                <div class="marker-year">2040</div>
+                                                <div class="marker-label">-40% émissions</div>
+                                            </div>
+                                            <div class="timeline-marker future">
+                                                <div class="marker-dot">○</div>
+                                                <div class="marker-year">2050</div>
+                                                <div class="marker-label">Neutralité carbone</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-legend">
+                                        <span class="legend-item"><span class="legend-dot done">✓</span> Fait</span>
+                                        <span class="legend-item"><span class="legend-dot current">●</span> En cours</span>
+                                        <span class="legend-item"><span class="legend-dot future">○</span> À venir</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Budget -->
+                            <div class="decideurs-card">
+                                <div class="decideurs-card-header">
+                                    <h2>💰 Tableau de bord budgétaire</h2>
+                                    <span class="budget-period">2025-2030</span>
+                                </div>
+                                <div class="decideurs-card-body">
+                                    <div class="budget-summary">
+                                        <div class="budget-row budget-total">
+                                            <span class="budget-label">Enveloppe totale</span>
+                                            <div class="budget-bar-container">
+                                                <div class="budget-bar" style="width: 100%"></div>
+                                            </div>
+                                            <span class="budget-value">2,3 Mds€</span>
+                                        </div>
+                                        <div class="budget-row budget-engaged">
+                                            <span class="budget-label">Engagé</span>
+                                            <div class="budget-bar-container">
+                                                <div class="budget-bar" style="width: 48%"></div>
+                                            </div>
+                                            <span class="budget-value">1,1 Mds€</span>
+                                        </div>
+                                        <div class="budget-row budget-consumed">
+                                            <span class="budget-label">Consommé</span>
+                                            <div class="budget-bar-container">
+                                                <div class="budget-bar" style="width: 20%"></div>
+                                            </div>
+                                            <span class="budget-value">450 M€</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="budget-breakdown">
+                                        <h4>Répartition par poste</h4>
+                                        <div class="budget-item">
+                                            <span class="budget-item-label">🏗️ Bâtiments/rénovation</span>
+                                            <div class="budget-item-bar-container">
+                                                <div class="budget-item-bar" style="width: 30%"></div>
+                                            </div>
+                                            <span class="budget-item-value">680 M€</span>
+                                        </div>
+                                        <div class="budget-item">
+                                            <span class="budget-item-label">🌳 Végétalisation</span>
+                                            <div class="budget-item-bar-container">
+                                                <div class="budget-item-bar" style="width: 17%"></div>
+                                            </div>
+                                            <span class="budget-item-value">380 M€</span>
+                                        </div>
+                                        <div class="budget-item">
+                                            <span class="budget-item-label">💧 Gestion de l'eau</span>
+                                            <div class="budget-item-bar-container">
+                                                <div class="budget-item-bar" style="width: 13%"></div>
+                                            </div>
+                                            <span class="budget-item-value">290 M€</span>
+                                        </div>
+                                        <div class="budget-item">
+                                            <span class="budget-item-label">🚲 Mobilités douces</span>
+                                            <div class="budget-item-bar-container">
+                                                <div class="budget-item-bar" style="width: 10%"></div>
+                                            </div>
+                                            <span class="budget-item-value">240 M€</span>
+                                        </div>
+                                        <div class="budget-item">
+                                            <span class="budget-item-label">📋 Études & ingénierie</span>
+                                            <div class="budget-item-bar-container">
+                                                <div class="budget-item-bar" style="width: 5%"></div>
+                                            </div>
+                                            <span class="budget-item-value">110 M€</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Opinion publique -->
+                            <div class="decideurs-card">
+                                <div class="decideurs-card-header">
+                                    <h2>📊 Baromètre opinion publique</h2>
+                                    <span class="opinion-source">Sondage Q4 2025</span>
+                                </div>
+                                <div class="decideurs-card-body">
+                                    <div class="opinion-items">
+                                        <div class="opinion-item">
+                                            <span class="opinion-question">"Le changement climatique est une priorité"</span>
+                                            <div class="opinion-bar-container">
+                                                <div class="opinion-bar positive" style="width: 78%"></div>
+                                            </div>
+                                            <span class="opinion-value">78% <span class="opinion-trend positive">+5pts</span></span>
+                                        </div>
+                                        <div class="opinion-item">
+                                            <span class="opinion-question">"Je suis prêt à changer mes habitudes"</span>
+                                            <div class="opinion-bar-container">
+                                                <div class="opinion-bar positive" style="width: 62%"></div>
+                                            </div>
+                                            <span class="opinion-value">62% <span class="opinion-trend positive">+3pts</span></span>
+                                        </div>
+                                        <div class="opinion-item">
+                                            <span class="opinion-question">"La Ville fait assez pour le climat"</span>
+                                            <div class="opinion-bar-container">
+                                                <div class="opinion-bar warning" style="width: 41%"></div>
+                                            </div>
+                                            <span class="opinion-value">41% <span class="opinion-trend negative">-2pts</span> ⚠️</span>
+                                        </div>
+                                        <div class="opinion-item">
+                                            <span class="opinion-question">"Je fais confiance aux projections scientifiques"</span>
+                                            <div class="opinion-bar-container">
+                                                <div class="opinion-bar positive" style="width: 71%"></div>
+                                            </div>
+                                            <span class="opinion-value">71% <span class="opinion-trend neutral">stable</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Section alertes pleine largeur -->
+                    <div class="decideurs-alerts-section">
+                        <div class="decideurs-card decideurs-card-alerts">
+                            <div class="decideurs-card-header">
+                                <h2>⚠️ Alertes & Points d'attention</h2>
+                            </div>
+                            <div class="decideurs-card-body">
+                                <div class="alerts-grid">
+                                    <div class="alert-column alert-critical">
+                                        <h4>🔴 CRITIQUE</h4>
+                                        <ul>
+                                            <li>Retard végétalisation secteur Nord-Est (-18 mois)</li>
+                                            <li>Dépassement budget rénovation écoles (+12%)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="alert-column alert-warning">
+                                        <h4>🟡 ATTENTION</h4>
+                                        <ul>
+                                            <li>Consultation publique PLU en attente validation</li>
+                                            <li>Partenariat Métropole à finaliser avant T2</li>
+                                        </ul>
+                                    </div>
+                                    <div class="alert-column alert-opportunity">
+                                        <h4>🟢 OPPORTUNITÉS</h4>
+                                        <ul>
+                                            <li>Subvention UE "Green Cities" (deadline 15/03)</li>
+                                            <li>Appel à projets ADEME adaptation (50 M€ dispo)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions immédiates -->
+                    <div class="decideurs-actions-section">
+                        <div class="decideurs-card decideurs-card-actions">
+                            <div class="decideurs-card-header">
+                                <h2>📌 Décisions attendues ce trimestre</h2>
+                            </div>
+                            <div class="decideurs-card-body">
+                                <div class="actions-checklist">
+                                    <label class="action-item">
+                                        <input type="checkbox">
+                                        <span class="action-text">Valider budget supplémentaire végétalisation (45 M€)</span>
+                                        <span class="action-deadline">Avant 15/02</span>
+                                    </label>
+                                    <label class="action-item">
+                                        <input type="checkbox">
+                                        <span class="action-text">Arbitrer tracé corridor écologique Seine-Bièvre</span>
+                                        <span class="action-deadline">Avant 28/02</span>
+                                    </label>
+                                    <label class="action-item">
+                                        <input type="checkbox">
+                                        <span class="action-text">Signer convention Métropole gestion des crues</span>
+                                        <span class="action-deadline">Avant 31/03</span>
+                                    </label>
+                                    <label class="action-item">
+                                        <input type="checkbox">
+                                        <span class="action-text">Lancer appel d'offres rénovation thermique lot 3</span>
+                                        <span class="action-deadline">Avant 31/03</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ================================ -->
+            <!-- VUE PÉDAGOGIQUE COMPLÈTE       -->
+            <!-- ================================ -->
+            <div id="pedagogy-view" class="pedagogy-view" style="display: none;">
+
+                <!-- Hero pédagogique -->
+                <div class="pedagogy-hero">
+                    <span class="pedagogy-badge">&#x1F4DA; Guide pédagogique</span>
+                    <h1>Le climat de Paris<br>va changer.</h1>
+                    <p class="pedagogy-hero-subtitle">Comprendre les projections climatiques pour mieux s'adapter</p>
+                    <div class="pedagogy-hero-temp">
+                        <span class="hero-temp-value">+4°C</span>
+                        <span class="hero-temp-label">possible d'ici 2100</span>
+                    </div>
+                </div>
+
+                <!-- Section 1: D'où viennent ces chiffres -->
+                <div class="pedagogy-section">
+                    <div class="pedagogy-section-header">
+                        <span class="pedagogy-section-number">01</span>
+                        <h2>D'où viennent ces chiffres ?</h2>
+                        <p class="pedagogy-lead">Les projections climatiques ne sont pas des prédictions magiques. Ce sont des calculs scientifiques rigoureux basés sur des données réelles.</p>
+                    </div>
+
+                    <div class="pedagogy-cards">
+                        <div class="pedagogy-card">
+                            <div class="pedagogy-card-icon">&#x1F30D;</div>
+                            <h3>Le GIEC collecte les données</h3>
+                            <p>Des milliers de scientifiques du monde entier analysent les températures, les océans, la glace et l'atmosphère depuis des décennies.</p>
+                        </div>
+                        <div class="pedagogy-card">
+                            <div class="pedagogy-card-icon">&#x1F4BB;</div>
+                            <h3>Les modèles simulent le futur</h3>
+                            <p>Des superordinateurs calculent comment le climat évoluera selon différents scénarios d'émissions de gaz à effet de serre.</p>
+                        </div>
+                        <div class="pedagogy-card">
+                            <div class="pedagogy-card-icon">&#x1F5FC;</div>
+                            <h3>TRACC adapté à Paris</h3>
+                            <p>L'étude TRACC 2023 traduit ces projections mondiales en données concrètes pour Paris et l'Île-de-France.</p>
+                        </div>
+                    </div>
+
+                    <div class="pedagogy-info-box">
+                        <div class="pedagogy-info-icon">&#x2139;&#xFE0F;</div>
+                        <div class="pedagogy-info-content">
+                            <strong>Qu'est-ce que le TRACC ?</strong>
+                            <p>Les Trajectoires de Réchauffement Adaptées aux territoires et au Changement Climatique (TRACC) sont une étude publiée en 2023 par Météo-France. Elle fournit des projections climatiques détaillées pour chaque région de France.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Les trois futurs -->
+                <div class="pedagogy-section pedagogy-section-alt">
+                    <div class="pedagogy-section-header">
+                        <span class="pedagogy-section-number">02</span>
+                        <h2>Trois futurs possibles</h2>
+                        <p class="pedagogy-lead">Le climat de demain dépend de nos choix d'aujourd'hui. Voici les trois scénarios étudiés pour Paris.</p>
+                    </div>
+
+                    <div class="pedagogy-scenarios">
+                        <div class="pedagogy-scenario" data-level="optimiste">
+                            <div class="pedagogy-scenario-header">
+                                <span class="pedagogy-scenario-temp">+2°C</span>
+                                <span class="pedagogy-scenario-year">Horizon 2030</span>
+                            </div>
+                            <div class="pedagogy-scenario-body">
+                                <h3>&#x1F331; Scénario "efforts importants"</h3>
+                                <p>Si le monde réduit fortement ses émissions de CO2, le réchauffement pourrait être limité à +2°C.</p>
+                                <div class="pedagogy-scenario-impacts">
+                                    <span class="pedagogy-impact-label">À Paris, cela signifie :</span>
+                                    <ul>
+                                        <li>&#x1F321;&#xFE0F; 2-3 canicules par an</li>
+                                        <li>&#x2600;&#xFE0F; ~20 jours au-dessus de 30°C</li>
+                                        <li>&#x2744;&#xFE0F; Hivers plus doux avec moins de gel</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pedagogy-scenario" data-level="median">
+                            <div class="pedagogy-scenario-header">
+                                <span class="pedagogy-scenario-temp">+2,7°C</span>
+                                <span class="pedagogy-scenario-year">Horizon 2050</span>
+                            </div>
+                            <div class="pedagogy-scenario-body">
+                                <h3>&#x26A0;&#xFE0F; Scénario "tendanciel"</h3>
+                                <p>Si les efforts actuels se poursuivent sans accélération, le réchauffement atteindrait +2,7°C vers 2050.</p>
+                                <div class="pedagogy-scenario-impacts">
+                                    <span class="pedagogy-impact-label">À Paris, cela signifie :</span>
+                                    <ul>
+                                        <li>&#x1F525; Canicules de 2 à 3 semaines</li>
+                                        <li>&#x1F321;&#xFE0F; Plus de 30 jours au-dessus de 30°C</li>
+                                        <li>&#x1F319; Nuits tropicales fréquentes (+20°C la nuit)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pedagogy-scenario" data-level="pessimiste">
+                            <div class="pedagogy-scenario-header">
+                                <span class="pedagogy-scenario-temp">+4°C</span>
+                                <span class="pedagogy-scenario-year">Horizon 2100</span>
+                            </div>
+                            <div class="pedagogy-scenario-body">
+                                <h3>&#x1F6A8; Scénario "sans action"</h3>
+                                <p>Sans changement majeur dans nos modes de vie, le réchauffement pourrait atteindre +4°C d'ici la fin du siècle.</p>
+                                <div class="pedagogy-scenario-impacts">
+                                    <span class="pedagogy-impact-label">À Paris, cela signifie :</span>
+                                    <ul>
+                                        <li>&#x1F975; Étés caniculaires de plusieurs mois</li>
+                                        <li>&#x1F525;&#x1F525; Plus de 50 jours au-dessus de 30°C</li>
+                                        <li>&#x1F1EA;&#x1F1F8; Un climat comparable à Séville aujourd'hui</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparaison visuelle -->
+                    <div class="pedagogy-comparison">
+                        <h4>&#x1F4CA; Pour mieux comprendre</h4>
+                        <div class="pedagogy-comparison-cities">
+                            <div class="pedagogy-city">
+                                <span class="pedagogy-city-icon">&#x1F5FC;</span>
+                                <span class="pedagogy-city-name">Paris aujourd'hui</span>
+                                <span class="pedagogy-city-temp">16°C en moyenne</span>
+                            </div>
+                            <div class="pedagogy-arrow">&#x27A1;&#xFE0F;</div>
+                            <div class="pedagogy-city pedagogy-city-highlight">
+                                <span class="pedagogy-city-icon">&#x1F5FC;&#x1F525;</span>
+                                <span class="pedagogy-city-name">Paris en 2100</span>
+                                <span class="pedagogy-city-temp">~20°C en moyenne</span>
+                            </div>
+                            <div class="pedagogy-equals">=</div>
+                            <div class="pedagogy-city">
+                                <span class="pedagogy-city-icon">&#x2600;&#xFE0F;</span>
+                                <span class="pedagogy-city-name">Seville aujourd'hui</span>
+                                <span class="pedagogy-city-temp">19°C en moyenne</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Impacts concrets -->
+                <div class="pedagogy-section">
+                    <div class="pedagogy-section-header">
+                        <span class="pedagogy-section-number">03</span>
+                        <h2>Qu'est-ce que ça change au quotidien ?</h2>
+                        <p class="pedagogy-lead">Le changement climatique n'est pas qu'une question de température. Il touche tous les aspects de notre vie.</p>
+                    </div>
+
+                    <div class="pedagogy-impacts-grid">
+                        <div class="pedagogy-impact-card pedagogy-impact-heat">
+                            <div class="pedagogy-impact-header">
+                                <span class="pedagogy-impact-icon">&#x1F321;&#xFE0F;</span>
+                                <h3>Chaleur et santé</h3>
+                            </div>
+                            <p>Les vagues de chaleur deviennent plus fréquentes et intenses. Elles sont dangereuses pour les personnes âgées, les enfants et les personnes fragiles.</p>
+                            <div class="pedagogy-impact-stat">
+                                <span class="pedagogy-stat-value">x3</span>
+                                <span class="pedagogy-stat-label">plus de jours de canicule d'ici 2050</span>
+                            </div>
+                            <div class="pedagogy-impact-actions">
+                                <strong>&#x1F4A1; Solutions :</strong>
+                                <ul>
+                                    <li>Végétaliser les rues et bâtiments</li>
+                                    <li>Créer des îlots de fraîcheur</li>
+                                    <li>Adapter les logements</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pedagogy-impact-card pedagogy-impact-water">
+                            <div class="pedagogy-impact-header">
+                                <span class="pedagogy-impact-icon">&#x1F4A7;</span>
+                                <h3>Eau et sécheresse</h3>
+                            </div>
+                            <p>Les périodes de sécheresse s'allongent. L'eau devient une ressource plus rare qu'il faut mieux gérer.</p>
+                            <div class="pedagogy-impact-stat">
+                                <span class="pedagogy-stat-value">-20%</span>
+                                <span class="pedagogy-stat-label">de pluie en été d'ici 2050</span>
+                            </div>
+                            <div class="pedagogy-impact-actions">
+                                <strong>&#x1F4A1; Solutions :</strong>
+                                <ul>
+                                    <li>Récupérer l'eau de pluie</li>
+                                    <li>Désimperméabiliser les sols</li>
+                                    <li>Adapter l'agriculture urbaine</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pedagogy-impact-card pedagogy-impact-flood">
+                            <div class="pedagogy-impact-header">
+                                <span class="pedagogy-impact-icon">&#x1F32A;&#xFE0F;</span>
+                                <h3>Pluies et inondations</h3>
+                            </div>
+                            <p>Paradoxalement, quand il pleut, c'est plus intense. Les orages violents et les inondations deviennent plus fréquents.</p>
+                            <div class="pedagogy-impact-stat">
+                                <span class="pedagogy-stat-value">+30%</span>
+                                <span class="pedagogy-stat-label">d'intensité des pluies extrêmes</span>
+                            </div>
+                            <div class="pedagogy-impact-actions">
+                                <strong>&#x1F4A1; Solutions :</strong>
+                                <ul>
+                                    <li>Créer des zones d'expansion des crues</li>
+                                    <li>Améliorer le réseau d'assainissement</li>
+                                    <li>Préparer les bâtiments au risque</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pedagogy-impact-card pedagogy-impact-nature">
+                            <div class="pedagogy-impact-header">
+                                <span class="pedagogy-impact-icon">&#x1F333;</span>
+                                <h3>Nature et biodiversité</h3>
+                            </div>
+                            <p>Les espèces végétales et animales doivent s'adapter ou migrer. Certains arbres parisiens ne supporteront plus le climat futur.</p>
+                            <div class="pedagogy-impact-stat">
+                                <span class="pedagogy-stat-value">40%</span>
+                                <span class="pedagogy-stat-label">des espèces d'arbres à risque</span>
+                            </div>
+                            <div class="pedagogy-impact-actions">
+                                <strong>&#x1F4A1; Solutions :</strong>
+                                <ul>
+                                    <li>Planter des espèces adaptées</li>
+                                    <li>Créer des corridors écologiques</li>
+                                    <li>Protéger les espaces verts</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Points de bascule -->
+                <div class="pedagogy-section pedagogy-section-dark">
+                    <div class="pedagogy-section-header pedagogy-header-light">
+                        <span class="pedagogy-section-number">04</span>
+                        <h2>Les points de non-retour</h2>
+                        <p class="pedagogy-lead">À certains seuils de température, des phénomènes irréversibles se déclenchent. Ce sont les "points de bascule" du climat.</p>
+                    </div>
+
+                    <div class="pedagogy-metaphor">
+                        <span class="pedagogy-metaphor-icon">&#x1F3B1;</span>
+                        <p>Imaginez une bille sur une colline. Tant qu'elle reste en haut, elle peut revenir en arrière. Mais une fois qu'elle a franchi le sommet, elle dévale la pente sans pouvoir s'arrêter. C'est ce qui se passe avec certains systèmes climatiques.</p>
+                    </div>
+
+                    <div class="pedagogy-tipping-scale">
+                        <div class="pedagogy-scale-bar">
+                            <div class="pedagogy-scale-gradient"></div>
+                            <div class="pedagogy-scale-marker" style="left: 10%;">
+                                <span class="pedagogy-marker-label">Aujourd'hui</span>
+                                <span class="pedagogy-marker-value">+1,2°C</span>
+                            </div>
+                            <div class="pedagogy-scale-marker" style="left: 35%;">
+                                <span class="pedagogy-marker-value">+1,5°C</span>
+                            </div>
+                            <div class="pedagogy-scale-marker" style="left: 55%;">
+                                <span class="pedagogy-marker-value">+2°C</span>
+                            </div>
+                            <div class="pedagogy-scale-marker" style="left: 100%;">
+                                <span class="pedagogy-marker-value">+4°C</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pedagogy-tipping-points">
+                        <div class="pedagogy-tipping-point pedagogy-tp-triggered">
+                            <span class="pedagogy-tp-icon">&#x1F9CA;</span>
+                            <div class="pedagogy-tp-content">
+                                <h4>Fonte de la banquise arctique</h4>
+                                <p>Déjà en cours. L'Arctique pourrait connaître des étés sans glace d'ici 2050.</p>
+                            </div>
+                            <span class="pedagogy-tp-threshold">1,0°C - 3,0°C</span>
+                        </div>
+
+                        <div class="pedagogy-tipping-point pedagogy-tp-triggered">
+                            <span class="pedagogy-tp-icon">&#x1F3D4;&#xFE0F;</span>
+                            <div class="pedagogy-tp-content">
+                                <h4>Fonte des glaciers de montagne</h4>
+                                <p>Déjà en cours. Les glaciers alpins pourraient disparaître d'ici la fin du siècle.</p>
+                            </div>
+                            <span class="pedagogy-tp-threshold">1,5°C - 3,0°C</span>
+                        </div>
+
+                        <div class="pedagogy-tipping-point pedagogy-tp-warning">
+                            <span class="pedagogy-tp-icon">&#x1F30A;</span>
+                            <div class="pedagogy-tp-content">
+                                <h4>Ralentissement du Gulf Stream</h4>
+                                <p>Ce courant qui réchauffe l'Europe pourrait s'affaiblir, modifiant notre climat.</p>
+                            </div>
+                            <span class="pedagogy-tp-threshold">1,5°C - 4,0°C</span>
+                        </div>
+
+                        <div class="pedagogy-tipping-point pedagogy-tp-warning">
+                            <span class="pedagogy-tp-icon">&#x1F332;</span>
+                            <div class="pedagogy-tp-content">
+                                <h4>Dépérissement de l'Amazonie</h4>
+                                <p>La forêt tropicale pourrait se transformer en savane, libérant d'énormes quantités de CO2.</p>
+                            </div>
+                            <span class="pedagogy-tp-threshold">2,0°C - 6,0°C</span>
+                        </div>
+                    </div>
+
+                    <div class="pedagogy-warning-box">
+                        <span class="pedagogy-warning-icon">&#x26A0;&#xFE0F;</span>
+                        <p><strong>Pourquoi c'est important :</strong> Ces points de bascule peuvent s'enchaîner comme des dominos. Une fois déclenchés, ils accélèrent le réchauffement et rendent l'adaptation beaucoup plus difficile.</p>
+                    </div>
+                </div>
+
+                <!-- Section 5: Agir -->
+                <div class="pedagogy-section">
+                    <div class="pedagogy-section-header">
+                        <span class="pedagogy-section-number">05</span>
+                        <h2>Et maintenant, on fait quoi ?</h2>
+                        <p class="pedagogy-lead">Face au changement climatique, nous avons deux leviers : réduire nos émissions (atténuation) et nous préparer aux impacts (adaptation).</p>
+                    </div>
+
+                    <div class="pedagogy-action-columns">
+                        <div class="pedagogy-action-column pedagogy-attenuation">
+                            <div class="pedagogy-column-header">
+                                <span class="pedagogy-column-icon">&#x1F4A1;</span>
+                                <h3>Atténuation</h3>
+                                <p>Réduire les émissions de gaz à effet de serre pour limiter le réchauffement</p>
+                            </div>
+                            <ul class="pedagogy-action-list">
+                                <li>&#x1F3E0; Rénover les bâtiments pour moins chauffer</li>
+                                <li>&#x1F68C; Développer les transports en commun et le vélo</li>
+                                <li>&#x26A1; Produire une énergie plus propre</li>
+                                <li>&#x1F96C; Consommer local et de saison</li>
+                                <li>&#x267B;&#xFE0F; Réduire les déchets et recycler</li>
+                            </ul>
+                        </div>
+
+                        <div class="pedagogy-action-column pedagogy-adaptation">
+                            <div class="pedagogy-column-header">
+                                <span class="pedagogy-column-icon">&#x1F6E1;&#xFE0F;</span>
+                                <h3>Adaptation</h3>
+                                <p>Se préparer aux impacts inévitables du changement climatique</p>
+                            </div>
+                            <ul class="pedagogy-action-list">
+                                <li>&#x1F333; Végétaliser la ville pour créer de la fraîcheur</li>
+                                <li>&#x1F3D7;&#xFE0F; Adapter les bâtiments aux fortes chaleurs</li>
+                                <li>&#x1F4A7; Protéger les ressources en eau</li>
+                                <li>&#x1F30A; Préparer la ville aux inondations</li>
+                                <li>&#x1F393; Former et sensibiliser les habitants</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="pedagogy-cta-box">
+                        <h3>&#x1F5FC; Paris s'engage</h3>
+                        <p>La Ville de Paris élabore actuellement sa stratégie d'adaptation au changement climatique. L'objectif : préparer la ville et ses habitants aux défis des prochaines décennies.</p>
+                        <div class="pedagogy-cta-badges">
+                            <span class="pedagogy-cta-badge">&#x1F4CA; Diagnostic en cours</span>
+                            <span class="pedagogy-cta-badge">&#x1F91D; Concertation citoyenne</span>
+                            <span class="pedagogy-cta-badge">&#x1F3AF; Objectifs 2030-2050</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer pédagogique -->
+                <div class="pedagogy-footer">
+                    <div class="pedagogy-footer-sources">
+                        <strong>&#x1F4DA; Sources des données</strong>
+                        <p>TRACC 2023 (Météo-France) | GIEC | Ville de Paris</p>
+                    </div>
+                    <div class="pedagogy-footer-credit">
+                        <p>Guide pédagogique réalisé pour faciliter la compréhension des enjeux climatiques à Paris.</p>
+                        <p class="pedagogy-version">&#x1F4D6; Mode pédagogique - beta-traj</p>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Fin de la vue pédagogique -->
 
         </main>
     </div>

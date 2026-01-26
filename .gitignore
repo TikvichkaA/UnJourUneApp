@@ -40,8 +40,8 @@ local.properties
 *.apk
 *.aab
 
-# App 21 (privé)
-21/
-
 # Windows artifacts
 nul
+
+# Version pedagogique beta-traj (prive)
+beta-traj-pedagogique/

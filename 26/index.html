@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ReVie - Trouvez une seconde vie pour vos objets</title>
+    <meta name="description" content="Trouvez facilement où réparer, donner ou recycler vos objets près de chez vous grâce aux données ouvertes de l'ADEME.">
+    <meta name="theme-color" content="#2d5a27">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon.svg">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">♻️</span>
+                    <span class="logo-text">ReVie</span>
+                </div>
+                <p class="tagline">Donnez une seconde vie à vos objets</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Assistant Panel (collapsible on mobile) -->
+            <aside class="assistant-panel" id="assistant-panel">
+                <div class="panel-header">
+                    <h2>Comment puis-je vous aider ?</h2>
+                    <button class="panel-toggle" id="panel-toggle" aria-label="Fermer le panneau">
+                        <span></span>
+                    </button>
+                </div>
+
+                <!-- Assistant Chat -->
+                <div class="assistant-chat" id="assistant-chat">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="chat-bubble bot">
+                            <p>Bonjour ! Que souhaitez-vous faire avec votre objet ?</p>
+                            <div class="quick-actions">
+                                <button class="quick-btn" data-action="reparer">
+                                    <span class="btn-icon">🔧</span>
+                                    <span>Réparer</span>
+                                </button>
+                                <button class="quick-btn" data-action="donner">
+                                    <span class="btn-icon">🎁</span>
+                                    <span>Donner</span>
+                                </button>
+                                <button class="quick-btn" data-action="recycler">
+                                    <span class="btn-icon">♻️</span>
+                                    <span>Recycler</span>
+                                </button>
+                                <button class="quick-btn" data-action="acheter">
+                                    <span class="btn-icon">🛒</span>
+                                    <span>Acheter d'occasion</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="chat-input-section">
+                    <form class="chat-form" id="chat-form">
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="chat-input" placeholder="Posez votre question..." autocomplete="off">
+                            <button type="submit" class="chat-send-btn" aria-label="Envoyer" id="chat-send-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Location -->
+                    <div class="location-section">
+                        <button class="location-btn" id="geolocate-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M12 2v4m0 12v4m10-10h-4M6 12H2"></path>
+                            </svg>
+                            <span>Me localiser</span>
+                        </button>
+                        <span class="location-or">ou</span>
+                        <input type="text" id="location-input" placeholder="Code postal ou ville">
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-section" id="filters-section">
+                    <h3>Filtres</h3>
+
+                    <div class="filter-group">
+                        <label>Type d'action</label>
+                        <div class="filter-chips" id="action-filters">
+                            <button class="chip active" data-filter="all">Tous</button>
+                            <button class="chip" data-filter="reparer">Réparer</button>
+                            <button class="chip" data-filter="donner">Donner</button>
+                            <button class="chip" data-filter="recycler">Recycler</button>
+                            <button class="chip" data-filter="acheter">Occasion</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Type d'objet</label>
+                        <div class="filter-chips" id="object-filters">
+                            <button class="chip active" data-filter="all">Tous</button>
+                            <button class="chip" data-filter="electromenager">Électroménager</button>
+                            <button class="chip" data-filter="textile">Textile</button>
+                            <button class="chip" data-filter="mobilier">Mobilier</button>
+                            <button class="chip" data-filter="velo">Vélo</button>
+                            <button class="chip" data-filter="numerique">Numérique</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Distance : <span id="distance-value">20</span> km</label>
+                        <input type="range" id="distance-slider" min="1" max="50" value="20" class="slider">
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Map Container -->
+            <div class="map-container">
+                <div id="map"></div>
+
+                <!-- Map Controls -->
+                <div class="map-controls">
+                    <button class="map-control-btn" id="zoom-in" aria-label="Zoom avant">+</button>
+                    <button class="map-control-btn" id="zoom-out" aria-label="Zoom arriere">-</button>
+                    <button class="map-control-btn" id="center-map" aria-label="Recentrer">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 2v4m0 12v4m10-10h-4M6 12H2"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Results Counter -->
+                <div class="results-counter" id="results-counter">
+                    <span id="results-count">0</span> acteurs trouvés
+                </div>
+
+                <!-- Mobile Toggle Button -->
+                <button class="mobile-assistant-btn" id="mobile-assistant-btn" aria-label="Ouvrir l'assistant">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Actor Details Panel -->
+            <aside class="details-panel" id="details-panel">
+                <button class="details-close" id="details-close" aria-label="Fermer">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="details-content" id="details-content">
+                    <!-- Filled by JS -->
+                </div>
+            </aside>
+
+            <!-- Results List (Mobile) -->
+            <div class="results-list-container" id="results-list-container">
+                <div class="results-header">
+                    <h3>Résultats (<span id="list-count">0</span>)</h3>
+                    <button class="toggle-view" id="toggle-view">
+                        <span>Voir la carte</span>
+                    </button>
+                </div>
+                <div class="results-list" id="results-list">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p class="data-source">
+                    Données issues de <a href="https://data.ademe.fr/datasets/longue-vie-aux-objets-acteurs-de-leconomie-circulaire" target="_blank" rel="noopener">l'ADEME - Longue vie aux objets</a>
+                </p>
+                <p class="disclaimer">Les informations sont issues de données ouvertes et peuvent comporter des imprécisions.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loader">
+            <div class="loader-icon">♻️</div>
+            <p>Chargement des acteurs...</p>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

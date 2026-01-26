@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TS Compagnon - Assistant Travailleuses Sociales</title>
+    <meta name="description" content="Application compagnon pour les travailleuses sociales - Droits sociaux, bancaires, glossaire et fiches réflexes">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Barre de navigation mobile -->
+        <nav class="bottom-nav" id="bottom-nav">
+            <button class="nav-btn active" data-page="home">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Accueil</span>
+            </button>
+            <button class="nav-btn" data-page="mes-suivis">
+                <span class="nav-icon">👥</span>
+                <span class="nav-label">Suivis</span>
+            </button>
+            <button class="nav-btn" data-page="assistant">
+                <span class="nav-icon">🧭</span>
+                <span class="nav-label">Assistant</span>
+            </button>
+            <button class="nav-btn" data-page="droits-sociaux">
+                <span class="nav-icon">🛡️</span>
+                <span class="nav-label">Social</span>
+            </button>
+            <button class="nav-btn" data-page="glossaire">
+                <span class="nav-icon">📖</span>
+                <span class="nav-label">Glossaire</span>
+            </button>
+        </nav>
+
+        <!-- Contenu principal -->
+        <main class="main-content" id="main-content">
+
+            <!-- Page Accueil -->
+            <section class="page active" id="page-home">
+                <header class="home-header">
+                    <div class="app-title">
+                        <span class="app-icon">🤝</span>
+                        <div>
+                            <h1>TS Compagnon</h1>
+                            <p class="tagline">Assistant terrain</p>
+                        </div>
+                    </div>
+                    <button class="settings-btn" onclick="app.showPage('parametres')" aria-label="Paramètres">⚙️</button>
+                </header>
+
+                <!-- Recherche universelle -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="search" id="global-search" placeholder="Rechercher un dispositif, sigle, fiche..." autocomplete="off">
+                        <button class="search-clear" id="search-clear" hidden>✕</button>
+                    </div>
+                    <div class="search-results" id="search-results" hidden></div>
+                </div>
+
+                <!-- Badge mise à jour -->
+                <div class="update-badge" id="update-badge" hidden>
+                    <span>📥</span> Mise à jour disponible
+                    <button onclick="app.updateContent()">Mettre à jour</button>
+                </div>
+
+                <!-- Raccourcis -->
+                <div class="quick-access">
+                    <h2>Accès rapide</h2>
+                    <div class="quick-grid">
+                        <button class="quick-card highlight" onclick="app.showPage('assistant')">
+                            <span class="quick-icon">🧭</span>
+                            <span class="quick-label">Assistant situation</span>
+                        </button>
+                        <button class="quick-card" onclick="app.showPage('droits-sociaux')">
+                            <span class="quick-icon">🛡️</span>
+                            <span class="quick-label">Droits sociaux</span>
+                        </button>
+                        <button class="quick-card" onclick="app.showPage('droits-bancaires')">
+                            <span class="quick-icon">🏦</span>
+                            <span class="quick-label">Droits bancaires</span>
+                        </button>
+                        <button class="quick-card" onclick="app.showPage('glossaire')">
+                            <span class="quick-icon">📖</span>
+                            <span class="quick-label">Glossaire</span>
+                        </button>
+                        <button class="quick-card" onclick="app.showPage('fiches')">
+                            <span class="quick-icon">📋</span>
+                            <span class="quick-label">Fiches réflexes</span>
+                        </button>
+                        <button class="quick-card" onclick="app.showPage('favoris')">
+                            <span class="quick-icon">⭐</span>
+                            <span class="quick-label">Favoris</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Récents -->
+                <div class="recent-section" id="recent-section">
+                    <h2>Consultés récemment</h2>
+                    <div class="recent-list" id="recent-list"></div>
+                </div>
+            </section>
+
+            <!-- Page Assistant Situation -->
+            <section class="page" id="page-assistant">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1>Assistant situation</h1>
+                    <button class="assistant-reset-btn" onclick="app.resetAssistant()" title="Recommencer">↺</button>
+                </header>
+
+                <!-- Sélection personne suivie (pour intégration future) -->
+                <div class="assistant-person-select" id="assistant-person-select" hidden>
+                    <div class="person-select-header">
+                        <span>👤</span>
+                        <span>Lier à une personne suivie</span>
+                    </div>
+                    <select id="person-select-dropdown">
+                        <option value="">-- Sélectionner (optionnel) --</option>
+                    </select>
+                </div>
+
+                <!-- Progression -->
+                <div class="assistant-progress" id="assistant-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">Question 1</span>
+                </div>
+
+                <!-- Zone de question -->
+                <div class="assistant-question-area" id="assistant-question-area">
+                    <div class="question-card">
+                        <div class="question-icon" id="question-icon">🤔</div>
+                        <h2 class="question-text" id="question-text">Chargement...</h2>
+                        <p class="question-hint" id="question-hint"></p>
+                    </div>
+
+                    <!-- Réponses -->
+                    <div class="answers-list" id="answers-list"></div>
+
+                    <!-- Navigation -->
+                    <div class="assistant-nav">
+                        <button class="assistant-nav-btn" id="assistant-back-btn" onclick="app.assistantGoBack()" disabled>
+                            ← Précédent
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Zone de résultats -->
+                <div class="assistant-results" id="assistant-results" hidden>
+                    <div class="results-header">
+                        <span class="results-icon">✅</span>
+                        <h2>Recommandations</h2>
+                        <p class="results-subtitle">Basées sur la situation décrite</p>
+                    </div>
+
+                    <!-- Résumé de la situation -->
+                    <div class="situation-summary" id="situation-summary"></div>
+
+                    <!-- Dispositifs recommandés -->
+                    <div class="recommended-list" id="recommended-list"></div>
+
+                    <!-- Actions -->
+                    <div class="results-actions">
+                        <button class="action-btn" onclick="app.copyAssistantResults()">
+                            <span>📋</span> Copier le résumé
+                        </button>
+                        <button class="action-btn primary" onclick="app.resetAssistant()">
+                            <span>↺</span> Nouvelle évaluation
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page Mes Suivis -->
+            <section class="page" id="page-mes-suivis">
+                <header class="page-header">
+                    <h1>Mes suivis</h1>
+                    <button class="profile-btn" id="profile-btn" onclick="app.showProfileModal()">
+                        <span class="profile-icon">👤</span>
+                        <span class="profile-name" id="current-ts-name">Choisir</span>
+                    </button>
+                </header>
+
+                <!-- Message si pas de profil -->
+                <div class="no-profile-message" id="no-profile-message">
+                    <div class="no-profile-icon">👤</div>
+                    <h2>Bienvenue sur TS Compagnon</h2>
+                    <p>Pour accéder à vos suivis, veuillez d'abord sélectionner votre profil.</p>
+                    <button class="btn-primary large" onclick="app.showProfileModal()">
+                        Choisir mon profil
+                    </button>
+                </div>
+
+                <!-- Liste des suivis -->
+                <div class="suivis-container" id="suivis-container" hidden>
+                    <div class="suivis-stats" id="suivis-stats"></div>
+
+                    <div class="suivis-filters">
+                        <button class="filter-chip active" data-filter="all" onclick="app.filterSuivis('all')">Tous</button>
+                        <button class="filter-chip" data-filter="femme_isolee" onclick="app.filterSuivis('femme_isolee')">Femmes isolées</button>
+                        <button class="filter-chip" data-filter="famille" onclick="app.filterSuivis('famille')">Familles</button>
+                    </div>
+
+                    <div class="suivis-list" id="suivis-list"></div>
+                </div>
+            </section>
+
+            <!-- Page Détail Suivi -->
+            <section class="page" id="page-suivi-detail">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1 id="suivi-title">Fiche suivi</h1>
+                    <button class="assistant-link-btn" onclick="app.startAssistantForPerson()" title="Lancer l'assistant">🧭</button>
+                </header>
+
+                <div class="suivi-content" id="suivi-content">
+                    <!-- Identité -->
+                    <div class="suivi-section suivi-identity">
+                        <div class="suivi-avatar" id="suivi-avatar">👤</div>
+                        <div class="suivi-main-info">
+                            <h2 id="suivi-fullname">Nom Prénom</h2>
+                            <p id="suivi-chambre">Chambre 000</p>
+                        </div>
+                    </div>
+
+                    <!-- Alertes -->
+                    <div class="suivi-alerts" id="suivi-alerts"></div>
+
+                    <!-- Informations -->
+                    <div class="suivi-section">
+                        <h3>📋 Informations générales</h3>
+                        <div class="suivi-info-grid" id="suivi-info-grid"></div>
+                    </div>
+
+                    <!-- Situation administrative -->
+                    <div class="suivi-section">
+                        <h3>🛂 Situation administrative</h3>
+                        <div class="suivi-admin-grid" id="suivi-admin-grid"></div>
+                    </div>
+
+                    <!-- Enfants (si famille) -->
+                    <div class="suivi-section" id="suivi-enfants-section" hidden>
+                        <h3>👶 Enfants</h3>
+                        <div class="suivi-enfants-list" id="suivi-enfants-list"></div>
+                    </div>
+
+                    <!-- Démarches recommandées -->
+                    <div class="suivi-section">
+                        <h3>✅ Démarches recommandées</h3>
+                        <p class="section-hint">Basées sur le profil de la personne</p>
+                        <div class="suivi-demarches" id="suivi-demarches"></div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="suivi-actions">
+                    <button class="action-btn" onclick="app.callPerson()">
+                        <span>📞</span> Appeler
+                    </button>
+                    <button class="action-btn primary" onclick="app.startAssistantForPerson()">
+                        <span>🧭</span> Assistant
+                    </button>
+                </div>
+            </section>
+
+            <!-- Page Droits Sociaux -->
+            <section class="page" id="page-droits-sociaux">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1>Droits sociaux</h1>
+                </header>
+
+                <div class="category-tabs" id="social-tabs">
+                    <button class="tab-btn active" data-category="all">Tous</button>
+                    <button class="tab-btn" data-category="ressources">Ressources</button>
+                    <button class="tab-btn" data-category="sante">Santé</button>
+                    <button class="tab-btn" data-category="famille">Famille</button>
+                    <button class="tab-btn" data-category="urgence">Urgence</button>
+                </div>
+
+                <div class="filter-bar">
+                    <span class="filter-label">Filtres :</span>
+                    <button class="filter-chip" data-filter="frequent">Fréquent</button>
+                    <button class="filter-chip" data-filter="urgence">Urgence</button>
+                    <button class="filter-chip" data-filter="recours">Recours</button>
+                </div>
+
+                <div class="dispositifs-list" id="dispositifs-list"></div>
+            </section>
+
+            <!-- Page Droits Bancaires -->
+            <section class="page" id="page-droits-bancaires">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1>Droits bancaires</h1>
+                </header>
+
+                <div class="category-tabs" id="bancaire-tabs">
+                    <button class="tab-btn active" data-category="all">Tous</button>
+                    <button class="tab-btn" data-category="compte">Compte</button>
+                    <button class="tab-btn" data-category="fichage">Fichage</button>
+                    <button class="tab-btn" data-category="frais">Frais</button>
+                    <button class="tab-btn" data-category="modeles">Modèles</button>
+                </div>
+
+                <div class="dispositifs-list" id="bancaire-list"></div>
+            </section>
+
+            <!-- Page Glossaire -->
+            <section class="page" id="page-glossaire">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1>Glossaire</h1>
+                </header>
+
+                <div class="search-box inline-search">
+                    <span class="search-icon">🔍</span>
+                    <input type="search" id="glossaire-search" placeholder="Rechercher un sigle..." autocomplete="off">
+                </div>
+
+                <div class="tag-filter" id="glossaire-tags">
+                    <button class="tag-btn active" data-tag="all">Tous</button>
+                    <button class="tag-btn" data-tag="social">Social</button>
+                    <button class="tag-btn" data-tag="bancaire">Bancaire</button>
+                    <button class="tag-btn" data-tag="sante">Santé</button>
+                </div>
+
+                <div class="glossaire-list" id="glossaire-list"></div>
+            </section>
+
+            <!-- Page Fiches Réflexes -->
+            <section class="page" id="page-fiches">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1>Fiches réflexes</h1>
+                </header>
+
+                <p class="page-intro">Check-lists actionnables pour les situations terrain courantes.</p>
+
+                <div class="category-tabs" id="fiches-tabs">
+                    <button class="tab-btn active" data-category="all">Toutes</button>
+                    <button class="tab-btn" data-category="urgence">Urgence</button>
+                    <button class="tab-btn" data-category="ressources">Ressources</button>
+                    <button class="tab-btn" data-category="sante">Santé</button>
+                    <button class="tab-btn" data-category="administratif">Admin</button>
+                </div>
+
+                <div class="fiches-list" id="fiches-list"></div>
+            </section>
+
+            <!-- Page Favoris -->
+            <section class="page" id="page-favoris">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1>Favoris & Notes</h1>
+                </header>
+
+                <div class="favoris-tabs">
+                    <button class="tab-btn active" data-tab="favoris">Favoris</button>
+                    <button class="tab-btn" data-tab="notes">Mes notes</button>
+                </div>
+
+                <div class="tab-content active" id="tab-favoris">
+                    <div class="favoris-list" id="favoris-list">
+                        <p class="empty-state">Aucun favori pour l'instant.<br>Appuyez sur ⭐ pour ajouter un contenu.</p>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-notes">
+                    <div class="notes-list" id="notes-list">
+                        <p class="empty-state">Aucune note pour l'instant.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page Paramètres -->
+            <section class="page" id="page-parametres">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1>Paramètres</h1>
+                </header>
+
+                <div class="settings-section">
+                    <h3>Affichage</h3>
+                    <div class="setting-item">
+                        <span>Taille du texte</span>
+                        <div class="text-size-selector">
+                            <button class="size-btn" data-size="small">A</button>
+                            <button class="size-btn active" data-size="medium">A</button>
+                            <button class="size-btn" data-size="large">A</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Mode hors ligne</h3>
+                    <div class="setting-item">
+                        <span>Statut du pack essentiel</span>
+                        <span class="offline-status" id="offline-status">Chargé</span>
+                    </div>
+                    <div class="setting-item">
+                        <span>Dernière synchro</span>
+                        <span id="last-sync">-</span>
+                    </div>
+                    <button class="btn-secondary" onclick="app.forceSync()">Synchroniser maintenant</button>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Données</h3>
+                    <button class="btn-danger" onclick="app.clearFavorites()">Effacer les favoris</button>
+                    <button class="btn-danger" onclick="app.clearNotes()">Effacer les notes</button>
+                </div>
+
+                <div class="settings-section">
+                    <h3>À propos</h3>
+                    <p class="disclaimer">
+                        <strong>TS Compagnon</strong> est un outil d'aide destiné aux professionnels du travail social.<br><br>
+                        Cet outil ne remplace pas la formation, le cadre réglementaire local ni l'accompagnement institutionnel.
+                        Vérifiez toujours les informations selon votre contexte.
+                    </p>
+                    <div class="version-info">
+                        <p>Version app : <span id="app-version">1.0.0</span></p>
+                        <p>Version contenu : <span id="content-version">2026.01</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page Détail Dispositif -->
+            <section class="page" id="page-dispositif-detail">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1 id="dispositif-title">Dispositif</h1>
+                    <button class="fav-btn" id="dispositif-fav-btn" onclick="app.toggleFavorite('dispositif')" aria-label="Favori">☆</button>
+                </header>
+
+                <div class="dispositif-content" id="dispositif-content"></div>
+
+                <div class="dispositif-actions">
+                    <button class="action-btn" onclick="app.copyChecklist()">
+                        <span>📋</span> Copier check-list
+                    </button>
+                    <button class="action-btn" onclick="app.showNoteModal()">
+                        <span>📝</span> Ajouter note
+                    </button>
+                </div>
+            </section>
+
+            <!-- Page Détail Glossaire -->
+            <section class="page" id="page-glossaire-detail">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1 id="glossaire-title">Terme</h1>
+                    <button class="fav-btn" id="glossaire-fav-btn" onclick="app.toggleFavorite('glossaire')" aria-label="Favori">☆</button>
+                </header>
+
+                <div class="glossaire-content" id="glossaire-content"></div>
+            </section>
+
+            <!-- Page Détail Fiche -->
+            <section class="page" id="page-fiche-detail">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1 id="fiche-title">Fiche</h1>
+                    <button class="fav-btn" id="fiche-fav-btn" onclick="app.toggleFavorite('fiche')" aria-label="Favori">☆</button>
+                </header>
+
+                <div class="fiche-content" id="fiche-content"></div>
+
+                <div class="fiche-actions">
+                    <button class="action-btn" onclick="app.copyChecklist()">
+                        <span>📋</span> Copier check-list
+                    </button>
+                </div>
+            </section>
+
+            <!-- Page Détail Modèle -->
+            <section class="page" id="page-modele-detail">
+                <header class="page-header">
+                    <button class="back-btn" onclick="app.goBack()">←</button>
+                    <h1 id="modele-title">Modèle</h1>
+                    <button class="fav-btn" id="modele-fav-btn" onclick="app.toggleFavorite('modele')" aria-label="Favori">☆</button>
+                </header>
+
+                <div class="modele-content" id="modele-content"></div>
+
+                <div class="modele-actions">
+                    <button class="action-btn primary" onclick="app.copyModele()">
+                        <span>📋</span> Copier le texte
+                    </button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Modal Note -->
+    <div class="modal" id="note-modal" hidden>
+        <div class="modal-overlay" onclick="app.closeNoteModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajouter une note</h3>
+                <button class="modal-close" onclick="app.closeNoteModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="note-textarea" placeholder="Votre note personnelle..." rows="5"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="app.closeNoteModal()">Annuler</button>
+                <button class="btn-primary" onclick="app.saveNote()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Profil TS -->
+    <div class="modal" id="profile-modal" hidden>
+        <div class="modal-overlay" onclick="app.closeProfileModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>👤 Mon profil</h3>
+                <button class="modal-close" onclick="app.closeProfileModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-hint">Sélectionnez votre nom pour accéder à vos suivis.</p>
+                <div class="profile-list" id="profile-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Bouton retour en haut -->
+    <button class="scroll-top-btn" id="scroll-top-btn" aria-label="Retour en haut">↑</button>
+
+    <script src="config.js"></script>
+    <script src="data.js"></script>
+    <script src="dataService.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Enregistrement du Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('SW enregistré'))
+                    .catch(err => console.log('SW erreur:', err));
+            });
+        }
+    </script>
+</body>
+</html>

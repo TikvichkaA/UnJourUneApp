@@ -1,0 +1,9 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="96" fill="#2d5a27"/>
+  <circle cx="256" cy="220" r="120" fill="none" stroke="white" stroke-width="24"/>
+  <path d="M256 100 L256 60" stroke="white" stroke-width="24" stroke-linecap="round"/>
+  <path d="M336 140 L366 110" stroke="white" stroke-width="24" stroke-linecap="round"/>
+  <path d="M176 140 L146 110" stroke="white" stroke-width="24" stroke-linecap="round"/>
+  <path d="M200 250 L240 290 L320 200" stroke="white" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <text x="256" y="420" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle">ReVie</text>
+</svg>

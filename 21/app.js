@@ -483,7 +483,7 @@ const impactsVille = [
 
 let currentScenario = "2030";
 let currentTab = "aleas";
-let isNightMode = false;
+let isPedagogyMode = false;
 let chart = null;
 let currentChart = "tropical";
 let tippingVersion = 'A';
@@ -523,21 +523,70 @@ function switchTab(tabId) {
 }
 
 // ============================================
-// NIGHT MODE (Mode nuit = donnees mondiales)
+// PEDAGOGY MODE (Mode pedagogique = explications detaillees)
 // ============================================
 
-function toggleNightMode() {
-    isNightMode = !isNightMode;
-    document.body.classList.toggle('night-mode', isNightMode);
+function togglePedagogyMode() {
+    isPedagogyMode = !isPedagogyMode;
+    document.body.classList.toggle('pedagogy-mode', isPedagogyMode);
 
-    const nightIcon = document.getElementById('night-icon');
-    if (nightIcon) {
-        // Switch between moon and sun SVG
-        if (isNightMode) {
-            nightIcon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
-        } else {
-            nightIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    const btn = document.getElementById('pedagogy-btn');
+    if (btn) {
+        btn.classList.toggle('active', isPedagogyMode);
+    }
+
+    // Elements a masquer/afficher
+    const mainNav = document.querySelector('.main-nav');
+    const sidebar = document.querySelector('.sidebar');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const pedagogyView = document.getElementById('pedagogy-view');
+
+    if (isPedagogyMode) {
+        // Masquer la navigation et les onglets normaux
+        if (mainNav) mainNav.style.display = 'none';
+        if (sidebar) sidebar.style.display = 'none';
+        tabContents.forEach(tab => tab.style.display = 'none');
+
+        // Afficher la vue pedagogique
+        if (pedagogyView) {
+            pedagogyView.style.display = 'block';
+            // Animation d'apparition
+            pedagogyView.style.opacity = '0';
+            pedagogyView.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                pedagogyView.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                pedagogyView.style.opacity = '1';
+                pedagogyView.style.transform = 'translateY(0)';
+            }, 10);
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+    } else {
+        // Restaurer la navigation et les onglets
+        if (mainNav) mainNav.style.display = '';
+        if (sidebar) sidebar.style.display = '';
+
+        // Masquer la vue pedagogique
+        if (pedagogyView) pedagogyView.style.display = 'none';
+
+        // IMPORTANT: Supprimer les styles inline sur les tab-content
+        // pour que les classes CSS reprennent le controle
+        tabContents.forEach(tab => {
+            tab.style.display = '';
+        });
+
+        // Restaurer l'onglet actif
+        const activeTab = document.querySelector('.nav-tab.active');
+        if (activeTab) {
+            const tabId = activeTab.getAttribute('data-tab');
+            switchTab(tabId);
+        } else {
+            // Par defaut, afficher le premier onglet
+            switchTab('aleas');
+        }
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
 
@@ -1221,9 +1270,9 @@ function renderImpactsTab() {
         </div>
     `;
 
-    // Global impacts section (night mode only)
+    // Global impacts section (pedagogy mode only)
     html += `
-        <div class="global-interdependencies night-only">
+        <div class="global-interdependencies pedagogy-only">
             <div class="section-header">
                 <h2 class="section-title">Impacts globaux et interdependances</h2>
                 <p class="section-subtitle">Consequences a l'echelle planetaire</p>
@@ -1578,3 +1627,86 @@ function renderTrajectoireFrise(key, traj) {
 
     return html;
 }
+
+// ============================================
+// EXPORT PDF - Page Decideurs
+// ============================================
+
+function exportDecideursPDF() {
+    // Pour l'instant, on utilise la fonction print du navigateur
+    // Une vraie implementation utiliserait une librairie comme jsPDF ou html2pdf
+
+    // Sauvegarder l'etat actuel
+    const originalTitle = document.title;
+
+    // Changer le titre pour le PDF
+    document.title = 'Resume Decideurs - Trajectoire Climatique Paris - ' + new Date().toLocaleDateString('fr-FR');
+
+    // Ajouter une classe pour le mode impression
+    document.body.classList.add('print-mode');
+
+    // Ouvrir la boite de dialogue d'impression
+    window.print();
+
+    // Restaurer l'etat
+    document.body.classList.remove('print-mode');
+    document.title = originalTitle;
+}
+
+// Style d'impression pour la page decideurs
+const printStyles = document.createElement('style');
+printStyles.textContent = `
+    @media print {
+        body.print-mode .header,
+        body.print-mode .main-nav,
+        body.print-mode .sidebar,
+        body.print-mode .footer,
+        body.print-mode .decideurs-export-btn,
+        body.print-mode .pedagogy-toggle {
+            display: none !important;
+        }
+
+        body.print-mode .app-layout {
+            display: block !important;
+        }
+
+        body.print-mode .main-content {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body.print-mode .decideurs-page {
+            max-width: 100% !important;
+            padding: 20px !important;
+        }
+
+        body.print-mode .decideurs-header {
+            background: #1e1b4b !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body.print-mode .decideurs-kpi {
+            background: rgba(255, 255, 255, 0.1) !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body.print-mode .decideurs-grid {
+            grid-template-columns: 1fr 1fr !important;
+        }
+
+        body.print-mode .timeline-line {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body.print-mode .progress-fill,
+        body.print-mode .budget-bar,
+        body.print-mode .opinion-bar {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    }
+`;
+document.head.appendChild(printStyles);

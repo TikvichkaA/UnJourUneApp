@@ -1,0 +1,44 @@
+{
+    "name": "TS Compagnon - Assistant Travailleuses Sociales",
+    "short_name": "TS Compagnon",
+    "description": "Application compagnon pour les travailleuses sociales - Droits sociaux, bancaires, glossaire et fiches réflexes terrain",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#f8fafc",
+    "theme_color": "#2563eb",
+    "lang": "fr-FR",
+    "categories": ["education", "productivity", "utilities"],
+    "icons": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%232563eb' width='100' height='100' rx='20'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>🤝</text></svg>",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%232563eb' width='100' height='100' rx='20'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>🤝</text></svg>",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Droits sociaux",
+            "url": "./index.html#droits-sociaux",
+            "description": "Accéder aux guides des droits sociaux"
+        },
+        {
+            "name": "Glossaire",
+            "url": "./index.html#glossaire",
+            "description": "Consulter le glossaire des sigles"
+        },
+        {
+            "name": "Fiches réflexes",
+            "url": "./index.html#fiches",
+            "description": "Voir les fiches réflexes terrain"
+        }
+    ]
+}
