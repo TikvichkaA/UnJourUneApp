@@ -1948,6 +1948,52 @@ body.pedagogy-mode .pedagogy-only {
     gap: var(--space-md);
 }
 
+/* Bandeau statistiques impacts (inondations) */
+.impacts-stats-banner {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    color: white;
+}
+
+.impacts-stats-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-md);
+    opacity: 0.9;
+}
+
+.impacts-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-md);
+}
+
+.impacts-stat-item {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    text-align: center;
+    backdrop-filter: blur(4px);
+}
+
+.impacts-stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.impacts-stat-label {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.3;
+}
+
 .impact-card {
     background: var(--bg-white);
     border: 1px solid var(--border-default);
@@ -2372,6 +2418,174 @@ body.pedagogy-mode .pedagogy-only {
     border-radius: 50%;
 }
 
+/* ======== NOUVELLES ACTIONS PAR HORIZON ======== */
+
+.trajectoire-actions-timeline {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+}
+
+.actions-timeline-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border-default);
+}
+
+.actions-timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+}
+
+.actions-horizon-group {
+    background: var(--bg-white);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    border: 1px solid var(--border-default);
+}
+
+.actions-horizon-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+    padding-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--traj-color, #64748b);
+}
+
+.actions-horizon-year {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--traj-color, var(--text-primary));
+}
+
+.actions-horizon-count {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--bg-light);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.actions-horizon-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.action-chip {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--bg-light);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--action-color, #64748b);
+    transition: var(--transition-fast);
+    cursor: help;
+}
+
+.action-chip:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateX(2px);
+}
+
+.action-chip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+.action-chip-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Actions sans échéance */
+.actions-sans-echeance {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    background: rgba(148, 163, 184, 0.1);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--border-default);
+}
+
+.actions-sans-echeance-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border-default);
+}
+
+.actions-sans-echeance-icon {
+    font-size: 1rem;
+}
+
+.actions-sans-echeance-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    flex: 1;
+}
+
+.actions-sans-echeance-count {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--bg-white);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.actions-sans-echeance-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.action-chip-muted {
+    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.action-chip-muted:hover {
+    opacity: 1;
+}
+
+/* Tooltips pour actions */
+.action-chip[title] {
+    position: relative;
+}
+
+.action-chip[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: var(--bg-dark);
+    color: white;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    border-radius: var(--radius-sm);
+    white-space: normal;
+    max-width: 300px;
+    z-index: 100;
+    box-shadow: var(--shadow-lg);
+}
+
 /* Trajectoire Placeholder */
 .trajectoire-placeholder {
     display: flex;
@@ -2432,6 +2646,26 @@ body.pedagogy-mode .pedagogy-only {
     font-size: 0.85rem;
     color: var(--text-secondary);
     line-height: 1.5;
+}
+
+.contrainte-items {
+    margin: 0;
+    padding-left: var(--space-lg);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.contrainte-items li {
+    margin-bottom: var(--space-xs);
+}
+
+.contrainte-items li:last-child {
+    margin-bottom: 0;
+}
+
+.contrainte-items li::marker {
+    color: var(--contrainte-color, var(--text-muted));
 }
 
 /* Besoins Section */

@@ -46,27 +46,35 @@ if (typeof document !== 'undefined') {
 const scenarios = {
     ref: {
         temp: "Ref", tempNum: 0, color: "#3b82f6", year: "1976-2005",
+        // Climat moyen
+        avgTemp: 12.4, avgSummer: 19, avgWinter: 5, summerRain: 161, winterRain: 148, frostDays: 22,
+        // Extrêmes
         maxTemp: 34, tropicalNights: 8, tropicalNightsICU: 8, days30: 9, days35: 1, days40: 0,
-        cooling: 62, heating: 2332, fireRisk: 2, summerRain: 161, frostDays: 22,
-        droughtDays: 23, extremeRainDays: 3
+        cooling: 62, heating: 2332, fireRisk: 2, droughtDays: 23, extremeRainDays: 3
     },
     "2030": {
         temp: "+2°C", tempNum: 2, color: "#f59e0b", year: "2030",
+        // Climat moyen (estimations basées sur +2°C)
+        avgTemp: 14.4, avgSummer: 21, avgWinter: 7, summerRain: 154, winterRain: 155, frostDays: 14,
+        // Extrêmes
         maxTemp: 36.2, tropicalNights: 17, tropicalNightsICU: 32, days30: 15, days35: 2.2, days40: 0.2,
-        cooling: 106, heating: 2023, fireRisk: 3.3, summerRain: 154, frostDays: 14,
-        droughtDays: 28, extremeRainDays: 4
+        cooling: 106, heating: 2023, fireRisk: 3.3, droughtDays: 28, extremeRainDays: 4
     },
     "2050": {
         temp: "+2,7°C", tempNum: 2.7, color: "#ef4444", year: "2050",
+        // Climat moyen (estimations basées sur +2,7°C)
+        avgTemp: 15.1, avgSummer: 22, avgWinter: 8, summerRain: 155, winterRain: 160, frostDays: 11,
+        // Extrêmes
         maxTemp: 37.4, tropicalNights: 26, tropicalNightsICU: 48, days30: 22, days35: 4.1, days40: 0.4,
-        cooling: 163, heating: 1893, fireRisk: 8, summerRain: 155, frostDays: 11,
-        droughtDays: 32, extremeRainDays: 5
+        cooling: 163, heating: 1893, fireRisk: 8, droughtDays: 32, extremeRainDays: 5
     },
     "2100": {
         temp: "+4°C", tempNum: 4, color: "#991b1b", year: "2100",
+        // Climat moyen (estimations basées sur +4°C)
+        avgTemp: 16.4, avgSummer: 24, avgWinter: 9, summerRain: 141, winterRain: 165, frostDays: 7,
+        // Extrêmes
         maxTemp: 39.9, tropicalNights: 42, tropicalNightsICU: 63, days30: 33, days35: 8, days40: 1.5,
-        cooling: 250, heating: 1627, fireRisk: 9.3, summerRain: 141, frostDays: 7,
-        droughtDays: 38, extremeRainDays: 6
+        cooling: 250, heating: 1627, fireRisk: 9.3, droughtDays: 38, extremeRainDays: 6
     }
 };
 
@@ -181,31 +189,49 @@ const impactsData = {
             {
                 title: "Intensification des canicules",
                 icon: "&#x1F321;",
-                desc: "Risques sanitaires accrus, notamment pour les personnes vulnerables (personnes agees, enfants, malades chroniques). Les nuits chaudes empechent la recuperation.",
+                desc: "Risques sanitaires accrus, notamment pour les personnes vulnérables (personnes âgées, enfants, malades chroniques). Les nuits chaudes empêchent la récupération.",
                 data: { label: "Nuits tropicales", ref: 8, "2030": 17, "2050": 26, "2100": 42 }
             },
             {
-                title: "Surchauffe des batiments",
+                title: "Augmentation des besoins de rafraîchissement",
+                icon: "&#x2744;",
+                desc: "Recours de plus en plus fréquent et généralisé à la climatisation en raison de l'augmentation de périodes de fortes chaleurs et leurs implications sur le confort thermique et la santé des Parisiens et des personnels.",
+                data: { label: "Degrés-jours climatisation", ref: 62, "2030": 106, "2050": 163, "2100": 250 }
+            },
+            {
+                title: "Risque sur la santé",
+                icon: "&#x1F3E5;",
+                desc: "Coups de chaud voire hyperthermie, déshydratation, fatigue, troubles du sommeil, maladies cardio-vasculaires, respiratoires, infectieuses etc. Certains publics sont particulièrement vulnérables : personnes âgées, nourrissons, enfants, malades ou sous certains traitements, personnes précaires, travailleurs exposés.",
+                data: null
+            },
+            {
+                title: "Surchauffe des bâtiments",
                 icon: "&#x1F3EB;",
-                desc: "Tous les batiments seront a risque, surtout les batiments anciens ou mal isoles : ecoles, creches, EHPAD, logements, accueil du public.",
-                data: { label: "Besoin climatisation (DJ)", ref: 62, "2030": 106, "2050": 163, "2100": 250 }
-            },
-            {
-                title: "Baisse de l'attractivite",
-                icon: "&#x1F3DB;",
-                desc: "Avec des etes caniculaires et une ville peu adaptee, baisse de l'attractivite touristique et economique, risques sanitaires dans l'espace public.",
+                desc: "Tous les bâtiments seront à risque, surtout les bâtiments anciens ou mal isolés : écoles, crèches, EHPAD, logements, accueil du public.",
                 data: null
             },
             {
-                title: "Stress thermique vegetation",
-                icon: "&#x1F333;",
-                desc: "La surchauffe impacte fortement les espaces verts et la biodiversite urbaine, reduisant leur capacite de rafraichissement.",
-                data: null
-            },
-            {
-                title: "Perturbation des reseaux",
+                title: "Perturbation des réseaux énergétiques",
                 icon: "&#x26A1;",
-                desc: "La chaleur augmente les dommages sur certains reseaux (electrique, transports), renforces par l'augmentation de la demande de climatisation.",
+                desc: "Augmentation des dommages et risques de dysfonctionnements sur certains réseaux : montées de charges en cas de surconsommation de climatisation, défaillance de certains composants sensibles à la chaleur, dysfonctionnement en cas de dépassement de seuil de température (34°C de l'air), voire risques d'incendies, coupures d'électricité pour des quartiers entiers. Ces dysfonctionnements peuvent avoir des effets en cascade et impacter des services essentiels : hôpitaux, EHPAD, écoles dont les groupes électrogènes peuvent eux-mêmes être défaillants.",
+                data: { label: "Temp. max moyenne", ref: 34, "2030": 36.2, "2050": 37.4, "2100": 39.9 }
+            },
+            {
+                title: "Perturbation des transports",
+                icon: "&#x1F687;",
+                desc: "Réseau de transport parisien fragilisé face à la surchauffe des infrastructures, des pannes techniques et des ralentissements, notamment sur les réseaux ferroviaires et routiers. Les activités extérieures, la marche et le vélo sont également plus éprouvants et risqués pour la santé. Les épisodes caniculaires imposent une adaptation de l'organisation et de l'exploitation du réseau (horaires, maintenance, gestion de crise), entraînant des coûts supplémentaires.",
+                data: null
+            },
+            {
+                title: "Baisse de l'attractivité",
+                icon: "&#x1F3DB;",
+                desc: "Avec des étés caniculaires et une ville peu adaptée, baisse de l'attractivité touristique et économique, risques sanitaires dans l'espace public.",
+                data: null
+            },
+            {
+                title: "Stress thermique végétation",
+                icon: "&#x1F333;",
+                desc: "La surchauffe impacte fortement les espaces verts et la biodiversité urbaine, réduisant leur capacité de rafraîchissement.",
                 data: null
             }
         ]
@@ -214,97 +240,128 @@ const impactsData = {
         title: "Inondations",
         color: "#3b82f6",
         icon: "&#x1F30A;",
+        stats: [
+            { value: "14/20", label: "arrondissements en zone inondable" },
+            { value: "110 000", label: "Parisiens en zone inondable" },
+            { value: "150 000", label: "salariés en zone inondable" },
+            { value: "280 000", label: "Parisiens impactés indirectement" },
+            { value: "30 Mds€", label: "dégâts estimés en IDF (OCDE)" }
+        ],
         impacts: [
             {
                 title: "Dommages aux infrastructures",
                 icon: "&#x1F687;",
-                desc: "Les infrastructures souterraines (metro, parkings, reseaux) et de transport sont particulierement vulnerables aux inondations.",
+                desc: "Les infrastructures souterraines (métro, parkings, réseaux) et de transport sont particulièrement vulnérables aux inondations.",
                 data: null
             },
             {
-                title: "Perturbation economique",
+                title: "Perturbation des réseaux énergétiques",
+                icon: "&#x26A1;",
+                desc: "Les inondations peuvent endommager les infrastructures énergétiques, comme les postes électriques, sous-stations ou réseaux de chaleur, provoquant pannes, courts-circuits et interruptions de service. Les opérations de réparation peuvent s'avérer très complexes. Ces dysfonctionnements ont des effets en cascade sur d'autres services essentiels, tels que l'eau, l'assainissement, les transports et les bâtiments.",
+                data: null
+            },
+            {
+                title: "Perturbation économique",
                 icon: "&#x1F4BC;",
-                desc: "Interruption des activites economiques, pertes pour les commerces et entreprises, couts de reparation.",
+                desc: "Interruption des activités économiques, pertes pour les commerces et entreprises, coûts de réparation.",
                 data: null
             },
             {
                 title: "Perturbation services publics",
                 icon: "&#x1F3E5;",
-                desc: "Ecoles, hopitaux, services administratifs peuvent etre inaccessibles ou dysfonctionnels.",
+                desc: "Écoles, hôpitaux, services administratifs peuvent être inaccessibles ou dysfonctionnels.",
                 data: null
             },
             {
                 title: "Saturation assainissement",
                 icon: "&#x1F6B0;",
-                desc: "Les reseaux d'assainissement peuvent etre satures lors d'evenements pluvieux intenses.",
-                data: { label: "Jours precip. extremes", ref: 3, "2030": 4, "2050": 5, "2100": 6 }
+                desc: "Les réseaux d'assainissement peuvent être saturés lors d'événements pluvieux intenses.",
+                data: { label: "Jours précip. extrêmes", ref: 3, "2030": 4, "2050": 5, "2100": 6 }
             },
             {
                 title: "Risques sanitaires",
                 icon: "&#x26A0;",
-                desc: "Pollution des eaux, risques de contamination, problemes d'hygiene post-inondation.",
+                desc: "Pollution des eaux, risques de contamination, problèmes d'hygiène post-inondation.",
                 data: null
             },
             {
                 title: "Gestion de crise",
                 icon: "&#x1F6A8;",
-                desc: "Necessite d'evacuation de populations, mobilisation des services d'urgence, hebergement temporaire.",
+                desc: "Nécessité d'évacuation de populations, mobilisation des services d'urgence, hébergement temporaire.",
                 data: null
             }
         ]
     },
     eau: {
-        title: "Rarefaction de l'eau",
+        title: "Raréfaction de l'eau",
         color: "#06b6d4",
         icon: "&#x1F4A7;",
         impacts: [
             {
                 title: "Tension approvisionnement",
                 icon: "&#x1F6B0;",
-                desc: "Difficultes croissantes pour assurer l'approvisionnement en eau potable en periode de secheresse.",
-                data: { label: "Jours de secheresse", ref: 23, "2030": 28, "2050": 32, "2100": 38 }
+                desc: "Difficultés croissantes pour assurer l'approvisionnement en eau potable en période de sécheresse.",
+                data: { label: "Jours de sécheresse", ref: 23, "2030": 28, "2050": 32, "2100": 38 }
+            },
+            {
+                title: "Risque sanitaire",
+                icon: "&#x1F9EA;",
+                desc: "Dégradation de la qualité sanitaire de la ressource en eau avec le développement de microbes et l'augmentation de la concentration en polluants.",
+                data: null
             },
             {
                 title: "Baisse des nappes",
                 icon: "&#x2B07;",
-                desc: "Les nappes phreatiques se rechargent moins, affectant les reserves strategiques.",
+                desc: "Les nappes phréatiques se rechargent moins, affectant les réserves stratégiques.",
+                data: null
+            },
+            {
+                title: "Effets dominos",
+                icon: "&#x1F4A5;",
+                desc: "Un dysfonctionnement des réseaux d'eau peut générer des effets domino sur de nombreux systèmes urbains interdépendants, notamment les réseaux énergétiques (réseau de froid, production électrique), les espaces verts, les dispositifs de rafraîchissement de l'espace public (fontaines, brumisateurs), les bâtiments et leurs usagers (climatisation, hygiène), l'alimentation des lacs et rivières, la navigation, les écosystèmes ainsi que certains services essentiels comme la santé, la lutte contre les incendies ou l'assainissement.",
                 data: null
             },
             {
                 title: "Conflits d'usages",
                 icon: "&#x1F91D;",
-                desc: "Competition accrue entre usages : eau potable, agriculture, industrie, espaces verts, loisirs.",
+                desc: "La raréfaction de l'eau entraîne une compétition accrue entre les usages – eau potable, arrosage des espaces verts, loisirs, industries, systèmes énergétiques, agriculture etc. – renforçant les tensions sur la gestion de la ressource. En cas de raréfaction, l'utilisation des eaux souterraines peut générer des conflits entre les besoins urbains, agricoles et environnementaux. Le réseau d'eau non potable présente une vulnérabilité élevée, car il n'est pas considéré comme prioritaire en période de tension.",
                 data: null
             }
         ]
     },
     biodiversite: {
-        title: "Alteration biodiversite",
+        title: "Altération biodiversité",
         color: "#22c55e",
         icon: "&#x1F33F;",
         impacts: [
             {
-                title: "Mortalite des especes",
+                title: "Mortalité des espèces",
                 icon: "&#x1F3F4;",
-                desc: "Augmentation des especes malades ou mourant a cause du stress thermique et hydrique.",
+                desc: "Augmentation des espèces malades ou mourant à cause du stress thermique et hydrique.",
                 data: null
             },
             {
-                title: "Especes invasives",
+                title: "Espèces invasives",
                 icon: "&#x1F41C;",
-                desc: "Proliferation d'especes invasives et de ravageurs favorises par le rechauffement.",
+                desc: "Prolifération d'espèces invasives et de ravageurs favorisés par le réchauffement.",
                 data: null
             },
             {
-                title: "Desequilibre Seine",
+                title: "Déséquilibre des milieux aquatiques",
                 icon: "&#x1F41F;",
-                desc: "Desequilibre de l'ecosysteme de la Seine : temperature de l'eau, oxygenation, especes.",
+                desc: "Dégradation de la qualité de l'eau de la Seine, des canaux et des plans d'eau des Parcs et Jardins, augmentation de la température de l'eau, oxygénation, dégradation de l'habitat de certaines espèces etc.",
                 data: null
             },
             {
-                title: "Perte services ecosystemiques",
+                title: "Dégradation des habitats",
+                icon: "&#x1F3DE;",
+                desc: "Fragmentation des habitats naturels impactant les déplacements et les lieux de reproduction, diminution des ressources alimentaires, augmentation des pollutions.",
+                data: null
+            },
+            {
+                title: "Perte services écosystémiques",
                 icon: "&#x1F343;",
-                desc: "Diminution des services rendus par la nature : rafraichissement, regulation, pollinisation.",
+                desc: "Diminution des services rendus par la nature : rafraîchissement, régulation, pollinisation.",
                 data: null
             }
         ]
@@ -317,21 +374,46 @@ const impactsData = {
 
 const trajectoiresData = {
     surchauffe: {
-        title: "Trajectoire face a la surchauffe",
+        title: "Trajectoire face à la surchauffe",
         color: "#ef4444",
         icon: "&#x1F321;",
         risques: [
-            { horizon: "2030", niveau: 2, label: "Canicules plus frequentes" },
+            { horizon: "2030", niveau: 2, label: "Canicules plus fréquentes" },
             { horizon: "2050", niveau: 3, label: "Canicules intenses et longues" },
-            { horizon: "2100", niveau: 4, label: "Etes caniculaires chroniques" }
+            { horizon: "2100", niveau: 4, label: "Étés caniculaires chroniques" }
         ],
-        actions: [
-            { type: "verte", label: "Vegetalisation des cours d'ecoles", status: "en_cours" },
-            { type: "verte", label: "Plan Arbre (170 000 arbres)", status: "en_cours" },
-            { type: "bleue", label: "Fontaines et brumisateurs", status: "en_cours" },
-            { type: "grise", label: "Renovation thermique des batiments", status: "en_cours" },
-            { type: "orga", label: "Plan canicule", status: "operationnel" },
-            { type: "orga", label: "Ilots de fraicheur", status: "en_cours" }
+        actionsDatées: [
+            // 2026
+            { shortName: "40 000 m² de toitures réfléchissantes", fullName: "Poser une peinture réfléchissante sur 40 000 m² de toitures pour les établissements accueillant du public", horizon: "2026", type: "gris" },
+            { shortName: "3 forêts urbaines créées", fullName: "Créer 3 forêts urbaines", horizon: "2026", type: "vert" },
+            // 2030
+            { shortName: "Protections solaires 100% bâtiments sensibles", fullName: "Équiper 100 % des bâtiments municipaux sensibles de protections solaires", horizon: "2030", type: "gris" },
+            { shortName: "100 % des résidences seniors adaptées", fullName: "Rénover et adapter à la chaleur 100 % des résidences senior du CASVP", horizon: "2030", type: "gris" },
+            { shortName: "100% des crèches et écoles adaptées", fullName: "Protéger 100 % des crèches et écoles de la chaleur", horizon: "2030", type: "gris" },
+            { shortName: "Cours Oasis généralisées", fullName: "Cours Oasis dans toutes les crèches, écoles et collèges", horizon: "2030", type: "vert" },
+            { shortName: "Espaces refuge dans les crèches et écoles", fullName: "Créer des espaces de refuge contre la chaleur dans les crèches et écoles", horizon: "2030", type: "gris" },
+            { shortName: "1 000 toits anti-surchauffe", fullName: "Développer un programme « 1 000 toits anti surchauffe »", horizon: "2030", type: "gris" },
+            { shortName: "170 000 arbres plantés", fullName: "Planter 170 000 arbres", horizon: "2030", type: "vert" },
+            { shortName: "Ombrages dans l'espace public renforcés", fullName: "Renforcer les dispositifs d'ombrage artificiel dans l'espace public", horizon: "2030", type: "gris" },
+            { shortName: "120 fontaines brumisantes", fullName: "Installer 120 nouvelles fontaines brumisantes", horizon: "2030", type: "bleu" },
+            { shortName: "Observatoire thermique pour l'ICU", fullName: "Développer un observatoire thermique pour modéliser l'îlot de chaleur urbain", horizon: "2030", type: "orga" },
+            // 2040
+            { shortName: "+300 ha d'espaces verts", fullName: "Ouvrir au public 300 ha d'espaces verts supplémentaires", horizon: "2040", type: "vert" },
+            { shortName: "20 % de végétation minimum dans les secteurs déficitaires", fullName: "Végétaliser prioritairement les secteurs déficitaires pour atteindre 20 % de végétation minimum", horizon: "2040", type: "vert" },
+            { shortName: "10 nouveaux parcs urbains", fullName: "Créer 10 parcs urbains dans les opérations d'aménagement", horizon: "2040", type: "vert" },
+            { shortName: "Réseau électrique résilient", fullName: "Investissements d'Enedis dans la résilience du réseau aux fortes chaleurs", horizon: "2040", type: "gris" },
+            // 2050
+            { shortName: "100% toits frais équipements municipaux", fullName: "Atteindre 100 % de toits frais pour les équipements municipaux", horizon: "2050", type: "gris" },
+            { shortName: "40 % du territoire désimperméabilisé", fullName: "40 % du territoire désimperméabilisé", horizon: "2050", type: "gris" },
+            { shortName: "Communication canicule renforcée", fullName: "Renforcer la communication de la Ville en cas de canicule", horizon: "2050", type: "orga" }
+        ],
+        actionsSansÉchéance: [
+            { shortName: "Ouvrir les piscines et les parcs", fullName: "Ouvrir une vingtaine de grands parcs parisiens toute la nuit & adapter les horaires des piscines", type: "orga" },
+            { shortName: "Programme Copr'Oasis", fullName: "Développer le programme Copr'Oasis", type: "gris" },
+            { shortName: "Stores, brasseurs d'air etc.", fullName: "Solutions légères de rafraîchissement du bâti (stores, brasseurs d'air)", type: "gris" },
+            { shortName: "Plan Canicule", fullName: "Plan Canicule", type: "orga" },
+            { shortName: "Exercice de crise", fullName: "Exercices de simulation de canicule et ses répercussions : coupures électriques etc.", type: "orga" },
+            { shortName: "Changements de pratique", fullName: "Changements de pratiques plus ou moins planifiés pour faire face : école dehors, climatiseurs mobiles etc.", type: "orga" }
         ]
     },
     inondations: {
@@ -340,79 +422,116 @@ const trajectoiresData = {
         icon: "&#x1F30A;",
         risques: [
             { horizon: "2030", niveau: 2, label: "Crues et ruissellement accrus" },
-            { horizon: "2050", niveau: 3, label: "Evenements pluvieux intenses" },
+            { horizon: "2050", niveau: 3, label: "Événements pluvieux intenses" },
             { horizon: "2100", niveau: 4, label: "Risque inondation majeur" }
         ],
-        actions: [
-            { type: "bleue", label: "Desimpermeabilisation des sols", status: "en_cours" },
-            { type: "bleue", label: "Bassins de retention", status: "en_cours" },
-            { type: "grise", label: "Renforcement reseaux assainissement", status: "planifie" },
-            { type: "orga", label: "Plan de Prevention des Risques", status: "operationnel" },
-            { type: "orga", label: "Exercices de crise", status: "en_cours" }
+        actionsDatées: [
+            // 2030
+            { shortName: "30 % de surfaces non imperméabilisées", fullName: "Atteindre 30 % de surfaces non imperméabilisées", horizon: "2030", type: "gris" },
+            { shortName: "Déconnecter 5 % des surfaces des égouts", fullName: "Déconnecter 5 % des surfaces des égouts", horizon: "2030", type: "gris" },
+            // 2050
+            { shortName: "40 % de surfaces non imperméabilisées", fullName: "Atteindre 40 % de surfaces non imperméabilisées", horizon: "2050", type: "gris" },
+            { shortName: "Déconnecter 15 % des surfaces des égouts", fullName: "Déconnecter 15 % des surfaces des égouts", horizon: "2050", type: "gris" }
+        ],
+        actionsSansÉchéance: [
+            { shortName: "Application du PPRI et du PLUb", fullName: "Suivi des dispositions du PPRI et du PLUb", type: "orga" },
+            { shortName: "Sécurisation des quais de Seine", fullName: "Fermeture et sécurisation des quais bas en cas de crue", type: "orga" },
+            { shortName: "Protections amovibles", fullName: "Mise en place de protections amovibles types batardeau ou murettes anti-crue", type: "orga" },
+            { shortName: "Sensibilisation aux risques", fullName: "Actions de sensibilisation aux bons gestes", type: "orga" },
+            { shortName: "Exercices de gestion de crise", fullName: "Exercices de crise", type: "orga" },
+            { shortName: "Gestion des crues (EPTB SGL)", fullName: "Actions de soutien d'étiage et de gestion des crues grâce aux 4 grands lacs-réservoirs de l'EPTB Seine Grands Lacs", type: "bleu" },
+            { shortName: "Surveillance du niveau de l'eau", fullName: "Pour les crues, 80 stations permettant de suivre les variations des hauteurs d'eau sur la Seine et sur ses affluents", type: "orga" }
+        ]
+    },
+    biodiversite: {
+        title: "Trajectoire face à l'altération de la biodiversité",
+        color: "#22c55e",
+        icon: "&#x1F33F;",
+        risques: [
+            { horizon: "2030", niveau: 2, label: "Stress des espèces" },
+            { horizon: "2050", niveau: 3, label: "Disparition d'espèces locales" },
+            { horizon: "2100", niveau: 4, label: "Écosystèmes dégradés" }
+        ],
+        actionsDatées: [
+            // 2030
+            { shortName: "Réseau de haies renforcé", fullName: "Augmenter les linéaires de haies afin d'atteindre 500 m à plusieurs km par arrondissement", horizon: "2030", type: "vert" },
+            { shortName: "40 espaces refuges de biodiversité", fullName: "Créer 40 nouveaux espaces refuges de biodiversité sur l'espace public", horizon: "2030", type: "vert" },
+            { shortName: "30 % de surfaces non imperméabilisées et végétalisées", fullName: "30 % de surface non imperméabilisées et végétalisées", horizon: "2030", type: "vert" },
+            { shortName: "20 nouvelles zones humides", fullName: "Réaliser 20 nouvelles zones humides, notamment dans les parcs et jardins de moins d'un hectare qui n'en disposent pas avec un maillage de 250 m et avec une palette végétale composée de 100% d'espèces régionales", horizon: "2030", type: "bleu" }
+        ],
+        actionsSansÉchéance: [
+            { shortName: "Renaturation des bois parisiens", fullName: "Poursuivre la renaturation du bois de Vincennes et du Bois de Boulogne", type: "vert" },
+            { shortName: "Essences d'arbres résilientes", fullName: "Choix des essences d'arbres adaptées aux chaleurs et au piétinement", type: "orga" }
         ]
     },
     eau: {
-        title: "Trajectoire face a la rarefaction de l'eau",
+        title: "Trajectoire face à la raréfaction de l'eau",
         color: "#06b6d4",
         icon: "&#x1F4A7;",
         risques: [
             { horizon: "2030", niveau: 2, label: "Tensions ponctuelles" },
-            { horizon: "2050", niveau: 3, label: "Stress hydrique frequent" },
-            { horizon: "2100", niveau: 4, label: "Penurie recurrente" }
+            { horizon: "2050", niveau: 3, label: "Stress hydrique fréquent" },
+            { horizon: "2100", niveau: 4, label: "Pénurie récurrente" }
         ],
-        actions: [
-            { type: "bleue", label: "Recuperation eaux de pluie", status: "en_cours" },
-            { type: "bleue", label: "Reseau d'eau non potable", status: "en_cours" },
-            { type: "orga", label: "Plan secheresse", status: "operationnel" },
-            { type: "orga", label: "Sensibilisation eco-gestes", status: "en_cours" }
-        ]
-    },
-    biodiversite: {
-        title: "Trajectoire face a l'alteration de la biodiversite",
-        color: "#22c55e",
-        icon: "&#x1F33F;",
-        risques: [
-            { horizon: "2030", niveau: 2, label: "Stress des especes" },
-            { horizon: "2050", niveau: 3, label: "Disparition d'especes locales" },
-            { horizon: "2100", niveau: 4, label: "Ecosystemes degrades" }
+        actionsDatées: [
+            // 2030
+            { shortName: "–15 % de prélèvements en eau", fullName: "Réduire les prélèvements en eau de 15 %", horizon: "2030", type: "bleu" },
+            // 2050
+            { shortName: "40 % du territoire désimperméabilisé", fullName: "40 % du territoire désimperméabilisé via des opérations de débitumisation", horizon: "2050", type: "vert" }
         ],
-        actions: [
-            { type: "verte", label: "Corridors ecologiques", status: "en_cours" },
-            { type: "verte", label: "Gestion differenciee des espaces verts", status: "operationnel" },
-            { type: "verte", label: "Plan Biodiversite", status: "operationnel" },
-            { type: "orga", label: "Choix d'especes adaptees", status: "en_cours" }
+        actionsSansÉchéance: [
+            { shortName: "Réduction des fuites réseau", fullName: "Réduire les fuites sur le réseau d'eau potable", type: "orga" },
+            { shortName: "Optimisation de l'eau non potable", fullName: "Réduire de 20 % les prélèvements d'eau non potable", type: "orga" },
+            { shortName: "Qualité de l'eau et baignade", fullName: "Améliorer la qualité de l'eau de la Seine et permettre la baignade", type: "bleu" },
+            { shortName: "Récupération d'eau de pluie", fullName: "Déployer des récupérateurs d'eau de pluie dans les équipements municipaux", type: "orga" },
+            { shortName: "Sobriété en eau potable", fullName: "Favoriser l'eau de pluie et l'eau non potable pour l'arrosage", type: "orga" },
+            { shortName: "Gestion étiage et crues", fullName: "Actions de soutien d'étiage et de gestion des crues par l'EPTB Seine Grands Lacs", type: "bleu" },
+            { shortName: "Paiements pour services environnementaux", fullName: "Actions préventives de paiement pour services environnementaux sur les aires de captages par Eau de Paris", type: "orga" }
         ]
     }
 };
 
 const contraintesData = [
     {
-        id: "financieres",
-        title: "Contraintes financieres",
-        icon: "&#x1F4B0;",
-        color: "#f59e0b",
-        desc: "Certaines solutions d'adaptation necessitent des volumes financiers tres significatifs. Enjeu de perennisation de budgets encore incertains."
-    },
-    {
         id: "techniques",
-        title: "Contraintes techniques",
+        title: "Contraintes techniques / connaissance",
         icon: "&#x1F527;",
         color: "#6366f1",
-        desc: "Questions de faisabilite et de complexite technique pour certaines solutions innovantes."
+        items: [
+            "Absence d'indicateur sur l'habitabilité du bâti existant",
+            "Manque de maîtrise de certaines solutions techniques pour le confort d'été encore peu déployables",
+            "Contraintes associées aux réhabilitations et le tout ou rien quand il est difficile d'intervenir (par exemple sur une verrière)"
+        ]
     },
     {
-        id: "organisationnelles",
-        title: "Contraintes organisationnelles",
-        icon: "&#x1F4CB;",
-        color: "#ec4899",
-        desc: "Certaines solutions sont complexes a mettre en oeuvre. Ex: renover les ecoles necessite de les fermer plus d'un an, reloger les enfants, gerer les canicules pendant les travaux."
+        id: "financieres",
+        title: "Financement et besoins humains",
+        icon: "&#x1F4B0;",
+        color: "#f59e0b",
+        items: [
+            "Incertitudes sur la continuité stratégique et financière de certains dispositifs comme ERP+",
+            "Besoins humains insuffisants pour la rénovation de l'ensemble du parc"
+        ]
     },
     {
         id: "coordination",
-        title: "Contraintes de coordination",
+        title: "Coordination interne et externe",
         icon: "&#x1F91D;",
         color: "#14b8a6",
-        desc: "Necessite d'actions coherentes entre acteurs, synergies a construire, arbitrages entre objectifs parfois contraires (ex: ABF vs adaptation des toits)."
+        items: [
+            "Enjeux patrimoniaux (ABF) quand façade extérieure pour confort d'été par exemple avec les stores",
+            "Temporalité longue et complexité des projets de rénovation globale : dialogue, démographie, études travaux",
+            "Marché : disponibilité des matériaux, manque d'attractivité des marchés publics de la Ville"
+        ]
+    },
+    {
+        id: "pratiques",
+        title: "Contraintes de pratiques",
+        icon: "&#x1F3EB;",
+        color: "#ec4899",
+        items: [
+            "Le « rythme » de l'école, dans lequel à chaque classe d'élèves correspond une classe / pièce dédiée, freine le recours aux classes plus fraîches"
+        ]
     }
 ];
 
@@ -623,24 +742,22 @@ function renderIndicators() {
 
     const categories = [
         {
-            title: "Indicateurs d'extremes climatiques",
-            subtitle: "Evenements meteorologiques intenses",
+            title: "Indicateurs d'extrêmes climatiques",
+            subtitle: "Événements météorologiques intenses",
             indicators: [
                 { key: 'days30', label: 'Jours > 30°C', value: s.days30, color: '#f97316' },
                 { key: 'days35', label: 'Jours > 35°C', value: s.days35, color: '#dc2626' },
-                { key: 'days40', label: 'Jours > 40°C', value: s.days40, color: '#7f1d1d' },
                 { key: 'tropicalNights', label: 'Nuits tropicales', value: s.tropicalNights, color: '#ef4444' },
                 { key: 'maxTemp', label: 'Temp. max record', value: s.maxTemp, unit: '°C', color: '#991b1b' },
                 { key: 'fireRisk', label: 'Risque incendie', value: s.fireRisk, color: '#ea580c' }
             ]
         },
         {
-            title: "Confort thermique des batiments",
-            subtitle: "Evolution des besoins energetiques",
+            title: "Confort thermique des bâtiments",
+            subtitle: "Évolution des besoins énergétiques",
             indicators: [
                 { key: 'cooling', label: 'Besoin climatisation', value: s.cooling, unit: 'DJ', color: '#0ea5e9' },
-                { key: 'heating', label: 'Besoin chauffage', value: s.heating, unit: 'DJ', color: '#f59e0b' },
-                { key: 'frostDays', label: 'Jours de gel', value: s.frostDays, color: '#3b82f6' }
+                { key: 'heating', label: 'Besoin chauffage', value: s.heating, unit: 'DJ', color: '#f59e0b' }
             ]
         }
     ];
@@ -649,6 +766,51 @@ function renderIndicators() {
     if (!container) return;
 
     let html = '';
+
+    // Encadré "Climat moyen" pour les scénarios futurs
+    if (currentScenario !== 'ref') {
+        const avgTempChange = (s.avgTemp - ref.avgTemp).toFixed(1);
+        const avgSummerChange = (s.avgSummer - ref.avgSummer).toFixed(0);
+        const avgWinterChange = (s.avgWinter - ref.avgWinter).toFixed(0);
+        const frostChange = ((s.frostDays - ref.frostDays) / ref.frostDays * 100).toFixed(0);
+
+        html += `
+            <div class="indicator-category climat-moyen-category" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(59, 130, 246, 0.02)); border-left: 4px solid #3b82f6;">
+                <h3 class="indicator-category-title" style="color: #3b82f6;">Climat moyen à ${s.temp}</h3>
+                <p class="indicator-category-subtitle">Évolution des moyennes climatiques par rapport à la période de référence</p>
+                <div class="indicators-grid">
+                    <div class="indicator-card">
+                        <div class="indicator-value" style="color: #ef4444">${s.avgTemp}°C</div>
+                        <div class="indicator-label">Température moyenne</div>
+                        <span class="indicator-change up">+${avgTempChange}°C</span>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-value" style="color: #f97316">${s.avgSummer}°C</div>
+                        <div class="indicator-label">Moyenne été</div>
+                        <span class="indicator-change up">+${avgSummerChange}°C</span>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-value" style="color: #3b82f6">${s.avgWinter}°C</div>
+                        <div class="indicator-label">Moyenne hiver</div>
+                        <span class="indicator-change up">+${avgWinterChange}°C</span>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-value" style="color: #06b6d4">${s.summerRain} mm</div>
+                        <div class="indicator-label">Pluie été</div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-value" style="color: #6366f1">${s.winterRain} mm</div>
+                        <div class="indicator-label">Pluie hiver</div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-value" style="color: #0ea5e9">${s.frostDays}</div>
+                        <div class="indicator-label">Jours de gel</div>
+                        <span class="indicator-change down">${frostChange}%</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 
     categories.forEach(cat => {
         html += `
@@ -1332,11 +1494,30 @@ function renderImpactsList() {
             <span class="impacts-header-icon">${threat.icon}</span>
             <div class="impacts-header-text">
                 <h3>${threat.title}</h3>
-                <p>Impacts associes a la menace - Scenario ${s.temp}</p>
+                <p>Impacts associés à la menace - Scénario ${s.temp}</p>
             </div>
         </div>
-        <div class="impacts-grid">
     `;
+
+    // Afficher les statistiques si disponibles (pour inondations)
+    if (threat.stats && threat.stats.length > 0) {
+        html += `
+            <div class="impacts-stats-banner">
+                <h4 class="impacts-stats-title">Chiffres clés</h4>
+                <div class="impacts-stats-grid">
+        `;
+        threat.stats.forEach(stat => {
+            html += `
+                <div class="impacts-stat-item">
+                    <span class="impacts-stat-value">${stat.value}</span>
+                    <span class="impacts-stat-label">${stat.label}</span>
+                </div>
+            `;
+        });
+        html += `</div></div>`;
+    }
+
+    html += `<div class="impacts-grid">`;
 
     threat.impacts.forEach(impact => {
         let dataHtml = '';
@@ -1460,12 +1641,20 @@ function renderTrajectoireTab() {
     `;
 
     contraintesData.forEach(contrainte => {
+        let itemsHtml = '';
+        if (contrainte.items && contrainte.items.length > 0) {
+            itemsHtml = `<ul class="contrainte-items">` +
+                contrainte.items.map(item => `<li>${item}</li>`).join('') +
+                `</ul>`;
+        } else if (contrainte.desc) {
+            itemsHtml = `<p class="contrainte-desc">${contrainte.desc}</p>`;
+        }
         html += `
             <div class="contrainte-card" style="--contrainte-color: ${contrainte.color}">
                 <div class="contrainte-icon">${contrainte.icon}</div>
                 <div class="contrainte-content">
                     <h4 class="contrainte-title">${contrainte.title}</h4>
-                    <p class="contrainte-desc">${contrainte.desc}</p>
+                    ${itemsHtml}
                 </div>
             </div>
         `;
@@ -1518,16 +1707,10 @@ function renderTrajectoireTab() {
 
 function renderTrajectoireFrise(key, traj) {
     const actionTypes = {
-        verte: { label: "Solution verte", color: "#22c55e" },
-        bleue: { label: "Solution bleue", color: "#3b82f6" },
-        grise: { label: "Solution grise", color: "#64748b" },
+        vert: { label: "Solution verte", color: "#22c55e" },
+        bleu: { label: "Solution bleue", color: "#3b82f6" },
+        gris: { label: "Solution grise", color: "#64748b" },
         orga: { label: "Organisationnel", color: "#a855f7" }
-    };
-
-    const statusLabels = {
-        operationnel: "Operationnel",
-        en_cours: "En cours",
-        planifie: "Planifie"
     };
 
     // Build risk cards for timeline
@@ -1547,6 +1730,69 @@ function renderTrajectoireFrise(key, traj) {
         `;
     });
 
+    // Group actions by horizon
+    const horizons = ['2026', '2030', '2040', '2050'];
+    const actionsByHorizon = {};
+    horizons.forEach(h => actionsByHorizon[h] = []);
+
+    if (traj.actionsDatées) {
+        traj.actionsDatées.forEach(action => {
+            if (actionsByHorizon[action.horizon]) {
+                actionsByHorizon[action.horizon].push(action);
+            }
+        });
+    }
+
+    // Build actions timeline section
+    let actionsTimelineHtml = '';
+    horizons.forEach(horizon => {
+        const actions = actionsByHorizon[horizon];
+        if (actions.length > 0) {
+            actionsTimelineHtml += `
+                <div class="actions-horizon-group">
+                    <div class="actions-horizon-header">
+                        <span class="actions-horizon-year">${horizon}</span>
+                        <span class="actions-horizon-count">${actions.length} action${actions.length > 1 ? 's' : ''}</span>
+                    </div>
+                    <div class="actions-horizon-list">
+            `;
+            actions.forEach(action => {
+                const type = actionTypes[action.type];
+                actionsTimelineHtml += `
+                    <div class="action-chip" style="--action-color: ${type.color}" title="${action.fullName}">
+                        <span class="action-chip-dot" style="background: ${type.color}"></span>
+                        <span class="action-chip-label">${action.shortName}</span>
+                    </div>
+                `;
+            });
+            actionsTimelineHtml += `</div></div>`;
+        }
+    });
+
+    // Build sans échéance section
+    let sansEcheanceHtml = '';
+    if (traj.actionsSansÉchéance && traj.actionsSansÉchéance.length > 0) {
+        sansEcheanceHtml = `
+            <div class="actions-sans-echeance">
+                <div class="actions-sans-echeance-header">
+                    <span class="actions-sans-echeance-icon">⏳</span>
+                    <span class="actions-sans-echeance-title">Actions sans échéance</span>
+                    <span class="actions-sans-echeance-count">${traj.actionsSansÉchéance.length}</span>
+                </div>
+                <div class="actions-sans-echeance-list">
+        `;
+        traj.actionsSansÉchéance.forEach(action => {
+            const type = actionTypes[action.type];
+            sansEcheanceHtml += `
+                <div class="action-chip action-chip-muted" style="--action-color: ${type.color}" title="${action.fullName}">
+                    <span class="action-chip-dot" style="background: ${type.color}"></span>
+                    <span class="action-chip-label">${action.shortName}</span>
+                </div>
+            `;
+        });
+        sansEcheanceHtml += `</div></div>`;
+    }
+
     let html = `
         <div class="trajectoire-card" style="--traj-color: ${traj.color}">
             <div class="trajectoire-header">
@@ -1556,11 +1802,11 @@ function renderTrajectoireFrise(key, traj) {
             <div class="trajectoire-content">
                 <div class="trajectoire-frise">
                     <div class="frise-legend-top">
-                        <span class="frise-legend-label">Intensite du risque</span>
+                        <span class="frise-legend-label">Intensité du risque</span>
                         <span class="frise-legend-scale">
                             <span class="scale-low">Faible</span>
                             <span class="scale-arrow">→</span>
-                            <span class="scale-high">Eleve</span>
+                            <span class="scale-high">Élevé</span>
                         </span>
                     </div>
                     <div class="frise-timeline-container">
@@ -1594,32 +1840,24 @@ function renderTrajectoireFrise(key, traj) {
                         ${risqueCards}
                     </div>
                 </div>
-                <div class="trajectoire-actions">
-                    <h4 class="actions-title">Actions engagees</h4>
-                    <p class="actions-note">Actions non datees - objectifs a definir</p>
-                    <div class="actions-list">
-    `;
 
-    // Group actions by type
-    traj.actions.forEach(action => {
-        const type = actionTypes[action.type];
-        html += `
-            <div class="action-item">
-                <span class="action-type-dot" style="background: ${type.color}"></span>
-                <span class="action-label">${action.label}</span>
-                <span class="action-status status-${action.status}">${statusLabels[action.status]}</span>
-            </div>
-        `;
-    });
+                <!-- Séquences d'actions par horizon -->
+                <div class="trajectoire-actions-timeline">
+                    <h4 class="actions-timeline-title">Séquences d'actions par horizon</h4>
+                    <div class="actions-timeline-grid">
+                        ${actionsTimelineHtml}
+                    </div>
+                </div>
 
-    html += `
-                    </div>
-                    <div class="actions-legend">
-                        <span class="legend-item"><span class="legend-dot" style="background: #22c55e"></span> Verte</span>
-                        <span class="legend-item"><span class="legend-dot" style="background: #3b82f6"></span> Bleue</span>
-                        <span class="legend-item"><span class="legend-dot" style="background: #64748b"></span> Grise</span>
-                        <span class="legend-item"><span class="legend-dot" style="background: #a855f7"></span> Orga</span>
-                    </div>
+                <!-- Actions sans échéance -->
+                ${sansEcheanceHtml}
+
+                <!-- Légende des types d'adaptation -->
+                <div class="actions-legend">
+                    <span class="legend-item"><span class="legend-dot" style="background: #22c55e"></span> Vert</span>
+                    <span class="legend-item"><span class="legend-dot" style="background: #3b82f6"></span> Bleu</span>
+                    <span class="legend-item"><span class="legend-dot" style="background: #64748b"></span> Gris</span>
+                    <span class="legend-item"><span class="legend-dot" style="background: #a855f7"></span> Organisationnel</span>
                 </div>
             </div>
         </div>
