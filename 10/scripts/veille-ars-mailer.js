@@ -33,7 +33,7 @@ const CONFIG = {
         'soins de support', 'douleur chronique', 'HAD', 'EMSP', 'USP', 'LISP',
         'soins palliatifs', 'unité de soins palliatifs', 'équipe mobile'
     ],
-    maxAgeDays: 7
+    maxAgeDays: 1
 };
 
 // Client Supabase admin (avec service key pour bypass RLS)
