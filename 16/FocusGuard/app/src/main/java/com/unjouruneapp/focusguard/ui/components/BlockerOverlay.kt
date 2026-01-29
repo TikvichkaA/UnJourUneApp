@@ -40,16 +40,21 @@ fun BlockerOverlayContent(
     canDismiss: Boolean,
     countdown: Int,
     onDismiss: () -> Unit,
-    onSnooze: (Int) -> Unit
+    onSnooze: (Int) -> Unit,
+    isScrollWarning: Boolean = false,
+    scrollCount: Int = 0
 ) {
+    // Different colors for scroll warning
+    val gradientStart = if (isScrollWarning) Color(0xFF8B7355) else CozyGradientStart // Warm brown for scroll
+    val gradientEnd = if (isScrollWarning) Color(0xFF6B5344) else CozyGradientEnd
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        CozyGradientStart,
-                        CozyGradientEnd
+                        gradientStart,
+                        gradientEnd
                     )
                 )
             ),
@@ -62,7 +67,7 @@ fun BlockerOverlayContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // Cozy header with soft icon
+            // Header icon - different for scroll warning
             Box(
                 modifier = Modifier
                     .size(80.dp)
@@ -71,7 +76,7 @@ fun BlockerOverlayContent(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    Icons.Default.Coffee,
+                    if (isScrollWarning) Icons.Default.SwipeVertical else Icons.Default.Coffee,
                     contentDescription = null,
                     modifier = Modifier.size(48.dp),
                     tint = CozyWarmAccent
@@ -79,13 +84,13 @@ fun BlockerOverlayContent(
             }
 
             Text(
-                text = "Petite pause ?",
+                text = if (isScrollWarning) "Doom scrolling detecte" else "Petite pause ?",
                 style = MaterialTheme.typography.headlineMedium,
                 color = CozyWarmAccent,
                 fontWeight = FontWeight.SemiBold
             )
 
-            // Friendly time message
+            // Message card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
@@ -97,19 +102,34 @@ fun BlockerOverlayContent(
                     modifier = Modifier.padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = "Tu as passe $totalMinutes min sur $appName",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = CozyWarmAccent,
-                        textAlign = TextAlign.Center
-                    )
-                    if (sessionMinutes > 0) {
+                    if (isScrollWarning) {
+                        Text(
+                            text = "Tu scrolles sur $appName depuis un moment...",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = CozyWarmAccent,
+                            textAlign = TextAlign.Center
+                        )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Cette session : $sessionMinutes min",
+                            text = "~$scrollCount scrolls detectes en quelques minutes",
                             style = MaterialTheme.typography.bodySmall,
                             color = CozyWarmAccent.copy(alpha = 0.7f)
                         )
+                    } else {
+                        Text(
+                            text = "Tu as passe $totalMinutes min sur $appName",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = CozyWarmAccent,
+                            textAlign = TextAlign.Center
+                        )
+                        if (sessionMinutes > 0) {
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = "Cette session : $sessionMinutes min",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = CozyWarmAccent.copy(alpha = 0.7f)
+                            )
+                        }
                     }
                 }
             }

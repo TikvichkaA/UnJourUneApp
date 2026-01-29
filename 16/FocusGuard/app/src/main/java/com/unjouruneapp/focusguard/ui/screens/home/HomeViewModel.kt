@@ -82,7 +82,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun requestOverlayPermission() {
-        val intent = OverlayService.getOverlaySettingsIntent()
+        val intent = OverlayService.getOverlaySettingsIntent(context)
         context.startActivity(intent)
     }
 

@@ -12,9 +12,10 @@ import com.unjouruneapp.focusguard.data.database.entity.*
         AlternativeActivity::class,
         Project::class,
         UsageLog::class,
-        UserSettings::class
+        UserSettings::class,
+        ScrollEvent::class
     ],
-    version = 1,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -25,6 +26,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun projectDao(): ProjectDao
     abstract fun usageLogDao(): UsageLogDao
     abstract fun settingsDao(): SettingsDao
+    abstract fun scrollEventDao(): ScrollEventDao
 
     companion object {
         const val DATABASE_NAME = "focus_guard_db"

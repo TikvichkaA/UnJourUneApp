@@ -38,10 +38,16 @@ npm-debug.log*
 **/build/
 local.properties
 *.apk
+!**/release/*.apk
 *.aab
+*.keystore
+*.jks
 
 # Windows artifacts
 nul
 
 # Version pedagogique beta-traj (prive)
 beta-traj-pedagogique/
+
+# Local Netlify folder
+.netlify

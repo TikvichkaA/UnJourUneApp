@@ -95,8 +95,10 @@ fun OnboardingScreen(
                     OnboardingStep.PERMISSIONS -> PermissionsStep(
                         hasUsagePermission = uiState.hasUsagePermission,
                         hasOverlayPermission = uiState.hasOverlayPermission,
+                        hasAccessibilityPermission = uiState.hasAccessibilityPermission,
                         onRequestUsagePermission = { viewModel.requestUsagePermission() },
                         onRequestOverlayPermission = { viewModel.requestOverlayPermission() },
+                        onRequestAccessibilityPermission = { viewModel.requestAccessibilityPermission() },
                         onRefresh = { viewModel.checkPermissions() },
                         onNext = { viewModel.nextStep() },
                         onBack = { viewModel.previousStep() }
@@ -376,27 +378,34 @@ private fun GoalCard(
 private fun PermissionsStep(
     hasUsagePermission: Boolean,
     hasOverlayPermission: Boolean,
+    hasAccessibilityPermission: Boolean,
     onRequestUsagePermission: () -> Unit,
     onRequestOverlayPermission: () -> Unit,
+    onRequestAccessibilityPermission: () -> Unit,
     onRefresh: () -> Unit,
     onNext: () -> Unit,
     onBack: () -> Unit
 ) {
+    // Required permissions are usage + overlay
+    // Accessibility is optional but recommended
+    val hasRequiredPermissions = hasUsagePermission && hasOverlayPermission
+
     OnboardingStepContainer(
         title = "Autorisations necessaires",
         subtitle = "FocusGuard a besoin de ces permissions pour fonctionner",
         onNext = onNext,
         onBack = onBack,
-        canProceed = hasUsagePermission && hasOverlayPermission,
-        nextLabel = if (hasUsagePermission && hasOverlayPermission) "Continuer" else "Verifier"
+        canProceed = hasRequiredPermissions,
+        nextLabel = if (hasRequiredPermissions) "Continuer" else "Verifier"
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             PermissionCard(
                 icon = Icons.Default.QueryStats,
                 title = "Acces aux statistiques",
                 description = "Pour savoir combien de temps tu passes sur chaque app",
                 isGranted = hasUsagePermission,
-                onRequest = onRequestUsagePermission
+                onRequest = onRequestUsagePermission,
+                isRequired = true
             )
 
             PermissionCard(
@@ -404,10 +413,20 @@ private fun PermissionsStep(
                 title = "Affichage par-dessus les apps",
                 description = "Pour afficher l'ecran de pause quand tu depasses ta limite",
                 isGranted = hasOverlayPermission,
-                onRequest = onRequestOverlayPermission
+                onRequest = onRequestOverlayPermission,
+                isRequired = true
             )
 
-            if (!hasUsagePermission || !hasOverlayPermission) {
+            PermissionCard(
+                icon = Icons.Default.TouchApp,
+                title = "Accessibilite (doom scrolling)",
+                description = "Pour detecter le scrolling excessif et t'aider a reprendre le controle",
+                isGranted = hasAccessibilityPermission,
+                onRequest = onRequestAccessibilityPermission,
+                isRequired = false
+            )
+
+            if (!hasUsagePermission || !hasOverlayPermission || !hasAccessibilityPermission) {
                 TextButton(
                     onClick = onRefresh,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -427,7 +446,8 @@ private fun PermissionCard(
     title: String,
     description: String,
     isGranted: Boolean,
-    onRequest: () -> Unit
+    onRequest: () -> Unit,
+    isRequired: Boolean = true
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -455,11 +475,21 @@ private fun PermissionCard(
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    if (!isRequired) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "(optionnel)",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,

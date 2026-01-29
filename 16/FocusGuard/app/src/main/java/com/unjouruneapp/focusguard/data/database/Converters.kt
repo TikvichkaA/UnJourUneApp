@@ -3,6 +3,7 @@ package com.unjouruneapp.focusguard.data.database
 import androidx.room.TypeConverter
 import com.unjouruneapp.focusguard.data.database.entity.ActivityCategory
 import com.unjouruneapp.focusguard.data.database.entity.AppCategory
+import com.unjouruneapp.focusguard.data.database.entity.ScrollSensitivity
 import com.unjouruneapp.focusguard.data.database.entity.SeverityLevel
 
 class Converters {
@@ -24,4 +25,10 @@ class Converters {
 
     @TypeConverter
     fun toSeverityLevel(value: String): SeverityLevel = SeverityLevel.valueOf(value)
+
+    @TypeConverter
+    fun fromScrollSensitivity(value: ScrollSensitivity): String = value.name
+
+    @TypeConverter
+    fun toScrollSensitivity(value: String): ScrollSensitivity = ScrollSensitivity.valueOf(value)
 }

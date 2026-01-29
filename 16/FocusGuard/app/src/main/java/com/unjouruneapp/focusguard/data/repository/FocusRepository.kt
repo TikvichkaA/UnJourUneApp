@@ -14,7 +14,8 @@ class FocusRepository @Inject constructor(
     private val activityDao: ActivityDao,
     private val projectDao: ProjectDao,
     private val usageLogDao: UsageLogDao,
-    private val settingsDao: SettingsDao
+    private val settingsDao: SettingsDao,
+    private val scrollEventDao: ScrollEventDao
 ) {
     // =====================
     // Monitored Apps
@@ -25,6 +26,8 @@ class FocusRepository @Inject constructor(
     fun getEnabledApps(): Flow<List<MonitoredApp>> = monitoredAppDao.getEnabledApps()
 
     suspend fun getEnabledAppsList(): List<MonitoredApp> = monitoredAppDao.getEnabledAppsList()
+
+    suspend fun getEnabledAppsOnce(): List<MonitoredApp> = monitoredAppDao.getEnabledAppsList()
 
     suspend fun getMonitoredApp(packageName: String): MonitoredApp? =
         monitoredAppDao.getAppByPackage(packageName)
@@ -139,6 +142,45 @@ class FocusRepository @Inject constructor(
         if (settingsDao.getSettingsOnce() == null) {
             settingsDao.insertSettings(UserSettings())
         }
+    }
+
+    // =====================
+    // Scroll Events
+    // =====================
+
+    fun getScrollEvents(days: Int): Flow<List<ScrollEvent>> {
+        val startDate = getDateMidnight(days)
+        return scrollEventDao.getEventsSince(startDate)
+    }
+
+    fun getScrollEventsForApp(packageName: String, days: Int): Flow<List<ScrollEvent>> {
+        val startDate = getDateMidnight(days)
+        return scrollEventDao.getEventsForAppSince(packageName, startDate)
+    }
+
+    suspend fun recordScrollEvent(packageName: String, scrollCount: Int, scrollSpeed: Int) {
+        val event = ScrollEvent(
+            packageName = packageName,
+            timestamp = System.currentTimeMillis(),
+            scrollCount = scrollCount,
+            scrollSpeed = scrollSpeed
+        )
+        scrollEventDao.insert(event)
+    }
+
+    suspend fun getScrollWarningCountToday(): Int {
+        val today = getDateMidnight(0)
+        return scrollEventDao.getScrollWarningCountSince(today)
+    }
+
+    suspend fun getScrollWarningCountForApp(packageName: String, days: Int): Int {
+        val startDate = getDateMidnight(days)
+        return scrollEventDao.getScrollWarningCountForApp(packageName, startDate)
+    }
+
+    suspend fun getAverageScrollSpeed(packageName: String, days: Int): Float {
+        val startDate = getDateMidnight(days)
+        return scrollEventDao.getAverageScrollSpeed(packageName, startDate) ?: 0f
     }
 
     // =====================

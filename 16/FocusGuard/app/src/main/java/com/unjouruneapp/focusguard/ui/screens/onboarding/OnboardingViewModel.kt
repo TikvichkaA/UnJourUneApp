@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.unjouruneapp.focusguard.data.database.entity.*
 import com.unjouruneapp.focusguard.data.repository.FocusRepository
 import com.unjouruneapp.focusguard.service.OverlayService
+import com.unjouruneapp.focusguard.service.ScrollDetectorService
 import com.unjouruneapp.focusguard.util.InstalledAppInfo
 import com.unjouruneapp.focusguard.util.InstalledAppsHelper
 import com.unjouruneapp.focusguard.util.UsageStatsHelper
@@ -40,6 +41,7 @@ data class OnboardingUiState(
     val selectedGoals: Set<String> = emptySet(),
     val hasUsagePermission: Boolean = false,
     val hasOverlayPermission: Boolean = false,
+    val hasAccessibilityPermission: Boolean = false,
     val suggestedActivities: List<AlternativeActivity> = emptyList(),
     val selectedActivities: Set<Int> = emptySet(),
     val customActivities: List<AlternativeActivity> = emptyList(),
@@ -144,7 +146,8 @@ class OnboardingViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 hasUsagePermission = usageStatsHelper.hasUsageStatsPermission(),
-                hasOverlayPermission = OverlayService.hasOverlayPermission(context)
+                hasOverlayPermission = OverlayService.hasOverlayPermission(context),
+                hasAccessibilityPermission = ScrollDetectorService.hasAccessibilityPermission(context)
             )
         }
     }
@@ -286,7 +289,12 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun requestOverlayPermission() {
-        val intent = OverlayService.getOverlaySettingsIntent()
+        val intent = OverlayService.getOverlaySettingsIntent(context)
+        context.startActivity(intent)
+    }
+
+    fun requestAccessibilityPermission() {
+        val intent = ScrollDetectorService.getAccessibilitySettingsIntent()
         context.startActivity(intent)
     }
 

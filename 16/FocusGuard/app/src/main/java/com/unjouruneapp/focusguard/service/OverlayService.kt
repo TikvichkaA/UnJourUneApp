@@ -62,14 +62,23 @@ class OverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
                 val packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME) ?: ""
                 val sessionMinutes = intent.getIntExtra(EXTRA_SESSION_MINUTES, 0)
                 val totalMinutes = intent.getIntExtra(EXTRA_TOTAL_MINUTES, 0)
-                showOverlay(appName, packageName, sessionMinutes, totalMinutes)
+                val isScrollWarning = intent.getBooleanExtra(EXTRA_IS_SCROLL_WARNING, false)
+                val scrollCount = intent.getIntExtra(EXTRA_SCROLL_COUNT, 0)
+                showOverlay(appName, packageName, sessionMinutes, totalMinutes, isScrollWarning, scrollCount)
             }
             ACTION_DISMISS -> dismissOverlay()
         }
         return START_NOT_STICKY
     }
 
-    private fun showOverlay(appName: String, packageName: String, sessionMinutes: Int, totalMinutes: Int) {
+    private fun showOverlay(
+        appName: String,
+        packageName: String,
+        sessionMinutes: Int,
+        totalMinutes: Int,
+        isScrollWarning: Boolean = false,
+        scrollCount: Int = 0
+    ) {
         if (!Settings.canDrawOverlays(this)) return
         if (overlayView != null) return // Already showing
 
@@ -82,7 +91,7 @@ class OverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
             val settings = repository.getSettingsOnce()
 
             withContext(Dispatchers.Main) {
-                createOverlayView(appName, sessionMinutes, totalMinutes, activities, project, settings)
+                createOverlayView(appName, sessionMinutes, totalMinutes, activities, project, settings, isScrollWarning, scrollCount)
             }
         }
     }
@@ -93,7 +102,9 @@ class OverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
         totalMinutes: Int,
         activities: List<AlternativeActivity>,
         project: Project?,
-        settings: UserSettings
+        settings: UserSettings,
+        isScrollWarning: Boolean = false,
+        scrollCount: Int = 0
     ) {
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
@@ -145,7 +156,9 @@ class OverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
                         onDismiss = { dismissOverlay() },
                         onSnooze = { snoozeMinutes ->
                             sendSnoozeAction(snoozeMinutes)
-                        }
+                        },
+                        isScrollWarning = isScrollWarning,
+                        scrollCount = scrollCount
                     )
                 }
             }
@@ -190,13 +203,16 @@ class OverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
         const val EXTRA_PACKAGE_NAME = "package_name"
         const val EXTRA_SESSION_MINUTES = "session_minutes"
         const val EXTRA_TOTAL_MINUTES = "total_minutes"
+        const val EXTRA_IS_SCROLL_WARNING = "is_scroll_warning"
+        const val EXTRA_SCROLL_COUNT = "scroll_count"
 
         fun hasOverlayPermission(context: Context): Boolean {
             return Settings.canDrawOverlays(context)
         }
 
-        fun getOverlaySettingsIntent(): Intent {
+        fun getOverlaySettingsIntent(context: Context): Intent {
             return Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
+                data = android.net.Uri.parse("package:${context.packageName}")
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
         }

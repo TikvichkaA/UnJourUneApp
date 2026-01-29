@@ -2,6 +2,7 @@ package com.unjouruneapp.focusguard.ui.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unjouruneapp.focusguard.data.database.entity.ScrollSensitivity
 import com.unjouruneapp.focusguard.data.database.entity.SeverityLevel
 import com.unjouruneapp.focusguard.data.database.entity.UserSettings
 import com.unjouruneapp.focusguard.data.repository.FocusRepository
@@ -67,6 +68,27 @@ class SettingsViewModel @Inject constructor(
     fun setShowNotifications(show: Boolean) {
         viewModelScope.launch {
             val updatedSettings = _uiState.value.settings.copy(showNotifications = show)
+            repository.updateSettings(updatedSettings)
+        }
+    }
+
+    fun setScrollDetectionEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            val updatedSettings = _uiState.value.settings.copy(scrollDetectionEnabled = enabled)
+            repository.updateSettings(updatedSettings)
+        }
+    }
+
+    fun setScrollSensitivity(sensitivity: ScrollSensitivity) {
+        viewModelScope.launch {
+            val updatedSettings = _uiState.value.settings.copy(scrollSensitivity = sensitivity)
+            repository.updateSettings(updatedSettings)
+        }
+    }
+
+    fun setScrollCooldown(minutes: Int) {
+        viewModelScope.launch {
+            val updatedSettings = _uiState.value.settings.copy(scrollCooldownMinutes = minutes)
             repository.updateSettings(updatedSettings)
         }
     }

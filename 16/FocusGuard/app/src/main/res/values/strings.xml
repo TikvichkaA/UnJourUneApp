@@ -61,7 +61,12 @@
     <string name="permission_usage_desc">FocusGuard a besoin d\'acceder aux statistiques d\'utilisation pour surveiller le temps passe sur les apps.</string>
     <string name="permission_overlay_title">Affichage par-dessus les apps</string>
     <string name="permission_overlay_desc">FocusGuard a besoin d\'afficher un ecran par-dessus les autres apps pour vous interrompre.</string>
+    <string name="permission_accessibility_title">Accessibilite (detection du scrolling)</string>
+    <string name="permission_accessibility_desc">FocusGuard utilise l\'accessibilite pour detecter le doom scrolling et vous aider a reprendre le controle.</string>
     <string name="permission_grant">Autoriser</string>
+
+    <!-- Accessibility Service -->
+    <string name="accessibility_service_description">FocusGuard detecte les patterns de scrolling excessif (doom scrolling) sur les apps que vous surveillez. Cette permission permet de vous alerter quand vous scrollez de maniere compulsive, meme si vous n\'avez pas encore atteint votre limite de temps.</string>
 
     <!-- Categories -->
     <string name="category_social">Reseaux sociaux</string>

@@ -33,9 +33,30 @@ class UsageStatsHelper @Inject constructor(
 
     /**
      * Get intent to open usage stats settings
+     * Note: ACTION_USAGE_ACCESS_SETTINGS doesn't officially support package URI,
+     * but some manufacturers honor it. We try with URI first, fallback to generic.
      */
     fun getUsageStatsSettingsIntent(): Intent {
-        return Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).apply {
+        // Try with package URI first (works on some devices)
+        return try {
+            Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).apply {
+                data = android.net.Uri.parse("package:${context.packageName}")
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+        } catch (e: Exception) {
+            // Fallback to generic settings
+            Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+        }
+    }
+
+    /**
+     * Get intent for app info settings (alternative approach for some devices)
+     */
+    fun getAppInfoSettingsIntent(): Intent {
+        return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = android.net.Uri.parse("package:${context.packageName}")
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
     }

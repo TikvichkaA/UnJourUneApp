@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.unjouruneapp.focusguard.R
+import com.unjouruneapp.focusguard.data.database.entity.ScrollSensitivity
 import com.unjouruneapp.focusguard.data.database.entity.SeverityLevel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -169,6 +170,88 @@ fun SettingsScreen(
                     }
                 }
 
+                // Scroll detection settings
+                Text(
+                    text = "Detection du doom scrolling",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        // Enable/disable
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "Activer la detection",
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                                Text(
+                                    text = "Detecte le scrolling excessif",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = uiState.settings.scrollDetectionEnabled,
+                                onCheckedChange = { viewModel.setScrollDetectionEnabled(it) }
+                            )
+                        }
+
+                        if (uiState.settings.scrollDetectionEnabled) {
+                            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+
+                            // Sensitivity
+                            Text(
+                                text = "Sensibilite",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            ScrollSensitivityOption(
+                                title = "Basse",
+                                description = "50 scrolls ou 30/min",
+                                selected = uiState.settings.scrollSensitivity == ScrollSensitivity.LOW,
+                                onClick = { viewModel.setScrollSensitivity(ScrollSensitivity.LOW) }
+                            )
+                            ScrollSensitivityOption(
+                                title = "Moyenne",
+                                description = "30 scrolls ou 20/min",
+                                selected = uiState.settings.scrollSensitivity == ScrollSensitivity.MEDIUM,
+                                onClick = { viewModel.setScrollSensitivity(ScrollSensitivity.MEDIUM) }
+                            )
+                            ScrollSensitivityOption(
+                                title = "Haute",
+                                description = "15 scrolls ou 10/min",
+                                selected = uiState.settings.scrollSensitivity == ScrollSensitivity.HIGH,
+                                onClick = { viewModel.setScrollSensitivity(ScrollSensitivity.HIGH) }
+                            )
+                            ScrollSensitivityOption(
+                                title = "Tres haute",
+                                description = "8 scrolls ou 5/min",
+                                selected = uiState.settings.scrollSensitivity == ScrollSensitivity.VERY_HIGH,
+                                onClick = { viewModel.setScrollSensitivity(ScrollSensitivity.VERY_HIGH) }
+                            )
+
+                            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+
+                            // Cooldown
+                            Text(
+                                text = "Delai entre alertes: ${uiState.settings.scrollCooldownMinutes} min",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Slider(
+                                value = uiState.settings.scrollCooldownMinutes.toFloat(),
+                                onValueChange = { viewModel.setScrollCooldown(it.toInt()) },
+                                valueRange = 1f..15f,
+                                steps = 13
+                            )
+                        }
+                    }
+                }
+
                 // App info
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -225,6 +308,38 @@ private fun SeverityOption(
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun ScrollSensitivityOption(
+    title: String,
+    description: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = onClick
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyMedium
             )
             Text(
                 text = description,

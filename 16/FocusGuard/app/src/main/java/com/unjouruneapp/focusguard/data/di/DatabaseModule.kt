@@ -2,6 +2,8 @@ package com.unjouruneapp.focusguard.data.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.unjouruneapp.focusguard.data.database.AppDatabase
 import com.unjouruneapp.focusguard.data.database.dao.*
 import dagger.Module
@@ -15,6 +17,30 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
+    private val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("""
+                CREATE TABLE IF NOT EXISTS scroll_events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    packageName TEXT NOT NULL,
+                    timestamp INTEGER NOT NULL,
+                    scrollCount INTEGER NOT NULL,
+                    scrollSpeed INTEGER NOT NULL,
+                    wasWarningShown INTEGER NOT NULL DEFAULT 1
+                )
+            """)
+        }
+    }
+
+    private val MIGRATION_2_3 = object : Migration(2, 3) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            // Add scroll detection settings columns
+            db.execSQL("ALTER TABLE user_settings ADD COLUMN scrollDetectionEnabled INTEGER NOT NULL DEFAULT 1")
+            db.execSQL("ALTER TABLE user_settings ADD COLUMN scrollSensitivity TEXT NOT NULL DEFAULT 'MEDIUM'")
+            db.execSQL("ALTER TABLE user_settings ADD COLUMN scrollCooldownMinutes INTEGER NOT NULL DEFAULT 5")
+        }
+    }
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
@@ -22,7 +48,10 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             AppDatabase.DATABASE_NAME
-        ).build()
+        )
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
@@ -48,5 +77,10 @@ object DatabaseModule {
     @Provides
     fun provideSettingsDao(database: AppDatabase): SettingsDao {
         return database.settingsDao()
+    }
+
+    @Provides
+    fun provideScrollEventDao(database: AppDatabase): ScrollEventDao {
+        return database.scrollEventDao()
     }
 }
