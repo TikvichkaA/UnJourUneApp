@@ -211,14 +211,89 @@
 
   // Simplifier le nom du produit pour la recherche
   function simplifyProductName(name) {
-    const stopWords = ['le', 'la', 'les', 'de', 'du', 'des', 'un', 'une', 'et', 'ou', 'pour', 'avec', 'sans', 'dans'];
-    return name
-      .toLowerCase()
+    // Marques connues (prioritaires dans la recherche)
+    const knownBrands = [
+      'samsung', 'apple', 'sony', 'lg', 'philips', 'bosch', 'makita', 'dewalt',
+      'ikea', 'dyson', 'tefal', 'moulinex', 'rowenta', 'delonghi', 'krups',
+      'nintendo', 'xbox', 'playstation', 'hp', 'dell', 'lenovo', 'asus', 'acer',
+      'canon', 'nikon', 'gopro', 'bose', 'jbl', 'marshall', 'sennheiser',
+      'adidas', 'nike', 'puma', 'levis', 'zara', 'mango', 'lacoste',
+      'black+decker', 'ryobi', 'karcher', 'gardena', 'stihl', 'husqvarna',
+      'whirlpool', 'electrolux', 'miele', 'siemens', 'aeg', 'hotpoint',
+      'kitchenaid', 'kenwood', 'braun', 'remington', 'babyliss', 'oral-b',
+      'lego', 'playmobil', 'barbie', 'fisher-price', 'vtech', 'chicco'
+    ];
+
+    // Types de produits génériques (à conserver)
+    const productTypes = [
+      'perceuse', 'visseuse', 'scie', 'ponceuse', 'meuleuse', 'perforateur',
+      'aspirateur', 'robot', 'lave-linge', 'lave-vaisselle', 'réfrigérateur', 'frigo',
+      'télévision', 'téléviseur', 'tv', 'écran', 'moniteur', 'tablette', 'ordinateur', 'pc', 'laptop',
+      'smartphone', 'téléphone', 'iphone', 'ipad', 'galaxy', 'watch', 'montre',
+      'casque', 'enceinte', 'barre', 'ampli', 'platine',
+      'appareil', 'caméra', 'objectif', 'drone',
+      'console', 'manette', 'jeu', 'switch',
+      'cafetière', 'machine', 'mixeur', 'blender', 'grille-pain', 'four', 'micro-ondes',
+      'canapé', 'fauteuil', 'chaise', 'table', 'bureau', 'lit', 'armoire', 'commode', 'étagère',
+      'vélo', 'trottinette', 'skateboard', 'roller',
+      'poussette', 'siège', 'berceau', 'parc',
+      'veste', 'manteau', 'pantalon', 'jean', 'robe', 'chemise', 'pull', 'baskets', 'chaussures'
+    ];
+
+    // Mots à exclure (stop words + termes techniques non pertinents)
+    const excludeWords = [
+      'le', 'la', 'les', 'de', 'du', 'des', 'un', 'une', 'et', 'ou', 'pour', 'avec', 'sans', 'dans',
+      'professional', 'pro', 'plus', 'max', 'ultra', 'premium', 'edition', 'series', 'version',
+      'neuf', 'new', 'nouveau', 'nouvelle', 'original', 'officiel', 'genuine', 'authentic',
+      'livraison', 'gratuite', 'offert', 'promo', 'solde', 'pack', 'kit', 'set', 'lot', 'bundle'
+    ];
+
+    // Patterns à supprimer (références techniques)
+    const technicalPatterns = [
+      /\b\d+[x×]\d+\b/gi,           // Dimensions (ex: 1920x1080)
+      /\b\d+\s*(mm|cm|m|kg|g|l|ml|w|wh|v|mah|hz|ghz|mhz|go|gb|to|tb|mo|mb)\b/gi, // Unités
+      /\b[a-z]{1,3}\d{3,}[a-z]*\d*\b/gi, // Références produit (ex: GSR18V-55, ABC123XYZ)
+      /\b\d{5,}\b/g,                // Longs numéros (codes EAN, références)
+      /\([^)]*\)/g,                 // Contenu entre parenthèses
+      /\[[^\]]*\]/g,                // Contenu entre crochets
+      /-{2,}/g,                     // Tirets multiples
+      /\b\d+\s*[-×x]\s*\d+\s*(ah|wh)?\b/gi // Batteries (ex: 2x2.0Ah)
+    ];
+
+    let cleaned = name.toLowerCase();
+
+    // Supprimer les patterns techniques
+    for (const pattern of technicalPatterns) {
+      cleaned = cleaned.replace(pattern, ' ');
+    }
+
+    // Nettoyer et splitter
+    const words = cleaned
       .replace(/[^\w\sàâäéèêëïîôùûüç-]/g, ' ')
       .split(/\s+/)
-      .filter(word => word.length > 2 && !stopWords.includes(word))
-      .slice(0, 5)
-      .join(' ');
+      .filter(word => word.length > 1 && !excludeWords.includes(word));
+
+    // Trouver la marque
+    let brand = words.find(w => knownBrands.includes(w)) || '';
+
+    // Trouver le type de produit
+    let productType = words.find(w => productTypes.some(pt => w.includes(pt) || pt.includes(w))) || '';
+
+    // Récupérer quelques mots clés supplémentaires (ni marque, ni type, ni exclus)
+    const additionalWords = words
+      .filter(w => w !== brand && w !== productType && w.length > 3)
+      .filter(w => !/^\d+$/.test(w)) // Exclure les nombres seuls
+      .slice(0, 2);
+
+    // Construire la requête simplifiée
+    const queryParts = [productType, brand, ...additionalWords].filter(Boolean);
+
+    // Si on n'a rien trouvé, fallback sur les 3 premiers mots significatifs
+    if (queryParts.length === 0) {
+      return words.slice(0, 3).join(' ');
+    }
+
+    return queryParts.slice(0, 3).join(' ');
   }
 
   // Intercepter le clic sur le bouton panier

@@ -40,6 +40,358 @@ if (typeof document !== 'undefined') {
 }
 
 // ============================================
+// ADMIN MODE - Édition inline des textes
+// ============================================
+
+let isAdminMode = false;
+const DATA_OVERRIDES_KEY = 'betatraj_data_overrides';
+let dataOverrides = {};
+
+// Charger les overrides depuis localStorage
+function loadOverrides() {
+    try {
+        const stored = localStorage.getItem(DATA_OVERRIDES_KEY);
+        if (stored) {
+            dataOverrides = JSON.parse(stored);
+        }
+    } catch (e) {
+        console.warn('Erreur chargement overrides:', e);
+        dataOverrides = {};
+    }
+}
+
+// Sauvegarder les overrides
+function saveOverrides() {
+    try {
+        localStorage.setItem(DATA_OVERRIDES_KEY, JSON.stringify(dataOverrides));
+    } catch (e) {
+        console.error('Erreur sauvegarde overrides:', e);
+    }
+}
+
+// Obtenir la valeur (override ou défaut)
+function getEditableValue(path, defaultValue) {
+    return dataOverrides[path] !== undefined ? dataOverrides[path] : defaultValue;
+}
+
+// Toggle mode admin
+function toggleAdminMode() {
+    isAdminMode = !isAdminMode;
+    document.body.classList.toggle('admin-mode', isAdminMode);
+
+    const banner = document.getElementById('admin-banner');
+    if (banner) {
+        banner.classList.toggle('hidden', !isAdminMode);
+    }
+
+    const btn = document.getElementById('admin-toggle-btn');
+    if (btn) {
+        btn.classList.toggle('active', isAdminMode);
+    }
+
+    // Re-render les sections éditables
+    renderTrajectoireTab();
+
+    // Attacher les événements d'édition après le rendu
+    if (isAdminMode) {
+        setTimeout(attachEditableListeners, 100);
+    }
+}
+
+// Attacher les listeners sur les éléments éditables
+function attachEditableListeners() {
+    if (!isAdminMode) return;
+
+    document.querySelectorAll('[data-editable]').forEach(el => {
+        el.setAttribute('contenteditable', 'true');
+        el.classList.add('editable');
+
+        // Éviter les doublons
+        el.removeEventListener('blur', handleEditBlur);
+        el.removeEventListener('keydown', handleEditKeydown);
+
+        el.addEventListener('blur', handleEditBlur);
+        el.addEventListener('keydown', handleEditKeydown);
+    });
+}
+
+function handleEditBlur(e) {
+    const el = e.target;
+    const path = el.getAttribute('data-editable');
+    const newValue = el.innerText.trim();
+
+    if (path && newValue) {
+        dataOverrides[path] = newValue;
+        saveOverrides();
+        showSaveIndicator();
+    }
+}
+
+function handleEditKeydown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        e.target.blur();
+    }
+    if (e.key === 'Escape') {
+        e.target.blur();
+    }
+}
+
+// Indicateur de sauvegarde
+function showSaveIndicator() {
+    const indicator = document.getElementById('save-indicator');
+    if (indicator) {
+        indicator.classList.remove('hidden');
+        indicator.classList.add('show');
+        setTimeout(() => {
+            indicator.classList.remove('show');
+            indicator.classList.add('hidden');
+        }, 2000);
+    }
+}
+
+// Réinitialiser les overrides
+function resetOverrides() {
+    if (confirm('Réinitialiser toutes les modifications ? Cette action est irréversible.')) {
+        dataOverrides = {};
+        localStorage.removeItem(DATA_OVERRIDES_KEY);
+        renderTrajectoireTab();
+        showSaveIndicator();
+    }
+}
+
+// Appliquer les overrides sur un objet de données
+function applyOverridesToData(dataObj, basePath) {
+    const clone = JSON.parse(JSON.stringify(dataObj));
+
+    Object.entries(dataOverrides).forEach(([path, value]) => {
+        if (path.startsWith(basePath + '.')) {
+            const subPath = path.substring(basePath.length + 1);
+            setNestedValue(clone, subPath, value);
+        }
+    });
+
+    return clone;
+}
+
+function setNestedValue(obj, path, value) {
+    const parts = path.split('.');
+    let current = obj;
+
+    for (let i = 0; i < parts.length - 1; i++) {
+        const key = isNaN(parts[i]) ? parts[i] : parseInt(parts[i]);
+        if (current[key] === undefined) return;
+        current = current[key];
+    }
+
+    const lastKey = isNaN(parts[parts.length - 1]) ? parts[parts.length - 1] : parseInt(parts[parts.length - 1]);
+    current[lastKey] = value;
+}
+
+// Exporter les modifications - envoie directement par email
+async function exportDataForPublication() {
+    if (Object.keys(dataOverrides).length === 0) {
+        alert('Aucune modification à enregistrer.');
+        if (isAdminMode) toggleAdminMode();
+        return;
+    }
+
+    // Fermer le mode édition
+    if (isAdminMode) toggleAdminMode();
+
+    // Appliquer les overrides sur les données originales
+    const updatedTrajectoires = applyOverridesToData(trajectoiresData, 'trajectoires');
+    const updatedContraintes = applyOverridesToData(contraintesData, 'contraintes');
+    const updatedBesoins = applyOverridesToData(besoinsData, 'besoins');
+
+    // Générer le code JS complet
+    let code = '// ============================================\n';
+    code += '// DONNÉES MISES À JOUR - Généré le ' + new Date().toLocaleString('fr-FR') + '\n';
+    code += '// Remplacer les sections correspondantes dans app.js\n';
+    code += '// ============================================\n\n';
+
+    // Trajectoires
+    code += 'const trajectoiresData = ' + JSON.stringify(updatedTrajectoires, null, 4) + ';\n\n';
+
+    // Contraintes
+    code += 'const contraintesData = ' + JSON.stringify(updatedContraintes, null, 4) + ';\n\n';
+
+    // Besoins
+    code += 'const besoinsData = ' + JSON.stringify(updatedBesoins, null, 4) + ';\n';
+
+    // Envoyer directement par email
+    await sendEmailDirectly(code);
+}
+
+// Envoi direct par email sans modale
+async function sendEmailDirectly(content) {
+    const date = new Date().toLocaleString('fr-FR');
+    const nbModifications = Object.keys(dataOverrides).length;
+
+    // Afficher indicateur
+    showSendingIndicator();
+
+    try {
+        const response = await fetch('/.netlify/functions/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: content,
+                date: date,
+                nbModifications: nbModifications
+            })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            showSuccessIndicator('Modifications envoyées !');
+        } else {
+            throw new Error(result.error || 'Erreur inconnue');
+        }
+    } catch (error) {
+        console.error('Erreur envoi email:', error);
+        showSuccessIndicator('Erreur - fichier téléchargé', true);
+        // Fallback: télécharger le fichier
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'betatraj-modifications-' + new Date().toISOString().slice(0, 10) + '.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+}
+
+// Indicateur d'envoi en cours
+function showSendingIndicator() {
+    let indicator = document.getElementById('save-indicator');
+    if (indicator) {
+        indicator.textContent = '⏳ Envoi en cours...';
+        indicator.style.background = '#3b82f6';
+        indicator.classList.remove('hidden');
+        indicator.classList.add('show');
+    }
+}
+
+// Indicateur de succès/erreur
+function showSuccessIndicator(message, isError = false) {
+    let indicator = document.getElementById('save-indicator');
+    if (indicator) {
+        indicator.textContent = isError ? '❌ ' + message : '✅ ' + message;
+        indicator.style.background = isError ? '#dc2626' : '#22c55e';
+        indicator.classList.remove('hidden');
+        indicator.classList.add('show');
+        setTimeout(() => {
+            indicator.classList.remove('show');
+            indicator.classList.add('hidden');
+            indicator.style.background = '#22c55e';
+        }, 3000);
+    }
+}
+
+// Modale d'export
+function showExportModal(content) {
+    // Créer la modale si elle n'existe pas
+    let modal = document.getElementById('export-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'export-modal';
+        modal.className = 'export-modal hidden';
+        modal.innerHTML = `
+            <div class="export-modal-content">
+                <div class="export-modal-header">
+                    <h3>Exporter les modifications</h3>
+                    <button onclick="closeExportModal()" class="export-modal-close">&times;</button>
+                </div>
+                <div class="export-modal-body">
+                    <p>Envoyez les modifications par email pour publication :</p>
+                    <textarea id="export-content" readonly></textarea>
+                </div>
+                <div class="export-modal-footer">
+                    <button onclick="sendExportByEmail()" class="export-btn-email">📧 Envoyer par email</button>
+                    <button onclick="downloadExport()" class="export-btn-download">Télécharger</button>
+                    <button onclick="closeExportModal()" class="export-btn-close">Fermer</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    document.getElementById('export-content').value = content;
+    modal.classList.remove('hidden');
+}
+
+// Envoyer par email via Netlify Function
+async function sendExportByEmail() {
+    const content = document.getElementById('export-content').value;
+    const date = new Date().toLocaleString('fr-FR');
+    const nbModifications = Object.keys(dataOverrides).length;
+
+    // Afficher indicateur de chargement
+    const btn = document.querySelector('.export-btn-email');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '⏳ Envoi en cours...';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch('/.netlify/functions/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: content,
+                date: date,
+                nbModifications: nbModifications
+            })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            alert('Email envoyé avec succès !');
+            closeExportModal();
+        } else {
+            throw new Error(result.error || 'Erreur inconnue');
+        }
+    } catch (error) {
+        console.error('Erreur envoi email:', error);
+        // Fallback: télécharger le fichier
+        alert('Erreur lors de l\'envoi automatique.\nLe fichier va être téléchargé.');
+        downloadExport();
+        closeExportModal();
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+}
+
+function closeExportModal() {
+    const modal = document.getElementById('export-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function copyExportContent() {
+    const textarea = document.getElementById('export-content');
+    textarea.select();
+    document.execCommand('copy');
+    alert('Contenu copié dans le presse-papier !');
+}
+
+function downloadExport() {
+    const content = document.getElementById('export-content').value;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'betatraj-modifications-' + new Date().toISOString().slice(0, 10) + '.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// Charger les overrides au démarrage
+loadOverrides();
+
+// ============================================
 // DATA - Climate Scenarios (TRACC 2023)
 // ============================================
 
@@ -1640,14 +1992,20 @@ function renderTrajectoireTab() {
             <div class="contraintes-grid">
     `;
 
-    contraintesData.forEach(contrainte => {
+    contraintesData.forEach((contrainte, cIdx) => {
         let itemsHtml = '';
         if (contrainte.items && contrainte.items.length > 0) {
             itemsHtml = `<ul class="contrainte-items">` +
-                contrainte.items.map(item => `<li>${item}</li>`).join('') +
+                contrainte.items.map((item, iIdx) => {
+                    const editPath = `contraintes.${cIdx}.items.${iIdx}`;
+                    const displayValue = getEditableValue(editPath, item);
+                    return `<li data-editable="${editPath}">${displayValue}</li>`;
+                }).join('') +
                 `</ul>`;
         } else if (contrainte.desc) {
-            itemsHtml = `<p class="contrainte-desc">${contrainte.desc}</p>`;
+            const editPath = `contraintes.${cIdx}.desc`;
+            const displayValue = getEditableValue(editPath, contrainte.desc);
+            itemsHtml = `<p class="contrainte-desc" data-editable="${editPath}">${displayValue}</p>`;
         }
         html += `
             <div class="contrainte-card" style="--contrainte-color: ${contrainte.color}">
@@ -1672,7 +2030,7 @@ function renderTrajectoireTab() {
             <div class="besoins-grid">
     `;
 
-    besoinsData.forEach(besoin => {
+    besoinsData.forEach((besoin, bIdx) => {
         html += `
             <div class="besoin-card" style="--besoin-color: ${besoin.color}">
                 <div class="besoin-header">
@@ -1680,7 +2038,11 @@ function renderTrajectoireTab() {
                     <h4 class="besoin-title">${besoin.title}</h4>
                 </div>
                 <ul class="besoin-list">
-                    ${besoin.items.map(item => `<li>${item}</li>`).join('')}
+                    ${besoin.items.map((item, iIdx) => {
+                        const editPath = `besoins.${bIdx}.items.${iIdx}`;
+                        const displayValue = getEditableValue(editPath, item);
+                        return `<li data-editable="${editPath}">${displayValue}</li>`;
+                    }).join('')}
                 </ul>
             </div>
         `;
@@ -1756,12 +2118,16 @@ function renderTrajectoireFrise(key, traj) {
                     </div>
                     <div class="actions-horizon-list">
             `;
-            actions.forEach(action => {
+            actions.forEach((action, idx) => {
                 const type = actionTypes[action.type];
+                // Trouver l'index original dans actionsDatées
+                const origIdx = traj.actionsDatées.findIndex(a => a.shortName === action.shortName);
+                const editPath = `trajectoires.${key}.actionsDatées.${origIdx}.shortName`;
+                const displayValue = getEditableValue(editPath, action.shortName);
                 actionsTimelineHtml += `
                     <div class="action-chip" style="--action-color: ${type.color}" title="${action.fullName}">
                         <span class="action-chip-dot" style="background: ${type.color}"></span>
-                        <span class="action-chip-label">${action.shortName}</span>
+                        <span class="action-chip-label" data-editable="${editPath}">${displayValue}</span>
                     </div>
                 `;
             });
@@ -1781,12 +2147,14 @@ function renderTrajectoireFrise(key, traj) {
                 </div>
                 <div class="actions-sans-echeance-list">
         `;
-        traj.actionsSansÉchéance.forEach(action => {
+        traj.actionsSansÉchéance.forEach((action, idx) => {
             const type = actionTypes[action.type];
+            const editPath = `trajectoires.${key}.actionsSansEcheance.${idx}.shortName`;
+            const displayValue = getEditableValue(editPath, action.shortName);
             sansEcheanceHtml += `
                 <div class="action-chip action-chip-muted" style="--action-color: ${type.color}" title="${action.fullName}">
                     <span class="action-chip-dot" style="background: ${type.color}"></span>
-                    <span class="action-chip-label">${action.shortName}</span>
+                    <span class="action-chip-label" data-editable="${editPath}">${displayValue}</span>
                 </div>
             `;
         });

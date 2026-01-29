@@ -1802,6 +1802,240 @@ function populateRecentActivity() {
 }
 
 // ============================================
+// CORRECTION IA
+// ============================================
+let correctionImageData = null;
+
+function openCorrectionModal() {
+    if (!currentExercise) return;
+
+    document.getElementById('correction-modal-overlay').classList.add('active');
+    document.getElementById('correction-modal').classList.add('active');
+
+    // Reset state
+    document.getElementById('correction-input-section').style.display = 'block';
+    document.getElementById('correction-loading').style.display = 'none';
+    document.getElementById('correction-result-section').style.display = 'none';
+    document.getElementById('correction-latex-input').value = '';
+    document.getElementById('correction-latex-preview').innerHTML = '';
+    removeImage();
+
+    // Setup live preview
+    const latexInput = document.getElementById('correction-latex-input');
+    latexInput.oninput = () => updateLatexPreview();
+}
+
+function closeCorrectionModal() {
+    document.getElementById('correction-modal-overlay').classList.remove('active');
+    document.getElementById('correction-modal').classList.remove('active');
+}
+
+function switchCorrectionTab(tab) {
+    document.querySelectorAll('.correction-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.tab === tab);
+    });
+    document.querySelectorAll('.correction-tab-content').forEach(c => {
+        c.classList.remove('active');
+    });
+    document.getElementById(`correction-tab-${tab}`).classList.add('active');
+}
+
+function updateLatexPreview() {
+    const input = document.getElementById('correction-latex-input').value;
+    const preview = document.getElementById('correction-latex-preview');
+
+    if (!input.trim()) {
+        preview.innerHTML = '<p class="preview-empty">L\'apercu apparaitra ici...</p>';
+        return;
+    }
+
+    preview.innerHTML = input;
+
+    if (typeof renderMathInElement !== 'undefined') {
+        setTimeout(() => {
+            renderMathInElement(preview, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }, 50);
+    }
+}
+
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        alert('Veuillez selectionner une image.');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        correctionImageData = e.target.result;
+        document.getElementById('correction-image-preview').src = correctionImageData;
+        document.getElementById('image-preview-container').style.display = 'block';
+        document.querySelector('.upload-placeholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeImage() {
+    correctionImageData = null;
+    document.getElementById('correction-image-input').value = '';
+    document.getElementById('correction-image-preview').src = '';
+    document.getElementById('image-preview-container').style.display = 'none';
+    document.querySelector('.upload-placeholder').style.display = 'flex';
+}
+
+async function submitCorrection() {
+    const latexInput = document.getElementById('correction-latex-input').value.trim();
+    const activeTab = document.querySelector('.correction-tab.active').dataset.tab;
+
+    const reponse = activeTab === 'latex' ? latexInput : null;
+    const image = activeTab === 'image' ? correctionImageData : null;
+
+    if (!reponse && !image) {
+        alert('Veuillez entrer une reponse ou uploader une image.');
+        return;
+    }
+
+    // Show loading
+    document.getElementById('correction-input-section').style.display = 'none';
+    document.getElementById('correction-loading').style.display = 'flex';
+    document.getElementById('correction-result-section').style.display = 'none';
+
+    try {
+        const response = await fetch('/.netlify/functions/correct', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                exercice: {
+                    id: currentExercise.id,
+                    title: currentExercise.title,
+                    enonce: currentExercise.enonce,
+                    theme: currentExercise.theme
+                },
+                reponse: reponse,
+                image: image
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Erreur serveur');
+        }
+
+        displayCorrectionResult(data.correction);
+
+    } catch (error) {
+        console.error('Correction error:', error);
+        document.getElementById('correction-loading').style.display = 'none';
+        document.getElementById('correction-input-section').style.display = 'block';
+        alert('Erreur lors de la correction: ' + error.message);
+    }
+}
+
+function displayCorrectionResult(correction) {
+    document.getElementById('correction-loading').style.display = 'none';
+    document.getElementById('correction-result-section').style.display = 'block';
+
+    const scoreEl = document.getElementById('correction-score');
+    const detailsEl = document.getElementById('correction-details');
+
+    // Score display
+    const score = correction.score ?? '?';
+    const verdictClass = correction.verdict === 'correct' ? 'success' :
+                         correction.verdict === 'partiel' ? 'partial' : 'error';
+    const verdictText = correction.verdict === 'correct' ? 'Correct !' :
+                        correction.verdict === 'partiel' ? 'Partiellement correct' : 'A revoir';
+
+    scoreEl.innerHTML = `
+        <div class="score-circle ${verdictClass}">
+            <span class="score-value">${score}</span>
+            <span class="score-max">/100</span>
+        </div>
+        <div class="score-verdict ${verdictClass}">${verdictText}</div>
+    `;
+
+    // Details
+    let detailsHtml = '';
+
+    // Points positifs
+    if (correction.points_positifs && correction.points_positifs.length > 0) {
+        detailsHtml += `
+            <div class="correction-section positifs">
+                <h4>Points positifs</h4>
+                <ul>
+                    ${correction.points_positifs.map(p => `<li>${p}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+    }
+
+    // Erreurs
+    if (correction.erreurs && correction.erreurs.length > 0) {
+        detailsHtml += `
+            <div class="correction-section erreurs">
+                <h4>Erreurs identifiees</h4>
+                ${correction.erreurs.map(e => `
+                    <div class="erreur-item">
+                        <span class="erreur-type">${e.type || 'Erreur'}</span>
+                        <p class="erreur-desc">${e.description}</p>
+                        ${e.correction ? `<p class="erreur-fix"><strong>Correction:</strong> ${e.correction}</p>` : ''}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    // Conseil
+    if (correction.conseil) {
+        detailsHtml += `
+            <div class="correction-section conseil">
+                <h4>Conseil</h4>
+                <p>${correction.conseil}</p>
+            </div>
+        `;
+    }
+
+    // Solution complete
+    if (correction.solution_complete) {
+        detailsHtml += `
+            <div class="correction-section solution">
+                <h4>Solution detaillee</h4>
+                <div class="solution-content">${correction.solution_complete}</div>
+            </div>
+        `;
+    }
+
+    detailsEl.innerHTML = detailsHtml;
+
+    // Render LaTeX in results
+    if (typeof renderMathInElement !== 'undefined') {
+        setTimeout(() => {
+            renderMathInElement(detailsEl, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }, 50);
+    }
+}
+
+function retryCorrectionModal() {
+    document.getElementById('correction-input-section').style.display = 'block';
+    document.getElementById('correction-loading').style.display = 'none';
+    document.getElementById('correction-result-section').style.display = 'none';
+}
+
+// ============================================
 // UTILITIES
 // ============================================
 // Keyboard navigation
