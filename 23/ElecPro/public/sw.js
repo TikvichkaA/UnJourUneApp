@@ -1,13 +1,20 @@
-const CACHE_NAME = 'elecpro-v1';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/vite.svg'
-];
+const CACHE_NAME = 'elecpro-v2';
+
+// Déterminer le chemin de base dynamiquement
+const getBasePath = () => {
+  const swPath = self.location.pathname;
+  return swPath.substring(0, swPath.lastIndexOf('/') + 1);
+};
 
 // Installation du service worker
 self.addEventListener('install', (event) => {
+  const basePath = getBasePath();
+  const urlsToCache = [
+    basePath,
+    basePath + 'index.html',
+    basePath + 'manifest.json'
+  ];
+
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
@@ -36,6 +43,8 @@ self.addEventListener('activate', (event) => {
 
 // Stratégie de cache: Network First avec fallback sur cache
 self.addEventListener('fetch', (event) => {
+  const basePath = getBasePath();
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
@@ -61,7 +70,7 @@ self.addEventListener('fetch', (event) => {
             }
             // Page hors ligne par défaut pour les navigations
             if (event.request.mode === 'navigate') {
-              return caches.match('/index.html');
+              return caches.match(basePath + 'index.html');
             }
           });
       })
