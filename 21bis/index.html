@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MathOral | Entraînement Oraux Concours</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
+    <link rel="apple-touch-icon" href="./icons/icon.svg">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MathOral">
+    <meta name="description" content="Application d'entraînement aux oraux de mathématiques pour les concours X, ENS, Centrale">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -426,6 +437,12 @@
                         </svg>
                         Precedent
                     </button>
+                    <button class="nav-ia" onclick="openCorrectionModal()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A2.5 2.5 0 0 0 5 15.5A2.5 2.5 0 0 0 7.5 18a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 7.5 13m9 0a2.5 2.5 0 0 0-2.5 2.5a2.5 2.5 0 0 0 2.5 2.5a2.5 2.5 0 0 0 2.5-2.5a2.5 2.5 0 0 0-2.5-2.5"/>
+                        </svg>
+                        Correction IA
+                    </button>
                     <button class="nav-next" id="btn-next" onclick="nextStep()">
                         Je me lance
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -582,7 +599,92 @@
         </div>
     </div>
 
+    <!-- Modal Correction IA -->
+    <div class="correction-modal-overlay" id="correction-modal-overlay" onclick="closeCorrectionModal()"></div>
+    <div class="correction-modal" id="correction-modal">
+        <div class="correction-modal-header">
+            <h2>Correction IA</h2>
+            <button class="modal-close" onclick="closeCorrectionModal()">&times;</button>
+        </div>
+        <div class="correction-modal-body">
+            <!-- Input Section -->
+            <div class="correction-input-section" id="correction-input-section">
+                <p class="correction-intro">Soumets ta reponse pour obtenir une correction detaillee par IA.</p>
+
+                <div class="correction-tabs">
+                    <button class="correction-tab active" data-tab="latex" onclick="switchCorrectionTab('latex')">LaTeX</button>
+                    <button class="correction-tab" data-tab="image" onclick="switchCorrectionTab('image')">Image</button>
+                </div>
+
+                <div class="correction-tab-content active" id="correction-tab-latex">
+                    <textarea id="correction-latex-input" placeholder="Ecris ta reponse en LaTeX ici...
+Exemple: Soit $f$ continue sur $[a,b]$. Par le theoreme des valeurs intermediaires..."></textarea>
+                    <div class="correction-preview">
+                        <h4>Apercu</h4>
+                        <div id="correction-latex-preview"></div>
+                    </div>
+                </div>
+
+                <div class="correction-tab-content" id="correction-tab-image">
+                    <div class="image-upload-zone" id="image-upload-zone">
+                        <input type="file" id="correction-image-input" accept="image/*" onchange="handleImageUpload(event)" hidden>
+                        <div class="upload-placeholder" onclick="document.getElementById('correction-image-input').click()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21,15 16,10 5,21"/>
+                            </svg>
+                            <p>Clique ou depose une photo de ta copie</p>
+                        </div>
+                        <div class="image-preview-container" id="image-preview-container" style="display: none;">
+                            <img id="correction-image-preview" alt="Preview">
+                            <button class="remove-image" onclick="removeImage()">&times;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="correction-submit-btn" onclick="submitCorrection()" id="correction-submit-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+                    </svg>
+                    Envoyer pour correction
+                </button>
+            </div>
+
+            <!-- Loading -->
+            <div class="correction-loading" id="correction-loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Analyse en cours...</p>
+            </div>
+
+            <!-- Result Section -->
+            <div class="correction-result-section" id="correction-result-section" style="display: none;">
+                <div class="correction-score" id="correction-score"></div>
+                <div class="correction-details" id="correction-details"></div>
+                <button class="correction-retry-btn" onclick="retryCorrectionModal()">
+                    Soumettre une autre reponse
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="exercises.js"></script>
     <script src="app.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('MathOral SW enregistré:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Erreur SW:', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
