@@ -1,5 +1,6 @@
-import { Outlet, NavLink, useLocation } from 'react-router-dom'
+import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
 import { Home, BookOpen, FileText, Brain, Calculator, Shield } from 'lucide-react'
+import DisclaimerModal from './DisclaimerModal'
 
 const navItems = [
   { path: '/', icon: Home, label: 'Accueil' },
@@ -16,6 +17,9 @@ function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* Disclaimer modal */}
+      <DisclaimerModal />
+
       {/* Header */}
       <header className="bg-blue-600 text-white px-4 py-3 safe-area-top sticky top-0 z-40 shadow-lg">
         <div className="flex items-center gap-3">
@@ -30,8 +34,34 @@ function Layout() {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className="flex-1 overflow-y-auto pb-28">
         <Outlet />
+
+        {/* Footer signature / Watermark */}
+        <footer className="mt-8 pb-4 px-4 border-t border-gray-200 bg-gray-50">
+          <div className="text-center pt-4">
+            <p className="text-xs font-medium text-gray-500">
+              Méthode EP - 2026
+            </p>
+            <p className="text-[10px] text-gray-400 mt-1">
+              &copy; 2026 Emmanuel Pinglier - Tous droits réservés
+            </p>
+            <div className="flex justify-center gap-4 mt-2">
+              <Link
+                to="/mentions-legales"
+                className="text-[10px] text-blue-500 hover:underline"
+              >
+                Mentions légales
+              </Link>
+              <Link
+                to="/conditions"
+                className="text-[10px] text-blue-500 hover:underline"
+              >
+                Conditions d'utilisation
+              </Link>
+            </div>
+          </div>
+        </footer>
       </main>
 
       {/* Bottom navigation - hidden during quiz */}

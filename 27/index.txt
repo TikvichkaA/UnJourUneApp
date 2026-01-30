@@ -1,0 +1,39 @@
+Sol Vivant - Experience collective sur l'agronomie regenerative
+
+Une experience multijoueur en temps reel ou chaque visiteur partage le meme sol.
+Le dilemme : recolter pour soi ou patienter pour le bien de tous.
+
+GAMEPLAY:
+- Cliquer = Recolter (+1 au score personnel) mais epuise le sol
+- Ne rien faire 15s = Regenere le sol pour tous
+- Le sol est partage entre tous les visiteurs connectes
+- Si le sol s'epuise completement, plus personne ne peut recolter
+
+INTERFACE:
+- Score personnel (recoltes) en haut a gauche
+- Nombre d'utilisateurs connectes en haut a droite
+- Fil d'activite en temps reel (qui recolte, qui regenere)
+- Curseurs des autres utilisateurs visibles
+- Barre de vie du sol en bas
+- Progression de patience visible pendant l'attente
+
+VISUEL:
+- Ciel + soleil qui ternissent quand le sol se degrade
+- Cultures (tomates, carottes, mais...) qui poussent selon la sante
+- Sol qui passe de brun riche a gris epuise
+- Lueur verte quand quelqu'un regenere
+
+TECHNIQUE:
+- Firebase Realtime Database pour la synchronisation
+- Mode demo avec simulation si Firebase non configure
+- Score personnel sauvegarde en localStorage
+
+CONFIGURATION FIREBASE:
+Pour activer le multijoueur reel, creer un projet Firebase et remplacer
+firebaseConfig dans index.html avec vos credentials.
+Structure de la base:
+- /state/soilHealth : sante globale du sol
+- /users/{id} : presence et position des utilisateurs
+- /activities : flux des actions recentes
+
+Technologies: HTML5, CSS, Firebase Realtime Database

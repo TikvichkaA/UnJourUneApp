@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Apprenez le géorgien avec une méthode pédagogique structurée et rigoureuse">
+    <meta name="theme-color" content="#8B4513">
+    <title>KartApp - Apprentissage du Géorgien</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-advanced.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <button class="btn-icon back-btn hidden" id="backBtn" aria-label="Retour">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <h1 class="logo">
+                <span class="logo-geo">ქარ</span>
+                <span class="logo-text">KartApp</span>
+            </h1>
+            <button class="btn-icon settings-btn" id="settingsBtn" aria-label="Paramètres">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Onboarding Overlay -->
+        <div class="onboarding-overlay" id="onboardingOverlay">
+            <div class="onboarding-container">
+                <!-- Step 1: Welcome -->
+                <div class="onboarding-step active" data-step="1">
+                    <div class="onboarding-illustration">
+                        <span class="geo-big">გამარჯობა</span>
+                    </div>
+                    <h2>Bienvenue sur KartApp</h2>
+                    <p>Apprenez le géorgien avec une méthode pédagogique structurée, adaptée à votre niveau.</p>
+                    <button class="btn btn-primary btn-large" onclick="app.onboardingNext()">Commencer</button>
+                </div>
+
+                <!-- Step 2: Experience -->
+                <div class="onboarding-step" data-step="2">
+                    <h2>Votre expérience</h2>
+                    <p>Avez-vous déjà étudié le géorgien ?</p>
+                    <div class="onboarding-options">
+                        <button class="onboarding-option" data-level="beginner" onclick="app.selectLevel('beginner')">
+                            <div class="option-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"/>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"/>
+                                </svg>
+                            </div>
+                            <h4>Jamais</h4>
+                            <p>Je découvre complètement cette langue</p>
+                        </button>
+                        <button class="onboarding-option" data-level="elementary" onclick="app.selectLevel('elementary')">
+                            <div class="option-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                                </svg>
+                            </div>
+                            <h4>Un peu</h4>
+                            <p>Je connais quelques mots ou l'alphabet</p>
+                        </button>
+                        <button class="onboarding-option" data-level="intermediate" onclick="app.selectLevel('intermediate')">
+                            <div class="option-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                </svg>
+                            </div>
+                            <h4>Bases acquises</h4>
+                            <p>Je lis l'alphabet et connais des phrases</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Alphabet Knowledge -->
+                <div class="onboarding-step" data-step="3">
+                    <h2>L'alphabet géorgien</h2>
+                    <p>Connaissez-vous l'alphabet Mkhedruli ?</p>
+                    <div class="onboarding-options">
+                        <button class="onboarding-option" data-alphabet="none" onclick="app.selectAlphabetLevel('none')">
+                            <div class="option-icon geo-letters">ა?</div>
+                            <h4>Pas du tout</h4>
+                            <p>Je ne connais aucune lettre</p>
+                        </button>
+                        <button class="onboarding-option" data-alphabet="partial" onclick="app.selectAlphabetLevel('partial')">
+                            <div class="option-icon geo-letters">ა ბ გ</div>
+                            <h4>Partiellement</h4>
+                            <p>Je reconnais quelques lettres</p>
+                        </button>
+                        <button class="onboarding-option" data-alphabet="full" onclick="app.selectAlphabetLevel('full')">
+                            <div class="option-icon geo-letters">ა-ჰ</div>
+                            <h4>Entièrement</h4>
+                            <p>Je lis toutes les lettres</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Goals -->
+                <div class="onboarding-step" data-step="4">
+                    <h2>Vos objectifs</h2>
+                    <p>Pourquoi apprenez-vous le géorgien ?</p>
+                    <div class="onboarding-goals">
+                        <label class="goal-option">
+                            <input type="checkbox" value="travel">
+                            <span class="goal-check"></span>
+                            <span>Voyager en Géorgie</span>
+                        </label>
+                        <label class="goal-option">
+                            <input type="checkbox" value="culture">
+                            <span class="goal-check"></span>
+                            <span>Découvrir la culture</span>
+                        </label>
+                        <label class="goal-option">
+                            <input type="checkbox" value="family">
+                            <span class="goal-check"></span>
+                            <span>Famille / amis géorgiens</span>
+                        </label>
+                        <label class="goal-option">
+                            <input type="checkbox" value="work">
+                            <span class="goal-check"></span>
+                            <span>Raisons professionnelles</span>
+                        </label>
+                        <label class="goal-option">
+                            <input type="checkbox" value="curiosity">
+                            <span class="goal-check"></span>
+                            <span>Curiosité linguistique</span>
+                        </label>
+                    </div>
+                    <button class="btn btn-primary btn-large" onclick="app.onboardingNext()">Continuer</button>
+                </div>
+
+                <!-- Step 5: Placement Test Offer -->
+                <div class="onboarding-step" data-step="5">
+                    <h2>Test de placement</h2>
+                    <p>Souhaitez-vous faire un court test pour affiner votre niveau ?</p>
+                    <div class="test-info">
+                        <div class="test-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <span>5 questions</span>
+                        </div>
+                        <div class="test-info-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <span>Adapte le parcours</span>
+                        </div>
+                    </div>
+                    <div class="onboarding-buttons">
+                        <button class="btn btn-primary btn-large" onclick="app.startPlacementTest()">Faire le test</button>
+                        <button class="btn btn-secondary" onclick="app.skipPlacementTest()">Passer cette étape</button>
+                    </div>
+                </div>
+
+                <!-- Step 6: Placement Test -->
+                <div class="onboarding-step" data-step="6">
+                    <div class="placement-test" id="placementTest"></div>
+                </div>
+
+                <!-- Step 7: Results -->
+                <div class="onboarding-step" data-step="7">
+                    <div class="onboarding-result">
+                        <div class="result-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <h2>Votre profil est prêt !</h2>
+                        <div class="result-level" id="resultLevel">
+                            <span class="level-badge">Débutant</span>
+                            <p>Niveau A0</p>
+                        </div>
+                        <p class="result-desc" id="resultDesc">Nous avons adapté votre parcours d'apprentissage à votre niveau.</p>
+                        <div class="result-summary" id="resultSummary"></div>
+                        <button class="btn btn-primary btn-large" onclick="app.finishOnboarding()">Commencer l'apprentissage</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress dots -->
+            <div class="onboarding-progress" id="onboardingProgress">
+                <span class="progress-dot active" data-step="1"></span>
+                <span class="progress-dot" data-step="2"></span>
+                <span class="progress-dot" data-step="3"></span>
+                <span class="progress-dot" data-step="4"></span>
+                <span class="progress-dot" data-step="5"></span>
+                <span class="progress-dot" data-step="6"></span>
+                <span class="progress-dot" data-step="7"></span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Home View -->
+            <section class="view active" id="homeView">
+                <div class="welcome-section">
+                    <h2>გამარჯობა!</h2>
+                    <p class="welcome-text">Bienvenue dans votre apprentissage du géorgien</p>
+                </div>
+
+                <div class="progress-overview" id="progressOverview">
+                    <div class="progress-card">
+                        <div class="progress-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <div class="progress-info">
+                            <span class="progress-label">Progression</span>
+                            <span class="progress-value" id="overallProgress">0%</span>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                        </div>
+                        <div class="progress-info">
+                            <span class="progress-label">Mots appris</span>
+                            <span class="progress-value" id="wordsLearned">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Article Section -->
+                <div class="daily-article-section" id="dailyArticleSection">
+                    <div class="article-header">
+                        <div class="article-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                            Article du jour
+                        </div>
+                        <span class="article-source" id="articleSource"></span>
+                    </div>
+                    
+                    <div class="article-content" id="articleContent">
+                        <div class="article-loading">
+                            <div class="loading-spinner"></div>
+                            <p>Chargement de l'article...</p>
+                        </div>
+                    </div>
+
+                    <div class="article-vocabulary" id="articleVocabulary">
+                        <h4>Vocabulaire de l'article</h4>
+                        <div class="vocab-list" id="articleVocabList"></div>
+                    </div>
+
+                    <button class="btn btn-primary article-learn-btn" id="articleLearnBtn" onclick="app.startArticleFlashcards()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="4" width="20" height="16" rx="2"/>
+                            <path d="M7 15h0M2 9.5h20"/>
+                        </svg>
+                        Apprendre ces mots
+                    </button>
+                </div>
+
+                <nav class="main-nav">
+                    <button class="nav-card" data-section="alphabet">
+                        <div class="nav-icon alphabet-icon">ა ბ გ</div>
+                        <div class="nav-content">
+                            <h3>Alphabet</h3>
+                            <p>Mkhedruli - 33 lettres</p>
+                        </div>
+                        <div class="nav-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <button class="nav-card" data-section="units">
+                        <div class="nav-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                        </div>
+                        <div class="nav-content">
+                            <h3>Unités</h3>
+                            <p>Leçons structurées</p>
+                        </div>
+                        <div class="nav-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <button class="nav-card" data-section="vocabulary">
+                        <div class="nav-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                        <div class="nav-content">
+                            <h3>Vocabulaire</h3>
+                            <p>Mots et expressions</p>
+                        </div>
+                        <div class="nav-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <button class="nav-card" data-section="grammar">
+                        <div class="nav-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                        </div>
+                        <div class="nav-content">
+                            <h3>Grammaire</h3>
+                            <p>Règles et explications</p>
+                        </div>
+                        <div class="nav-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </div>
+                    </button>
+                    <button class="nav-card" data-section="review">
+                        <div class="nav-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 4v6h-6"/>
+                                <path d="M1 20v-6h6"/>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                            </svg>
+                        </div>
+                        <div class="nav-content">
+                            <h3>Révision</h3>
+                            <p>Consolider vos acquis</p>
+                        </div>
+                        <div class="nav-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </div>
+                    </button>
+                </nav>
+            </section>
+
+            <!-- Alphabet View -->
+            <section class="view" id="alphabetView">
+                <div class="section-header">
+                    <h2>Alphabet Géorgien</h2>
+                    <p>Le Mkhedruli - 33 caractères uniques</p>
+                </div>
+                <div class="info-box">
+                    <h4>Particularités</h4>
+                    <ul>
+                        <li>Pas de majuscules/minuscules</li>
+                        <li>Correspondance graphème/phonème quasi parfaite</li>
+                        <li>Chaque lettre = un seul son</li>
+                    </ul>
+                </div>
+                <div class="alphabet-grid" id="alphabetGrid"></div>
+            </section>
+
+            <!-- Letter Detail View -->
+            <section class="view" id="letterView">
+                <div class="letter-detail" id="letterDetail"></div>
+            </section>
+
+            <!-- Units View -->
+            <section class="view" id="unitsView">
+                <div class="section-header">
+                    <h2>Unités d'apprentissage</h2>
+                    <p>Progression structurée A0 vers B1/B2</p>
+                </div>
+                <div class="units-list" id="unitsList"></div>
+            </section>
+
+            <!-- Lesson View -->
+            <section class="view" id="lessonView">
+                <div class="lesson-content" id="lessonContent"></div>
+            </section>
+
+            <!-- Exercise View -->
+            <section class="view" id="exerciseView">
+                <div class="exercise-container" id="exerciseContainer"></div>
+            </section>
+
+            <!-- Flashcard View -->
+            <section class="view" id="flashcardView">
+                <div class="flashcard-container">
+                    <div class="flashcard-progress">
+                        <div class="flashcard-progress-bar">
+                            <div class="flashcard-progress-fill" id="flashcardProgressFill"></div>
+                        </div>
+                        <span class="flashcard-progress-text" id="flashcardProgressText">1/5</span>
+                    </div>
+
+                    <div class="flashcard-card" id="flashcardCard">
+                        <div class="flashcard-inner" id="flashcardInner">
+                            <div class="flashcard-front">
+                                <span class="flashcard-geo" id="flashcardGeo"></span>
+                                <span class="flashcard-translit" id="flashcardTranslit"></span>
+                                <button class="flashcard-audio-btn" onclick="app.playFlashcardAudio()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="flashcard-back">
+                                <span class="flashcard-meaning" id="flashcardMeaning"></span>
+                                <span class="flashcard-theme" id="flashcardTheme"></span>
+                            </div>
+                        </div>
+                        <p class="flashcard-hint">Touchez pour retourner</p>
+                    </div>
+
+                    <div class="flashcard-actions">
+                        <button class="flashcard-action-btn wrong" onclick="app.flashcardResponse(false)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M15 9l-6 6M9 9l6 6"/>
+                            </svg>
+                            <span>À revoir</span>
+                        </button>
+                        <button class="flashcard-action-btn correct" onclick="app.flashcardResponse(true)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                            <span>Je sais</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Flashcard Results -->
+            <section class="view" id="flashcardResultsView">
+                <div class="flashcard-results">
+                    <div class="results-header">
+                        <h2>Session terminée !</h2>
+                        <p id="flashcardResultsDate"></p>
+                    </div>
+                    <div class="results-stats">
+                        <div class="result-stat">
+                            <span class="stat-value correct" id="flashcardCorrect">0</span>
+                            <span class="stat-label">Maîtrisés</span>
+                        </div>
+                        <div class="result-stat">
+                            <span class="stat-value wrong" id="flashcardWrong">0</span>
+                            <span class="stat-label">À revoir</span>
+                        </div>
+                    </div>
+                    <div class="results-words" id="flashcardResultsList"></div>
+                    <div class="results-actions">
+                        <button class="btn btn-primary" onclick="app.retryFlashcards()">Réviser les erreurs</button>
+                        <button class="btn btn-secondary" onclick="app.navigateTo('homeView')">Retour</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vocabulary View -->
+            <section class="view" id="vocabularyView">
+                <div class="section-header">
+                    <h2>Vocabulaire</h2>
+                    <p>Mots et expressions essentiels</p>
+                </div>
+                <div class="vocab-actions-bar">
+                    <button class="btn btn-primary vocab-flashcard-btn" onclick="app.startVocabFlashcards()">
+                        Réviser en flashcards
+                    </button>
+                </div>
+                <div class="filter-bar">
+                    <select id="vocabFilter" class="filter-select">
+                        <option value="all">Tous les mots</option>
+                        <option value="learned">Appris</option>
+                        <option value="review">À réviser</option>
+                        <option value="new">Nouveaux</option>
+                    </select>
+                    <button class="btn-transliteration" id="toggleTranslit">
+                        <span>Translittération</span>
+                        <span class="toggle-switch active"></span>
+                    </button>
+                </div>
+                <div class="vocabulary-list" id="vocabularyList"></div>
+            </section>
+
+            <!-- Grammar View -->
+            <section class="view" id="grammarView">
+                <div class="section-header">
+                    <h2>Grammaire</h2>
+                    <p>Règles et explications détaillées</p>
+                </div>
+                <div class="grammar-list" id="grammarList"></div>
+            </section>
+
+            <!-- Grammar Rule Detail -->
+            <section class="view" id="grammarDetailView">
+                <div class="grammar-detail" id="grammarDetail"></div>
+            </section>
+
+            <!-- Review View -->
+            <section class="view" id="reviewView">
+                <div class="section-header">
+                    <h2>Révision</h2>
+                    <p>Consolidez vos acquis sans pression</p>
+                </div>
+                <div class="review-options" id="reviewOptions">
+                    <button class="review-card" data-type="alphabet">
+                        <h3>Alphabet</h3>
+                        <p>Révisez les lettres</p>
+                    </button>
+                    <button class="review-card" data-type="vocabulary">
+                        <h3>Vocabulaire</h3>
+                        <p>Révisez les mots</p>
+                    </button>
+                    <button class="review-card" data-type="grammar">
+                        <h3>Grammaire</h3>
+                        <p>Révisez les règles</p>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section class="view" id="settingsView">
+                <div class="section-header">
+                    <h2>Paramètres</h2>
+                </div>
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Translittération</h4>
+                            <p>Afficher la romanisation des caractères géorgiens</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="settingTranslit" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Audio automatique</h4>
+                            <p>Jouer le son automatiquement</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="settingAutoAudio">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Réinitialiser la progression</h4>
+                            <p>Effacer toutes les données d'apprentissage</p>
+                        </div>
+                        <button class="btn-danger" id="resetProgress">Réinitialiser</button>
+                    </div>
+                </div>
+                <div class="about-section">
+                    <h3>À propos</h3>
+                    <p>KartApp v1.0.0</p>
+                    <p>Application d'apprentissage du géorgien moderne pour francophones.</p>
+                    <p>Approche pédagogique explicite et structurée.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Audio Player (hidden) -->
+    <audio id="audioPlayer" preload="auto"></audio>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="data/course_plan.js"></script>
+    <script src="data/lexicon.js"></script>
+    <script src="data/rules.js"></script>
+    <script src="data.js"></script>
+    <script src="dataService.js"></script>
+    <script src="app.js"></script>
+    <script src="appAdvanced.js"></script>
+</body>
+</html>

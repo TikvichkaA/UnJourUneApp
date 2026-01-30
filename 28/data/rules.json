@@ -1,0 +1,266 @@
+[
+  {
+    "id": "R.ALPHABET.VOWELS",
+    "title": "Les voyelles géorgiennes",
+    "level": "A0",
+    "content": "Le géorgien possède exactement 5 voyelles (ა, ე, ი, ო, უ) qui correspondent bien aux voyelles françaises a, é, i, o, ou.",
+    "pedagogyNotes": [
+      "Insister sur უ = 'ou' (pas 'u' français)",
+      "Pas de voyelles nasales en géorgien",
+      "Correspondance quasi parfaite graphie-son"
+    ]
+  },
+  {
+    "id": "R.ALPHABET.CONSONANTS.SIMPLE",
+    "title": "Consonnes simples",
+    "level": "A0",
+    "content": "Certaines consonnes géorgiennes se prononcent exactement comme en français : ბ (b), გ (g), დ (d), ვ (v), ზ (z), კ (k), ლ (l), მ (m), ნ (n).",
+    "pedagogyNotes": [
+      "Commencer par ces consonnes familières",
+      "გ est toujours dur (comme dans 'gare')"
+    ]
+  },
+  {
+    "id": "R.ALPHABET.CONSONANTS.ASPIRATED",
+    "title": "Consonnes aspirées",
+    "level": "A0",
+    "content": "Les consonnes aspirées (თ, ფ, ქ, ჰ) sont prononcées avec un souffle d'air après l'occlusion.",
+    "pedagogyNotes": [
+      "Comparer avec l'anglais 'top' vs 'stop'",
+      "Faire sentir le souffle sur la main"
+    ],
+    "audioRequired": true
+  },
+  {
+    "id": "R.ALPHABET.CONSONANTS.EJECTIVE",
+    "title": "Consonnes éjectives",
+    "level": "A0",
+    "content": "Les éjectives (პ, ტ, კ, ყ, წ, ჭ) sont produites avec une occlusion glottale. Ce sont des sons uniques au Caucase.",
+    "pedagogyNotes": [
+      "Son 'sec' et 'claquant'",
+      "Pas d'équivalent en français",
+      "Audio natif indispensable"
+    ],
+    "audioRequired": true,
+    "warning": "Ne pas confondre avec les aspirées !"
+  },
+  {
+    "id": "R.READING.DECODING",
+    "title": "Décoder avant de comprendre",
+    "level": "A0",
+    "content": "Le géorgien a une correspondance quasi parfaite entre graphie et son. Une fois l'alphabet maîtrisé, tout mot peut être lu correctement.",
+    "pedagogyNotes": [
+      "Pratiquer la lecture à voix haute",
+      "Ne pas se soucier du sens au début",
+      "La translittération doit disparaître progressivement"
+    ]
+  },
+  {
+    "id": "R.CULTURE.GREETINGS",
+    "title": "Salutations géorgiennes",
+    "level": "A1",
+    "content": "გამარჯობა vient de გამარჯვება (victoire). Les salutations selon le moment utilisent მშვიდობა (paix).",
+    "culturalNotes": [
+      "Le toast traditionnel commence par 'გაუმარჯოს'",
+      "La politesse géorgienne est élaborée"
+    ]
+  },
+  {
+    "id": "R.PRONOUNS.PERSONAL",
+    "title": "Pronoms personnels",
+    "level": "A1",
+    "content": "Les pronoms (მე, შენ, ის, ჩვენ, თქვენ, ისინი) sont souvent omis car le verbe indique la personne. თქვენ est aussi la forme de politesse.",
+    "pedagogyNotes": [
+      "Ne pas systématiquement traduire le pronom français",
+      "თქვენ = vous (pluriel et politesse)"
+    ]
+  },
+  {
+    "id": "R.VERB.TO.BE",
+    "title": "Le verbe être",
+    "level": "A1",
+    "content": "Le verbe 'être' (ყოფნა) est irrégulier. À la 3e personne, il peut s'attacher au prédicat (-ა/-ია).",
+    "examples": [
+      { "geo": "მე სტუდენტი ვარ", "fr": "Je suis étudiant", "note": "Verbe à la fin" },
+      { "geo": "ის ექიმია", "fr": "Il est médecin", "note": "-ია attaché" }
+    ]
+  },
+  {
+    "id": "R.PRESENT.S1.PREFIXES",
+    "title": "Présent — préfixes personnels",
+    "level": "A1",
+    "content": "Au présent (Série I), la personne est indiquée par un préfixe verbal. Le pronom est optionnel.",
+    "examples": [
+      { "geo": "ვკითხულობ", "fr": "je lis", "gloss": "ვ- (1SG) + კითხულობ" },
+      { "geo": "კითხულობს", "fr": "il/elle lit", "gloss": "კითხულობ + -ს (3SG)" }
+    ],
+    "pedagogyNotes": [
+      "ვ- est le marqueur de 1re personne le plus visible",
+      "Le suffixe -ს marque la 3e personne"
+    ]
+  },
+  {
+    "id": "R.SYNTAX.SOV",
+    "title": "Ordre des mots SOV",
+    "level": "A1",
+    "content": "L'ordre neutre est Sujet–Objet–Verbe (SOV), contrairement au français (SVO). L'ordre peut varier pour l'emphase.",
+    "examples": [
+      { "geo": "მე წიგნს ვკითხულობ", "fr": "Je lis un livre", "order": "S-O-V" }
+    ],
+    "warning": "Ne jamais traduire mot à mot en gardant l'ordre français !"
+  },
+  {
+    "id": "R.NUMBERS",
+    "title": "Système numéral vigésimal",
+    "level": "A1",
+    "content": "Le géorgien utilise un système en base 20 (vigésimal) : 40 = 2×20 (ორმოცი), 60 = 3×20 (სამოცი), etc.",
+    "examples": [
+      { "geo": "ოცდაათი", "fr": "30", "gloss": "20 + 10" },
+      { "geo": "ორმოცდახუთი", "fr": "45", "gloss": "2×20 + 5" }
+    ]
+  },
+  {
+    "id": "R.QUESTIONS.BASIC",
+    "title": "Mots interrogatifs",
+    "level": "A1",
+    "content": "Les questions se forment avec des mots interrogatifs en début de phrase. L'intonation monte.",
+    "vocabulary": [
+      { "geo": "რა", "fr": "quoi" },
+      { "geo": "ვინ", "fr": "qui" },
+      { "geo": "სად", "fr": "où" },
+      { "geo": "როდის", "fr": "quand" },
+      { "geo": "რატომ", "fr": "pourquoi" },
+      { "geo": "როგორ", "fr": "comment" }
+    ]
+  },
+  {
+    "id": "R.CASE.NOMINATIVE",
+    "title": "Le cas nominatif",
+    "level": "A2",
+    "content": "Le nominatif est la forme de base (dictionnaire). Il marque le sujet au présent et au futur (Série I).",
+    "pedagogyNotes": [
+      "C'est la forme qu'on apprend en premier",
+      "Pas de suffixe spécifique"
+    ]
+  },
+  {
+    "id": "R.CASE.ACCUSATIVE",
+    "title": "Le cas accusatif",
+    "level": "A2",
+    "content": "L'accusatif marque l'objet direct. Le suffixe est -ს, qui s'ajoute après la voyelle finale.",
+    "examples": [
+      { "geo": "წიგნს", "fr": "le livre (ACC)", "base": "წიგნი" }
+    ]
+  },
+  {
+    "id": "R.CASE.DATIVE",
+    "title": "Le cas datif",
+    "level": "A2",
+    "content": "Le datif marque le complément indirect (à qui ?). Il utilise aussi -ს. Le contexte clarifie.",
+    "warning": "Accusatif et datif ont la même forme en -ს !"
+  },
+  {
+    "id": "R.POSTPOSITIONS",
+    "title": "Postpositions",
+    "level": "A2",
+    "content": "En géorgien, les 'prépositions' viennent APRÈS le nom : სახლში (dans la maison), მაგიდაზე (sur la table).",
+    "vocabulary": [
+      { "geo": "-ში", "fr": "dans" },
+      { "geo": "-ზე", "fr": "sur" },
+      { "geo": "-თან", "fr": "chez, près de" },
+      { "geo": "-დან", "fr": "de (provenance)" },
+      { "geo": "-მდე", "fr": "jusqu'à" }
+    ],
+    "warning": "Ne jamais dire 'dans სახლი' à la française !"
+  },
+  {
+    "id": "R.CASE.ERGATIVE.INTRO",
+    "title": "Introduction à l'ergativité",
+    "level": "A2",
+    "content": "Dans certains temps (Série II), l'agent de l'action prend le cas ergatif (-მა). Le 'sujet' français n'est pas toujours le sujet géorgien.",
+    "examples": [
+      { "geo": "კაცი წერს", "fr": "L'homme écrit (présent)", "case": "NOM" },
+      { "geo": "კაცმა დაწერა", "fr": "L'homme a écrit (aoriste)", "case": "ERG" }
+    ],
+    "warning": "Ne JAMAIS traduire mot à mot depuis le français.",
+    "pedagogyNotes": [
+      "Concept clé et difficile",
+      "Utiliser des tableaux comparatifs",
+      "Beaucoup de pratique nécessaire"
+    ]
+  },
+  {
+    "id": "R.AORIST.S2",
+    "title": "L'aoriste (Série II)",
+    "level": "A2",
+    "content": "L'aoriste exprime une action ponctuelle et accomplie. Il déclenche l'alignement ergatif : l'agent en -მა, le patient au nominatif.",
+    "examples": [
+      { "geo": "მან წერილი დაწერა", "fr": "Il a écrit la lettre", "gloss": "il-ERG lettre-NOM écrit-AOR" }
+    ],
+    "pedagogyNotes": [
+      "Toujours analyser 'qui fait quoi'",
+      "Les pronoms changent aussi (ის → მან)"
+    ]
+  },
+  {
+    "id": "R.VERB.FAMILIES",
+    "title": "Familles verbales et préverbes",
+    "level": "A2",
+    "content": "Les verbes géorgiens forment des familles autour d'un radical. Les préverbes modifient le sens (direction, aspect).",
+    "examples": [
+      { "root": "წერ", "meaning": "écrire", "derived": ["დაწერ (accompli)", "ჩაწერ (inscrire)", "გადაწერ (recopier)"] }
+    ],
+    "pedagogyNotes": [
+      "Apprendre les radicaux, pas seulement les formes conjuguées",
+      "Les préverbes ont des sens récurrents"
+    ]
+  },
+  {
+    "id": "R.VERBAL.SYSTEM.OVERVIEW",
+    "title": "Vue d'ensemble du système verbal",
+    "level": "B1",
+    "content": "Le verbe géorgien s'organise en 3 séries (screeves) qui déterminent les temps ET le marquage des cas (ergativité).",
+    "table": {
+      "series1": { "name": "Série I (Présent)", "tenses": ["Présent", "Imparfait", "Futur"], "alignment": "NOM-ACC" },
+      "series2": { "name": "Série II (Aoriste)", "tenses": ["Aoriste", "Optatif"], "alignment": "ERG-NOM" },
+      "series3": { "name": "Série III (Parfait)", "tenses": ["Parfait", "Plus-que-parfait"], "alignment": "DAT-NOM" }
+    }
+  },
+  {
+    "id": "R.DOUBLE.MARKING",
+    "title": "Double marquage verbal",
+    "level": "B1",
+    "content": "Certains verbes (transitifs indirects) encodent simultanément l'agent et le bénéficiaire dans leur morphologie.",
+    "examples": [
+      { "geo": "მაძლევს", "fr": "il me donne", "gloss": "მ- (1SG.DAT) + ა- + ძლევ + ს (3SG)" }
+    ],
+    "pedagogyNotes": [
+      "Décomposer systématiquement",
+      "Utiliser des schémas visuels"
+    ]
+  },
+  {
+    "id": "R.CONDITIONAL",
+    "title": "Le conditionnel",
+    "level": "B1",
+    "content": "თუ introduit une condition réelle, რომ une condition irréelle ou une subordonnée.",
+    "examples": [
+      { "geo": "თუ მოხვალ, გიმასპინძლებ", "fr": "Si tu viens, je t'accueillerai" },
+      { "geo": "რომ ვიცოდე, გეტყოდი", "fr": "Si je savais, je te le dirais" }
+    ]
+  },
+  {
+    "id": "R.ASPECT.PREVERBS",
+    "title": "Aspect verbal",
+    "level": "B2",
+    "content": "Les préverbes ne sont pas seulement directionnels : ils marquent aussi l'aspect perfectif (action accomplie) vs imperfectif (action en cours).",
+    "examples": [
+      { "geo": "წერდა", "fr": "il écrivait (impf)", "aspect": "imperfectif" },
+      { "geo": "დაწერა", "fr": "il a écrit (pf)", "aspect": "perfectif" }
+    ],
+    "pedagogyNotes": [
+      "L'aspect est plus important que le temps en géorgien",
+      "Comparer systématiquement les paires"
+    ]
+  }
+]

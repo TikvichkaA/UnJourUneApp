@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sol Vivant</title>
+    <meta name="description" content="Experience collective sur l'agronomie regenerative">
+    <meta name="theme-color" content="#1a1510">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #1a1510;
+            user-select: none;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* === CIEL === */
+        .sky {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: linear-gradient(180deg, #5BA3C9 0%, #7BC0E0 60%, #A8D4EA 100%);
+            transition: all 3s ease;
+        }
+
+        .sun {
+            position: absolute;
+            top: 10%;
+            right: 12%;
+            width: 55px;
+            height: 55px;
+            background: radial-gradient(circle, #FFF8DC 0%, #FFD700 40%, rgba(255,200,50,0) 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(255, 220, 100, 0.6);
+            transition: all 3s ease;
+        }
+
+        /* === SOL === */
+        .soil-section {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+        }
+
+        .soil {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg,
+                var(--soil-top, #4a3828) 0%,
+                var(--soil-mid, #3a2a1a) 25%,
+                var(--soil-deep, #2a1c10) 60%,
+                #1a1208 100%);
+            transition: all 3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .soil-surface {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg,
+                var(--grass1, #4a7c3f) 0%,
+                var(--grass2, #5d8a4a) 50%,
+                var(--grass1, #4a7c3f) 100%);
+            transition: all 3s ease;
+        }
+
+        /* === CULTURES === */
+        .crops {
+            position: absolute;
+            bottom: 60%;
+            left: 0;
+            width: 100%;
+            height: 110px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding: 0 5%;
+            pointer-events: none;
+        }
+
+        .crop {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.8s ease;
+        }
+
+        .crop.harvested {
+            animation: harvest-bounce 0.4s ease;
+        }
+
+        @keyframes harvest-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.85) translateY(5px); }
+        }
+
+        /* Tige principale */
+        .crop-stem {
+            width: 3px;
+            background: linear-gradient(to top, #6B8E4E, #8FB563);
+            border-radius: 2px;
+            position: relative;
+            transition: all 0.8s ease;
+            flex-shrink: 0;
+            overflow: visible;
+        }
+
+        /* Feuilles */
+        .crop-leaves {
+            position: absolute;
+            bottom: 30%;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .leaf {
+            position: absolute;
+            background: linear-gradient(135deg, #7CB363 0%, #5A9E3E 100%);
+            border-radius: 0 70% 0 70%;
+            box-shadow: inset -2px -2px 4px rgba(0,0,0,0.1);
+            transition: all 0.8s ease;
+            width: 10px;
+            height: 6px;
+        }
+
+        .leaf.left {
+            transform: rotate(-35deg) scaleX(-1);
+            right: 100%;
+            margin-right: 1px;
+        }
+
+        .leaf.right {
+            transform: rotate(-35deg);
+            left: 100%;
+            margin-left: 1px;
+        }
+
+        /* Fruit/Legume */
+        .crop-fruit {
+            position: absolute;
+            top: 0;
+            border-radius: 50%;
+            box-shadow:
+                inset -3px -3px 6px rgba(0,0,0,0.2),
+                inset 2px 2px 4px rgba(255,255,255,0.2),
+                0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.8s ease;
+        }
+
+        .crop-fruit::after {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 20%;
+            width: 25%;
+            height: 20%;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+        }
+
+        /* Types de fruits */
+        .crop-fruit.tomato {
+            background: radial-gradient(circle at 30% 30%, #FF6B6B, #E74C3C, #C0392B);
+            width: 18px;
+            height: 18px;
+        }
+
+        .crop-fruit.carrot {
+            background: linear-gradient(180deg, #7CB363 0%, #F39C12 20%, #E67E22 100%);
+            width: 10px;
+            height: 22px;
+            border-radius: 40% 40% 50% 50%;
+            top: 5px;
+        }
+
+        .crop-fruit.lettuce {
+            background: radial-gradient(circle at 40% 40%, #A8E6CF, #7CB363, #5A9E3E);
+            width: 22px;
+            height: 18px;
+            border-radius: 50% 50% 45% 45%;
+        }
+
+        .crop-fruit.eggplant {
+            background: linear-gradient(180deg, #7CB363 0%, #9B59B6 15%, #8E44AD 100%);
+            width: 12px;
+            height: 20px;
+            border-radius: 45% 45% 50% 50%;
+        }
+
+        .crop-fruit.pepper {
+            background: radial-gradient(circle at 30% 30%, #FF8A65, #F44336, #D32F2F);
+            width: 10px;
+            height: 16px;
+            border-radius: 45% 45% 50% 50%;
+        }
+
+        .crop-fruit.corn {
+            background: linear-gradient(180deg, #8BC34A 0%, #FDD835 20%, #F9A825 100%);
+            width: 10px;
+            height: 24px;
+            border-radius: 35% 35% 45% 45%;
+        }
+
+        /* Herbes decoratives */
+        .grass-blade {
+            position: absolute;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to top, #5D8A3E, #8BC34A);
+            border-radius: 2px 2px 0 0;
+            transform-origin: bottom center;
+            animation: grass-sway 3s ease-in-out infinite;
+        }
+
+        @keyframes grass-sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        /* === RACINES === */
+        .roots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .root {
+            position: absolute;
+            background: linear-gradient(to bottom,
+                rgba(139, 115, 85, 0.8) 0%,
+                rgba(107, 83, 68, 0.5) 50%,
+                transparent 100%);
+            width: 2px;
+            border-radius: 1px;
+            transition: all 1s ease;
+        }
+
+        /* === ORGANISMES DU SOL === */
+        .organisms {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .worm {
+            position: absolute;
+            width: 35px;
+            height: 8px;
+            background: linear-gradient(90deg,
+                #C4A484 0%, #D4B896 30%, #C4A484 70%, #B89878 100%);
+            border-radius: 4px;
+            opacity: var(--life-opacity, 0.8);
+            animation: worm-crawl 5s ease-in-out infinite;
+            transition: opacity 2s ease;
+        }
+
+        @keyframes worm-crawl {
+            0%, 100% { transform: translateX(0) scaleX(1) rotate(0deg); }
+            25% { transform: translateX(8px) scaleX(0.85) rotate(2deg); }
+            50% { transform: translateX(15px) scaleX(1) rotate(-1deg); }
+            75% { transform: translateX(8px) scaleX(0.9) rotate(1deg); }
+        }
+
+        .microbe {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle,
+                rgba(180, 210, 140, 0.9) 0%,
+                rgba(140, 180, 100, 0.6) 50%,
+                transparent 100%);
+            border-radius: 50%;
+            opacity: var(--life-opacity, 0.7);
+            animation: microbe-float 3s ease-in-out infinite;
+            transition: opacity 2s ease;
+        }
+
+        @keyframes microbe-float {
+            0%, 100% { transform: scale(1) translate(0, 0); }
+            33% { transform: scale(1.2) translate(3px, -2px); }
+            66% { transform: scale(0.9) translate(-2px, 2px); }
+        }
+
+        .fungus {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.4) 20%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0.4) 80%,
+                transparent 100%);
+            opacity: var(--life-opacity, 0.6);
+            animation: fungus-pulse 4s ease-in-out infinite;
+            transition: opacity 2s ease;
+        }
+
+        @keyframes fungus-pulse {
+            0%, 100% { transform: scaleX(1); opacity: 0.4; }
+            50% { transform: scaleX(1.1); opacity: 0.7; }
+        }
+
+        /* === CRAQUELURES === */
+        .cracks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 3s ease;
+        }
+
+        .crack {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.3);
+            width: 2px;
+        }
+
+        /* === ZONE CLIQUABLE === */
+        .harvest-zone {
+            position: absolute;
+            top: 30%;
+            left: 0;
+            width: 100%;
+            height: 25%;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .harvest-popup {
+            position: absolute;
+            font-size: 1.6rem;
+            pointer-events: none;
+            animation: float-up 1.2s ease-out forwards;
+            z-index: 20;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @keyframes float-up {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-80px) scale(1.4); }
+        }
+
+        /* === INTERFACE === */
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 10;
+        }
+
+        .panel {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 14px;
+            border-radius: 12px;
+            color: white;
+            backdrop-filter: blur(8px);
+        }
+
+        .panel-label {
+            font-size: 0.65rem;
+            font-weight: 500;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 3px;
+        }
+
+        .panel-value {
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hunger-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .hunger-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e74c3c, #f39c12, #2ecc71);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .panel.hungry {
+            animation: hungry-pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes hungry-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+            50% { box-shadow: 0 0 15px 3px rgba(231, 76, 60, 0.5); }
+        }
+
+        /* === JAUGE DE RECOLTE === */
+        .harvest-progress {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 25;
+        }
+
+        .harvest-progress.visible {
+            opacity: 1;
+        }
+
+        .harvest-progress svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .harvest-progress .bg {
+            fill: none;
+            stroke: rgba(0,0,0,0.3);
+            stroke-width: 8;
+        }
+
+        .harvest-progress .fg {
+            fill: none;
+            stroke: url(#harvestGradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 314;
+            stroke-dashoffset: 314;
+            transition: stroke-dashoffset 0.15s ease;
+        }
+
+        .harvest-progress .center-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+        }
+
+        .harvest-difficulty {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.6);
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            background: rgba(0,0,0,0.4);
+            padding: 4px 10px;
+            border-radius: 10px;
+            z-index: 20;
+        }
+
+        .harvest-difficulty.visible {
+            opacity: 1;
+        }
+
+        .users-panel {
+            text-align: right;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse-dot 2s ease-in-out infinite;
+            display: inline-block;
+            margin-left: 6px;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
+        }
+
+        /* === FIL D'ACTIVITE === */
+        .activity-feed {
+            position: absolute;
+            top: 75px;
+            right: 12px;
+            width: 170px;
+            z-index: 10;
+        }
+
+        .activity-item {
+            background: rgba(0, 0, 0, 0.35);
+            padding: 7px 10px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            animation: slide-in 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .activity-item.harvest { border-left: 3px solid #e67e22; }
+        .activity-item.regen { border-left: 3px solid #4CAF50; }
+
+        @keyframes slide-in {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* === BARRE DE VIE DU SOL === */
+        .health-bar-container {
+            position: absolute;
+            bottom: 12%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .health-label {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .health-bar {
+            width: 180px;
+            height: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8B4513 0%, #6B8E23 40%, #228B22 100%);
+            border-radius: 5px;
+            transition: width 0.8s ease;
+            box-shadow: 0 0 10px rgba(34, 139, 34, 0.4);
+        }
+
+        /* === PATIENCE === */
+        .patience-bar {
+            position: absolute;
+            bottom: 7%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .patience-bar.visible { opacity: 1; }
+
+        .patience-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #66BB6A, #43A047);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.15s linear;
+        }
+
+        /* === GLOW REGENERATION === */
+        .regen-glow {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                rgba(76, 175, 80, 0.25) 0%,
+                rgba(76, 175, 80, 0.1) 40%,
+                transparent 70%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease;
+        }
+
+        .regen-glow.active {
+            opacity: 1;
+            animation: regen-breathe 3s ease-in-out infinite;
+        }
+
+        @keyframes regen-breathe {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.15); }
+        }
+
+        /* === CURSEURS DISTANTS === */
+        .remote-cursor {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 15;
+            transition: left 0.4s ease, top 0.4s ease;
+        }
+
+        .remote-cursor.harvesting {
+            background: rgba(230, 126, 34, 0.5);
+            box-shadow: 0 0 20px rgba(230, 126, 34, 0.7);
+        }
+
+        .remote-cursor.patient {
+            background: rgba(76, 175, 80, 0.4);
+            box-shadow: 0 0 25px rgba(76, 175, 80, 0.6);
+            animation: cursor-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes cursor-glow {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        /* === BOUTON INFO === */
+        .info-btn {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            background: rgba(30, 25, 20, 0.7);
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 1.15rem;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .info-btn:hover {
+            background: rgba(50, 40, 30, 0.9);
+            border-color: rgba(255, 255, 255, 0.4);
+            color: white;
+        }
+
+        /* === CONNEXION === */
+        .connection {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.35);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .connection-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #f44336;
+            transition: background 0.3s ease;
+        }
+
+        .connection-dot.ok { background: #4CAF50; }
+
+        /* === PANEL INFO === */
+        .info-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 21, 16, 0.98);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .info-panel.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .info-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 50px 25px 70px;
+            color: rgba(230, 220, 200, 0.9);
+            line-height: 1.75;
+        }
+
+        .info-content h1 {
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-bottom: 25px;
+            color: #8FBC8F;
+        }
+
+        .info-content h2 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin: 35px 0 12px;
+            color: #9ACD32;
+        }
+
+        .info-content p {
+            margin-bottom: 15px;
+            font-size: 0.92rem;
+            color: rgba(220, 210, 190, 0.85);
+        }
+
+        .info-content strong { color: #DEB887; }
+
+        .info-content .rules {
+            background: rgba(230, 126, 34, 0.12);
+            padding: 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(230, 126, 34, 0.25);
+            margin: 20px 0;
+        }
+
+        .info-content .rules h3 {
+            color: #e67e22;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .info-content .rules ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .info-content .rules li {
+            margin-bottom: 8px;
+            color: rgba(220, 200, 180, 0.85);
+        }
+
+        .info-content .highlight {
+            background: rgba(76, 175, 80, 0.12);
+            padding: 16px 18px;
+            border-radius: 8px;
+            border-left: 4px solid rgba(76, 175, 80, 0.5);
+            margin: 20px 0;
+        }
+
+        .info-content .quote {
+            font-style: italic;
+            color: rgba(180, 200, 160, 0.9);
+            padding: 12px 18px;
+            border-left: 3px solid rgba(139, 119, 101, 0.4);
+            margin: 20px 0;
+        }
+
+        .info-content .quote small {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            color: rgba(160, 150, 130, 0.65);
+        }
+
+        .info-content .refs {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(139, 119, 101, 0.2);
+            font-size: 0.85rem;
+        }
+
+        .info-content .refs a {
+            color: rgba(143, 188, 143, 0.85);
+            text-decoration: none;
+        }
+
+        .close-btn {
+            position: fixed;
+            top: 15px;
+            right: 18px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        /* === ETATS DEGRADES === */
+        .degraded {
+            --soil-top: #6B5A48;
+            --soil-mid: #5a4a3a;
+            --soil-deep: #4a3c2c;
+            --grass1: #7a9a5f;
+            --grass2: #8aa86a;
+            --life-opacity: 0.4;
+        }
+
+        .degraded .sky {
+            background: linear-gradient(180deg, #8FAAB8 0%, #A0B8C4 60%, #B8C8D0 100%);
+        }
+
+        .degraded .sun {
+            opacity: 0.7;
+            box-shadow: 0 0 30px rgba(255, 220, 100, 0.3);
+        }
+
+        .degraded .cracks { opacity: 0.25; }
+
+        .critical {
+            --soil-top: #9C8B7A;
+            --soil-mid: #8a7a6a;
+            --soil-deep: #7a6a5a;
+            --grass1: #a0a080;
+            --grass2: #b0b090;
+            --life-opacity: 0;
+        }
+
+        .critical .sky {
+            background: linear-gradient(180deg, #A8B0B4 0%, #B8C0C4 60%, #C8D0D4 100%);
+        }
+
+        .critical .sun {
+            opacity: 0.4;
+            box-shadow: 0 0 15px rgba(255, 220, 100, 0.15);
+        }
+
+        .critical .cracks { opacity: 0.5; }
+
+        /* === MORT DEFINITIVE === */
+        .dead-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg,
+                rgba(180, 170, 150, 0.97) 0%,
+                rgba(140, 120, 100, 0.98) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 4s ease;
+            z-index: 50;
+        }
+
+        .dead-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dead-message {
+            color: rgba(60, 45, 30, 0.7);
+            font-size: 1.2rem;
+            text-align: center;
+            line-height: 1.8;
+            max-width: 320px;
+            letter-spacing: 0.03em;
+        }
+
+        .dead-icon {
+            font-size: 3rem;
+            margin-bottom: 25px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="sky">
+            <div class="sun"></div>
+        </div>
+
+        <div class="harvest-zone" id="harvest-zone"></div>
+        <div class="crops" id="crops"></div>
+
+        <div class="soil-section">
+            <div class="soil">
+                <div class="soil-surface"></div>
+                <div class="roots" id="roots"></div>
+                <div class="organisms" id="organisms"></div>
+                <div class="cracks" id="cracks"></div>
+            </div>
+        </div>
+
+        <div class="regen-glow" id="regen-glow"></div>
+        <div id="remote-cursors"></div>
+
+        <!-- Jauge de recolte circulaire -->
+        <div class="harvest-progress" id="harvest-progress">
+            <svg viewBox="0 0 100 100">
+                <defs>
+                    <linearGradient id="harvestGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#e67e22"/>
+                        <stop offset="100%" stop-color="#f1c40f"/>
+                    </linearGradient>
+                </defs>
+                <circle class="bg" cx="50" cy="50" r="45"/>
+                <circle class="fg" id="harvest-circle" cx="50" cy="50" r="45"/>
+            </svg>
+            <div class="center-icon">🌱</div>
+        </div>
+
+        <div class="harvest-difficulty" id="harvest-difficulty"></div>
+
+        <div class="top-bar">
+            <div class="panel" id="score-panel">
+                <div class="panel-label">Ma recolte</div>
+                <div class="panel-value">
+                    <span id="score">0</span>
+                    <span style="font-size: 1rem;">🍅</span>
+                </div>
+                <div class="hunger-bar">
+                    <div class="hunger-fill" id="hunger-fill"></div>
+                </div>
+            </div>
+            <div class="panel users-panel">
+                <div class="panel-label">En ligne</div>
+                <div class="panel-value">
+                    <span id="users-count">1</span>
+                    <span class="online-dot"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-feed" id="activity-feed"></div>
+
+        <div class="health-bar-container">
+            <div class="health-label">Vie du sol</div>
+            <div class="health-bar">
+                <div class="health-fill" id="health-fill"></div>
+            </div>
+        </div>
+
+        <div class="patience-bar" id="patience-bar">
+            <div class="patience-fill" id="patience-fill"></div>
+        </div>
+
+        <div class="connection">
+            <div class="connection-dot" id="connection-dot"></div>
+            <span id="connection-text">Connexion...</span>
+        </div>
+
+        <button class="info-btn" id="info-btn">?</button>
+    </div>
+
+    <div class="info-panel" id="info-panel">
+        <button class="close-btn" id="close-btn">&times;</button>
+        <div class="info-content">
+            <h1>Sol Vivant</h1>
+
+            <p>Vous partagez ce sol avec tous les visiteurs connectes. Ensemble, vous decidez de son destin.</p>
+
+            <div class="rules">
+                <h3>Les regles</h3>
+                <ul>
+                    <li><strong>Cliquer</strong> = Contribuer a la recolte (jauge circulaire)</li>
+                    <li><strong>Sol fertile</strong> = 1 clic = 1 fruit / <strong>Sol epuise</strong> = 10-20 clics !</li>
+                    <li><strong>Ne rien faire 15s</strong> = Regenerer le sol pour tous</li>
+                    <li><strong>Vous consommez 1 fruit toutes les 8s</strong> - il faut recolter pour survivre !</li>
+                    <li>Observez la vie du sol : vers, microbes, champignons</li>
+                    <li><strong>Si le sol meurt, c'est definitif.</strong></li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Le cercle vertueux :</strong> un sol sain produit facilement, ce qui permet de moins le solliciter, ce qui le maintient sain.<br><br>
+                <strong>Le cercle vicieux :</strong> un sol epuise produit difficilement, ce qui force a cliquer plus, ce qui l'epuise davantage.</p>
+            </div>
+
+            <h2>Ce que vous voyez</h2>
+            <p>Dans le sol, vous pouvez observer la vie microscopique : les <strong>vers de terre</strong> qui aerent la terre, les <strong>microbes</strong> qui decomposent la matiere organique, et les <strong>filaments blancs des champignons</strong> (mycelium) qui connectent les plantes entre elles.</p>
+            <p>Quand le sol se degrade, cette vie disparait. Les craquelures apparaissent. Plus rien ne pousse.</p>
+
+            <h2>Un sol vivant</h2>
+            <p>Un gramme de sol sain contient <strong>un milliard de bacteries</strong>, des kilometres de filaments fongiques, des millions de protozoaires. Cette vie invisible produit la fertilite.</p>
+
+            <div class="quote">
+                "Le sol n'est pas un support inerte, c'est un organisme vivant dont depend toute la chaine alimentaire."
+                <small>- Claude Bourguignon</small>
+            </div>
+
+            <div class="quote">
+                "En regenerant nos sols, nous pouvons inverser le changement climatique."
+                <small>- Gabe Brown</small>
+            </div>
+
+            <div class="refs">
+                <p><strong>References :</strong> Bourguignon C. & L. <em>Le sol, la terre et les champs</em> | Brown G. <em>Dirt to Soil</em> | <a href="https://www.4p1000.org/" target="_blank">Initiative 4 pour 1000</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="dead-overlay" id="dead-overlay">
+        <div class="dead-icon">🏜️</div>
+        <div class="dead-message">
+            Le sol est mort.<br><br>
+            Plus rien ne poussera ici.
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDemo-xxxxxxxxxxxxxxxxxxxx",
+            authDomain: "sol-vivant.firebaseapp.com",
+            databaseURL: "https://sol-vivant-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "sol-vivant"
+        };
+
+        const DEMO_MODE = firebaseConfig.apiKey.includes('Demo');
+        const PATIENCE_TIME = 15000;
+        const HARVEST_COST = 3;
+        const PATIENCE_BONUS = 6;
+        const MAX_HEALTH = 100;
+        const HUNGER_INTERVAL = 8000; // Consomme 1 fruit toutes les 8 secondes
+        const MAX_HUNGER = 100;
+
+        let state = {
+            odId: Math.random().toString(36).substr(2, 9),
+            score: parseInt(localStorage.getItem('solvivant_score') || '0'),
+            health: 75,
+            hunger: MAX_HUNGER,
+            isDead: localStorage.getItem('solvivant_dead') === 'true'
+        };
+
+        let db, userRef, stateRef;
+        let lastAction = Date.now();
+        let lastHungerTick = Date.now();
+        let isPatient = false;
+        let hasRegenerated = false;
+        let harvestProgress = 0;
+        let harvestTimeout = null;
+
+        const $ = id => document.getElementById(id);
+        const container = $('container');
+        const cropsEl = $('crops');
+        const rootsEl = $('roots');
+        const organismsEl = $('organisms');
+        const cracksEl = $('cracks');
+        const healthFill = $('health-fill');
+        const scoreEl = $('score');
+        const usersEl = $('users-count');
+        const activityFeed = $('activity-feed');
+        const regenGlow = $('regen-glow');
+        const patienceBar = $('patience-bar');
+        const patienceFill = $('patience-fill');
+        const remoteCursors = $('remote-cursors');
+        const connDot = $('connection-dot');
+        const connText = $('connection-text');
+        const infoPanel = $('info-panel');
+        const deadOverlay = $('dead-overlay');
+        const scorePanel = $('score-panel');
+        const hungerFill = $('hunger-fill');
+        const harvestProgressEl = $('harvest-progress');
+        const harvestCircle = $('harvest-circle');
+        const harvestDifficulty = $('harvest-difficulty');
+
+        function init() {
+            if (state.isDead) {
+                deadOverlay.classList.add('visible');
+                return;
+            }
+
+            scoreEl.textContent = state.score;
+            generateCrops();
+            generateRoots();
+            generateOrganisms();
+            generateCracks();
+            updateVisuals();
+            setupEvents();
+            initFirebase();
+            gameLoop();
+        }
+
+        async function initFirebase() {
+            if (DEMO_MODE) {
+                connText.textContent = 'Demo';
+                connDot.classList.add('ok');
+                startDemo();
+                return;
+            }
+
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                userRef = db.ref(`users/${state.odId}`);
+                stateRef = db.ref('state');
+
+                userRef.onDisconnect().remove();
+                await userRef.set({ odId: state.odId, isPatient: false, x: 0.5, y: 0.5 });
+
+                stateRef.on('value', snap => {
+                    if (snap.val()?.health !== undefined) {
+                        state.health = snap.val().health;
+                        updateVisuals();
+                    }
+                });
+
+                db.ref('users').on('value', snap => {
+                    const users = snap.val() || {};
+                    usersEl.textContent = Object.keys(users).length;
+                    updateCursors(users);
+                });
+
+                db.ref('activities').limitToLast(5).on('child_added', snap => {
+                    const a = snap.val();
+                    if (a && a.odId !== state.odId) showActivity(a);
+                });
+
+                connText.textContent = 'Connecte';
+                connDot.classList.add('ok');
+            } catch (e) {
+                connText.textContent = 'Demo';
+                connDot.classList.add('ok');
+                startDemo();
+            }
+        }
+
+        function startDemo() {
+            setInterval(() => {
+                usersEl.textContent = Math.floor(2 + Math.random() * 6);
+
+                if (Math.random() < 0.25 && !state.isDead) {
+                    const names = ['Alice', 'Bob', 'Camille', 'David', 'Emma'];
+                    const name = names[Math.floor(Math.random() * names.length)];
+                    const isHarvest = Math.random() < 0.55;
+
+                    if (isHarvest) {
+                        showActivity({ type: 'harvest', name });
+                        state.health = Math.max(0, state.health - HARVEST_COST * 0.4);
+                    } else {
+                        showActivity({ type: 'regen', name });
+                        state.health = Math.min(MAX_HEALTH, state.health + PATIENCE_BONUS * 0.3);
+                    }
+                    updateVisuals();
+                }
+
+                // Curseurs simules
+                remoteCursors.innerHTML = '';
+                for (let i = 0; i < Math.floor(1 + Math.random() * 3); i++) {
+                    const c = document.createElement('div');
+                    c.className = 'remote-cursor ' + (Math.random() < 0.4 ? 'patient' : 'harvesting');
+                    c.style.left = (15 + Math.random() * 70) + '%';
+                    c.style.top = (25 + Math.random() * 30) + '%';
+                    remoteCursors.appendChild(c);
+                }
+            }, 2500);
+        }
+
+        function generateCrops() {
+            cropsEl.innerHTML = '';
+            const ratio = state.health / MAX_HEALTH;
+            const count = Math.max(0, Math.floor(3 + ratio * 12));
+            const types = ['tomato', 'carrot', 'lettuce', 'eggplant', 'pepper', 'corn'];
+
+            for (let i = 0; i < count; i++) {
+                const crop = document.createElement('div');
+                crop.className = 'crop';
+                const type = types[i % types.length];
+                const height = 20 + ratio * 40 + Math.random() * 15;
+
+                crop.innerHTML = `
+                    <div class="crop-fruit ${type}"></div>
+                    <div class="crop-stem" style="height: ${height}px">
+                        <div class="leaf left" style="bottom: 60%;"></div>
+                        <div class="leaf right" style="bottom: 35%;"></div>
+                    </div>
+                `;
+                crop.style.opacity = 0.4 + ratio * 0.6;
+                cropsEl.appendChild(crop);
+            }
+        }
+
+        function generateRoots() {
+            rootsEl.innerHTML = '';
+            const ratio = state.health / MAX_HEALTH;
+            const count = Math.floor(6 + ratio * 14);
+
+            for (let i = 0; i < count; i++) {
+                const root = document.createElement('div');
+                root.className = 'root';
+                root.style.left = (8 + Math.random() * 84) + '%';
+                root.style.top = '0';
+                root.style.height = (15 + ratio * 50 + Math.random() * 25) + 'px';
+                root.style.transform = `rotate(${-12 + Math.random() * 24}deg)`;
+                root.style.opacity = 0.3 + ratio * 0.5;
+                rootsEl.appendChild(root);
+            }
+        }
+
+        function generateOrganisms() {
+            organismsEl.innerHTML = '';
+            const ratio = state.health / MAX_HEALTH;
+            if (ratio < 0.2) return;
+
+            // Vers
+            for (let i = 0; i < Math.floor(ratio * 5); i++) {
+                const w = document.createElement('div');
+                w.className = 'worm';
+                w.style.left = (10 + Math.random() * 80) + '%';
+                w.style.top = (8 + Math.random() * 45) + '%';
+                w.style.animationDelay = (Math.random() * 3) + 's';
+                organismsEl.appendChild(w);
+            }
+
+            // Microbes
+            for (let i = 0; i < Math.floor(ratio * 15); i++) {
+                const m = document.createElement('div');
+                m.className = 'microbe';
+                m.style.left = (5 + Math.random() * 90) + '%';
+                m.style.top = (5 + Math.random() * 55) + '%';
+                m.style.animationDelay = (Math.random() * 2) + 's';
+                m.style.width = (4 + Math.random() * 4) + 'px';
+                m.style.height = m.style.width;
+                organismsEl.appendChild(m);
+            }
+
+            // Champignons (mycelium)
+            for (let i = 0; i < Math.floor(ratio * 10); i++) {
+                const f = document.createElement('div');
+                f.className = 'fungus';
+                f.style.left = (5 + Math.random() * 85) + '%';
+                f.style.top = (10 + Math.random() * 50) + '%';
+                f.style.width = (15 + Math.random() * 30) + 'px';
+                f.style.transform = `rotate(${Math.random() * 180}deg)`;
+                f.style.animationDelay = (Math.random() * 3) + 's';
+                organismsEl.appendChild(f);
+            }
+        }
+
+        function generateCracks() {
+            cracksEl.innerHTML = '';
+            for (let i = 0; i < 12; i++) {
+                const c = document.createElement('div');
+                c.className = 'crack';
+                c.style.left = (5 + Math.random() * 90) + '%';
+                c.style.top = (Math.random() * 40) + '%';
+                c.style.height = (15 + Math.random() * 35) + 'px';
+                c.style.transform = `rotate(${-8 + Math.random() * 16}deg)`;
+                cracksEl.appendChild(c);
+            }
+        }
+
+        function getHarvestEfficiency() {
+            // Retourne le % de progression par clic selon la sante du sol
+            // Sol sain (100%) = 100% par clic (1 clic = 1 fruit)
+            // Sol moyen (50%) = 33% par clic (3 clics = 1 fruit)
+            // Sol pauvre (25%) = 15% par clic (7 clics = 1 fruit)
+            // Sol mort (0%) = 5% par clic (20 clics = 1 fruit)
+            const ratio = state.health / MAX_HEALTH;
+            if (ratio >= 0.8) return 100;
+            if (ratio >= 0.6) return 50;
+            if (ratio >= 0.4) return 33;
+            if (ratio >= 0.2) return 20;
+            if (ratio >= 0.1) return 10;
+            return 5;
+        }
+
+        function getEfficiencyText() {
+            const eff = getHarvestEfficiency();
+            if (eff >= 100) return "Sol fertile !";
+            if (eff >= 50) return "Sol correct";
+            if (eff >= 33) return "Sol fatigue";
+            if (eff >= 20) return "Sol pauvre";
+            return "Sol epuise...";
+        }
+
+        function updateHarvestUI() {
+            // Mettre a jour le cercle de progression
+            const circumference = 2 * Math.PI * 45; // 45 = rayon du cercle
+            const offset = circumference - (harvestProgress / 100) * circumference;
+            harvestCircle.style.strokeDashoffset = offset;
+
+            // Afficher/cacher
+            if (harvestProgress > 0 && harvestProgress < 100) {
+                harvestProgressEl.classList.add('visible');
+            }
+
+            // Afficher la difficulte
+            harvestDifficulty.textContent = getEfficiencyText();
+            harvestDifficulty.classList.add('visible');
+
+            // Reset timeout pour cacher
+            clearTimeout(harvestTimeout);
+            harvestTimeout = setTimeout(() => {
+                if (harvestProgress < 100 && harvestProgress > 0) {
+                    // La progression se perd si on attend trop
+                    harvestProgress = Math.max(0, harvestProgress - 20);
+                    updateHarvestUI();
+                }
+                harvestProgressEl.classList.remove('visible');
+                harvestDifficulty.classList.remove('visible');
+            }, 2000);
+        }
+
+        function harvest(e) {
+            if (state.isDead || state.health <= 0) return;
+
+            const x = e.clientX || e.touches?.[0]?.clientX || window.innerWidth / 2;
+            const y = e.clientY || e.touches?.[0]?.clientY || window.innerHeight * 0.4;
+
+            lastAction = Date.now();
+            isPatient = false;
+            hasRegenerated = false;
+            regenGlow.classList.remove('active');
+            patienceBar.classList.remove('visible');
+
+            // Ajouter la progression selon l'efficacite du sol
+            const efficiency = getHarvestEfficiency();
+            harvestProgress += efficiency;
+
+            // Si on atteint 100%, on recolte un fruit
+            if (harvestProgress >= 100) {
+                harvestProgress = 0;
+
+                state.score++;
+                scoreEl.textContent = state.score;
+                localStorage.setItem('solvivant_score', state.score);
+
+                state.health = Math.max(0, state.health - HARVEST_COST);
+
+                // Animation recolte reussie
+                const popup = document.createElement('div');
+                popup.className = 'harvest-popup';
+                popup.textContent = '+1 🍅';
+                popup.style.left = x + 'px';
+                popup.style.top = y + 'px';
+                container.appendChild(popup);
+                setTimeout(() => popup.remove(), 1200);
+
+                const crops = cropsEl.querySelectorAll('.crop');
+                if (crops.length) {
+                    const c = crops[Math.floor(Math.random() * crops.length)];
+                    c.classList.add('harvested');
+                    setTimeout(() => c.classList.remove('harvested'), 400);
+                }
+
+                harvestProgressEl.classList.remove('visible');
+                broadcast('harvest');
+                syncState();
+            } else {
+                // Feedback visuel du clic (petit effet)
+                const mini = document.createElement('div');
+                mini.className = 'harvest-popup';
+                mini.textContent = '🌱';
+                mini.style.left = x + 'px';
+                mini.style.top = y + 'px';
+                mini.style.fontSize = '1rem';
+                container.appendChild(mini);
+                setTimeout(() => mini.remove(), 600);
+            }
+
+            updateHarvestUI();
+            updateVisuals();
+        }
+
+        function checkPatience() {
+            if (state.isDead) return;
+
+            const elapsed = Date.now() - lastAction;
+            const progress = Math.min(elapsed / PATIENCE_TIME, 1);
+
+            if (elapsed > 2000 && elapsed < PATIENCE_TIME) {
+                patienceBar.classList.add('visible');
+                patienceFill.style.width = (progress * 100) + '%';
+            } else {
+                patienceBar.classList.remove('visible');
+            }
+
+            if (elapsed >= PATIENCE_TIME && !isPatient) {
+                isPatient = true;
+                regenGlow.classList.add('active');
+
+                if (!hasRegenerated) {
+                    hasRegenerated = true;
+                    state.health = Math.min(MAX_HEALTH, state.health + PATIENCE_BONUS);
+                    broadcast('regen');
+                    updateVisuals();
+                    syncState();
+                    generateCrops();
+                    generateRoots();
+                    generateOrganisms();
+                }
+            }
+
+            // Regen continue
+            if (isPatient && state.health < MAX_HEALTH) {
+                state.health = Math.min(MAX_HEALTH, state.health + 0.008);
+            }
+        }
+
+        function updateVisuals() {
+            const ratio = state.health / MAX_HEALTH;
+            healthFill.style.width = (ratio * 100) + '%';
+
+            container.classList.remove('degraded', 'critical');
+            if (ratio < 0.2) {
+                container.classList.add('critical');
+            } else if (ratio < 0.5) {
+                container.classList.add('degraded');
+            }
+
+            document.documentElement.style.setProperty('--life-opacity', ratio > 0.2 ? ratio : 0);
+
+            if (state.health <= 0 && !state.isDead) {
+                state.isDead = true;
+                localStorage.setItem('solvivant_dead', 'true');
+                setTimeout(() => deadOverlay.classList.add('visible'), 1500);
+            }
+        }
+
+        function showActivity(a) {
+            const item = document.createElement('div');
+            item.className = 'activity-item ' + a.type;
+            item.innerHTML = a.type === 'harvest'
+                ? `🍅 ${a.name} recolte`
+                : `🌱 ${a.name} regenere`;
+            activityFeed.insertBefore(item, activityFeed.firstChild);
+            while (activityFeed.children.length > 5) activityFeed.lastChild.remove();
+            setTimeout(() => item.remove(), 6000);
+        }
+
+        function broadcast(type) {
+            if (DEMO_MODE || !db) return;
+            const names = ['Visiteur', 'Jardinier', 'Paysan'];
+            db.ref('activities').push({
+                type,
+                name: names[Math.floor(Math.random() * names.length)],
+                odId: state.odId
+            });
+        }
+
+        function syncState() {
+            if (!DEMO_MODE && stateRef) {
+                stateRef.update({ health: state.health });
+            }
+        }
+
+        function updateCursors(users) {
+            remoteCursors.innerHTML = '';
+            Object.entries(users).forEach(([id, u]) => {
+                if (id === state.odId) return;
+                const c = document.createElement('div');
+                c.className = 'remote-cursor ' + (u.isPatient ? 'patient' : 'harvesting');
+                c.style.left = (u.x * 100) + '%';
+                c.style.top = (u.y * 100) + '%';
+                remoteCursors.appendChild(c);
+            });
+        }
+
+        function setupEvents() {
+            $('harvest-zone').addEventListener('click', harvest);
+            $('harvest-zone').addEventListener('touchstart', e => { e.preventDefault(); harvest(e); }, { passive: false });
+
+            $('info-btn').addEventListener('click', e => { e.stopPropagation(); infoPanel.classList.add('visible'); });
+            $('close-btn').addEventListener('click', () => infoPanel.classList.remove('visible'));
+            infoPanel.addEventListener('click', e => { if (e.target === infoPanel) infoPanel.classList.remove('visible'); });
+
+            document.addEventListener('mousemove', e => {
+                if (!DEMO_MODE && userRef) {
+                    userRef.update({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight, isPatient });
+                }
+            });
+        }
+
+        function checkHunger() {
+            const now = Date.now();
+            const elapsed = now - lastHungerTick;
+
+            // Mise a jour de la barre de faim (descend progressivement)
+            const hungerDecay = (elapsed / HUNGER_INTERVAL) * 100;
+            state.hunger = Math.max(0, state.hunger - hungerDecay * 0.016);
+            hungerFill.style.width = state.hunger + '%';
+
+            // Quand la faim atteint 0, consommer 1 fruit
+            if (now - lastHungerTick >= HUNGER_INTERVAL) {
+                lastHungerTick = now;
+
+                if (state.score > 0) {
+                    state.score--;
+                    scoreEl.textContent = state.score;
+                    localStorage.setItem('solvivant_score', state.score);
+                    state.hunger = MAX_HUNGER; // Reset hunger bar
+                    scorePanel.classList.remove('hungry');
+                } else {
+                    // Pas de fruit = faim !
+                    scorePanel.classList.add('hungry');
+                    state.hunger = 0;
+                }
+            }
+
+            // Alerte visuelle quand faim basse
+            if (state.hunger < 30 && state.score === 0) {
+                scorePanel.classList.add('hungry');
+            } else if (state.score > 0) {
+                scorePanel.classList.remove('hungry');
+            }
+        }
+
+        function gameLoop() {
+            if (!state.isDead) {
+                checkPatience();
+                checkHunger();
+                if (!isPatient) state.health = Math.max(0, state.health - 0.002);
+                updateVisuals();
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        init();
+    </script>
+</body>
+</html>

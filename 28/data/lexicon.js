@@ -1,0 +1,862 @@
+const LEXICON = 
+{
+  "meta": {
+    "version": "1.0.0",
+    "lastUpdated": "2026-01-30",
+    "description": "Lexique structuré pour KartApp - Niveaux A2 à B2"
+  },
+  "verbs": [
+    {
+      "id": "V.WRITE",
+      "root": "წერ",
+      "infinitive": "წერა",
+      "meaning": "écrire",
+      "level": "A2",
+      "class": "transitif",
+      "family": {
+        "base": "წერს",
+        "withPreverbs": [
+          { "form": "დაწერს", "preverb": "და-", "meaning": "écrire (perfectif)", "aspect": "perfectif" },
+          { "form": "ჩაწერს", "preverb": "ჩა-", "meaning": "inscrire, noter", "aspect": "perfectif" },
+          { "form": "გადაწერს", "preverb": "გადა-", "meaning": "recopier", "aspect": "perfectif" },
+          { "form": "მიწერს", "preverb": "მი-", "meaning": "écrire à qqn", "aspect": "perfectif" }
+        ]
+      },
+      "conjugation": {
+        "present": {
+          "1sg": "ვწერ", "2sg": "წერ", "3sg": "წერს",
+          "1pl": "ვწერთ", "2pl": "წერთ", "3pl": "წერენ"
+        },
+        "aorist": {
+          "1sg": "დავწერე", "2sg": "დაწერე", "3sg": "დაწერა",
+          "1pl": "დავწერეთ", "2pl": "დაწერეთ", "3pl": "დაწერეს"
+        }
+      },
+      "examples": [
+        { "geo": "წერილს ვწერ", "fr": "J'écris une lettre", "series": "I" },
+        { "geo": "მან წერილი დაწერა", "fr": "Il a écrit la lettre", "series": "II", "note": "ergatif" }
+      ]
+    },
+    {
+      "id": "V.READ",
+      "root": "კითხ",
+      "infinitive": "კითხვა",
+      "meaning": "lire",
+      "level": "A2",
+      "class": "transitif",
+      "family": {
+        "base": "კითხულობს",
+        "withPreverbs": [
+          { "form": "წაიკითხავს", "preverb": "წა-", "meaning": "lire (perfectif)", "aspect": "perfectif" },
+          { "form": "გადაიკითხავს", "preverb": "გადა-", "meaning": "relire", "aspect": "perfectif" }
+        ]
+      },
+      "conjugation": {
+        "present": {
+          "1sg": "ვკითხულობ", "2sg": "კითხულობ", "3sg": "კითხულობს",
+          "1pl": "ვკითხულობთ", "2pl": "კითხულობთ", "3pl": "კითხულობენ"
+        },
+        "aorist": {
+          "1sg": "წავიკითხე", "2sg": "წაიკითხე", "3sg": "წაიკითხა",
+          "1pl": "წავიკითხეთ", "2pl": "წაიკითხეთ", "3pl": "წაიკითხეს"
+        }
+      }
+    },
+    {
+      "id": "V.GIVE",
+      "root": "ძლევ",
+      "infinitive": "მიცემა",
+      "meaning": "donner",
+      "level": "B1",
+      "class": "transitif-indirect",
+      "doubleMarking": true,
+      "family": {
+        "base": "აძლევს",
+        "withPreverbs": [
+          { "form": "მისცემს", "preverb": "მი-", "meaning": "donner (perfectif)", "aspect": "perfectif" },
+          { "form": "გადასცემს", "preverb": "გადა-", "meaning": "transmettre", "aspect": "perfectif" }
+        ]
+      },
+      "conjugation": {
+        "present": {
+          "note": "Double marquage: préfixe objet indirect + suffixe sujet",
+          "1sg>3sg": "ვაძლევ", "3sg>1sg": "მაძლევს", "3sg>3sg": "აძლევს",
+          "1sg>2sg": "გაძლევ", "2sg>1sg": "მაძლევ", "2sg>3sg": "აძლევ"
+        }
+      },
+      "examples": [
+        { "geo": "წიგნს მაძლევს", "fr": "Il me donne le livre", "gloss": "მ- (1SG.DAT) + აძლევ + ს (3SG)" },
+        { "geo": "მან წიგნი მომცა", "fr": "Il m'a donné le livre", "series": "II" }
+      ]
+    },
+    {
+      "id": "V.GO",
+      "root": "სვლ",
+      "infinitive": "სვლა",
+      "meaning": "aller",
+      "level": "A2",
+      "class": "intransitif",
+      "family": {
+        "base": "მიდის",
+        "withPreverbs": [
+          { "form": "მიდის", "preverb": "მი-", "meaning": "aller (vers là-bas)", "direction": "éloignement" },
+          { "form": "მოდის", "preverb": "მო-", "meaning": "venir (vers ici)", "direction": "approche" },
+          { "form": "შედის", "preverb": "შე-", "meaning": "entrer", "direction": "intérieur" },
+          { "form": "გადის", "preverb": "გა-", "meaning": "sortir", "direction": "extérieur" },
+          { "form": "ადის", "preverb": "ა-", "meaning": "monter", "direction": "haut" },
+          { "form": "ჩადის", "preverb": "ჩა-", "meaning": "descendre", "direction": "bas" }
+        ]
+      },
+      "conjugation": {
+        "present": {
+          "1sg": "მივდივარ", "2sg": "მიდიხარ", "3sg": "მიდის",
+          "1pl": "მივდივართ", "2pl": "მიდიხართ", "3pl": "მიდიან"
+        }
+      }
+    },
+    {
+      "id": "V.SEE",
+      "root": "ხედ",
+      "infinitive": "ნახვა",
+      "meaning": "voir",
+      "level": "A2",
+      "class": "transitif",
+      "family": {
+        "base": "ხედავს",
+        "withPreverbs": [
+          { "form": "დაინახავს", "preverb": "და-", "meaning": "voir (perfectif)", "aspect": "perfectif" },
+          { "form": "ნახულობს", "preverb": "-", "meaning": "regarder, visiter", "aspect": "imperfectif" }
+        ]
+      },
+      "conjugation": {
+        "present": {
+          "1sg": "ვხედავ", "2sg": "ხედავ", "3sg": "ხედავს",
+          "1pl": "ვხედავთ", "2pl": "ხედავთ", "3pl": "ხედავენ"
+        },
+        "aorist": {
+          "1sg": "დავინახე", "2sg": "დაინახე", "3sg": "დაინახა",
+          "1pl": "დავინახეთ", "2pl": "დაინახეთ", "3pl": "დაინახეს"
+        }
+      }
+    },
+    {
+      "id": "V.WANT",
+      "root": "ნდომ",
+      "infinitive": "ნდომა",
+      "meaning": "vouloir",
+      "level": "A2",
+      "class": "inversif",
+      "note": "Verbe inversif: l'expérient est au datif",
+      "conjugation": {
+        "present": {
+          "note": "Sujet logique au datif",
+          "1sg": "მინდა", "2sg": "გინდა", "3sg": "უნდა",
+          "1pl": "გვინდა", "2pl": "გინდათ", "3pl": "უნდათ"
+        }
+      },
+      "examples": [
+        { "geo": "წყალი მინდა", "fr": "Je veux de l'eau", "gloss": "eau-NOM me-DAT.vouloir" },
+        { "geo": "რა გინდა?", "fr": "Que veux-tu?", "note": "გ- marque 2SG datif" }
+      ]
+    },
+    {
+      "id": "V.KNOW",
+      "root": "ცოდ",
+      "infinitive": "ცოდნა",
+      "meaning": "savoir",
+      "level": "A2",
+      "class": "transitif",
+      "conjugation": {
+        "present": {
+          "1sg": "ვიცი", "2sg": "იცი", "3sg": "იცის",
+          "1pl": "ვიცით", "2pl": "იცით", "3pl": "იციან"
+        }
+      },
+      "examples": [
+        { "geo": "ქართული ვიცი", "fr": "Je sais le géorgien" },
+        { "geo": "არ ვიცი", "fr": "Je ne sais pas" }
+      ]
+    },
+    {
+      "id": "V.SPEAK",
+      "root": "ლაპარაკ",
+      "infinitive": "ლაპარაკი",
+      "meaning": "parler",
+      "level": "A2",
+      "class": "intransitif",
+      "conjugation": {
+        "present": {
+          "1sg": "ვლაპარაკობ", "2sg": "ლაპარაკობ", "3sg": "ლაპარაკობს",
+          "1pl": "ვლაპარაკობთ", "2pl": "ლაპარაკობთ", "3pl": "ლაპარაკობენ"
+        }
+      },
+      "examples": [
+        { "geo": "ქართულად ვლაპარაკობ", "fr": "Je parle géorgien" }
+      ]
+    },
+    {
+      "id": "V.LOVE",
+      "root": "ყვარ",
+      "infinitive": "სიყვარული",
+      "meaning": "aimer",
+      "level": "B1",
+      "class": "inversif",
+      "note": "Verbe inversif: l'aimant est au datif",
+      "conjugation": {
+        "present": {
+          "1sg>3sg": "მიყვარს", "2sg>3sg": "გიყვარს", "3sg>3sg": "უყვარს",
+          "1pl>3sg": "გვიყვარს", "2pl>3sg": "გიყვართ", "3pl>3sg": "უყვართ"
+        }
+      },
+      "examples": [
+        { "geo": "საქართველო მიყვარს", "fr": "J'aime la Géorgie", "gloss": "Géorgie-NOM me-DAT.aimer" },
+        { "geo": "მიყვარხარ", "fr": "Je t'aime", "note": "Double marquage: მი- (1SG) + ყვარ + ხარ (2SG)" }
+      ]
+    },
+    {
+      "id": "V.EAT",
+      "root": "ჭამ",
+      "infinitive": "ჭამა",
+      "meaning": "manger",
+      "level": "A2",
+      "class": "transitif",
+      "family": {
+        "base": "ჭამს",
+        "withPreverbs": [
+          { "form": "შეჭამს", "preverb": "შე-", "meaning": "manger (perfectif)", "aspect": "perfectif" }
+        ]
+      },
+      "conjugation": {
+        "present": {
+          "1sg": "ვჭამ", "2sg": "ჭამ", "3sg": "ჭამს",
+          "1pl": "ვჭამთ", "2pl": "ჭამთ", "3pl": "ჭამენ"
+        },
+        "aorist": {
+          "1sg": "შევჭამე", "2sg": "შეჭამე", "3sg": "შეჭამა",
+          "1pl": "შევჭამეთ", "2pl": "შეჭამეთ", "3pl": "შეჭამეს"
+        }
+      }
+    },
+    {
+      "id": "V.DRINK",
+      "root": "სმ",
+      "infinitive": "სმა",
+      "meaning": "boire",
+      "level": "A2",
+      "class": "transitif",
+      "family": {
+        "base": "სვამს",
+        "withPreverbs": [
+          { "form": "დალევს", "preverb": "და-", "meaning": "boire (perfectif)", "aspect": "perfectif" }
+        ]
+      },
+      "conjugation": {
+        "present": {
+          "1sg": "ვსვამ", "2sg": "სვამ", "3sg": "სვამს",
+          "1pl": "ვსვამთ", "2pl": "სვამთ", "3pl": "სვამენ"
+        }
+      }
+    },
+    {
+      "id": "V.WORK",
+      "root": "მუშაობ",
+      "infinitive": "მუშაობა",
+      "meaning": "travailler",
+      "level": "A2",
+      "class": "intransitif",
+      "conjugation": {
+        "present": {
+          "1sg": "ვმუშაობ", "2sg": "მუშაობ", "3sg": "მუშაობს",
+          "1pl": "ვმუშაობთ", "2pl": "მუშაობთ", "3pl": "მუშაობენ"
+        }
+      }
+    },
+    {
+      "id": "V.LIVE",
+      "root": "ცხოვრ",
+      "infinitive": "ცხოვრება",
+      "meaning": "vivre, habiter",
+      "level": "A2",
+      "class": "intransitif",
+      "conjugation": {
+        "present": {
+          "1sg": "ვცხოვრობ", "2sg": "ცხოვრობ", "3sg": "ცხოვრობს",
+          "1pl": "ვცხოვრობთ", "2pl": "ცხოვრობთ", "3pl": "ცხოვრობენ"
+        }
+      },
+      "examples": [
+        { "geo": "თბილისში ვცხოვრობ", "fr": "J'habite à Tbilissi" }
+      ]
+    },
+    {
+      "id": "V.THINK",
+      "root": "ფიქრ",
+      "infinitive": "ფიქრი",
+      "meaning": "penser",
+      "level": "B1",
+      "class": "intransitif",
+      "conjugation": {
+        "present": {
+          "1sg": "ვფიქრობ", "2sg": "ფიქრობ", "3sg": "ფიქრობს",
+          "1pl": "ვფიქრობთ", "2pl": "ფიქრობთ", "3pl": "ფიქრობენ"
+        }
+      },
+      "examples": [
+        { "geo": "რას ფიქრობ?", "fr": "Qu'en penses-tu?" }
+      ]
+    },
+    {
+      "id": "V.TELL",
+      "root": "ეუბნ",
+      "infinitive": "თქმა",
+      "meaning": "dire (à qqn)",
+      "level": "B1",
+      "class": "transitif-indirect",
+      "doubleMarking": true,
+      "conjugation": {
+        "present": {
+          "3sg>1sg": "მეუბნება", "3sg>2sg": "გეუბნება", "3sg>3sg": "ეუბნება",
+          "1sg>2sg": "გეუბნები", "1sg>3sg": "ვეუბნები"
+        }
+      },
+      "examples": [
+        { "geo": "რას მეუბნები?", "fr": "Que me dis-tu?" },
+        { "geo": "გეუბნები რომ...", "fr": "Je te dis que..." }
+      ]
+    }
+  ],
+  "nouns": [
+    {
+      "id": "N.BOOK",
+      "nominative": "წიგნი",
+      "meaning": "livre",
+      "level": "A2",
+      "gender": "inanimate",
+      "declension": {
+        "nominative": "წიგნი",
+        "ergative": "წიგნმა",
+        "dative": "წიგნს",
+        "genitive": "წიგნის",
+        "instrumental": "წიგნით",
+        "adverbial": "წიგნად",
+        "vocative": "წიგნო"
+      }
+    },
+    {
+      "id": "N.MAN",
+      "nominative": "კაცი",
+      "meaning": "homme",
+      "level": "A2",
+      "gender": "animate",
+      "declension": {
+        "nominative": "კაცი",
+        "ergative": "კაცმა",
+        "dative": "კაცს",
+        "genitive": "კაცის",
+        "instrumental": "კაცით",
+        "adverbial": "კაცად",
+        "vocative": "კაცო"
+      },
+      "examples": [
+        { "geo": "კაცი მიდის", "fr": "L'homme va", "case": "NOM" },
+        { "geo": "კაცმა დაწერა", "fr": "L'homme a écrit", "case": "ERG" }
+      ]
+    },
+    {
+      "id": "N.WOMAN",
+      "nominative": "ქალი",
+      "meaning": "femme",
+      "level": "A2",
+      "gender": "animate",
+      "declension": {
+        "nominative": "ქალი",
+        "ergative": "ქალმა",
+        "dative": "ქალს",
+        "genitive": "ქალის",
+        "instrumental": "ქალით",
+        "adverbial": "ქალად",
+        "vocative": "ქალო"
+      }
+    },
+    {
+      "id": "N.HOUSE",
+      "nominative": "სახლი",
+      "meaning": "maison",
+      "level": "A2",
+      "gender": "inanimate",
+      "declension": {
+        "nominative": "სახლი",
+        "ergative": "სახლმა",
+        "dative": "სახლს",
+        "genitive": "სახლის",
+        "instrumental": "სახლით",
+        "adverbial": "სახლად",
+        "vocative": "სახლო"
+      },
+      "withPostpositions": [
+        { "form": "სახლში", "postposition": "-ში", "meaning": "dans la maison" },
+        { "form": "სახლიდან", "postposition": "-დან", "meaning": "de la maison" },
+        { "form": "სახლამდე", "postposition": "-მდე", "meaning": "jusqu'à la maison" }
+      ]
+    },
+    {
+      "id": "N.WATER",
+      "nominative": "წყალი",
+      "meaning": "eau",
+      "level": "A2",
+      "gender": "inanimate",
+      "declension": {
+        "nominative": "წყალი",
+        "ergative": "წყალმა",
+        "dative": "წყალს",
+        "genitive": "წყლის",
+        "instrumental": "წყლით",
+        "adverbial": "წყლად"
+      }
+    },
+    {
+      "id": "N.LETTER",
+      "nominative": "წერილი",
+      "meaning": "lettre",
+      "level": "A2",
+      "gender": "inanimate",
+      "declension": {
+        "nominative": "წერილი",
+        "ergative": "წერილმა",
+        "dative": "წერილს",
+        "genitive": "წერილის",
+        "instrumental": "წერილით",
+        "adverbial": "წერილად"
+      }
+    },
+    {
+      "id": "N.FRIEND",
+      "nominative": "მეგობარი",
+      "meaning": "ami",
+      "level": "A2",
+      "gender": "animate",
+      "declension": {
+        "nominative": "მეგობარი",
+        "ergative": "მეგობარმა",
+        "dative": "მეგობარს",
+        "genitive": "მეგობრის",
+        "instrumental": "მეგობრით",
+        "adverbial": "მეგობრად",
+        "vocative": "მეგობარო"
+      }
+    },
+    {
+      "id": "N.CITY",
+      "nominative": "ქალაქი",
+      "meaning": "ville",
+      "level": "A2",
+      "gender": "inanimate",
+      "declension": {
+        "nominative": "ქალაქი",
+        "ergative": "ქალაქმა",
+        "dative": "ქალაქს",
+        "genitive": "ქალაქის",
+        "instrumental": "ქალაქით",
+        "adverbial": "ქალაქად"
+      },
+      "withPostpositions": [
+        { "form": "ქალაქში", "postposition": "-ში", "meaning": "dans la ville" }
+      ]
+    },
+    {
+      "id": "N.TABLE",
+      "nominative": "მაგიდა",
+      "meaning": "table",
+      "level": "A2",
+      "gender": "inanimate",
+      "declension": {
+        "nominative": "მაგიდა",
+        "ergative": "მაგიდამ",
+        "dative": "მაგიდას",
+        "genitive": "მაგიდის",
+        "instrumental": "მაგიდით",
+        "adverbial": "მაგიდად"
+      },
+      "withPostpositions": [
+        { "form": "მაგიდაზე", "postposition": "-ზე", "meaning": "sur la table" }
+      ]
+    },
+    {
+      "id": "N.WORD",
+      "nominative": "სიტყვა",
+      "meaning": "mot, parole",
+      "level": "A2",
+      "gender": "inanimate",
+      "declension": {
+        "nominative": "სიტყვა",
+        "ergative": "სიტყვამ",
+        "dative": "სიტყვას",
+        "genitive": "სიტყვის",
+        "instrumental": "სიტყვით",
+        "adverbial": "სიტყვად"
+      }
+    },
+    {
+      "id": "N.LANGUAGE",
+      "nominative": "ენა",
+      "meaning": "langue",
+      "level": "A2",
+      "gender": "inanimate",
+      "declension": {
+        "nominative": "ენა",
+        "ergative": "ენამ",
+        "dative": "ენას",
+        "genitive": "ენის",
+        "instrumental": "ენით",
+        "adverbial": "ენად"
+      }
+    },
+    {
+      "id": "N.COUNTRY",
+      "nominative": "ქვეყანა",
+      "meaning": "pays",
+      "level": "A2",
+      "gender": "inanimate",
+      "declension": {
+        "nominative": "ქვეყანა",
+        "ergative": "ქვეყანამ",
+        "dative": "ქვეყანას",
+        "genitive": "ქვეყნის",
+        "instrumental": "ქვეყნით",
+        "adverbial": "ქვეყნად"
+      }
+    },
+    {
+      "id": "N.TIME",
+      "nominative": "დრო",
+      "meaning": "temps",
+      "level": "B1",
+      "gender": "inanimate",
+      "declension": {
+        "nominative": "დრო",
+        "ergative": "დრომ",
+        "dative": "დროს",
+        "genitive": "დროის",
+        "instrumental": "დროით",
+        "adverbial": "დროდ"
+      }
+    },
+    {
+      "id": "N.WORK",
+      "nominative": "სამუშაო",
+      "meaning": "travail",
+      "level": "A2",
+      "gender": "inanimate",
+      "declension": {
+        "nominative": "სამუშაო",
+        "ergative": "სამუშაომ",
+        "dative": "სამუშაოს",
+        "genitive": "სამუშაოის",
+        "instrumental": "სამუშაოთი",
+        "adverbial": "სამუშაოდ"
+      }
+    },
+    {
+      "id": "N.CHILD",
+      "nominative": "ბავშვი",
+      "meaning": "enfant",
+      "level": "A2",
+      "gender": "animate",
+      "declension": {
+        "nominative": "ბავშვი",
+        "ergative": "ბავშვმა",
+        "dative": "ბავშვს",
+        "genitive": "ბავშვის",
+        "instrumental": "ბავშვით",
+        "adverbial": "ბავშვად",
+        "vocative": "ბავშვო"
+      }
+    }
+  ],
+  "pronouns": {
+    "personal": {
+      "level": "A2",
+      "forms": [
+        {
+          "person": "1sg",
+          "nominative": "მე",
+          "ergative": "მე",
+          "dative": "მე",
+          "genitive": "ჩემი",
+          "meaning": "je/moi"
+        },
+        {
+          "person": "2sg",
+          "nominative": "შენ",
+          "ergative": "შენ",
+          "dative": "შენ",
+          "genitive": "შენი",
+          "meaning": "tu/toi"
+        },
+        {
+          "person": "3sg",
+          "nominative": "ის",
+          "ergative": "მან",
+          "dative": "მას",
+          "genitive": "მისი",
+          "meaning": "il/elle"
+        },
+        {
+          "person": "1pl",
+          "nominative": "ჩვენ",
+          "ergative": "ჩვენ",
+          "dative": "ჩვენ",
+          "genitive": "ჩვენი",
+          "meaning": "nous"
+        },
+        {
+          "person": "2pl",
+          "nominative": "თქვენ",
+          "ergative": "თქვენ",
+          "dative": "თქვენ",
+          "genitive": "თქვენი",
+          "meaning": "vous",
+          "note": "aussi forme de politesse"
+        },
+        {
+          "person": "3pl",
+          "nominative": "ისინი",
+          "ergative": "მათ",
+          "dative": "მათ",
+          "genitive": "მათი",
+          "meaning": "ils/elles"
+        }
+      ],
+      "note": "1ère et 2ème personnes ne changent pas de forme entre NOM/ERG/DAT"
+    },
+    "demonstrative": {
+      "level": "A2",
+      "forms": [
+        { "geo": "ეს", "meaning": "ce/ceci (proche)" },
+        { "geo": "ის", "meaning": "ce/cela (loin)" },
+        { "geo": "ეგ", "meaning": "ce/cela (distance moyenne)" }
+      ]
+    },
+    "interrogative": {
+      "level": "A2",
+      "forms": [
+        { "geo": "რა", "meaning": "quoi" },
+        { "geo": "ვინ", "meaning": "qui" },
+        { "geo": "რომელი", "meaning": "lequel" },
+        { "geo": "რამდენი", "meaning": "combien" }
+      ]
+    }
+  },
+  "adjectives": [
+    {
+      "id": "ADJ.BIG",
+      "base": "დიდი",
+      "meaning": "grand",
+      "level": "A2",
+      "comparative": "უფრო დიდი",
+      "superlative": "ყველაზე დიდი"
+    },
+    {
+      "id": "ADJ.SMALL",
+      "base": "პატარა",
+      "meaning": "petit",
+      "level": "A2",
+      "comparative": "უფრო პატარა",
+      "superlative": "ყველაზე პატარა"
+    },
+    {
+      "id": "ADJ.GOOD",
+      "base": "კარგი",
+      "meaning": "bon",
+      "level": "A2",
+      "comparative": "უკეთესი",
+      "superlative": "საუკეთესო"
+    },
+    {
+      "id": "ADJ.BAD",
+      "base": "ცუდი",
+      "meaning": "mauvais",
+      "level": "A2",
+      "comparative": "უარესი",
+      "superlative": "ყველაზე ცუდი"
+    },
+    {
+      "id": "ADJ.NEW",
+      "base": "ახალი",
+      "meaning": "nouveau",
+      "level": "A2"
+    },
+    {
+      "id": "ADJ.OLD",
+      "base": "ძველი",
+      "meaning": "vieux, ancien",
+      "level": "A2"
+    },
+    {
+      "id": "ADJ.BEAUTIFUL",
+      "base": "ლამაზი",
+      "meaning": "beau",
+      "level": "A2"
+    },
+    {
+      "id": "ADJ.EASY",
+      "base": "ადვილი",
+      "meaning": "facile",
+      "level": "B1"
+    },
+    {
+      "id": "ADJ.DIFFICULT",
+      "base": "ძნელი",
+      "meaning": "difficile",
+      "level": "B1"
+    },
+    {
+      "id": "ADJ.INTERESTING",
+      "base": "საინტერესო",
+      "meaning": "intéressant",
+      "level": "B1"
+    },
+    {
+      "id": "ADJ.IMPORTANT",
+      "base": "მნიშვნელოვანი",
+      "meaning": "important",
+      "level": "B1"
+    }
+  ],
+  "postpositions": {
+    "level": "A2",
+    "items": [
+      {
+        "id": "POST.IN",
+        "form": "-ში",
+        "meaning": "dans",
+        "usage": "S'attache au datif",
+        "examples": [
+          { "geo": "სახლში", "fr": "dans la maison" },
+          { "geo": "თბილისში", "fr": "à Tbilissi" }
+        ]
+      },
+      {
+        "id": "POST.ON",
+        "form": "-ზე",
+        "meaning": "sur",
+        "usage": "S'attache au datif",
+        "examples": [
+          { "geo": "მაგიდაზე", "fr": "sur la table" },
+          { "geo": "ქუჩაზე", "fr": "dans la rue" }
+        ]
+      },
+      {
+        "id": "POST.FROM",
+        "form": "-დან",
+        "meaning": "de (provenance)",
+        "usage": "S'attache au datif",
+        "examples": [
+          { "geo": "თბილისიდან", "fr": "de Tbilissi" },
+          { "geo": "სახლიდან", "fr": "de la maison" }
+        ]
+      },
+      {
+        "id": "POST.TO",
+        "form": "-მდე",
+        "meaning": "jusqu'à",
+        "usage": "S'attache au datif",
+        "examples": [
+          { "geo": "ქალაქამდე", "fr": "jusqu'à la ville" }
+        ]
+      },
+      {
+        "id": "POST.WITH",
+        "form": "-თან",
+        "meaning": "chez, près de, avec",
+        "usage": "S'attache au datif",
+        "examples": [
+          { "geo": "მეგობართან", "fr": "chez un ami" }
+        ]
+      },
+      {
+        "id": "POST.FOR",
+        "form": "-თვის",
+        "meaning": "pour",
+        "usage": "S'attache au génitif",
+        "examples": [
+          { "geo": "შენთვის", "fr": "pour toi" }
+        ]
+      }
+    ]
+  },
+  "conjunctions": {
+    "level": "B1",
+    "items": [
+      { "geo": "და", "meaning": "et", "level": "A2" },
+      { "geo": "მაგრამ", "meaning": "mais", "level": "A2" },
+      { "geo": "ან", "meaning": "ou", "level": "A2" },
+      { "geo": "თუ", "meaning": "si (condition réelle)", "level": "B1" },
+      { "geo": "რომ", "meaning": "que / si (irréel)", "level": "B1" },
+      { "geo": "რადგან", "meaning": "parce que", "level": "B1" },
+      { "geo": "როდესაც", "meaning": "quand, lorsque", "level": "B1" },
+      { "geo": "სანამ", "meaning": "avant que, jusqu'à ce que", "level": "B1" },
+      { "geo": "თუმცა", "meaning": "bien que, cependant", "level": "B2" },
+      { "geo": "მიუხედავად", "meaning": "malgré", "level": "B2" }
+    ]
+  },
+  "adverbs": {
+    "level": "A2",
+    "items": [
+      { "geo": "აქ", "meaning": "ici", "level": "A2" },
+      { "geo": "იქ", "meaning": "là-bas", "level": "A2" },
+      { "geo": "ახლა", "meaning": "maintenant", "level": "A2" },
+      { "geo": "მერე", "meaning": "après, ensuite", "level": "A2" },
+      { "geo": "ხშირად", "meaning": "souvent", "level": "A2" },
+      { "geo": "იშვიათად", "meaning": "rarement", "level": "B1" },
+      { "geo": "ჯერ", "meaning": "d'abord, encore", "level": "A2" },
+      { "geo": "უკვე", "meaning": "déjà", "level": "A2" },
+      { "geo": "ძალიან", "meaning": "très", "level": "A2" },
+      { "geo": "კარგად", "meaning": "bien", "level": "A2" },
+      { "geo": "ცუდად", "meaning": "mal", "level": "A2" }
+    ]
+  },
+  "numbers": {
+    "level": "A2",
+    "cardinals": [
+      { "geo": "ერთი", "value": 1 },
+      { "geo": "ორი", "value": 2 },
+      { "geo": "სამი", "value": 3 },
+      { "geo": "ოთხი", "value": 4 },
+      { "geo": "ხუთი", "value": 5 },
+      { "geo": "ექვსი", "value": 6 },
+      { "geo": "შვიდი", "value": 7 },
+      { "geo": "რვა", "value": 8 },
+      { "geo": "ცხრა", "value": 9 },
+      { "geo": "ათი", "value": 10 },
+      { "geo": "ოცი", "value": 20 },
+      { "geo": "ოცდაათი", "value": 30, "gloss": "20+10" },
+      { "geo": "ორმოცი", "value": 40, "gloss": "2×20" },
+      { "geo": "ორმოცდაათი", "value": 50, "gloss": "2×20+10" },
+      { "geo": "სამოცი", "value": 60, "gloss": "3×20" },
+      { "geo": "სამოცდაათი", "value": 70, "gloss": "3×20+10" },
+      { "geo": "ოთხმოცი", "value": 80, "gloss": "4×20" },
+      { "geo": "ოთხმოცდაათი", "value": 90, "gloss": "4×20+10" },
+      { "geo": "ასი", "value": 100 }
+    ],
+    "note": "Système vigésimal (base 20)"
+  },
+  "properNouns": {
+    "countries": [
+      { "geo": "საქართველო", "meaning": "Géorgie" },
+      { "geo": "საფრანგეთი", "meaning": "France" },
+      { "geo": "გერმანია", "meaning": "Allemagne" },
+      { "geo": "რუსეთი", "meaning": "Russie" },
+      { "geo": "თურქეთი", "meaning": "Turquie" },
+      { "geo": "სომხეთი", "meaning": "Arménie" },
+      { "geo": "აზერბაიჯანი", "meaning": "Azerbaïdjan" }
+    ],
+    "cities": [
+      { "geo": "თბილისი", "meaning": "Tbilissi" },
+      { "geo": "ბათუმი", "meaning": "Batoumi" },
+      { "geo": "ქუთაისი", "meaning": "Koutaïssi" },
+      { "geo": "პარიზი", "meaning": "Paris" }
+    ]
+  }
+}
+;

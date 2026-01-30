@@ -27,6 +27,8 @@ import SchemasExercices from './pages/SchemasExercices'
 import SchemaExercice from './pages/SchemaExercice'
 import ErreursVisuelles from './pages/ErreursVisuelles'
 import ErreurVisuelleSession from './pages/ErreurVisuelleSession'
+import MentionsLegales from './pages/MentionsLegales'
+import ConditionsUtilisation from './pages/ConditionsUtilisation'
 
 function App() {
   return (
@@ -59,6 +61,8 @@ function App() {
         <Route path="schemas-exercices/:exerciceId" element={<SchemaExercice />} />
         <Route path="erreurs-visuelles" element={<ErreursVisuelles />} />
         <Route path="erreurs-visuelles/:exerciceId" element={<ErreurVisuelleSession />} />
+        <Route path="mentions-legales" element={<MentionsLegales />} />
+        <Route path="conditions" element={<ConditionsUtilisation />} />
       </Route>
     </Routes>
   )

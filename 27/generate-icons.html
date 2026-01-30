@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Generate PWA Icons</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+        a { display: inline-block; margin: 10px; padding: 10px 20px; background: #333; color: white; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>PWA Icon Generator</h1>
+    <p>Click the links below to download the icons:</p>
+
+    <canvas id="canvas192" width="192" height="192"></canvas>
+    <canvas id="canvas512" width="512" height="512"></canvas>
+
+    <br>
+    <a id="link192" download="icon-192.png">Download icon-192.png</a>
+    <a id="link512" download="icon-512.png">Download icon-512.png</a>
+
+    <script>
+        function drawIcon(ctx, size) {
+            const scale = size / 512;
+
+            // Background gradient
+            const bgGrad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+            bgGrad.addColorStop(0, '#252545');
+            bgGrad.addColorStop(1, '#1a1a2e');
+
+            // Rounded rect background
+            ctx.fillStyle = bgGrad;
+            ctx.beginPath();
+            const r = 80 * scale;
+            ctx.roundRect(0, 0, size, size, r);
+            ctx.fill();
+
+            // Central glow
+            const glowGrad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, 180 * scale);
+            glowGrad.addColorStop(0, 'rgba(100, 180, 255, 0.8)');
+            glowGrad.addColorStop(0.7, 'rgba(100, 180, 255, 0.2)');
+            glowGrad.addColorStop(1, 'rgba(26, 26, 46, 0)');
+
+            ctx.fillStyle = glowGrad;
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, 180 * scale, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Particles
+            const particles = [
+                { x: 256, y: 256, r: 12, o: 0.9 },
+                { x: 230, y: 240, r: 8, o: 0.7 },
+                { x: 280, y: 235, r: 10, o: 0.8 },
+                { x: 245, y: 280, r: 9, o: 0.75 },
+                { x: 275, y: 270, r: 7, o: 0.65 },
+                { x: 200, y: 220, r: 6, o: 0.5 },
+                { x: 310, y: 210, r: 5, o: 0.45 },
+                { x: 190, y: 280, r: 7, o: 0.55 },
+                { x: 320, y: 290, r: 6, o: 0.5 },
+                { x: 220, y: 310, r: 5, o: 0.4 },
+                { x: 290, y: 320, r: 6, o: 0.45 },
+                { x: 160, y: 250, r: 4, o: 0.3 },
+                { x: 350, y: 260, r: 5, o: 0.35 },
+                { x: 250, y: 170, r: 4, o: 0.3 },
+                { x: 260, y: 340, r: 5, o: 0.35 },
+                { x: 180, y: 330, r: 4, o: 0.25 },
+                { x: 330, y: 180, r: 4, o: 0.28 }
+            ];
+
+            // Connections
+            ctx.strokeStyle = 'rgba(100, 180, 255, 0.2)';
+            ctx.lineWidth = 1 * scale;
+            const connections = [
+                [0, 1], [0, 2], [0, 3], [1, 5], [2, 6], [3, 9]
+            ];
+            connections.forEach(([i, j]) => {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x * scale, particles[i].y * scale);
+                ctx.lineTo(particles[j].x * scale, particles[j].y * scale);
+                ctx.stroke();
+            });
+
+            // Draw particles
+            particles.forEach(p => {
+                ctx.fillStyle = `rgba(100, 180, 255, ${p.o})`;
+                ctx.beginPath();
+                ctx.arc(p.x * scale, p.y * scale, p.r * scale, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        // Generate 192px
+        const ctx192 = document.getElementById('canvas192').getContext('2d');
+        drawIcon(ctx192, 192);
+        document.getElementById('link192').href = document.getElementById('canvas192').toDataURL('image/png');
+
+        // Generate 512px
+        const ctx512 = document.getElementById('canvas512').getContext('2d');
+        drawIcon(ctx512, 512);
+        document.getElementById('link512').href = document.getElementById('canvas512').toDataURL('image/png');
+    </script>
+</body>
+</html>

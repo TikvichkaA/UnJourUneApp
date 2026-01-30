@@ -260,11 +260,6 @@ function Home() {
         </p>
       </div>
 
-      {/* Footer info */}
-      <div className="text-center text-xs text-gray-400 pb-4">
-        <p>Application de révision - TP Électricien Bâtiment</p>
-        <p className="mt-1">Basé sur NF C 15-100 (2024) et RNCP36441</p>
-      </div>
     </div>
   )
 }
