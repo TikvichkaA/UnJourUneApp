@@ -123,7 +123,7 @@ function SchemaExercice() {
       {/* Schema canvas */}
       <div className="flex-1 p-4 overflow-auto">
         <div className="bg-white rounded-xl shadow-sm p-4 min-h-64 relative">
-          <svg viewBox="0 0 320 280" className="w-full h-auto" style={{ maxHeight: '300px' }}>
+          <svg viewBox="0 0 350 300" className="w-full h-auto">
             {/* Background grid */}
             <defs>
               <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">

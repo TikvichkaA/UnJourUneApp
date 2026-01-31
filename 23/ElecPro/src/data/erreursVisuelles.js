@@ -78,7 +78,7 @@ export const erreursVisuelles = [
       // DDR 300mA (ERREUR - devrait être 30mA)
       { type: 'rect', x: 40, y: 160, width: 45, height: 65, fill: '#fff', stroke: '#374151', strokeWidth: 2, rx: 3, id: 'erreur1' },
       { type: 'text', x: 62, y: 180, text: 'DDR', fontSize: 9, textAnchor: 'middle', fontWeight: 'bold' },
-      { type: 'text', x: 62, y: 192, text: '300mA', fontSize: 8, textAnchor: 'middle', fill: '#dc2626' },
+      { type: 'text', x: 62, y: 192, text: '300mA', fontSize: 8, textAnchor: 'middle', fill: '#059669' },
       { type: 'text', x: 62, y: 204, text: '40A', fontSize: 8, textAnchor: 'middle' },
       { type: 'rect', x: 48, y: 210, width: 28, height: 8, fill: '#22c55e', rx: 2 },
 
@@ -95,9 +95,8 @@ export const erreursVisuelles = [
 
       // Disjoncteur 32A sur prises (ERREUR - trop fort)
       { type: 'rect', x: 130, y: 160, width: 22, height: 65, fill: '#fff', stroke: '#374151', strokeWidth: 1.5, rx: 2, id: 'erreur2' },
-      { type: 'text', x: 141, y: 190, text: '32A', fontSize: 7, textAnchor: 'middle', fill: '#dc2626' },
+      { type: 'text', x: 141, y: 190, text: '32A', fontSize: 7, textAnchor: 'middle', fill: '#059669' },
       { type: 'circle', cx: 141, cy: 205, r: 6, fill: '#22c55e' },
-      { type: 'text', x: 141, y: 230, text: 'Prises!', fontSize: 6, textAnchor: 'middle', fill: '#dc2626' },
 
       // Disjoncteur 16A prises 3
       { type: 'rect', x: 160, y: 160, width: 22, height: 65, fill: '#fff', stroke: '#374151', strokeWidth: 1.5, rx: 2 },
@@ -107,7 +106,6 @@ export const erreursVisuelles = [
       // Fils sortie rangée 2 - avec un fil bleu comme phase (ERREUR visible)
       { type: 'line', x1: 111, y1: 225, x2: 111, y2: 233, stroke: '#ef4444', strokeWidth: 2 },
       { type: 'line', x1: 141, y1: 225, x2: 141, y2: 233, stroke: '#3b82f6', strokeWidth: 2 },
-      { type: 'text', x: 150, y: 232, text: 'L?', fontSize: 6, fill: '#dc2626' },
       { type: 'line', x1: 171, y1: 225, x2: 171, y2: 233, stroke: '#ef4444', strokeWidth: 2 },
 
       // ============ RANGÉE 3 : Circuits spécialisés ============
@@ -124,8 +122,8 @@ export const erreursVisuelles = [
 
       // Disjoncteur 10A pour plaque (ERREUR - doit être 32A)
       { type: 'rect', x: 100, y: 250, width: 22, height: 65, fill: '#fff', stroke: '#374151', strokeWidth: 1.5, rx: 2, id: 'erreur3' },
-      { type: 'text', x: 111, y: 275, text: '10A', fontSize: 7, textAnchor: 'middle', fill: '#dc2626' },
-      { type: 'circle', cx: 111, cy: 290, r: 6, fill: '#f59e0b' },
+      { type: 'text', x: 111, y: 275, text: '10A', fontSize: 7, textAnchor: 'middle', fill: '#059669' },
+      { type: 'circle', cx: 111, cy: 290, r: 6, fill: '#22c55e' },
       { type: 'text', x: 111, y: 305, text: 'Plaque', fontSize: 5, textAnchor: 'middle' },
 
       // Disjoncteur 20A lave-linge (correct)
@@ -156,7 +154,6 @@ export const erreursVisuelles = [
       { type: 'text', x: 290, y: 118, text: 'Terre (PE)', fontSize: 7 },
       { type: 'line', x1: 260, y1: 130, x2: 285, y2: 130, stroke: '#f97316', strokeWidth: 2 },
       { type: 'text', x: 290, y: 133, text: 'Retour', fontSize: 7 },
-      { type: 'text', x: 315, y: 148, text: '4 erreurs à trouver', fontSize: 8, textAnchor: 'middle', fill: '#dc2626' },
     ],
     erreurs: [
       {
@@ -234,12 +231,12 @@ export const erreursVisuelles = [
 
       // Labels volumes
       { type: 'text', x: 85, y: 95, text: 'Volume 0', fontSize: 8, textAnchor: 'middle', fill: '#dc2626' },
-      { type: 'text', x: 180, y: 95, text: 'Vol.1', fontSize: 8, textAnchor: 'middle', fill: '#f59e0b' },
+      { type: 'text', x: 180, y: 95, text: 'Vol.1', fontSize: 8, textAnchor: 'middle', fill: '#22c55e' },
       { type: 'text', x: 240, y: 95, text: 'Vol.2', fontSize: 8, textAnchor: 'middle', fill: '#22c55e' },
       { type: 'text', x: 320, y: 95, text: 'Hors vol.', fontSize: 8, textAnchor: 'middle', fill: '#3b82f6' },
 
       // Distances
-      { type: 'text', x: 180, y: 305, text: '60cm', fontSize: 7, textAnchor: 'middle', fill: '#f59e0b' },
+      { type: 'text', x: 180, y: 305, text: '60cm', fontSize: 7, textAnchor: 'middle', fill: '#22c55e' },
       { type: 'text', x: 240, y: 305, text: '60cm', fontSize: 7, textAnchor: 'middle', fill: '#22c55e' },
 
       // Câble alimentation général (du plafond)
@@ -293,7 +290,7 @@ export const erreursVisuelles = [
       { type: 'line', x1: 230, y1: 278, x2: 270, y2: 278, stroke: '#ef4444', strokeWidth: 2 },
       { type: 'line', x1: 230, y1: 288, x2: 270, y2: 288, stroke: '#ef4444', strokeWidth: 2 },
       { type: 'line', x1: 230, y1: 298, x2: 270, y2: 298, stroke: '#ef4444', strokeWidth: 2 },
-      { type: 'text', x: 250, y: 260, text: 'Classe I', fontSize: 6, textAnchor: 'middle', fill: '#dc2626' },
+      { type: 'text', x: 250, y: 260, text: 'Radiateur', fontSize: 6, textAnchor: 'middle', fill: '#6b7280' },
 
       // === CHAUFFE-EAU SANS DDR 30mA (ERREUR) ===
       // Fils vers chauffe-eau
@@ -306,7 +303,6 @@ export const erreursVisuelles = [
       { type: 'ellipse', cx: 357, cy: 180, rx: 18, ry: 10, fill: '#e5e7eb' },
       { type: 'text', x: 357, y: 145, text: 'Ballon', fontSize: 9, textAnchor: 'middle', fontWeight: 'bold' },
       { type: 'text', x: 357, y: 158, text: 'ECS', fontSize: 8, textAnchor: 'middle' },
-      { type: 'text', x: 357, y: 220, text: 'DDR 30mA ?', fontSize: 7, textAnchor: 'middle', fill: '#dc2626' },
 
       // === LAVABO HORS VOLUME (CORRECT) ===
       { type: 'ellipse', cx: 340, cy: 270, rx: 30, ry: 18, fill: '#fff', stroke: '#374151', strokeWidth: 2 },
@@ -395,17 +391,15 @@ export const erreursVisuelles = [
       { type: 'circle', cx: 68, cy: 270, r: 5, fill: '#374151' },
       { type: 'circle', cx: 88, cy: 270, r: 5, fill: '#374151' },
       { type: 'line', x1: 78, y1: 258, x2: 78, y2: 255, stroke: '#22c55e', strokeWidth: 2 },
-      { type: 'text', x: 78, y: 250, text: '1cm!', fontSize: 8, textAnchor: 'middle', fill: '#dc2626', fontWeight: 'bold' },
 
       // === PRISE 2 : Correcte ===
       { type: 'line', x1: 150, y1: 50, x2: 150, y2: 205, stroke: '#ef4444', strokeWidth: 2 },
       { type: 'line', x1: 158, y1: 58, x2: 158, y2: 205, stroke: '#3b82f6', strokeWidth: 2 },
       { type: 'line', x1: 166, y1: 66, x2: 166, y2: 208, stroke: '#22c55e', strokeWidth: 2 },
-      { type: 'rect', x: 135, y: 205, width: 45, height: 30, fill: '#fff', stroke: '#22c55e', strokeWidth: 2, rx: 5 },
+      { type: 'rect', x: 135, y: 205, width: 45, height: 30, fill: '#fff', stroke: '#374151', strokeWidth: 2, rx: 5 },
       { type: 'circle', cx: 148, cy: 220, r: 5, fill: '#374151' },
       { type: 'circle', cx: 168, cy: 220, r: 5, fill: '#374151' },
       { type: 'line', x1: 158, y1: 208, x2: 158, y2: 205, stroke: '#22c55e', strokeWidth: 2 },
-      { type: 'text', x: 158, y: 245, text: 'OK (5cm)', fontSize: 8, textAnchor: 'middle', fill: '#22c55e' },
 
       // === PRISE 3 : Sans terre (ERREUR) ===
       { type: 'line', x1: 230, y1: 50, x2: 230, y2: 140, stroke: '#ef4444', strokeWidth: 2 },
@@ -415,7 +409,6 @@ export const erreursVisuelles = [
       { type: 'circle', cx: 228, cy: 155, r: 5, fill: '#374151' },
       { type: 'circle', cx: 248, cy: 155, r: 5, fill: '#374151' },
       // Pas de broche de terre visible !
-      { type: 'text', x: 238, y: 135, text: 'Pas de PE!', fontSize: 8, textAnchor: 'middle', fill: '#dc2626', fontWeight: 'bold' },
 
       // === PRISE 4 : Fils visibles (ERREUR) ===
       { type: 'line', x1: 300, y1: 50, x2: 300, y2: 100, stroke: '#ef4444', strokeWidth: 2 },
@@ -429,7 +422,6 @@ export const erreursVisuelles = [
       { type: 'circle', cx: 303, cy: 145, r: 5, fill: '#374151' },
       { type: 'circle', cx: 323, cy: 145, r: 5, fill: '#374151' },
       { type: 'line', x1: 313, y1: 133, x2: 313, y2: 130, stroke: '#22c55e', strokeWidth: 2 },
-      { type: 'text', x: 312, y: 95, text: 'Fils nus!', fontSize: 8, textAnchor: 'middle', fill: '#dc2626', fontWeight: 'bold' },
 
       // === PRISE 5 : Multiprise en cascade (ERREUR) ===
       { type: 'line', x1: 360, y1: 50, x2: 360, y2: 175, stroke: '#ef4444', strokeWidth: 2 },
@@ -450,7 +442,6 @@ export const erreursVisuelles = [
       // Multiprise 2 (cascade)
       { type: 'rect', x: 335, y: 235, width: 55, height: 12, fill: '#e5e7eb', stroke: '#9ca3af', rx: 3 },
       { type: 'line', x1: 355, y1: 225, x2: 355, y2: 235, stroke: '#374151', strokeWidth: 2 },
-      { type: 'text', x: 360, y: 260, text: 'Cascade!', fontSize: 8, textAnchor: 'middle', fill: '#dc2626', fontWeight: 'bold' },
 
       // Légende
       { type: 'rect', x: 100, y: 85, width: 100, height: 50, fill: '#ecfdf5', stroke: '#22c55e', rx: 4 },
@@ -549,7 +540,6 @@ export const erreursVisuelles = [
       { type: 'line', x1: 185, y1: 115, x2: 210, y2: 115, stroke: '#3b82f6', strokeWidth: 3, id: 'erreur1' },
       { type: 'line', x1: 210, y1: 115, x2: 210, y2: 80, stroke: '#3b82f6', strokeWidth: 3 },
       { type: 'line', x1: 210, y1: 80, x2: 290, y2: 80, stroke: '#3b82f6', strokeWidth: 3 },
-      { type: 'text', x: 250, y: 75, text: 'Bleu = Retour?', fontSize: 7, fill: '#dc2626' },
 
       // Lampe
       { type: 'circle', cx: 320, cy: 100, r: 30, fill: '#fef9c3', stroke: '#eab308', strokeWidth: 3 },
@@ -568,14 +558,12 @@ export const erreursVisuelles = [
       { type: 'line', x1: 70, y1: 105, x2: 70, y2: 180, stroke: '#3b82f6', strokeWidth: 3, id: 'erreur2' },
       { type: 'line', x1: 70, y1: 180, x2: 170, y2: 180, stroke: '#3b82f6', strokeWidth: 3 },
       { type: 'line', x1: 170, y1: 160, x2: 170, y2: 180, stroke: '#3b82f6', strokeWidth: 3 },
-      { type: 'text', x: 120, y: 195, text: 'N passe par inter?', fontSize: 7, fill: '#dc2626' },
 
       // Neutre devrait aller direct à la lampe
       { type: 'line', x1: 170, y1: 180, x2: 340, y2: 180, stroke: '#3b82f6', strokeWidth: 3 },
       { type: 'line', x1: 340, y1: 180, x2: 340, y2: 90, stroke: '#3b82f6', strokeWidth: 3 },
 
       // ERREUR 3: Pas de terre visible
-      { type: 'text', x: 320, y: 160, text: 'Pas de PE!', fontSize: 8, fill: '#dc2626', textAnchor: 'middle', id: 'erreur3' },
 
       // Légende
       { type: 'rect', x: 130, y: 200, width: 150, height: 35, fill: '#fff', stroke: '#9ca3af', rx: 4 },

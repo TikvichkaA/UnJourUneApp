@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traducteur Antifasciste</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 320px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #1a1a1a;
+      color: #ffffff;
+    }
+
+    .header {
+      background: #dc2626;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .header p {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .main {
+      padding: 16px;
+    }
+
+    .toggle-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: #2a2a2a;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+
+    .toggle-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .toggle {
+      position: relative;
+      width: 48px;
+      height: 26px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #444;
+      border-radius: 26px;
+      transition: 0.3s;
+    }
+
+    .toggle-slider::before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background: #dc2626;
+    }
+
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(22px);
+    }
+
+    .toggle input:focus + .toggle-slider {
+      box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.5);
+    }
+
+    .stats {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      flex: 1;
+      background: #2a2a2a;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #dc2626;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    .connection-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 12px;
+      padding: 8px;
+      background: #2a2a2a;
+      border-radius: 4px;
+    }
+
+    .connection-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #666;
+    }
+
+    .connection-dot.online {
+      background: #22c55e;
+    }
+
+    .connection-dot.offline {
+      background: #f59e0b;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: #333;
+      border-color: #dc2626;
+    }
+
+    .btn-primary {
+      background: #dc2626;
+      border-color: #dc2626;
+    }
+
+    .btn-primary:hover {
+      background: #b91c1c;
+    }
+
+    .btn-icon {
+      font-size: 16px;
+    }
+
+    .manifest {
+      background: #2a2a2a;
+      padding: 12px;
+      border-radius: 6px;
+      border-left: 3px solid #dc2626;
+    }
+
+    .manifest p {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #ccc;
+    }
+
+    .manifest p:first-child {
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .footer {
+      padding: 12px 16px;
+      background: #111;
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+    }
+
+    .footer a {
+      color: #dc2626;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Traducteur Antifasciste</h1>
+    <p>Contre-propagande linguistique</p>
+  </div>
+
+  <div class="main">
+    <div class="connection-status">
+      <span class="connection-dot" id="connectionDot"></span>
+      <span id="connectionText">Vérification...</span>
+    </div>
+
+    <div class="toggle-section">
+      <span class="toggle-label">Extension active</span>
+      <label class="toggle">
+        <input type="checkbox" id="enableToggle" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value" id="expressionCount">--</div>
+        <div class="stat-label">Expressions</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="pageCount">0</div>
+        <div class="stat-label">Sur cette page</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="contribute.html" class="btn btn-primary">
+        <span class="btn-icon">+</span>
+        Proposer une traduction
+      </a>
+      <a href="browse.html" class="btn">
+        <span class="btn-icon">&#128214;</span>
+        Parcourir le dictionnaire
+      </a>
+    </div>
+
+    <div class="manifest">
+      <p>Cette extension adopte un point de vue antifasciste.</p>
+      <p>Elle ne cherche pas à être neutre face aux discours qui menacent les droits fondamentaux.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>v1.1.0 — <a href="https://github.com" target="_blank">Contribuer sur GitHub</a></p>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="translations.js"></script>
+  <script src="api.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

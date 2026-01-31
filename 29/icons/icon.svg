@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a"/>
+      <stop offset="100%" style="stop-color:#2a2a2a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="128" height="128" rx="16" fill="url(#bg)"/>
+
+  <!-- Red accent bar -->
+  <rect x="0" y="0" width="128" height="8" rx="4" fill="#dc2626"/>
+
+  <!-- T letter stylized -->
+  <g fill="#ffffff">
+    <!-- Horizontal bar of T -->
+    <rect x="24" y="32" width="80" height="12" rx="2"/>
+    <!-- Vertical bar of T -->
+    <rect x="52" y="32" width="24" height="72" rx="2"/>
+  </g>
+
+  <!-- Underline accent -->
+  <rect x="32" y="108" width="64" height="4" rx="2" fill="#dc2626"/>
+
+  <!-- Small arrow indicating translation -->
+  <path d="M96 72 L108 64 L96 56 L96 60 L88 60 L88 68 L96 68 Z" fill="#dc2626"/>
+</svg>

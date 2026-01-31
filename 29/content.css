@@ -1,0 +1,133 @@
+/**
+ * Traducteur Antifasciste - Styles
+ * Design sobre et tranchant
+ */
+
+/* Wrapper autour du texte annoté */
+.trad-antifa-wrapper {
+  position: relative;
+  display: inline;
+  cursor: help;
+}
+
+/* Le texte marqué */
+.trad-antifa-mark {
+  background: linear-gradient(180deg, transparent 60%, rgba(220, 38, 38, 0.25) 60%);
+  color: inherit;
+  padding: 0 2px;
+  border-bottom: 2px solid #dc2626;
+  transition: background 0.2s ease;
+}
+
+.trad-antifa-wrapper:hover .trad-antifa-mark,
+.trad-antifa-wrapper:focus .trad-antifa-mark {
+  background: rgba(220, 38, 38, 0.15);
+}
+
+.trad-antifa-wrapper:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Tooltip */
+.trad-antifa-tooltip {
+  position: absolute;
+  z-index: 2147483647;
+  display: none;
+  max-width: 380px;
+  min-width: 200px;
+  padding: 0;
+  background: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #dc2626;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: left;
+  pointer-events: none;
+}
+
+.trad-antifa-tooltip::before {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #dc2626;
+  border-bottom: 0;
+}
+
+.trad-antifa-tooltip-header {
+  background: #dc2626;
+  color: #ffffff;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 3px 3px 0 0;
+}
+
+.trad-antifa-tooltip-content {
+  padding: 12px;
+  font-weight: 500;
+  color: #ffffff;
+  border-bottom: 1px solid #333;
+}
+
+.trad-antifa-tooltip-original {
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #888;
+  font-style: italic;
+}
+
+/* Animation d'entrée */
+.trad-antifa-tooltip[style*="display: block"] {
+  animation: trad-antifa-fade-in 0.15s ease-out;
+}
+
+@keyframes trad-antifa-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mode sombre automatique - ajustements si le site est déjà sombre */
+@media (prefers-color-scheme: dark) {
+  .trad-antifa-mark {
+    background: linear-gradient(180deg, transparent 60%, rgba(220, 38, 38, 0.35) 60%);
+  }
+
+  .trad-antifa-wrapper:hover .trad-antifa-mark,
+  .trad-antifa-wrapper:focus .trad-antifa-mark {
+    background: rgba(220, 38, 38, 0.25);
+  }
+}
+
+/* Styles pour impression */
+@media print {
+  .trad-antifa-tooltip {
+    display: none !important;
+  }
+
+  .trad-antifa-mark {
+    background: none !important;
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .trad-antifa-wrapper::after {
+    content: " [" attr(data-translation) "]";
+    font-style: italic;
+    font-size: 0.9em;
+  }
+}

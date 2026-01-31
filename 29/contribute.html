@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposer une traduction - Traducteur Antifasciste</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 400px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #1a1a1a;
+      color: #ffffff;
+    }
+
+    .header {
+      background: #dc2626;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header .back {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header .back:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .header h1 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .main {
+      padding: 16px;
+    }
+
+    .intro {
+      background: #2a2a2a;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: #ccc;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #dc2626;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    select {
+      cursor: pointer;
+    }
+
+    select option {
+      background: #2a2a2a;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: #dc2626;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #b91c1c;
+    }
+
+    .btn:disabled {
+      background: #444;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 13px;
+      display: none;
+    }
+
+    .status.success {
+      display: block;
+      background: #065f46;
+      color: #a7f3d0;
+    }
+
+    .status.error {
+      display: block;
+      background: #7f1d1d;
+      color: #fecaca;
+    }
+
+    .status.offline {
+      display: block;
+      background: #78350f;
+      color: #fde68a;
+    }
+
+    .examples {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #333;
+    }
+
+    .examples h3 {
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .example {
+      background: #2a2a2a;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .example-original {
+      color: #999;
+    }
+
+    .example-translation {
+      color: #dc2626;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <button class="back" id="backBtn" title="Retour">&larr;</button>
+    <h1>Proposer une traduction</h1>
+  </header>
+
+  <main class="main">
+    <div class="intro">
+      Proposez une nouvelle expression et sa traduction politique. Votre proposition sera examinée avant d'être ajoutée au dictionnaire collaboratif.
+    </div>
+
+    <form id="proposalForm">
+      <div class="form-group">
+        <label for="original">Expression originale</label>
+        <input type="text" id="original" name="original" required
+               placeholder="ex: préférence nationale">
+        <div class="hint">L'expression euphémisante telle qu'elle apparaît dans les médias</div>
+      </div>
+
+      <div class="form-group">
+        <label for="translation">Traduction politique</label>
+        <input type="text" id="translation" name="translation" required
+               placeholder="ex: discrimination légale fondée sur l'origine">
+        <div class="hint">Ce que l'expression signifie réellement</div>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Catégorie</label>
+        <select id="category" name="category">
+          <option value="immigration">Immigration</option>
+          <option value="ordre">Ordre & Répression</option>
+          <option value="tradition">Valeurs & Tradition</option>
+          <option value="economie">Économie & Social</option>
+          <option value="medias">Médias & Démocratie</option>
+          <option value="nationalisme">Nationalisme</option>
+          <option value="general">Général</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="justification">Justification (optionnel)</label>
+        <textarea id="justification" name="justification"
+                  placeholder="Pourquoi cette traduction ? Sources, exemples d'usage..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="proposedBy">Votre pseudo (optionnel)</label>
+        <input type="text" id="proposedBy" name="proposedBy"
+               placeholder="Anonyme">
+      </div>
+
+      <button type="submit" class="btn" id="submitBtn">Envoyer la proposition</button>
+    </form>
+
+    <div class="status" id="status"></div>
+
+    <div class="examples">
+      <h3>Exemples de bonnes propositions</h3>
+      <div class="example">
+        <div class="example-original">"ensauvagement"</div>
+        <div class="example-translation">→ déshumanisation de populations ciblées</div>
+      </div>
+      <div class="example">
+        <div class="example-original">"wokisme"</div>
+        <div class="example-translation">→ épouvantail contre les luttes pour l'égalité</div>
+      </div>
+    </div>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script>
+    document.getElementById('backBtn').addEventListener('click', () => {
+      window.location.href = 'popup.html';
+    });
+
+    document.getElementById('proposalForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const btn = document.getElementById('submitBtn');
+      const status = document.getElementById('status');
+
+      btn.disabled = true;
+      btn.textContent = 'Envoi en cours...';
+      status.className = 'status';
+      status.style.display = 'none';
+
+      const original = document.getElementById('original').value;
+      const translation = document.getElementById('translation').value;
+      const category = document.getElementById('category').value;
+      const justification = document.getElementById('justification').value;
+      const proposedBy = document.getElementById('proposedBy').value;
+
+      // Vérifier le mode en ligne
+      if (!CONFIG.ONLINE_MODE) {
+        status.className = 'status offline';
+        status.textContent = 'Mode hors ligne. Configurez Supabase dans config.js pour activer les contributions.';
+        status.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Envoyer la proposition';
+        return;
+      }
+
+      const result = await TranslationsAPI.submitProposal(
+        original, translation, category, justification, proposedBy
+      );
+
+      if (result.success) {
+        status.className = 'status success';
+        status.textContent = 'Merci ! Votre proposition a été envoyée et sera examinée prochainement.';
+        document.getElementById('proposalForm').reset();
+      } else {
+        status.className = 'status error';
+        status.textContent = 'Erreur : ' + result.error;
+      }
+
+      status.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Envoyer la proposition';
+    });
+  </script>
+</body>
+</html>

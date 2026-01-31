@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traducteur Antifasciste - Extension Navigateur</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #1a1a1a;
+      color: #ffffff;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    .header {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
+    .header p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+    .nav {
+      background: #111;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid #333;
+    }
+    .nav-inner { max-width: 1000px; margin: 0 auto; display: flex; overflow-x: auto; }
+    .nav-link {
+      padding: 1rem 1.5rem;
+      color: #888;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .nav-link:hover, .nav-link.active { color: #fff; border-bottom-color: #dc2626; }
+    .main { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+    section { margin-bottom: 3rem; padding-top: 2rem; }
+    h2 {
+      font-size: 1.5rem;
+      color: #dc2626;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #333;
+    }
+    .manifest-box {
+      background: #2a2a2a;
+      border-left: 4px solid #dc2626;
+      padding: 1.5rem;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 2rem;
+    }
+    .manifest-box p { font-size: 1.1rem; margin-bottom: 1rem; }
+    .manifest-box p:last-child { margin-bottom: 0; color: #999; }
+    .download-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+    .download-card { background: #2a2a2a; padding: 1.5rem; border-radius: 8px; border: 1px solid #333; }
+    .download-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .download-card p { font-size: 0.9rem; color: #888; margin-bottom: 1rem; }
+    .download-card ol { font-size: 0.85rem; color: #ccc; padding-left: 1.2rem; margin-bottom: 1rem; }
+    .download-card li { margin-bottom: 0.4rem; }
+    .download-card code { background: #1a1a1a; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.8rem; color: #dc2626; }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: #dc2626;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #b91c1c; }
+    .btn:disabled { background: #666; cursor: not-allowed; }
+    .btn-outline { background: transparent; border: 1px solid #dc2626; color: #dc2626; }
+    .btn-outline:hover { background: #dc2626; color: #fff; }
+    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+    .dict-controls { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      padding: 0.75rem 1rem;
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .search-box:focus { outline: none; border-color: #dc2626; }
+    .filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      background: #333;
+      border: none;
+      border-radius: 20px;
+      color: #888;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { background: #444; color: #fff; }
+    .filter-btn.active { background: #dc2626; color: #fff; }
+    .dict-stats { font-size: 0.9rem; color: #888; margin-bottom: 1rem; }
+    .dict-list { display: grid; gap: 0.75rem; max-height: 600px; overflow-y: auto; padding-right: 0.5rem; }
+    .dict-item {
+      background: #2a2a2a;
+      padding: 1rem;
+      border-radius: 6px;
+      border-left: 3px solid #666;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .dict-item:hover { background: #333; }
+    .dict-item.editing { border-color: #dc2626; background: #1a1a1a; }
+    .dict-item.new-item { animation: flash-new 1s ease; }
+    @keyframes flash-new {
+      0%, 100% { background: #2a2a2a; }
+      50% { background: rgba(220, 38, 38, 0.3); }
+    }
+    .dict-item-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+    .dict-item-original { font-weight: 600; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; flex: 1; }
+    .dict-item-category { font-size: 0.7rem; padding: 0.15rem 0.5rem; background: #444; border-radius: 3px; color: #888; }
+    .dict-item-translation { color: #dc2626; font-size: 0.95rem; }
+    .dict-item-actions { display: flex; gap: 0.5rem; opacity: 0; transition: opacity 0.2s; }
+    .dict-item:hover .dict-item-actions { opacity: 1; }
+    .btn-icon { padding: 0.4rem; font-size: 0.9rem; min-width: 32px; }
+    .edit-form { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #444; }
+    .edit-form .form-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+    .edit-form input, .edit-form select {
+      flex: 1;
+      min-width: 150px;
+      padding: 0.6rem;
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+    .edit-form input:focus, .edit-form select:focus { outline: none; border-color: #dc2626; }
+    .edit-form .actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+    .cat-immigration { border-left-color: #3b82f6; }
+    .cat-ordre { border-left-color: #ef4444; }
+    .cat-tradition { border-left-color: #8b5cf6; }
+    .cat-economie { border-left-color: #22c55e; }
+    .cat-medias { border-left-color: #f59e0b; }
+    .cat-nationalisme { border-left-color: #ec4899; }
+    .cat-general { border-left-color: #6b7280; }
+    .add-form { background: #2a2a2a; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; }
+    .add-form h3 { font-size: 1rem; margin-bottom: 1rem; color: #fff; }
+    .add-form .form-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+    .add-form input, .add-form select {
+      flex: 1;
+      min-width: 150px;
+      padding: 0.75rem;
+      background: #1a1a1a;
+      border: 1px solid #444;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .add-form input:focus, .add-form select:focus { outline: none; border-color: #dc2626; }
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 1rem 1.5rem;
+      background: #065f46;
+      color: #a7f3d0;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.error { background: #7f1d1d; color: #fecaca; }
+    .demo-box { background: #2a2a2a; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; }
+    .demo-text { font-size: 1.1rem; color: #ccc; line-height: 1.8; }
+    .demo-word { position: relative; display: inline; cursor: help; }
+    .demo-mark { background: linear-gradient(180deg, transparent 60%, rgba(220, 38, 38, 0.25) 60%); padding: 0 2px; border-bottom: 2px solid #dc2626; }
+    .demo-tooltip { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1a1a1a; border: 1px solid #dc2626; border-radius: 4px; min-width: 250px; margin-bottom: 8px; z-index: 10; }
+    .demo-word:hover .demo-tooltip { display: block; }
+    .demo-tooltip-header { background: #dc2626; color: #fff; padding: 8px 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .demo-tooltip-content { padding: 12px; font-weight: 500; color: #fff; }
+    .demo-tooltip-original { padding: 10px 12px; font-size: 12px; color: #888; font-style: italic; border-top: 1px solid #333; }
+    .footer { text-align: center; padding: 2rem; color: #666; font-size: 0.9rem; border-top: 1px solid #333; margin-top: 2rem; }
+    .footer a { color: #dc2626; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .loading { text-align: center; padding: 2rem; color: #888; }
+    @media (max-width: 600px) {
+      .header h1 { font-size: 1.8rem; }
+      .download-cards { grid-template-columns: 1fr; }
+      .dict-item-actions { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>Traducteur Antifasciste</h1>
+    <p>Extension de navigateur qui traduit les euphémismes autoritaires en formulations politiques explicites.</p>
+  </header>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#presentation" class="nav-link active">Présentation</a>
+      <a href="#telecharger" class="nav-link">Télécharger</a>
+      <a href="#dictionnaire" class="nav-link">Dictionnaire</a>
+    </div>
+  </nav>
+
+  <main class="main">
+    <section id="presentation">
+      <div class="manifest-box">
+        <p><strong>Cette extension adopte un point de vue antifasciste.</strong></p>
+        <p>Elle ne cherche pas à être neutre face aux discours qui menacent les droits fondamentaux. Elle nomme. Elle traduit. Elle assume.</p>
+      </div>
+      <h2>Démonstration</h2>
+      <div class="demo-box">
+        <div class="demo-text">
+          "Le candidat promet de <span class="demo-word"><mark class="demo-mark">rétablir l'ordre</mark><span class="demo-tooltip"><div class="demo-tooltip-header">Traduction politique</div><div class="demo-tooltip-content">Renforcement de la répression d'État</div><div class="demo-tooltip-original">"rétablir l'ordre"</div></span></span> et de lutter contre l'<span class="demo-word"><mark class="demo-mark">immigration massive</mark><span class="demo-tooltip"><div class="demo-tooltip-header">Traduction politique</div><div class="demo-tooltip-content">Population désignée comme menace collective</div><div class="demo-tooltip-original">"immigration massive"</div></span></span> au nom des <span class="demo-word"><mark class="demo-mark">valeurs traditionnelles</mark><span class="demo-tooltip"><div class="demo-tooltip-header">Traduction politique</div><div class="demo-tooltip-content">Normes sociales imposées par l'État ou la majorité</div><div class="demo-tooltip-original">"valeurs traditionnelles"</div></span></span>."
+        </div>
+      </div>
+      <p style="color: #888; font-size: 0.9rem;">Survolez les expressions soulignées pour voir leur traduction.</p>
+    </section>
+
+    <section id="telecharger">
+      <h2>Télécharger l'extension</h2>
+      <div class="download-cards">
+        <div class="download-card">
+          <h3>Chrome / Edge / Brave</h3>
+          <p>Navigateurs basés sur Chromium</p>
+          <ol>
+            <li>Téléchargez et décompressez le ZIP</li>
+            <li>Ouvrez <code>chrome://extensions/</code></li>
+            <li>Activez le "Mode développeur"</li>
+            <li>Cliquez "Charger l'extension non empaquetée"</li>
+            <li>Sélectionnez le dossier décompressé</li>
+          </ol>
+          <a href="traducteur-antifasciste.zip" class="btn" download>Télécharger ZIP</a>
+        </div>
+        <div class="download-card">
+          <h3>Firefox</h3>
+          <p>Installation temporaire</p>
+          <ol>
+            <li>Téléchargez et décompressez le ZIP</li>
+            <li>Ouvrez <code>about:debugging</code></li>
+            <li>Cliquez "Ce Firefox" puis "Charger un module temporaire"</li>
+            <li>Sélectionnez <code>manifest.json</code></li>
+          </ol>
+          <a href="traducteur-antifasciste.zip" class="btn btn-outline" download>Télécharger ZIP</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="dictionnaire">
+      <h2>Dictionnaire collaboratif</h2>
+      <p style="color: #888; margin-bottom: 1.5rem;">Ajoutez ou modifiez les traductions directement. Les changements sont immédiats et partagés avec tous les utilisateurs.</p>
+
+      <div class="add-form" id="addForm">
+        <h3>+ Ajouter une expression</h3>
+        <div class="form-row">
+          <input type="text" id="newOriginal" placeholder="Expression originale (ex: préférence nationale)">
+          <input type="text" id="newTranslation" placeholder="Traduction politique">
+        </div>
+        <div class="form-row">
+          <select id="newCategory">
+            <option value="immigration">Immigration</option>
+            <option value="ordre">Ordre & Répression</option>
+            <option value="tradition">Valeurs & Tradition</option>
+            <option value="economie">Économie & Social</option>
+            <option value="medias">Médias & Démocratie</option>
+            <option value="nationalisme">Nationalisme</option>
+            <option value="general">Général</option>
+          </select>
+          <button class="btn" id="addBtn">Ajouter</button>
+        </div>
+      </div>
+
+      <div class="dict-controls">
+        <input type="text" class="search-box" id="searchInput" placeholder="Rechercher une expression...">
+      </div>
+
+      <div class="filters" id="filters">
+        <button class="filter-btn active" data-filter="all">Tout</button>
+        <button class="filter-btn" data-filter="immigration">Immigration</button>
+        <button class="filter-btn" data-filter="ordre">Ordre</button>
+        <button class="filter-btn" data-filter="tradition">Tradition</button>
+        <button class="filter-btn" data-filter="economie">Économie</button>
+        <button class="filter-btn" data-filter="medias">Médias</button>
+        <button class="filter-btn" data-filter="nationalisme">Nationalisme</button>
+      </div>
+
+      <div class="dict-stats" id="dictStats">Chargement...</div>
+      <div class="dict-list" id="dictList">
+        <div class="loading">Chargement du dictionnaire...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p><a href="../">&larr; Retour à Un Jour Une App</a></p>
+    <p style="margin-top: 1rem;">Traducteur Antifasciste v1.1.0 — Logiciel libre</p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const SUPABASE_URL = 'https://hwunkojdzodcutewkfet.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3dW5rb2pkem9kY3V0ZXdrZmV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzOTMzNTAsImV4cCI6MjA4Mzk2OTM1MH0.Zpe-QqzKDIpx3pTa6_e9ysfI-Rprl3SXANM8b2pqXU0';
+
+    let allTranslations = [];
+    let currentFilter = 'all';
+    let searchQuery = '';
+    let editingId = null;
+
+    const headers = {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    };
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast' + (isError ? ' error' : '');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelector(link.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    async function loadTranslations() {
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/translations?is_active=eq.true&select=id,original,translation,category`,
+          { headers }
+        );
+        if (!response.ok) throw new Error('Erreur réseau');
+        allTranslations = await response.json();
+        renderDictionary();
+      } catch (error) {
+        console.error('Erreur:', error);
+        document.getElementById('dictList').innerHTML = '<div class="loading">Erreur de chargement.</div>';
+      }
+    }
+
+    function renderDictionary(highlightId = null) {
+      const list = document.getElementById('dictList');
+      const stats = document.getElementById('dictStats');
+
+      let filtered = allTranslations;
+      if (currentFilter !== 'all') {
+        filtered = filtered.filter(t => t.category === currentFilter);
+      }
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        filtered = filtered.filter(t =>
+          t.original.toLowerCase().includes(q) || t.translation.toLowerCase().includes(q)
+        );
+      }
+      filtered.sort((a, b) => a.original.localeCompare(b.original));
+
+      stats.textContent = `${filtered.length} expression${filtered.length > 1 ? 's' : ''}`;
+
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="loading">Aucune expression trouvée</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(t => `
+        <div class="dict-item cat-${t.category} ${t.id === highlightId ? 'new-item' : ''}" data-id="${t.id}">
+          <div class="dict-item-header">
+            <div>
+              <div class="dict-item-original">
+                ${escapeHtml(t.original)}
+                <span class="dict-item-category">${t.category}</span>
+              </div>
+              <div class="dict-item-translation">${escapeHtml(t.translation)}</div>
+            </div>
+            <div class="dict-item-actions">
+              <button class="btn btn-sm btn-outline btn-icon" onclick="startEdit('${t.id}')" title="Modifier">&#9998;</button>
+            </div>
+          </div>
+          <div class="edit-form" id="edit-${t.id}" style="display: none;">
+            <div class="form-row">
+              <input type="text" id="edit-original-${t.id}" value="${escapeHtml(t.original)}" placeholder="Expression">
+              <input type="text" id="edit-translation-${t.id}" value="${escapeHtml(t.translation)}" placeholder="Traduction">
+            </div>
+            <div class="form-row">
+              <select id="edit-category-${t.id}">
+                <option value="immigration" ${t.category === 'immigration' ? 'selected' : ''}>Immigration</option>
+                <option value="ordre" ${t.category === 'ordre' ? 'selected' : ''}>Ordre & Répression</option>
+                <option value="tradition" ${t.category === 'tradition' ? 'selected' : ''}>Valeurs & Tradition</option>
+                <option value="economie" ${t.category === 'economie' ? 'selected' : ''}>Économie & Social</option>
+                <option value="medias" ${t.category === 'medias' ? 'selected' : ''}>Médias & Démocratie</option>
+                <option value="nationalisme" ${t.category === 'nationalisme' ? 'selected' : ''}>Nationalisme</option>
+                <option value="general" ${t.category === 'general' ? 'selected' : ''}>Général</option>
+              </select>
+              <div class="actions">
+                <button class="btn btn-sm btn-outline" onclick="cancelEdit()">Annuler</button>
+                <button class="btn btn-sm" onclick="saveEdit('${t.id}')">Enregistrer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function startEdit(id) {
+      if (editingId) {
+        document.getElementById(`edit-${editingId}`).style.display = 'none';
+        document.querySelector(`[data-id="${editingId}"]`).classList.remove('editing');
+      }
+      editingId = id;
+      document.getElementById(`edit-${id}`).style.display = 'block';
+      document.querySelector(`[data-id="${id}"]`).classList.add('editing');
+      document.getElementById(`edit-original-${id}`).focus();
+    }
+
+    function cancelEdit() {
+      if (editingId) {
+        document.getElementById(`edit-${editingId}`).style.display = 'none';
+        document.querySelector(`[data-id="${editingId}"]`).classList.remove('editing');
+        editingId = null;
+      }
+    }
+
+    async function saveEdit(id) {
+      const original = document.getElementById(`edit-original-${id}`).value.trim().toLowerCase();
+      const translation = document.getElementById(`edit-translation-${id}`).value.trim();
+      const category = document.getElementById(`edit-category-${id}`).value;
+
+      if (!original || !translation) {
+        showToast('Veuillez remplir tous les champs', true);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/translations?id=eq.${id}`,
+          {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ original, translation, category })
+          }
+        );
+
+        if (!response.ok) throw new Error('Erreur');
+
+        const updated = await response.json();
+        const index = allTranslations.findIndex(t => t.id === id);
+        if (index !== -1) allTranslations[index] = updated[0];
+
+        editingId = null;
+        renderDictionary();
+        showToast('Modification enregistrée');
+      } catch (error) {
+        showToast('Erreur lors de la modification', true);
+      }
+    }
+
+    document.getElementById('addBtn').addEventListener('click', async () => {
+      const original = document.getElementById('newOriginal').value.trim().toLowerCase();
+      const translation = document.getElementById('newTranslation').value.trim();
+      const category = document.getElementById('newCategory').value;
+
+      if (!original || !translation) {
+        showToast('Veuillez remplir l\'expression et sa traduction', true);
+        return;
+      }
+
+      const btn = document.getElementById('addBtn');
+      btn.disabled = true;
+      btn.textContent = 'Ajout...';
+
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/translations`,
+          {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ original, translation, category, is_active: true })
+          }
+        );
+
+        if (!response.ok) {
+          const err = await response.json();
+          if (err.code === '23505') {
+            showToast('Cette expression existe déjà', true);
+          } else {
+            throw new Error('Erreur');
+          }
+        } else {
+          const newItem = await response.json();
+          allTranslations.push(newItem[0]);
+          document.getElementById('newOriginal').value = '';
+          document.getElementById('newTranslation').value = '';
+          renderDictionary(newItem[0].id);
+          showToast('Expression ajoutée');
+        }
+      } catch (error) {
+        showToast('Erreur lors de l\'ajout', true);
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Ajouter';
+    });
+
+    document.getElementById('filters').addEventListener('click', (e) => {
+      if (e.target.classList.contains('filter-btn')) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        e.target.classList.add('active');
+        currentFilter = e.target.dataset.filter;
+        renderDictionary();
+      }
+    });
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderDictionary();
+    });
+
+    loadTranslations();
+  </script>
+</body>
+</html>

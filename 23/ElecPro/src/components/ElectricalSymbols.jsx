@@ -422,9 +422,9 @@ export const symbolsMap = {
   'point-lumineux': SymbolPointLumineux,
   'dcl': SymbolDCL,
   'applique': SymbolApplique,
-  'spot-encastre': SymbolPointLumineux,
+  'spot-encastre': SymbolSpotEncastre,
   'detecteur-presence': SymbolDetecteurPresence,
-  'hublot': SymbolPointLumineux,
+  'hublot': SymbolHublot,
 
   // Prises
   'prise-2p-t': SymbolPrise2PT,
@@ -448,18 +448,18 @@ export const symbolsMap = {
   'minuterie': SymbolMinuterie,
   'contacteur': SymbolContacteur,
   'contacteur-jour-nuit': SymbolContacteurJourNuit,
-  'horloge': SymbolMinuterie,
-  'delesteur': SymbolContacteur,
+  'horloge': SymbolHorloge,
+  'delesteur': SymbolDelesteur,
 
   // Câblage
   'terre': SymbolTerre,
   'liaison-equipotentielle': SymbolLiaisonEquipotentielle,
   'boite-derivation': SymbolBoiteDerivation,
-  'conducteur-phase': SymbolTerre,
-  'conducteur-neutre': SymbolTerre,
-  'conducteur-terre': SymbolTerre,
-  'cable-encastre': SymbolBoiteDerivation,
-  'cable-apparent': SymbolBoiteDerivation
+  'conducteur-phase': SymbolConducteurPhase,
+  'conducteur-neutre': SymbolConducteurNeutre,
+  'conducteur-terre': SymbolConducteurTerre,
+  'cable-encastre': SymbolCableEncastre,
+  'cable-apparent': SymbolCableApparent
 }
 
 // Composant générique pour afficher un symbole par son ID
@@ -475,4 +475,106 @@ export function ElectricalSymbol({ symbolId, size = 80, className = "" }) {
   }
 
   return <SymbolComponent size={size} className={className} />
+}
+
+// Symbole conducteur de phase (fil rouge/marron/noir)
+export function SymbolConducteurPhase({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 80 30" width={size} height={size * 0.375} className={className}>
+      <line x1="5" y1="15" x2="75" y2="15" stroke="currentColor" strokeWidth="4"/>
+      <text x="40" y="28" textAnchor="middle" fontSize="8" fill="currentColor">L</text>
+    </svg>
+  )
+}
+
+// Symbole conducteur de neutre (fil bleu)
+export function SymbolConducteurNeutre({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 80 30" width={size} height={size * 0.375} className={className}>
+      <line x1="5" y1="15" x2="75" y2="15" stroke="currentColor" strokeWidth="4"/>
+      <text x="40" y="28" textAnchor="middle" fontSize="8" fill="currentColor">N</text>
+    </svg>
+  )
+}
+
+// Symbole conducteur de protection (fil vert/jaune)
+export function SymbolConducteurTerre({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 80 30" width={size} height={size * 0.375} className={className}>
+      <line x1="5" y1="15" x2="75" y2="15" stroke="currentColor" strokeWidth="4" strokeDasharray="8 4"/>
+      <text x="40" y="28" textAnchor="middle" fontSize="8" fill="currentColor">PE</text>
+    </svg>
+  )
+}
+
+// Symbole câble encastré (trait continu)
+export function SymbolCableEncastre({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 80 40" width={size} height={size * 0.5} className={className}>
+      <line x1="5" y1="20" x2="75" y2="20" stroke="currentColor" strokeWidth="3"/>
+      <text x="40" y="35" textAnchor="middle" fontSize="7" fill="currentColor">encastré</text>
+    </svg>
+  )
+}
+
+// Symbole câble apparent (trait pointillé)
+export function SymbolCableApparent({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 80 40" width={size} height={size * 0.5} className={className}>
+      <line x1="5" y1="20" x2="75" y2="20" stroke="currentColor" strokeWidth="3" strokeDasharray="8 4"/>
+      <text x="40" y="35" textAnchor="middle" fontSize="7" fill="currentColor">apparent</text>
+    </svg>
+  )
+}
+
+// Symbole spot encastré
+export function SymbolSpotEncastre({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 60 70" width={size} height={size * 1.17} className={className}>
+      <rect x="10" y="5" width="40" height="20" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="30" cy="40" r="18" fill="none" stroke="currentColor" strokeWidth="3"/>
+      <line x1="30" y1="27" x2="30" y2="53" stroke="currentColor" strokeWidth="2"/>
+      <line x1="17" y1="40" x2="43" y2="40" stroke="currentColor" strokeWidth="2"/>
+      <line x1="30" y1="22" x2="30" y2="25" stroke="currentColor" strokeWidth="2"/>
+    </svg>
+  )
+}
+
+// Symbole hublot (étanche)
+export function SymbolHublot({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 60 60" width={size} height={size} className={className}>
+      <circle cx="30" cy="30" r="25" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="30" cy="30" r="20" fill="none" stroke="currentColor" strokeWidth="3"/>
+      <line x1="30" y1="15" x2="30" y2="45" stroke="currentColor" strokeWidth="2"/>
+      <line x1="15" y1="30" x2="45" y2="30" stroke="currentColor" strokeWidth="2"/>
+    </svg>
+  )
+}
+
+// Symbole délesteur
+export function SymbolDelesteur({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 80 60" width={size} height={size * 0.75} className={className}>
+      <rect x="20" y="10" width="40" height="30" fill="none" stroke="currentColor" strokeWidth="2" rx="3"/>
+      <text x="40" y="22" textAnchor="middle" fontSize="8" fill="currentColor">P1</text>
+      <text x="40" y="35" textAnchor="middle" fontSize="8" fill="currentColor">P2</text>
+      <line x1="60" y1="18" x2="75" y2="18" stroke="currentColor" strokeWidth="2"/>
+      <line x1="60" y1="32" x2="75" y2="32" stroke="currentColor" strokeWidth="2"/>
+      <line x1="5" y1="25" x2="20" y2="25" stroke="currentColor" strokeWidth="2"/>
+    </svg>
+  )
+}
+
+// Symbole horloge programmable
+export function SymbolHorloge({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 60 60" width={size} height={size} className={className}>
+      <rect x="10" y="10" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="2" rx="3"/>
+      <circle cx="30" cy="30" r="15" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <line x1="30" y1="30" x2="30" y2="20" stroke="currentColor" strokeWidth="2"/>
+      <line x1="30" y1="30" x2="38" y2="35" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="30" cy="30" r="2" fill="currentColor"/>
+    </svg>
+  )
 }
