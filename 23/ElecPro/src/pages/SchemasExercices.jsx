@@ -21,7 +21,8 @@ function SchemasExercices() {
       'montages': '💡',
       'circuits': '🔧',
       'diagnostic': '🔍',
-      'protections': '⚡'
+      'protections': '⚡',
+      'courants-faibles': '🚪'
     }
     return icons[cat] || '📋'
   }

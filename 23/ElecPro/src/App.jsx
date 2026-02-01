@@ -29,6 +29,13 @@ import ErreursVisuelles from './pages/ErreursVisuelles'
 import ErreurVisuelleSession from './pages/ErreurVisuelleSession'
 import MentionsLegales from './pages/MentionsLegales'
 import ConditionsUtilisation from './pages/ConditionsUtilisation'
+import Calculs from './pages/Calculs'
+import CalculSession from './pages/CalculSession'
+import Moteurs from './pages/Moteurs'
+import MoteursDetail from './pages/MoteursDetail'
+import ErpSecurite from './pages/ErpSecurite'
+import ErpSecuriteDetail from './pages/ErpSecuriteDetail'
+import CommandeMateriel from './pages/CommandeMateriel'
 
 function App() {
   return (
@@ -63,6 +70,13 @@ function App() {
         <Route path="erreurs-visuelles/:exerciceId" element={<ErreurVisuelleSession />} />
         <Route path="mentions-legales" element={<MentionsLegales />} />
         <Route path="conditions" element={<ConditionsUtilisation />} />
+        <Route path="calculs" element={<Calculs />} />
+        <Route path="calculs/:id" element={<CalculSession />} />
+        <Route path="moteurs" element={<Moteurs />} />
+        <Route path="moteurs/:categoryId" element={<MoteursDetail />} />
+        <Route path="erp-securite" element={<ErpSecurite />} />
+        <Route path="erp-securite/:categoryId" element={<ErpSecuriteDetail />} />
+        <Route path="commande-materiel" element={<CommandeMateriel />} />
       </Route>
     </Routes>
   )

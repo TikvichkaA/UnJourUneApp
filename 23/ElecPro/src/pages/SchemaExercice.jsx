@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, CheckCircle, XCircle, Lightbulb, RotateCcw, Trophy, HelpCircle } from 'lucide-react'
+import { ArrowLeft, CheckCircle, XCircle, Lightbulb, RotateCcw, Trophy, HelpCircle, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react'
 import { getSchemaById, symbolesDisponibles } from '../data/schemasExercices'
 
 function SchemaExercice() {
@@ -20,6 +20,59 @@ function SchemaExercice() {
   const [showHints, setShowHints] = useState({})
   const [validated, setValidated] = useState(false)
   const [results, setResults] = useState(null)
+
+  // Zoom state
+  const [scale, setScale] = useState(1)
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const lastTouchDistance = useRef(null)
+  const lastTouchPosition = useRef(null)
+  const containerRef = useRef(null)
+
+  const handleZoom = useCallback((delta) => {
+    setScale(prev => Math.min(Math.max(prev + delta, 0.5), 3))
+  }, [])
+
+  const resetZoom = useCallback(() => {
+    setScale(1)
+    setPosition({ x: 0, y: 0 })
+  }, [])
+
+  const getDistance = (touch1, touch2) => {
+    return Math.hypot(touch1.clientX - touch2.clientX, touch1.clientY - touch2.clientY)
+  }
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 2) {
+      lastTouchDistance.current = getDistance(e.touches[0], e.touches[1])
+      lastTouchPosition.current = null
+    } else if (e.touches.length === 1 && scale > 1) {
+      lastTouchPosition.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+    }
+  }
+
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 2 && lastTouchDistance.current) {
+      e.preventDefault()
+      const newDistance = getDistance(e.touches[0], e.touches[1])
+      const delta = (newDistance - lastTouchDistance.current) * 0.01
+      setScale(prev => Math.min(Math.max(prev + delta, 0.5), 3))
+      lastTouchDistance.current = newDistance
+    } else if (e.touches.length === 1 && lastTouchPosition.current && scale > 1) {
+      e.preventDefault()
+      const deltaX = e.touches[0].clientX - lastTouchPosition.current.x
+      const deltaY = e.touches[0].clientY - lastTouchPosition.current.y
+      setPosition(prev => ({
+        x: Math.min(Math.max(prev.x + deltaX, -150), 150),
+        y: Math.min(Math.max(prev.y + deltaY, -150), 150)
+      }))
+      lastTouchPosition.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+    }
+  }
+
+  const handleTouchEnd = () => {
+    lastTouchDistance.current = null
+    lastTouchPosition.current = null
+  }
 
   if (!exercice) {
     return (
@@ -121,9 +174,54 @@ function SchemaExercice() {
       </div>
 
       {/* Schema canvas */}
-      <div className="flex-1 p-4 overflow-auto">
+      <div className="flex-1 p-4 overflow-hidden">
         <div className="bg-white rounded-xl shadow-sm p-4 min-h-64 relative">
-          <svg viewBox="0 0 350 300" className="w-full h-auto">
+          {/* Zoom controls */}
+          <div className="absolute top-2 right-2 z-10 flex gap-1">
+            <button
+              onClick={() => handleZoom(0.25)}
+              className="p-1.5 bg-white/90 rounded-lg shadow border hover:bg-gray-50"
+              title="Zoom +"
+            >
+              <ZoomIn size={18} className="text-gray-600" />
+            </button>
+            <button
+              onClick={() => handleZoom(-0.25)}
+              className="p-1.5 bg-white/90 rounded-lg shadow border hover:bg-gray-50"
+              title="Zoom -"
+            >
+              <ZoomOut size={18} className="text-gray-600" />
+            </button>
+            {scale !== 1 && (
+              <button
+                onClick={resetZoom}
+                className="p-1.5 bg-white/90 rounded-lg shadow border hover:bg-gray-50"
+                title="Reset zoom"
+              >
+                <Maximize2 size={18} className="text-gray-600" />
+              </button>
+            )}
+          </div>
+          {scale !== 1 && (
+            <div className="absolute bottom-2 left-2 z-10 text-xs bg-black/50 text-white px-2 py-1 rounded">
+              {Math.round(scale * 100)}%
+            </div>
+          )}
+          <div
+            ref={containerRef}
+            className="touch-none"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <svg
+              viewBox="0 0 350 300"
+              className="w-full h-auto transition-transform duration-100"
+              style={{
+                transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
+                transformOrigin: 'center'
+              }}
+            >
             {/* Background grid */}
             <defs>
               <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -272,6 +370,7 @@ function SchemaExercice() {
               )
             })}
           </svg>
+          </div>
         </div>
 
         {/* Zone hints */}

@@ -8,7 +8,12 @@ export const raccordementsData = {
     terre: { color: '#22C55E', label: 'Terre', code: 'PE' },
     retour: { color: '#F97316', label: 'Retour lampe', code: 'RL' },
     navette1: { color: '#8B5CF6', label: 'Navette 1', code: 'N1' },
-    navette2: { color: '#EC4899', label: 'Navette 2', code: 'N2' }
+    navette2: { color: '#EC4899', label: 'Navette 2', code: 'N2' },
+    // Courants faibles
+    plus12v: { color: '#DC2626', label: '+12V', code: '+' },
+    moins12v: { color: '#1E40AF', label: '0V', code: '-' },
+    data: { color: '#059669', label: 'Data', code: 'D' },
+    commande: { color: '#D97706', label: 'Commande', code: 'C' }
   },
 
   // Schémas constructeur pour les dispositifs centraux
@@ -370,6 +375,232 @@ export const raccordementsData = {
         'Le contacteur 1-2 alimente le chauffe-eau'
       ],
       explication: 'Le contacteur jour/nuit permet de faire fonctionner le chauffe-eau pendant les heures creuses. Le compteur envoie un signal qui active la bobine du contacteur.'
+    },
+
+    // === COURANTS FAIBLES ===
+    {
+      id: 'interphone-simple',
+      titre: 'Interphone simple',
+      description: 'Platine de rue, combiné et gâche électrique',
+      difficulte: 3,
+      icon: '🚪',
+      dureeEstimee: '4 min',
+      composants: [
+        { id: 'alim', type: 'alimentation', label: 'Alim 12V', x: 50, y: 100 },
+        { id: 'platine', type: 'platine-rue', label: 'Platine', x: 180, y: 50 },
+        { id: 'combine', type: 'combine', label: 'Combiné', x: 180, y: 150 },
+        { id: 'gache', type: 'gache', label: 'Gâche', x: 320, y: 100 }
+      ],
+      bornes: [
+        { id: 'alim-plus', componentId: 'alim', position: 'right', label: '+', x: 90, y: 90 },
+        { id: 'alim-moins', componentId: 'alim', position: 'right', label: '-', x: 90, y: 110 },
+        { id: 'platine-plus', componentId: 'platine', position: 'left', label: '+', x: 150, y: 40 },
+        { id: 'platine-moins', componentId: 'platine', position: 'left', label: '-', x: 150, y: 60 },
+        { id: 'platine-audio', componentId: 'platine', position: 'right', label: 'A', x: 210, y: 50 },
+        { id: 'combine-plus', componentId: 'combine', position: 'left', label: '+', x: 150, y: 140 },
+        { id: 'combine-moins', componentId: 'combine', position: 'left', label: '-', x: 150, y: 160 },
+        { id: 'combine-audio', componentId: 'combine', position: 'top', label: 'A', x: 180, y: 130 },
+        { id: 'combine-gache', componentId: 'combine', position: 'right', label: 'G', x: 210, y: 150 },
+        { id: 'gache-plus', componentId: 'gache', position: 'left', label: '+', x: 290, y: 90 },
+        { id: 'gache-moins', componentId: 'gache', position: 'left', label: '-', x: 290, y: 110 }
+      ],
+      connexionsCorrectes: [
+        { from: 'alim-plus', to: 'platine-plus', wireType: 'plus12v' },
+        { from: 'alim-plus', to: 'combine-plus', wireType: 'plus12v' },
+        { from: 'alim-moins', to: 'platine-moins', wireType: 'moins12v' },
+        { from: 'alim-moins', to: 'combine-moins', wireType: 'moins12v' },
+        { from: 'alim-moins', to: 'gache-moins', wireType: 'moins12v' },
+        { from: 'platine-audio', to: 'combine-audio', wireType: 'data' },
+        { from: 'combine-gache', to: 'gache-plus', wireType: 'commande' }
+      ],
+      indices: [
+        'Le +12V alimente la platine et le combiné',
+        'Le 0V est commun à tous les appareils',
+        'Le fil audio relie platine et combiné',
+        'La commande gâche part du combiné vers la gâche'
+      ],
+      explication: 'L\'interphone fonctionne en 12V DC. La platine et le combiné sont alimentés en parallèle. Le fil audio transmet la voix. Le bouton du combiné envoie le +12V vers la gâche pour l\'ouvrir.'
+    },
+
+    {
+      id: 'digicode',
+      titre: 'Digicode + Gâche',
+      description: 'Ouverture de porte par code',
+      difficulte: 2,
+      icon: '🔢',
+      dureeEstimee: '3 min',
+      composants: [
+        { id: 'alim', type: 'alimentation', label: 'Alim 12V', x: 50, y: 80 },
+        { id: 'digicode', type: 'digicode', label: 'Digicode', x: 180, y: 80 },
+        { id: 'gache', type: 'gache', label: 'Gâche', x: 320, y: 80 }
+      ],
+      bornes: [
+        { id: 'alim-plus', componentId: 'alim', position: 'right', label: '+', x: 90, y: 70 },
+        { id: 'alim-moins', componentId: 'alim', position: 'right', label: '-', x: 90, y: 90 },
+        { id: 'digi-plus', componentId: 'digicode', position: 'left', label: '+', x: 150, y: 70 },
+        { id: 'digi-moins', componentId: 'digicode', position: 'left', label: '-', x: 150, y: 90 },
+        { id: 'digi-com', componentId: 'digicode', position: 'right', label: 'COM', x: 210, y: 70 },
+        { id: 'digi-no', componentId: 'digicode', position: 'right', label: 'NO', x: 210, y: 90 },
+        { id: 'gache-plus', componentId: 'gache', position: 'left', label: '+', x: 290, y: 70 },
+        { id: 'gache-moins', componentId: 'gache', position: 'left', label: '-', x: 290, y: 90 }
+      ],
+      connexionsCorrectes: [
+        { from: 'alim-plus', to: 'digi-plus', wireType: 'plus12v' },
+        { from: 'alim-plus', to: 'digi-com', wireType: 'plus12v' },
+        { from: 'alim-moins', to: 'digi-moins', wireType: 'moins12v' },
+        { from: 'alim-moins', to: 'gache-moins', wireType: 'moins12v' },
+        { from: 'digi-no', to: 'gache-plus', wireType: 'commande' }
+      ],
+      indices: [
+        'Le digicode est alimenté en +12V et 0V',
+        'COM reçoit le +12V permanent',
+        'NO (Normally Open) envoie le + vers la gâche quand le code est bon',
+        'Le 0V est commun au digicode et à la gâche'
+      ],
+      explication: 'Le digicode possède un contact sec NO (normalement ouvert). Quand le bon code est entré, NO se connecte à COM et envoie le +12V vers la gâche.'
+    },
+
+    {
+      id: 'alarme-basique',
+      titre: 'Alarme filaire',
+      description: 'Centrale avec détecteur et sirène',
+      difficulte: 4,
+      icon: '🚨',
+      dureeEstimee: '5 min',
+      composants: [
+        { id: 'alim', type: 'alimentation', label: 'Alim 12V', x: 50, y: 100 },
+        { id: 'centrale', type: 'centrale', label: 'Centrale', x: 170, y: 100 },
+        { id: 'detecteur', type: 'detecteur', label: 'Détecteur IR', x: 300, y: 50 },
+        { id: 'sirene', type: 'sirene', label: 'Sirène', x: 300, y: 150 }
+      ],
+      bornes: [
+        { id: 'alim-plus', componentId: 'alim', position: 'right', label: '+', x: 90, y: 90 },
+        { id: 'alim-moins', componentId: 'alim', position: 'right', label: '-', x: 90, y: 110 },
+        { id: 'cent-plus', componentId: 'centrale', position: 'left', label: '+', x: 140, y: 90 },
+        { id: 'cent-moins', componentId: 'centrale', position: 'left', label: '-', x: 140, y: 110 },
+        { id: 'cent-z1-plus', componentId: 'centrale', position: 'right', label: 'Z1+', x: 200, y: 80 },
+        { id: 'cent-z1-moins', componentId: 'centrale', position: 'right', label: 'Z1-', x: 200, y: 95 },
+        { id: 'cent-sir-plus', componentId: 'centrale', position: 'right', label: 'SIR+', x: 200, y: 115 },
+        { id: 'cent-sir-moins', componentId: 'centrale', position: 'right', label: 'SIR-', x: 200, y: 130 },
+        { id: 'det-plus', componentId: 'detecteur', position: 'left', label: '+', x: 270, y: 40 },
+        { id: 'det-moins', componentId: 'detecteur', position: 'left', label: '-', x: 270, y: 60 },
+        { id: 'sir-plus', componentId: 'sirene', position: 'left', label: '+', x: 270, y: 140 },
+        { id: 'sir-moins', componentId: 'sirene', position: 'left', label: '-', x: 270, y: 160 }
+      ],
+      connexionsCorrectes: [
+        { from: 'alim-plus', to: 'cent-plus', wireType: 'plus12v' },
+        { from: 'alim-moins', to: 'cent-moins', wireType: 'moins12v' },
+        { from: 'cent-z1-plus', to: 'det-plus', wireType: 'plus12v' },
+        { from: 'cent-z1-moins', to: 'det-moins', wireType: 'moins12v' },
+        { from: 'cent-sir-plus', to: 'sir-plus', wireType: 'commande' },
+        { from: 'cent-sir-moins', to: 'sir-moins', wireType: 'moins12v' }
+      ],
+      indices: [
+        'La centrale est alimentée par l\'alimentation 12V',
+        'Le détecteur est câblé sur la zone 1 (Z1+ et Z1-)',
+        'La sirène reçoit le + commandé et le - permanent',
+        'Le 0V est commun à tous les appareils'
+      ],
+      explication: 'La centrale alimente les détecteurs via ses sorties de zone. En cas de détection, elle active la sortie sirène. Le câblage en étoile part de la centrale vers chaque périphérique.'
+    },
+
+    {
+      id: 'controle-acces-badge',
+      titre: 'Contrôle d\'accès',
+      description: 'Lecteur de badge avec ventouse',
+      difficulte: 4,
+      icon: '🪪',
+      dureeEstimee: '5 min',
+      composants: [
+        { id: 'alim', type: 'alimentation', label: 'Alim 12V', x: 50, y: 100 },
+        { id: 'lecteur', type: 'lecteur', label: 'Lecteur', x: 180, y: 60 },
+        { id: 'controleur', type: 'controleur', label: 'Contrôleur', x: 180, y: 140 },
+        { id: 'ventouse', type: 'ventouse', label: 'Ventouse', x: 320, y: 100 }
+      ],
+      bornes: [
+        { id: 'alim-plus', componentId: 'alim', position: 'right', label: '+', x: 90, y: 90 },
+        { id: 'alim-moins', componentId: 'alim', position: 'right', label: '-', x: 90, y: 110 },
+        { id: 'lect-plus', componentId: 'lecteur', position: 'left', label: '+', x: 150, y: 50 },
+        { id: 'lect-moins', componentId: 'lecteur', position: 'left', label: '-', x: 150, y: 70 },
+        { id: 'lect-d0', componentId: 'lecteur', position: 'right', label: 'D0', x: 210, y: 50 },
+        { id: 'lect-d1', componentId: 'lecteur', position: 'right', label: 'D1', x: 210, y: 70 },
+        { id: 'ctrl-plus', componentId: 'controleur', position: 'left', label: '+', x: 150, y: 130 },
+        { id: 'ctrl-moins', componentId: 'controleur', position: 'left', label: '-', x: 150, y: 150 },
+        { id: 'ctrl-d0', componentId: 'controleur', position: 'top', label: 'D0', x: 170, y: 120 },
+        { id: 'ctrl-d1', componentId: 'controleur', position: 'top', label: 'D1', x: 190, y: 120 },
+        { id: 'ctrl-rel', componentId: 'controleur', position: 'right', label: 'REL', x: 210, y: 140 },
+        { id: 'vent-plus', componentId: 'ventouse', position: 'left', label: '+', x: 290, y: 90 },
+        { id: 'vent-moins', componentId: 'ventouse', position: 'left', label: '-', x: 290, y: 110 }
+      ],
+      connexionsCorrectes: [
+        { from: 'alim-plus', to: 'lect-plus', wireType: 'plus12v' },
+        { from: 'alim-plus', to: 'ctrl-plus', wireType: 'plus12v' },
+        { from: 'alim-plus', to: 'vent-plus', wireType: 'plus12v' },
+        { from: 'alim-moins', to: 'lect-moins', wireType: 'moins12v' },
+        { from: 'alim-moins', to: 'ctrl-moins', wireType: 'moins12v' },
+        { from: 'lect-d0', to: 'ctrl-d0', wireType: 'data' },
+        { from: 'lect-d1', to: 'ctrl-d1', wireType: 'data' },
+        { from: 'ctrl-rel', to: 'vent-moins', wireType: 'commande' }
+      ],
+      indices: [
+        'Tous les appareils sont alimentés en +12V',
+        'Le lecteur communique avec le contrôleur via D0/D1 (Wiegand)',
+        'La ventouse est alimentée en permanence (+12V)',
+        'Le relais coupe le 0V de la ventouse pour ouvrir'
+      ],
+      explication: 'Le lecteur lit le badge et envoie le code au contrôleur via le protocole Wiegand (D0/D1). Si le badge est autorisé, le relais coupe l\'alimentation de la ventouse qui libère la porte.'
+    },
+
+    {
+      id: 'portail-motorise',
+      titre: 'Portail motorisé',
+      description: 'Moteur avec cellules et clignotant',
+      difficulte: 5,
+      icon: '🚗',
+      dureeEstimee: '6 min',
+      composants: [
+        { id: 'disj', type: 'disjoncteur', label: 'Disj. 10A', x: 50, y: 50 },
+        { id: 'moteur', type: 'moteur-portail', label: 'Moteur', x: 170, y: 100 },
+        { id: 'cellule-tx', type: 'cellule', label: 'Cell. TX', x: 300, y: 50 },
+        { id: 'cellule-rx', type: 'cellule', label: 'Cell. RX', x: 300, y: 100 },
+        { id: 'cligno', type: 'clignotant', label: 'Clignotant', x: 300, y: 160 }
+      ],
+      bornes: [
+        { id: 'disj-L', componentId: 'disj', position: 'right', label: 'L', x: 90, y: 40 },
+        { id: 'disj-N', componentId: 'disj', position: 'right', label: 'N', x: 90, y: 60 },
+        { id: 'mot-L', componentId: 'moteur', position: 'left', label: 'L', x: 140, y: 90 },
+        { id: 'mot-N', componentId: 'moteur', position: 'left', label: 'N', x: 140, y: 110 },
+        { id: 'mot-24-plus', componentId: 'moteur', position: 'right', label: '24+', x: 200, y: 80 },
+        { id: 'mot-24-moins', componentId: 'moteur', position: 'right', label: '24-', x: 200, y: 95 },
+        { id: 'mot-cell', componentId: 'moteur', position: 'right', label: 'CELL', x: 200, y: 110 },
+        { id: 'mot-flash', componentId: 'moteur', position: 'right', label: 'FLASH', x: 200, y: 125 },
+        { id: 'tx-plus', componentId: 'cellule-tx', position: 'left', label: '+', x: 270, y: 40 },
+        { id: 'tx-moins', componentId: 'cellule-tx', position: 'left', label: '-', x: 270, y: 60 },
+        { id: 'rx-plus', componentId: 'cellule-rx', position: 'left', label: '+', x: 270, y: 90 },
+        { id: 'rx-moins', componentId: 'cellule-rx', position: 'left', label: '-', x: 270, y: 110 },
+        { id: 'rx-nc', componentId: 'cellule-rx', position: 'right', label: 'NC', x: 330, y: 100 },
+        { id: 'clig-plus', componentId: 'cligno', position: 'left', label: '+', x: 270, y: 150 },
+        { id: 'clig-moins', componentId: 'cligno', position: 'left', label: '-', x: 270, y: 170 }
+      ],
+      connexionsCorrectes: [
+        { from: 'disj-L', to: 'mot-L', wireType: 'phase' },
+        { from: 'disj-N', to: 'mot-N', wireType: 'neutre' },
+        { from: 'mot-24-plus', to: 'tx-plus', wireType: 'plus12v' },
+        { from: 'mot-24-plus', to: 'rx-plus', wireType: 'plus12v' },
+        { from: 'mot-24-moins', to: 'tx-moins', wireType: 'moins12v' },
+        { from: 'mot-24-moins', to: 'rx-moins', wireType: 'moins12v' },
+        { from: 'rx-nc', to: 'mot-cell', wireType: 'commande' },
+        { from: 'mot-flash', to: 'clig-plus', wireType: 'commande' },
+        { from: 'mot-24-moins', to: 'clig-moins', wireType: 'moins12v' }
+      ],
+      indices: [
+        'Le moteur est alimenté en 230V (L et N)',
+        'Le moteur fournit du 24V pour les accessoires',
+        'Les cellules TX et RX sont alimentées en parallèle',
+        'Le contact NC du RX va sur l\'entrée CELL du moteur',
+        'Le clignotant reçoit la commande FLASH'
+      ],
+      explication: 'Le moteur de portail intègre une alimentation 24V pour les accessoires. Les cellules photoélectriques détectent les obstacles : si le faisceau est coupé, le contact NC s\'ouvre et arrête le portail. Le clignotant signale le mouvement.'
     }
   ]
 }

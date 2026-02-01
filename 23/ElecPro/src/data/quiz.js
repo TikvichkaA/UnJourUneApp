@@ -58,6 +58,20 @@ export const quizData = {
       description: "Câblage et montages",
       icon: "🔌",
       color: "rose"
+    },
+    {
+      id: "moteurs",
+      titre: "Moteurs",
+      description: "Couplage, démarrage, protection",
+      icon: "⚙️",
+      color: "violet"
+    },
+    {
+      id: "erp-securite",
+      titre: "Sécurité ERP",
+      description: "BAES, SSI, secours",
+      icon: "🏢",
+      color: "orange"
     }
   ],
 
@@ -1695,6 +1709,54 @@ export const quizData = {
       correct: 1,
       explication: "À partir de 30 mA traversant le cœur, il y a risque de fibrillation ventriculaire. C'est pourquoi les DDR 30mA sont dits \"haute sensibilité\"."
     },
+    {
+      id: "h26",
+      category: "habilitations",
+      question: "Quelle est la zone 0 en BT ?",
+      options: ["Zone de contact direct", "Zone de voisinage simple", "Zone d'investigation (eloignee)", "Zone de travaux sous tension"],
+      correct: 2,
+      explication: "La zone 0 est la zone d'investigation, eloignee des pieces sous tension. Aucune habilitation n'est requise pour y acceder."
+    },
+    {
+      id: "h27",
+      category: "habilitations",
+      question: "Quelle classe de gants isolants pour travailler en BT (1000V AC) ?",
+      options: ["Classe 00", "Classe 0", "Classe 1", "Classe 2"],
+      correct: 1,
+      explication: "Les gants classe 0 sont prevus pour des tensions jusqu'a 1000V AC. La classe 00 est limitee a 500V."
+    },
+    {
+      id: "h28",
+      category: "habilitations",
+      question: "Que signifie MALT lors de la consignation ?",
+      options: ["Mesure Apres Lecture Tension", "Mise A La Terre", "Mesure Avant Liaison Travaux", "Mode Arret Longue Temporisation"],
+      correct: 1,
+      explication: "MALT = Mise A La Terre. Apres la VAT, on realise la MALT et le CCT si necessaire."
+    },
+    {
+      id: "h29",
+      category: "habilitations",
+      question: "Quelle distance correspond a la DLVS en BT ?",
+      options: ["0.3 m", "0.5 m", "1 m", "3 m"],
+      correct: 3,
+      explication: "En BT, la DLVS (Distance Limite de Voisinage Simple) est de 3 m. C'est la limite entre zone 0 et zone 1."
+    },
+    {
+      id: "h30",
+      category: "habilitations",
+      question: "Quel document delivre le BC au B2 avant les travaux ?",
+      options: ["Ordre de travail", "Attestation de consignation", "Permis de feu", "Fiche de poste"],
+      correct: 1,
+      explication: "Le BC delivre l'attestation de consignation au B2, qui peut alors commencer les travaux."
+    },
+    {
+      id: "h31",
+      category: "habilitations",
+      question: "Quelle est la validite maximale d'une habilitation ?",
+      options: ["1 an", "2 ans", "3 ans", "5 ans"],
+      correct: 2,
+      explication: "L'habilitation doit etre revisee tous les 3 ans maximum, ou plus tot si changement de situation."
+    },
 
     // ===== TÂCHES PRATIQUES - SCÉNARIOS TERRAIN =====
     {
@@ -2021,6 +2083,210 @@ export const quizData = {
       ],
       correct: 1,
       explication: "Les prises RJ45 résidentielles doivent être câblées en Grade 2TV minimum (Cat 5e + coax) ou Grade 3 (Cat 6a + coax). Le câble 4 paires téléphonique est obsolète."
+    },
+
+    // ===== MOTEURS =====
+    {
+      id: "mot1",
+      category: "moteurs",
+      question: "Quelle partie du moteur est fixe ?",
+      options: ["Le rotor", "Le stator", "L'arbre"],
+      correct: 1,
+      explication: "Le stator est la partie fixe du moteur, il crée le champ magnétique tournant. Le rotor est la partie mobile."
+    },
+    {
+      id: "mot2",
+      category: "moteurs",
+      question: "Quelle est la vitesse de synchronisme d'un moteur 4 pôles à 50Hz ?",
+      options: ["3000 tr/min", "1500 tr/min", "750 tr/min"],
+      correct: 1,
+      explication: "Ns = 60×f/p = 60×50/2 = 1500 tr/min. Un moteur 4 pôles a 2 paires de pôles."
+    },
+    {
+      id: "mot3",
+      category: "moteurs",
+      question: "Pourquoi utilise-t-on un condensateur sur un moteur monophasé ?",
+      options: ["Pour stocker l'énergie", "Pour créer un déphasage", "Pour protéger le moteur"],
+      correct: 1,
+      explication: "Le condensateur crée un déphasage (~90°) entre les enroulements pour simuler un champ tournant biphasé."
+    },
+    {
+      id: "mot4",
+      category: "moteurs",
+      question: "Que signifie MAS ?",
+      options: ["Moteur A Synchrone", "Moteur Asynchrone", "Machine A Stator"],
+      correct: 1,
+      explication: "MAS = Moteur Asynchrone. C'est le type de moteur le plus répandu dans l'industrie."
+    },
+    {
+      id: "mot5",
+      category: "moteurs",
+      question: "Un moteur 400/690V sur réseau 400V se couple en ?",
+      options: ["Étoile", "Triangle", "Les deux possibles"],
+      correct: 0,
+      explication: "La petite tension (400V) correspond au triangle. Donc sur réseau 400V, on couple en étoile pour que chaque enroulement reçoive 230V."
+    },
+    {
+      id: "mot6",
+      category: "moteurs",
+      question: "En étoile, la tension aux bornes d'un enroulement est ?",
+      options: ["U", "U/√3", "U×√3"],
+      correct: 1,
+      explication: "En couplage étoile, chaque enroulement reçoit la tension simple U/√3 (230V sur réseau 400V)."
+    },
+    {
+      id: "mot7",
+      category: "moteurs",
+      question: "Combien de bornes sur une plaque à bornes moteur standard ?",
+      options: ["3", "6", "9"],
+      correct: 1,
+      explication: "La plaque à bornes standard comporte 6 bornes : U1, V1, W1 (débuts) et U2, V2, W2 (fins des enroulements)."
+    },
+    {
+      id: "mot8",
+      category: "moteurs",
+      question: "En démarrage étoile-triangle, le courant de démarrage est divisé par ?",
+      options: ["2", "3", "√3"],
+      correct: 1,
+      explication: "Le démarrage étoile-triangle divise le courant par 3 (et le couple aussi). C'est l'intérêt principal de cette méthode."
+    },
+    {
+      id: "mot9",
+      category: "moteurs",
+      question: "Quel démarrage permet la variation de vitesse ?",
+      options: ["Direct", "Étoile-triangle", "Variateur de fréquence"],
+      correct: 2,
+      explication: "Seul le variateur de fréquence permet de faire varier la vitesse du moteur en modifiant la fréquence d'alimentation."
+    },
+    {
+      id: "mot10",
+      category: "moteurs",
+      question: "Un soft starter utilise quel composant principal ?",
+      options: ["Condensateurs", "Thyristors", "Relais"],
+      correct: 1,
+      explication: "Le démarreur progressif (soft starter) utilise des thyristors pour augmenter progressivement la tension."
+    },
+    {
+      id: "mot11",
+      category: "moteurs",
+      question: "Un fusible aM est conçu pour ?",
+      options: ["L'éclairage", "Les moteurs", "L'électronique"],
+      correct: 1,
+      explication: "Les fusibles aM (accompagnement Moteur) supportent le courant de démarrage élevé des moteurs."
+    },
+    {
+      id: "mot12",
+      category: "moteurs",
+      question: "Sur quoi règle-t-on le relais thermique ?",
+      options: ["Sur Id (courant de démarrage)", "Sur In (courant nominal)", "Sur Pn (puissance nominale)"],
+      correct: 1,
+      explication: "Le relais thermique se règle sur le courant nominal In indiqué sur la plaque signalétique du moteur."
+    },
+    {
+      id: "mot13",
+      category: "moteurs",
+      question: "Une sonde PTC mesure ?",
+      options: ["Le courant", "La tension", "La température"],
+      correct: 2,
+      explication: "Les sondes PTC (thermistances) mesurent directement la température des enroulements pour une protection optimale."
+    },
+    {
+      id: "mot14",
+      category: "moteurs",
+      question: "La classe de démarrage 10 signifie ?",
+      options: ["Démarrage en 10 secondes max", "10 démarrages par heure", "Moteur 10 pôles"],
+      correct: 0,
+      explication: "La classe 10 correspond à un temps de démarrage normal (< 10s). Classe 20 pour démarrage lourd, classe 30 pour très lourd."
+    },
+    {
+      id: "mot15",
+      category: "moteurs",
+      question: "Un moteur asynchrone tourne toujours ?",
+      options: ["À la vitesse de synchronisme", "Plus lentement que la vitesse de synchronisme", "Plus vite que la vitesse de synchronisme"],
+      correct: 1,
+      explication: "Le rotor tourne toujours un peu moins vite que le champ tournant (glissement). C'est le principe du moteur asynchrone."
+    },
+
+    // ===== SÉCURITÉ ERP =====
+    {
+      id: "erp1",
+      category: "erp-securite",
+      question: "Quelle est l'autonomie minimale d'un BAES d'évacuation ?",
+      options: ["30 minutes", "1 heure", "5 heures"],
+      correct: 1,
+      explication: "Les BAES d'évacuation doivent avoir une autonomie minimale d'1 heure. Les BAEH (établissements de soins) ont 5 heures."
+    },
+    {
+      id: "erp2",
+      category: "erp-securite",
+      question: "À quelle fréquence doit-on tester les BAES avec la télécommande ?",
+      options: ["Tous les jours", "Tous les mois", "Tous les ans"],
+      correct: 1,
+      explication: "Test fonctionnel mensuel avec télécommande. Test d'autonomie semestriel. Vérification complète annuelle."
+    },
+    {
+      id: "erp3",
+      category: "erp-securite",
+      question: "Que signifie SSI ?",
+      options: ["Système de Sécurité Incendie", "Signal de Sécurité Intérieur", "Service de Surveillance Incendie"],
+      correct: 0,
+      explication: "SSI = Système de Sécurité Incendie. Il regroupe la détection, l'alarme et la mise en sécurité."
+    },
+    {
+      id: "erp4",
+      category: "erp-securite",
+      question: "Combien de catégories de SSI existe-t-il ?",
+      options: ["3 (A, B, C)", "5 (A à E)", "4 (1 à 4)"],
+      correct: 1,
+      explication: "Il existe 5 catégories de SSI : A (détection automatique complète) à E (alarme simple)."
+    },
+    {
+      id: "erp5",
+      category: "erp-securite",
+      question: "Quel type d'onduleur offre une protection sans coupure ?",
+      options: ["Off-line", "Line-interactive", "On-line (double conversion)"],
+      correct: 2,
+      explication: "L'onduleur on-line (double conversion) alimente en permanence la charge via l'onduleur. Aucun temps de commutation."
+    },
+    {
+      id: "erp6",
+      category: "erp-securite",
+      question: "Les ERP de 1ère catégorie accueillent ?",
+      options: ["Moins de 300 personnes", "Plus de 1500 personnes", "Entre 701 et 1500 personnes"],
+      correct: 1,
+      explication: "1ère catégorie : > 1500 personnes. 2ème : 701-1500. 3ème : 301-700. 4ème : ≤ 300. 5ème : selon seuils par type."
+    },
+    {
+      id: "erp7",
+      category: "erp-securite",
+      question: "Un détecteur de fumée optique fonctionne par ?",
+      options: ["Mesure de température", "Diffusion de lumière par les particules", "Analyse des gaz"],
+      correct: 1,
+      explication: "Le détecteur optique (photoélectrique) détecte la diffusion de la lumière par les particules de fumée."
+    },
+    {
+      id: "erp8",
+      category: "erp-securite",
+      question: "L'éclairage d'ambiance doit fournir ?",
+      options: ["45 lumens minimum", "5 lumens par m² minimum", "100 lux minimum"],
+      correct: 1,
+      explication: "L'éclairage d'ambiance (anti-panique) doit fournir 5 lumens par m² sur toute la surface."
+    },
+    {
+      id: "erp9",
+      category: "erp-securite",
+      question: "Un groupe électrogène en ERP doit démarrer en ?",
+      options: ["30 secondes maximum", "15 secondes maximum", "1 minute maximum"],
+      correct: 1,
+      explication: "Le groupe électrogène doit être opérationnel en 15 secondes maximum pour assurer la continuité des équipements de sécurité."
+    },
+    {
+      id: "erp10",
+      category: "erp-securite",
+      question: "Quel type d'alarme ERP comporte 2 niveaux (restreinte puis générale) ?",
+      options: ["Type 1", "Type 2a", "Type 4"],
+      correct: 1,
+      explication: "L'alarme type 2a comporte 2 signaux : alarme restreinte (personnel) puis alarme générale (évacuation)."
     }
   ]
 }

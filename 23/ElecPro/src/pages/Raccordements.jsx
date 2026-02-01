@@ -196,6 +196,25 @@ function Raccordements() {
             <span>Navette 2</span>
           </div>
         </div>
+        <h4 className="font-semibold text-gray-800 mt-4 mb-2">Courants faibles</h4>
+        <div className="grid grid-cols-2 gap-2 text-sm">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-3 bg-red-700 rounded"></div>
+            <span>+12V / +24V</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-3 bg-blue-800 rounded"></div>
+            <span>0V (masse)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-3 bg-emerald-600 rounded"></div>
+            <span>Data</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-3 bg-amber-600 rounded"></div>
+            <span>Commande</span>
+          </div>
+        </div>
       </div>
 
       {/* Footer */}
