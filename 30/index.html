@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bomberg Shuffle - In the Hold</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #e8e8e8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #f39c12 0%, #e74c3c 50%, #9b59b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #888;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .artist-info {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        button {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-shuffle {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-shuffle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-reset:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .grid-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .grid-selector label {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .grid-selector select {
+            padding: 6px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #e8e8e8;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f39c12;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .puzzle-container {
+            position: relative;
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .puzzle-wrapper {
+            position: relative;
+        }
+
+        #puzzle {
+            display: grid;
+            gap: 1px;
+            background: rgba(20, 20, 20, 0.8);
+            padding: 0;
+            border-radius: 2px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .tile {
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            background-size: cover;
+            background-position: center;
+            border-radius: 0;
+        }
+
+        .tile:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(243, 156, 18, 0.5);
+            z-index: 10;
+        }
+
+        .tile.selected {
+            box-shadow: 0 0 0 3px #f39c12, 0 0 20px rgba(243, 156, 18, 0.6);
+            transform: scale(1.05);
+            z-index: 20;
+        }
+
+        .tile.swapping {
+            animation: swap-pulse 0.3s ease;
+        }
+
+        @keyframes swap-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+        }
+
+        .reference {
+            text-align: center;
+        }
+
+        .reference-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        #reference-img {
+            max-width: 200px;
+            border-radius: 4px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        #reference-img:hover {
+            opacity: 1;
+        }
+
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 40px 60px;
+            border-radius: 16px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(39, 174, 96, 0.4);
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .success-message.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .success-message small {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #555;
+            font-size: 0.8rem;
+            line-height: 1.8;
+        }
+
+        footer a {
+            color: #888;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #f39c12;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .puzzle-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .reference {
+                order: -1;
+                margin-bottom: 20px;
+            }
+
+            #reference-img {
+                max-width: 150px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BOMBERG SHUFFLE</h1>
+        <p class="subtitle">In the Hold (1913-1914)</p>
+        <p class="artist-info">David Bomberg - Vorticisme britannique</p>
+    </header>
+
+    <div class="controls">
+        <button class="btn-shuffle" id="shuffleBtn">Melanger</button>
+        <button class="btn-reset" id="resetBtn">Reinitialiser</button>
+        <div class="grid-selector">
+            <label for="gridSize">Grille :</label>
+            <select id="gridSize">
+                <option value="3">3 x 3</option>
+                <option value="4" selected>4 x 4</option>
+                <option value="5">5 x 5</option>
+                <option value="6">6 x 6</option>
+                <option value="8">8 x 8</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value" id="moves">0</div>
+            <div class="stat-label">Mouvements</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="shuffles">0</div>
+            <div class="stat-label">Melanges</div>
+        </div>
+    </div>
+
+    <div class="puzzle-container">
+        <div class="puzzle-wrapper">
+            <div id="puzzle" class="loading">Chargement...</div>
+        </div>
+        <div class="reference">
+            <div class="reference-label">Image originale</div>
+            <img id="reference-img" src="bomberg.webp" alt="Original">
+        </div>
+    </div>
+
+    <div class="success-message" id="successMessage">
+        Bravo !
+        <small>Puzzle resolu</small>
+    </div>
+
+    <footer>
+        <p><strong>David Bomberg</strong> (1890-1957) - Peintre britannique, figure majeure du Vorticisme</p>
+        <p><em>In the Hold</em> represente des dockers travaillant dans la cale d'un navire,<br>
+        decomposes en formes geometriques dynamiques.</p>
+        <p style="margin-top: 15px;">
+            <a href="https://en.wikipedia.org/wiki/David_Bomberg" target="_blank">En savoir plus sur l'artiste</a>
+        </p>
+    </footer>
+
+    <script>
+        const IMAGE_SRC = 'bomberg.webp';
+        let gridSize = 4;
+        let tiles = [];
+        let selectedTile = null;
+        let moves = 0;
+        let shuffles = 0;
+        let originalOrder = [];
+        let img = null;
+        let tileSize = 0;
+
+        const puzzle = document.getElementById('puzzle');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const gridSizeSelect = document.getElementById('gridSize');
+        const movesDisplay = document.getElementById('moves');
+        const shufflesDisplay = document.getElementById('shuffles');
+        const successMessage = document.getElementById('successMessage');
+
+        function loadImage() {
+            return new Promise((resolve, reject) => {
+                img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = IMAGE_SRC;
+            });
+        }
+
+        function calculateTileSize() {
+            const maxSize = Math.min(window.innerWidth - 300, window.innerHeight - 350, 500);
+            return Math.floor(maxSize / gridSize);
+        }
+
+        function createPuzzle() {
+            tileSize = calculateTileSize();
+            puzzle.innerHTML = '';
+            puzzle.style.gridTemplateColumns = `repeat(${gridSize}, ${tileSize}px)`;
+            puzzle.classList.remove('loading');
+
+            tiles = [];
+            originalOrder = [];
+
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.style.width = `${tileSize}px`;
+                tile.style.height = `${tileSize}px`;
+
+                const row = Math.floor(i / gridSize);
+                const col = i % gridSize;
+
+                // Calculate the background position for this tile
+                const bgX = (col / (gridSize - 1)) * 100;
+                const bgY = (row / (gridSize - 1)) * 100;
+
+                tile.style.backgroundImage = `url(${IMAGE_SRC})`;
+                tile.style.backgroundSize = `${gridSize * 100}%`;
+                tile.style.backgroundPosition = `${bgX}% ${bgY}%`;
+
+                tile.dataset.originalIndex = i;
+                tile.dataset.currentIndex = i;
+
+                tile.addEventListener('click', () => handleTileClick(tile));
+
+                puzzle.appendChild(tile);
+                tiles.push(tile);
+                originalOrder.push(i);
+            }
+        }
+
+        function handleTileClick(tile) {
+            if (selectedTile === null) {
+                selectedTile = tile;
+                tile.classList.add('selected');
+            } else if (selectedTile === tile) {
+                selectedTile.classList.remove('selected');
+                selectedTile = null;
+            } else {
+                swapTiles(selectedTile, tile);
+                selectedTile.classList.remove('selected');
+                selectedTile = null;
+                moves++;
+                movesDisplay.textContent = moves;
+                checkWin();
+            }
+        }
+
+        function swapTiles(tile1, tile2) {
+            tile1.classList.add('swapping');
+            tile2.classList.add('swapping');
+
+            // Swap background positions
+            const bg1 = tile1.style.backgroundPosition;
+            const bg2 = tile2.style.backgroundPosition;
+            tile1.style.backgroundPosition = bg2;
+            tile2.style.backgroundPosition = bg1;
+
+            // Swap original indices
+            const idx1 = tile1.dataset.originalIndex;
+            const idx2 = tile2.dataset.originalIndex;
+            tile1.dataset.originalIndex = idx2;
+            tile2.dataset.originalIndex = idx1;
+
+            setTimeout(() => {
+                tile1.classList.remove('swapping');
+                tile2.classList.remove('swapping');
+            }, 300);
+        }
+
+        function shuffle() {
+            const n = gridSize * gridSize;
+            const shuffleCount = n * 10;
+
+            for (let i = 0; i < shuffleCount; i++) {
+                const idx1 = Math.floor(Math.random() * n);
+                const idx2 = Math.floor(Math.random() * n);
+                if (idx1 !== idx2) {
+                    swapTilesQuiet(tiles[idx1], tiles[idx2]);
+                }
+            }
+
+            shuffles++;
+            shufflesDisplay.textContent = shuffles;
+            moves = 0;
+            movesDisplay.textContent = moves;
+        }
+
+        function swapTilesQuiet(tile1, tile2) {
+            const bg1 = tile1.style.backgroundPosition;
+            const bg2 = tile2.style.backgroundPosition;
+            tile1.style.backgroundPosition = bg2;
+            tile2.style.backgroundPosition = bg1;
+
+            const idx1 = tile1.dataset.originalIndex;
+            const idx2 = tile2.dataset.originalIndex;
+            tile1.dataset.originalIndex = idx2;
+            tile2.dataset.originalIndex = idx1;
+        }
+
+        function reset() {
+            tiles.forEach((tile, i) => {
+                const row = Math.floor(i / gridSize);
+                const col = i % gridSize;
+                const bgX = (col / (gridSize - 1)) * 100;
+                const bgY = (row / (gridSize - 1)) * 100;
+                tile.style.backgroundPosition = `${bgX}% ${bgY}%`;
+                tile.dataset.originalIndex = i;
+            });
+            moves = 0;
+            movesDisplay.textContent = moves;
+            successMessage.classList.remove('show');
+        }
+
+        function checkWin() {
+            const isWin = tiles.every((tile, index) =>
+                parseInt(tile.dataset.originalIndex) === index
+            );
+
+            if (isWin) {
+                successMessage.classList.add('show');
+                setTimeout(() => {
+                    successMessage.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        function init() {
+            loadImage().then(() => {
+                createPuzzle();
+                shuffle();
+            }).catch(err => {
+                puzzle.innerHTML = 'Erreur de chargement de l\'image';
+                console.error(err);
+            });
+        }
+
+        shuffleBtn.addEventListener('click', shuffle);
+        resetBtn.addEventListener('click', reset);
+        gridSizeSelect.addEventListener('change', (e) => {
+            gridSize = parseInt(e.target.value);
+            createPuzzle();
+            shuffle();
+        });
+
+        window.addEventListener('resize', () => {
+            if (img) {
+                const newTileSize = calculateTileSize();
+                if (Math.abs(newTileSize - tileSize) > 10) {
+                    tileSize = newTileSize;
+                    tiles.forEach(tile => {
+                        tile.style.width = `${tileSize}px`;
+                        tile.style.height = `${tileSize}px`;
+                    });
+                    puzzle.style.gridTemplateColumns = `repeat(${gridSize}, ${tileSize}px)`;
+                }
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>

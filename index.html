@@ -264,7 +264,7 @@
         </a>
 
         <!-- Semaine 3 -->
-        <a href="./12/" class="day available">
+        <a href="./12/" class="day available" id="day-12">
             <span class="day-number">12</span>
             <span class="day-name">CHU Babinski</span>
         </a>
@@ -340,7 +340,10 @@
             <span class="day-number">29</span>
             <span class="day-name">TraductoFash</span>
         </a>
-        <div class="day upcoming"><span class="day-number">30</span></div>
+        <a href="./30/" class="day available">
+            <span class="day-number">30</span>
+            <span class="day-name">Bomberg Shuffle</span>
+        </a>
         <div class="day upcoming"><span class="day-number">31</span></div>
         <div class="day empty"></div>
     </main>
@@ -401,6 +404,35 @@
 
                     timer21 = setTimeout(function() {
                         clicks21 = 0;
+                    }, 1500);
+                }
+            });
+        })();
+
+        // Easter egg jour 12: 5 clics -> version backup
+        (function() {
+            const day12 = document.getElementById('day-12');
+            let clicks12 = 0;
+            let timer12 = null;
+            let navigateTimer12 = null;
+
+            day12.addEventListener('click', function(e) {
+                e.preventDefault();
+                clicks12++;
+
+                if (timer12) clearTimeout(timer12);
+                if (navigateTimer12) clearTimeout(navigateTimer12);
+
+                if (clicks12 >= 5) {
+                    window.location.href = './12-backup/';
+                    clicks12 = 0;
+                } else {
+                    navigateTimer12 = setTimeout(function() {
+                        window.location.href = './12/';
+                    }, 400);
+
+                    timer12 = setTimeout(function() {
+                        clicks12 = 0;
                     }, 1500);
                 }
             });
