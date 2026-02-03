@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a56db">
+    <title>Planning Babinski - SAMU Social</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📅</text></svg>">
+</head>
+<body>
+    <a href="./" class="back-home">← Accueil CHU</a>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-top">
+                <h1>📅 Planning Babinski</h1>
+                <span class="subtitle">Centre d'Hébergement - SAMU Social</span>
+            </div>
+            <div class="header-controls">
+                <button class="btn-icon" onclick="toggleDarkMode()" title="Mode sombre">
+                    <span id="dark-mode-icon">🌙</span>
+                </button>
+                <button class="btn-icon" onclick="showLegend()" title="Légende">
+                    <span>📋</span>
+                </button>
+                <button class="btn-icon" onclick="exportPlanning()" title="Exporter">
+                    <span>📤</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation mensuelle -->
+        <nav class="month-nav">
+            <button class="nav-btn" onclick="previousMonth()">◀</button>
+            <div class="month-display">
+                <span class="month-name" id="month-name">Janvier</span>
+                <span class="year" id="year">2026</span>
+            </div>
+            <button class="nav-btn" onclick="nextMonth()">▶</button>
+            <button class="btn-today" onclick="goToToday()">Aujourd'hui</button>
+        </nav>
+
+        <!-- Filtres -->
+        <div class="filters-bar">
+            <div class="filter-group">
+                <label>Catégorie:</label>
+                <select id="filter-category" onchange="applyFilters()">
+                    <option value="all">Toutes</option>
+                    <option value="responsables">Responsables</option>
+                    <option value="coordination">Coordination</option>
+                    <option value="maintenance">Maintenance/Log</option>
+                    <option value="administratif">Administratif</option>
+                    <option value="restauration">Restauration</option>
+                    <option value="accueil">Accueil</option>
+                    <option value="entretien">Entretien</option>
+                    <option value="polyvalent">Polyvalent</option>
+                    <option value="vacataire">Vacataires</option>
+                    <option value="interimaire">Intérimaires</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Type:</label>
+                <select id="filter-type" onchange="applyFilters()">
+                    <option value="all">Tous</option>
+                    <option value="permanent">Permanents</option>
+                    <option value="vacataire">Vacataires</option>
+                    <option value="interimaire">Intérimaires</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Rechercher:</label>
+                <input type="text" id="search-employee" placeholder="Nom de l'employé..." oninput="applyFilters()">
+            </div>
+            <div class="filter-group" style="margin-left: auto;">
+                <button class="btn-add-employee" onclick="showAddEmployeeModal()">
+                    <span>➕</span> Nouvel employé
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats rapides -->
+        <div class="quick-stats" id="quick-stats">
+            <div class="stat-card">
+                <span class="stat-value" id="stat-present">0</span>
+                <span class="stat-label">Présents aujourd'hui</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="stat-absent">0</span>
+                <span class="stat-label">Absents</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="stat-conge">0</span>
+                <span class="stat-label">En congé</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="stat-total">0</span>
+                <span class="stat-label">Total employés</span>
+            </div>
+            <div class="stat-card stat-recap" onclick="showRecapHeures()" title="Voir le récapitulatif des heures">
+                <span class="stat-value">📊</span>
+                <span class="stat-label">Récap heures</span>
+            </div>
+        </div>
+
+        <!-- Planning principal -->
+        <div class="planning-wrapper">
+            <div class="planning-container">
+                <!-- En-tête des jours -->
+                <div class="planning-header" id="planning-header">
+                    <div class="employee-header">Employé</div>
+                    <!-- Jours générés par JS -->
+                </div>
+
+                <!-- Corps du planning -->
+                <div class="planning-body" id="planning-body">
+                    <!-- Généré par JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Légende -->
+        <div class="modal" id="legend-modal">
+            <div class="modal-content legend-content">
+                <button class="modal-close" onclick="closeLegend()">✕</button>
+                <h2>📋 Légende des codes</h2>
+
+                <div class="legend-sections">
+                    <div class="legend-section">
+                        <h3>🌞 Horaires de jour</h3>
+                        <div class="legend-items" id="legend-jour"></div>
+                    </div>
+
+                    <div class="legend-section">
+                        <h3>🌙 Horaires de nuit</h3>
+                        <div class="legend-items" id="legend-nuit"></div>
+                    </div>
+
+                    <div class="legend-section">
+                        <h3>🍽️ Restauration</h3>
+                        <div class="legend-items" id="legend-restauration"></div>
+                    </div>
+
+                    <div class="legend-section">
+                        <h3>🧹 Entretien</h3>
+                        <div class="legend-items" id="legend-entretien"></div>
+                    </div>
+
+                    <div class="legend-section">
+                        <h3>📌 Statuts spéciaux</h3>
+                        <div class="legend-items" id="legend-special"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Détail employé -->
+        <div class="modal" id="employee-modal">
+            <div class="modal-content employee-detail">
+                <button class="modal-close" onclick="closeEmployeeModal()">✕</button>
+                <h2 id="employee-name">Nom de l'employé</h2>
+                <p class="employee-category" id="employee-category">Catégorie</p>
+
+                <div class="employee-stats">
+                    <div class="emp-stat">
+                        <span class="emp-stat-value" id="emp-heures">0</span>
+                        <span class="emp-stat-label">Heures ce mois</span>
+                    </div>
+                    <div class="emp-stat">
+                        <span class="emp-stat-value" id="emp-jours">0</span>
+                        <span class="emp-stat-label">Jours travaillés</span>
+                    </div>
+                    <div class="emp-stat">
+                        <span class="emp-stat-value" id="emp-nuits">0</span>
+                        <span class="emp-stat-label">Nuits</span>
+                    </div>
+                </div>
+
+                <div class="employee-calendar" id="employee-calendar">
+                    <!-- Mini calendrier généré par JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal édition shift -->
+        <div class="modal" id="edit-modal">
+            <div class="modal-content edit-shift">
+                <button class="modal-close" onclick="closeEditModal()">✕</button>
+                <h2>Modifier le shift</h2>
+                <p id="edit-info">Employé - Date</p>
+
+                <div class="shift-options">
+                    <div class="shift-category">
+                        <h4>Jour</h4>
+                        <div class="shift-buttons" id="shift-jour"></div>
+                    </div>
+                    <div class="shift-category">
+                        <h4>Nuit</h4>
+                        <div class="shift-buttons" id="shift-nuit"></div>
+                    </div>
+                    <div class="shift-category">
+                        <h4>Spécial</h4>
+                        <div class="shift-buttons" id="shift-special"></div>
+                    </div>
+                </div>
+
+                <div class="edit-actions">
+                    <button class="btn btn-secondary" onclick="closeEditModal()">Annuler</button>
+                    <button class="btn btn-danger" onclick="clearShift()">Effacer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal ajout employé -->
+        <div class="modal" id="add-employee-modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeAddEmployeeModal()">✕</button>
+                <h2>➕ Nouvel employé</h2>
+
+                <form class="add-employee-form" onsubmit="addEmployee(event)">
+                    <div class="form-group">
+                        <label for="emp-name">Nom complet *</label>
+                        <input type="text" id="emp-name" required placeholder="Prénom Nom">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="emp-category">Catégorie *</label>
+                            <select id="emp-category" required>
+                                <option value="">Sélectionner...</option>
+                                <option value="responsables">Responsables Site/CHU</option>
+                                <option value="coordination">Coordination Site/CHU</option>
+                                <option value="maintenance">Agent Maintenance/Log</option>
+                                <option value="administratif">Agent Administratif</option>
+                                <option value="restauration">Agent de Restauration</option>
+                                <option value="accueil">Agent d'Accueil</option>
+                                <option value="entretien">Agent d'Entretien</option>
+                                <option value="polyvalent">Agent Polyvalent</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-type">Type de contrat *</label>
+                            <select id="emp-type" required>
+                                <option value="permanent">Permanent</option>
+                                <option value="vacataire">Vacataire</option>
+                                <option value="interimaire">Intérimaire</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="emp-start">Date de début</label>
+                            <input type="date" id="emp-start">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emp-end">Date de fin (si applicable)</label>
+                            <input type="date" id="emp-end">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeAddEmployeeModal()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal récapitulatif heures -->
+        <div class="modal" id="recap-modal">
+            <div class="modal-content recap-content">
+                <button class="modal-close" onclick="closeRecapModal()">✕</button>
+                <h2>📊 Récapitulatif des heures</h2>
+
+                <div class="recap-controls">
+                    <div class="recap-nav">
+                        <button class="nav-btn" onclick="recapPreviousMonth()">◀</button>
+                        <span class="recap-month" id="recap-month-display">Janvier 2026</span>
+                        <button class="nav-btn" onclick="recapNextMonth()">▶</button>
+                    </div>
+                    <div class="recap-filters">
+                        <select id="recap-filter-type" onchange="updateRecapTable()">
+                            <option value="all">Tous les contrats</option>
+                            <option value="permanent">Permanents</option>
+                            <option value="vacataire">Vacataires</option>
+                            <option value="interimaire">Intérimaires</option>
+                        </select>
+                        <button class="btn btn-secondary" onclick="exportRecap()">📥 Exporter</button>
+                    </div>
+                </div>
+
+                <div class="recap-table-wrapper">
+                    <table class="recap-table" id="recap-table">
+                        <thead>
+                            <tr>
+                                <th>Employé</th>
+                                <th>Catégorie</th>
+                                <th>Contrat</th>
+                                <th>Heures</th>
+                                <th>Jours</th>
+                                <th>Nuits</th>
+                                <th>Congés</th>
+                                <th>Absences</th>
+                                <th>Formation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recap-table-body">
+                            <!-- Généré par JS -->
+                        </tbody>
+                        <tfoot id="recap-table-foot">
+                            <!-- Totaux générés par JS -->
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast notification -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <!-- Scripts SQLite -->
+    <script src="lib/sql-wasm.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/schema-planning.js"></script>
+    <script src="js/models-planning.js"></script>
+
+    <!-- Script principal du planning -->
+    <script src="app.js"></script>
+
+    <!-- Script récapitulatif heures -->
+    <script>
+        // État du récapitulatif
+        let recapState = {
+            year: new Date().getFullYear(),
+            month: new Date().getMonth() + 1
+        };
+
+        // Afficher le modal récapitulatif
+        function showRecapHeures() {
+            recapState.year = state.currentDate.getFullYear();
+            recapState.month = state.currentDate.getMonth() + 1;
+            updateRecapDisplay();
+            updateRecapTable();
+            document.getElementById('recap-modal').classList.add('active');
+        }
+
+        // Fermer le modal
+        function closeRecapModal() {
+            document.getElementById('recap-modal').classList.remove('active');
+        }
+
+        // Navigation du récap
+        function recapPreviousMonth() {
+            recapState.month--;
+            if (recapState.month < 1) {
+                recapState.month = 12;
+                recapState.year--;
+            }
+            updateRecapDisplay();
+            updateRecapTable();
+        }
+
+        function recapNextMonth() {
+            recapState.month++;
+            if (recapState.month > 12) {
+                recapState.month = 1;
+                recapState.year++;
+            }
+            updateRecapDisplay();
+            updateRecapTable();
+        }
+
+        function updateRecapDisplay() {
+            const monthName = MONTHS_FR[recapState.month - 1];
+            document.getElementById('recap-month-display').textContent = `${monthName} ${recapState.year}`;
+        }
+
+        // Mettre à jour le tableau récapitulatif
+        function updateRecapTable() {
+            const filterType = document.getElementById('recap-filter-type').value;
+            const tbody = document.getElementById('recap-table-body');
+            const tfoot = document.getElementById('recap-table-foot');
+
+            const monthKey = `${recapState.year}-${String(recapState.month).padStart(2, '0')}`;
+            const daysInMonth = new Date(recapState.year, recapState.month, 0).getDate();
+
+            // Calculer les heures pour chaque employé
+            let data = [];
+            let totaux = {
+                heures: 0,
+                jours: 0,
+                nuits: 0,
+                conges: 0,
+                absences: 0,
+                formations: 0
+            };
+
+            EMPLOYEES.forEach(emp => {
+                if (filterType !== 'all' && emp.type !== filterType) return;
+
+                const planning = emp.planning[monthKey] || [];
+                let heures = 0, jours = 0, nuits = 0, conges = 0, absences = 0, formations = 0;
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const shift = planning[day];
+                    if (!shift) continue;
+
+                    const info = SHIFT_CODES[shift];
+                    if (!info) continue;
+
+                    heures += info.hours || 0;
+
+                    if (info.type === 'nuit') {
+                        nuits++;
+                    } else if (info.type === 'jour' || info.type === 'present') {
+                        jours++;
+                    } else if (info.type === 'conge') {
+                        conges++;
+                    } else if (info.type === 'absent') {
+                        absences++;
+                    } else if (info.type === 'formation') {
+                        formations++;
+                        heures += 7; // Heures de formation
+                    }
+                }
+
+                const cat = CATEGORIES[emp.category];
+                data.push({
+                    id: emp.id,
+                    name: emp.name,
+                    category: cat.name,
+                    categoryIcon: cat.icon,
+                    type: emp.type,
+                    heures: Math.round(heures * 10) / 10,
+                    jours,
+                    nuits,
+                    conges,
+                    absences,
+                    formations
+                });
+
+                totaux.heures += heures;
+                totaux.jours += jours;
+                totaux.nuits += nuits;
+                totaux.conges += conges;
+                totaux.absences += absences;
+                totaux.formations += formations;
+            });
+
+            // Trier par catégorie puis par nom
+            data.sort((a, b) => {
+                if (a.category !== b.category) return a.category.localeCompare(b.category);
+                return a.name.localeCompare(b.name);
+            });
+
+            // Générer le tableau
+            tbody.innerHTML = data.map(emp => {
+                const typeBadge = emp.type !== 'permanent'
+                    ? `<span class="type-badge ${emp.type}">${emp.type === 'vacataire' ? 'VAC' : 'INT'}</span>`
+                    : '';
+
+                return `
+                    <tr onclick="showEmployeeDetail(${emp.id})">
+                        <td class="emp-name">${emp.name} ${typeBadge}</td>
+                        <td>${emp.categoryIcon} ${emp.category}</td>
+                        <td>${emp.type}</td>
+                        <td class="hours ${emp.heures > 151.67 ? 'overtime' : ''}">${emp.heures}h</td>
+                        <td>${emp.jours}</td>
+                        <td>${emp.nuits}</td>
+                        <td>${emp.conges}</td>
+                        <td class="${emp.absences > 0 ? 'warning' : ''}">${emp.absences}</td>
+                        <td>${emp.formations}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Pied de tableau avec totaux
+            tfoot.innerHTML = `
+                <tr class="totals-row">
+                    <td colspan="3"><strong>TOTAUX (${data.length} employés)</strong></td>
+                    <td><strong>${Math.round(totaux.heures * 10) / 10}h</strong></td>
+                    <td><strong>${totaux.jours}</strong></td>
+                    <td><strong>${totaux.nuits}</strong></td>
+                    <td><strong>${totaux.conges}</strong></td>
+                    <td><strong>${totaux.absences}</strong></td>
+                    <td><strong>${totaux.formations}</strong></td>
+                </tr>
+            `;
+        }
+
+        // Exporter le récapitulatif
+        function exportRecap() {
+            const filterType = document.getElementById('recap-filter-type').value;
+            const monthKey = `${recapState.year}-${String(recapState.month).padStart(2, '0')}`;
+            const monthName = MONTHS_FR[recapState.month - 1];
+            const daysInMonth = new Date(recapState.year, recapState.month, 0).getDate();
+
+            let csv = `Récapitulatif heures - ${monthName} ${recapState.year}\n\n`;
+            csv += 'Employé,Catégorie,Contrat,Heures,Jours,Nuits,Congés,Absences,Formation\n';
+
+            EMPLOYEES.forEach(emp => {
+                if (filterType !== 'all' && emp.type !== filterType) return;
+
+                const planning = emp.planning[monthKey] || [];
+                let heures = 0, jours = 0, nuits = 0, conges = 0, absences = 0, formations = 0;
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const shift = planning[day];
+                    if (!shift) continue;
+
+                    const info = SHIFT_CODES[shift];
+                    if (!info) continue;
+
+                    heures += info.hours || 0;
+
+                    if (info.type === 'nuit') nuits++;
+                    else if (info.type === 'jour' || info.type === 'present') jours++;
+                    else if (info.type === 'conge') conges++;
+                    else if (info.type === 'absent') absences++;
+                    else if (info.type === 'formation') { formations++; heures += 7; }
+                }
+
+                const cat = CATEGORIES[emp.category];
+                csv += `"${emp.name}","${cat.name}","${emp.type}",${Math.round(heures * 10) / 10},${jours},${nuits},${conges},${absences},${formations}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `recap-heures-${monthKey}.csv`;
+            link.click();
+
+            showToast('Récapitulatif exporté');
+        }
+
+        // Fermer modal avec Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeRecapModal();
+            }
+        });
+    </script>
+</body>
+</html>

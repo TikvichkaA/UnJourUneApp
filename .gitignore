@@ -31,7 +31,6 @@ npm-debug.log*
 
 # Backups avec données personnelles
 11-backup/
-12-backup/
 
 # Android
 .gradle/

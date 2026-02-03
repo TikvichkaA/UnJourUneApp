@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finances - CHU Babinski</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+    <link rel="stylesheet" href="css/finances.css">
+</head>
+<body>
+    <a href="index.html" class="back-home">← Accueil</a>
+
+    <header>
+        <div class="header-content">
+            <div class="header-title">
+                <span class="logo">💰</span>
+                <div>
+                    <h1>Gestion Financière</h1>
+                    <p>CHU Babinski - SAMU Social</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="month-selector">
+                    <button onclick="previousMonth()" class="btn-nav">◀</button>
+                    <span id="current-month">Janvier 2026</span>
+                    <button onclick="nextMonth()" class="btn-nav">▶</button>
+                </div>
+                <button onclick="toggleDarkMode()" class="btn-icon" title="Mode sombre">
+                    <span id="dark-mode-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Dashboard Caisse -->
+        <section class="caisse-dashboard">
+            <div class="caisse-card solde">
+                <div class="caisse-icon">💵</div>
+                <div class="caisse-info">
+                    <div class="caisse-label">Solde Caisse</div>
+                    <div class="caisse-value" id="solde-caisse">0 €</div>
+                </div>
+            </div>
+            <div class="caisse-card entrees">
+                <div class="caisse-icon">📥</div>
+                <div class="caisse-info">
+                    <div class="caisse-label">Entrées (PAF)</div>
+                    <div class="caisse-value" id="total-entrees">0 €</div>
+                </div>
+            </div>
+            <div class="caisse-card sorties">
+                <div class="caisse-icon">📤</div>
+                <div class="caisse-info">
+                    <div class="caisse-label">Sorties (Aides)</div>
+                    <div class="caisse-value" id="total-sorties">0 €</div>
+                </div>
+            </div>
+            <div class="caisse-card stats">
+                <div class="caisse-icon">📊</div>
+                <div class="caisse-info">
+                    <div class="caisse-label">Bénéficiaires</div>
+                    <div class="caisse-value" id="nb-beneficiaires">0</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabs -->
+        <nav class="tabs">
+            <button class="tab active" data-tab="paf" onclick="switchTab('paf')">
+                Aides <span class="tab-count" id="tab-count-paf">0</span>
+            </button>
+            <button class="tab" data-tab="absences" onclick="switchTab('absences')">
+                Absences <span class="tab-count" id="tab-count-absences">0</span>
+            </button>
+            <button class="tab" data-tab="avances" onclick="switchTab('avances')">
+                Avances <span class="tab-count" id="tab-count-avances">0</span>
+            </button>
+            <button class="tab" data-tab="mouvements" onclick="switchTab('mouvements')">
+                Mouvements
+            </button>
+        </nav>
+
+        <!-- Contenu des onglets -->
+        <section id="tab-content">
+            <!-- Contenu dynamique -->
+        </section>
+    </main>
+
+    <!-- Modal détail -->
+    <div class="modal" id="detail-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Modal formulaire -->
+    <div class="modal" id="form-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeFormModal()">&times;</button>
+            <div id="form-body"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="lib/sql-wasm.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/schema.js"></script>
+    <script src="js/models.js"></script>
+    <script src="js/migration.js"></script>
+    <!-- Données legacy pour migration -->
+    <script src="heberges.js"></script>
+    <script src="js/finances-app.js"></script>
+</body>
+</html>

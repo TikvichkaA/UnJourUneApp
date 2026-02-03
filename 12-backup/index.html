@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a56db">
+    <title>CHU Babinski - SAMU Social</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e40af;
+            --bg: #f3f4f6;
+            --bg-card: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1e3a5f 0%, #1a56db 50%, #3b82f6 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .back-home {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s;
+        }
+
+        .back-home:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2.5rem 2rem;
+            text-decoration: none;
+            color: var(--text);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+        }
+
+        .card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .card .arrow {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--primary);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .stats-preview {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 2rem 1.5rem;
+            }
+
+            .stats-preview {
+                gap: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../" class="back-home">← Retour</a>
+
+    <div class="container">
+        <span class="logo">🏠</span>
+        <h1>CHU Babinski</h1>
+        <p class="subtitle">Centre d'Hébergement d'Urgence - SAMU Social de Paris</p>
+
+        <div class="cards">
+            <a href="planning.html" class="card">
+                <span class="card-icon">📅</span>
+                <h2>Planning Personnel</h2>
+                <p>Gérez les plannings des équipes : responsables, coordination, accueil, restauration, entretien et agents polyvalents.</p>
+                <div class="stats-preview">
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-employes">--</span>
+                        <span class="stat-label">Employés</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-categories">--</span>
+                        <span class="stat-label">Catégories</span>
+                    </div>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+
+            <a href="heberges.html" class="card">
+                <span class="card-icon">👥</span>
+                <h2>Suivi Hébergés</h2>
+                <p>Consultez et gérez les informations des personnes hébergées : femmes isolées, familles, enfants et leurs parcours.</p>
+                <div class="stats-preview">
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-heberges">--</span>
+                        <span class="stat-label">Hébergés</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="stat-enfants">--</span>
+                        <span class="stat-label">Enfants</span>
+                    </div>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+
+            <a href="finances.html" class="card">
+                <span class="card-icon">💰</span>
+                <h2>Gestion Financière</h2>
+                <p>PAF, aides Cohésia, avances, suivi de caisse et mouvements financiers.</p>
+                <div class="stats-preview">
+                    <div class="stat-item">
+                        <span class="stat-value">PAF</span>
+                        <span class="stat-label">Participation</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">Cohésia</span>
+                        <span class="stat-label">Aides</span>
+                    </div>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+
+        </div>
+
+        <p class="footer">
+            Application de gestion interne - Développée par Emmanuel Pinglier
+        </p>
+    </div>
+
+    <!-- Scripts pour charger les stats dynamiquement -->
+    <script src="lib/sql-wasm.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/schema.js"></script>
+    <script src="js/models.js"></script>
+    <script>
+        // Charger les statistiques depuis la base de données
+        async function loadDashboardStats() {
+            try {
+                await db.init();
+
+                // Vérifier si la base a des données
+                const result = await initDatabase(db);
+
+                // Stats hébergés (depuis SQLite)
+                const stats = HebergeModel.getStats();
+
+                document.getElementById('stat-heberges').textContent = stats.total || 0;
+                document.getElementById('stat-enfants').textContent = stats.enfants || 0;
+
+                // Stats planning (depuis localStorage/app.js)
+                const planningData = localStorage.getItem('planning-babinski');
+                if (planningData) {
+                    const data = JSON.parse(planningData);
+                    const nbEmployes = data.employees?.length || 22;
+                    document.getElementById('stat-employes').textContent = nbEmployes;
+                } else {
+                    document.getElementById('stat-employes').textContent = 22;
+                }
+                document.getElementById('stat-categories').textContent = 8;
+
+            } catch (error) {
+                console.error('Erreur chargement stats:', error);
+                // Valeurs par défaut en cas d'erreur
+                document.getElementById('stat-heberges').textContent = '--';
+                document.getElementById('stat-enfants').textContent = '--';
+                document.getElementById('stat-employes').textContent = '--';
+                document.getElementById('stat-categories').textContent = '--';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDashboardStats);
+    </script>
+</body>
+</html>
