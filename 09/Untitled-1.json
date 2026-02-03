@@ -1,0 +1,224 @@
+[
+  {
+    "id": "L01",
+    "level": "beginner",
+    "skill": "checkmate_basic",
+    "fen": "8/8/8/8/8/8/6K1/6Qk w - - 0 1",
+    "objective": "mate",
+    "bestMoves": ["Qg7#"],
+    "intro": "Trouve le mat en un coup.",
+    "successText": "Exact. Le roi noir est attaqué et n'a aucune case de fuite.",
+    "failureText": "Ce coup ne donne pas échec ou laisse une échappatoire au roi."
+  },
+  {
+    "id": "L02",
+    "level": "beginner",
+    "skill": "checkmate_basic",
+    "fen": "7k/6Q1/6K1/8/8/8/8/8 w - - 0 1",
+    "objective": "mate",
+    "bestMoves": ["Qh7#"],
+    "intro": "Observe les cases autour du roi noir.",
+    "successText": "Parfait. Le roi est encerclé.",
+    "failureText": "Le roi peut encore fuir après ce coup."
+  },
+  {
+    "id": "L03",
+    "level": "beginner",
+    "skill": "piece_value",
+    "fen": "8/8/8/4q3/8/8/4R3/6K1 w - - 0 1",
+    "objective": "win_material",
+    "bestMoves": ["Rxe5"],
+    "intro": "Peux-tu gagner une pièce sans perdre la tienne ?",
+    "successText": "Bien vu. Tu échanges une tour contre une dame.",
+    "failureText": "Attention à la valeur des pièces."
+  },
+  {
+    "id": "L04",
+    "level": "beginner",
+    "skill": "hanging_piece",
+    "fen": "8/8/8/3n4/8/8/3Q4/6K1 w - - 0 1",
+    "objective": "win_material",
+    "bestMoves": ["Qxd5"],
+    "intro": "Une pièce adverse n'est pas protégée.",
+    "successText": "Exact. Le cavalier était en prise.",
+    "failureText": "Regarde quelles pièces sont défendues."
+  },
+  {
+    "id": "L05",
+    "level": "beginner",
+    "skill": "check_basics",
+    "fen": "6k1/8/8/8/8/8/6R1/6K1 w - - 0 1",
+    "objective": "check",
+    "bestMoves": ["Rg3+"],
+    "intro": "Donne un échec simple au roi.",
+    "successText": "Bien. Forcer le roi à réagir est souvent utile.",
+    "failureText": "Ce coup ne met pas le roi en échec."
+  },
+  {
+    "id": "L06",
+    "level": "beginner",
+    "skill": "mate_rook",
+    "fen": "7k/8/8/8/8/8/5R2/6K1 w - - 0 1",
+    "objective": "mate",
+    "bestMoves": ["Rf8#"],
+    "intro": "Le roi est bloqué sur la dernière rangée.",
+    "successText": "Parfait. Mat avec la tour.",
+    "failureText": "Le roi peut encore s'échapper."
+  },
+  {
+    "id": "L07",
+    "level": "beginner",
+    "skill": "double_attack",
+    "fen": "8/8/8/4n3/3Q4/8/8/6K1 w - - 0 1",
+    "objective": "win_material",
+    "bestMoves": ["Qxe5"],
+    "intro": "Une attaque simple permet de gagner du matériel.",
+    "successText": "Exact. Le cavalier était attaqué.",
+    "failureText": "Ce coup n'exploite pas la faiblesse."
+  },
+  {
+    "id": "L08",
+    "level": "beginner",
+    "skill": "mate_corridor",
+    "fen": "6k1/5ppp/8/8/8/8/5PPP/5RK1 w - - 0 1",
+    "objective": "mate",
+    "bestMoves": ["Rf8#"],
+    "intro": "Le roi noir est enfermé par ses propres pions.",
+    "successText": "Exact. C'est le mat du couloir.",
+    "failureText": "Le roi doit être totalement bloqué."
+  },
+  {
+    "id": "L09",
+    "level": "beginner",
+    "skill": "defense_basic",
+    "fen": "6k1/8/8/8/8/8/5q2/6K1 w - - 0 1",
+    "objective": "defend",
+    "bestMoves": ["Kh2"],
+    "intro": "Ton roi est menacé. Trouve un coup sûr.",
+    "successText": "Bien. Le roi échappe au danger.",
+    "failureText": "Ce coup laisse un échec dangereux."
+  },
+  {
+    "id": "L10",
+    "level": "beginner",
+    "skill": "opening_principle",
+    "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+    "objective": "develop",
+    "bestMoves": ["e5"],
+    "intro": "Réponds au centre.",
+    "successText": "Correct. Tu contestes le centre.",
+    "failureText": "Ce coup ne développe pas ton jeu."
+  },
+
+  {
+    "id": "L11",
+    "level": "intermediate",
+    "skill": "fork",
+    "fen": "8/8/3k4/8/3N4/8/4q3/6K1 w - - 0 1",
+    "objective": "win_material",
+    "bestMoves": ["Nc2+"],
+    "intro": "Cherche une attaque double avec le cavalier.",
+    "successText": "Excellent. C'est une fourchette.",
+    "failureText": "Ce coup manque l'opportunité tactique."
+  },
+  {
+    "id": "L12",
+    "level": "intermediate",
+    "skill": "pin",
+    "fen": "4k3/8/8/8/4b3/8/4R3/6K1 w - - 0 1",
+    "objective": "win_material",
+    "bestMoves": ["Rxe4"],
+    "intro": "Une pièce est clouée.",
+    "successText": "Exact. Le fou ne pouvait pas bouger.",
+    "failureText": "Observe les clouages sur le roi."
+  },
+  {
+    "id": "L13",
+    "level": "intermediate",
+    "skill": "skewer",
+    "fen": "6k1/8/8/8/6R1/8/5q2/6K1 w - - 0 1",
+    "objective": "win_material",
+    "bestMoves": ["Rxg7+"],
+    "intro": "Une attaque sur le roi peut gagner du matériel.",
+    "successText": "Bien vu. Enfilade réussie.",
+    "failureText": "Ce coup ne force pas la réponse attendue."
+  },
+  {
+    "id": "L14",
+    "level": "intermediate",
+    "skill": "mate_two_pieces",
+    "fen": "8/8/8/8/8/5K2/6R1/6k1 w - - 0 1",
+    "objective": "mate",
+    "bestMoves": ["Rg3#"],
+    "intro": "Coordonne le roi et la tour.",
+    "successText": "Parfait. Travail d'équipe.",
+    "failureText": "Les pièces doivent coopérer."
+  },
+  {
+    "id": "L15",
+    "level": "intermediate",
+    "skill": "deflection",
+    "fen": "6k1/5ppp/8/8/8/8/5QPP/6K1 w - - 0 1",
+    "objective": "mate",
+    "bestMoves": ["Qa8+"],
+    "intro": "Forcer une pièce à quitter une case clé.",
+    "successText": "Exact. La défense est détournée.",
+    "failureText": "Ce coup ne force pas la défense."
+  },
+
+  {
+    "id": "L16",
+    "level": "intermediate",
+    "skill": "endgame_pawn",
+    "fen": "8/8/8/8/4k3/8/4P3/4K3 w - - 0 1",
+    "objective": "win",
+    "bestMoves": ["e4"],
+    "intro": "Avance ton pion au bon moment.",
+    "successText": "Correct. Le pion va promouvoir.",
+    "failureText": "Ce coup laisse le pion bloqué."
+  },
+  {
+    "id": "L17",
+    "level": "intermediate",
+    "skill": "opposition",
+    "fen": "8/8/8/8/3k4/8/4K3/8 w - - 0 1",
+    "objective": "draw",
+    "bestMoves": ["Kd2"],
+    "intro": "Utilise l'opposition des rois.",
+    "successText": "Exact. Tu contrôles l'accès.",
+    "failureText": "Ce coup perd l'opposition."
+  },
+  {
+    "id": "L18",
+    "level": "intermediate",
+    "skill": "calculation",
+    "fen": "6k1/8/8/4n3/3Q4/8/8/6K1 w - - 0 1",
+    "objective": "win_material",
+    "bestMoves": ["Qxe5"],
+    "intro": "Calcule avant de jouer.",
+    "successText": "Bien calculé.",
+    "failureText": "Ce coup oublie la réponse adverse."
+  },
+  {
+    "id": "L19",
+    "level": "intermediate",
+    "skill": "mate_threat",
+    "fen": "7k/6pp/8/8/8/8/6Q1/6K1 w - - 0 1",
+    "objective": "mate",
+    "bestMoves": ["Qa8#"],
+    "intro": "Repère les cases de fuite.",
+    "successText": "Exact. Le roi est piégé.",
+    "failureText": "Le roi a encore une sortie."
+  },
+  {
+    "id": "L20",
+    "level": "intermediate",
+    "skill": "defense_only_move",
+    "fen": "6k1/8/8/8/8/8/5q2/6K1 w - - 0 1",
+    "objective": "defend",
+    "bestMoves": ["Kh1"],
+    "intro": "Il n'y a qu'un seul coup qui sauve.",
+    "successText": "Bien vu. Coup unique.",
+    "failureText": "Ce coup mène au mat."
+  }
+]

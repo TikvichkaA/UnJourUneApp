@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2d5a27">
+    <meta name="description" content="HomeHelper - Gestion plantes et anti-gaspi">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+    <title>HomeHelper - Plantes & Anti-Gaspi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1 id="pageTitle">🏠 HomeHelper</h1>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Vue Accueil -->
+            <section id="accueilView" class="view active">
+                <div class="dashboard">
+                    <div class="welcome-card">
+                        <h2>Bonjour !</h2>
+                        <p id="dateToday"></p>
+                    </div>
+
+                    <div class="alerts-section">
+                        <h3>🌱 Plantes à arroser</h3>
+                        <div id="plantesAlerts" class="alerts-list">
+                            <p class="empty-state">Aucune plante à arroser</p>
+                        </div>
+                    </div>
+
+                    <div class="alerts-section">
+                        <h3>⚠️ Produits qui périment</h3>
+                        <div id="frigoAlerts" class="alerts-list">
+                            <p class="empty-state">Aucun produit urgent</p>
+                        </div>
+                    </div>
+
+                    <div class="suggestion-section">
+                        <h3>🍳 Suggestion du jour</h3>
+                        <div id="suggestionDuJour" class="suggestion-card">
+                            <p class="empty-state">Ajoutez des ingrédients pour des suggestions</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vue Plantes -->
+            <section id="plantesView" class="view">
+                <div class="section-header">
+                    <h2>Mes Plantes</h2>
+                    <button id="btnAddPlante" class="btn-add">+ Ajouter</button>
+                </div>
+                <div id="plantesList" class="plantes-list">
+                    <p class="empty-state">Aucune plante ajoutée</p>
+                </div>
+
+                <!-- Modal Ajout Plante -->
+                <div id="modalPlante" class="modal hidden">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Ajouter une plante</h3>
+                            <button class="btn-close" data-close="modalPlante">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="catalogue-grid" id="cataloguePlantes"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Détails Plante -->
+                <div id="modalPlantDetail" class="modal hidden">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="detailPlanteName"></h3>
+                            <button class="btn-close" data-close="modalPlantDetail">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="detailPlanteContent"></div>
+                            <input type="text" id="inputEmplacement" placeholder="Emplacement (ex: Cuisine)" class="input-field">
+                            <button id="btnConfirmAddPlante" class="btn-primary">Ajouter cette plante</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vue Frigo -->
+            <section id="frigoView" class="view">
+                <div class="section-header">
+                    <h2>Mon Frigo</h2>
+                    <button id="btnAddIngredient" class="btn-add">+ Ajouter</button>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" data-tab="inventaire">Inventaire</button>
+                    <button class="tab" data-tab="recettes">Recettes</button>
+                </div>
+
+                <div id="tabInventaire" class="tab-content active">
+                    <div id="ingredientsList" class="ingredients-list">
+                        <p class="empty-state">Frigo vide !</p>
+                    </div>
+                </div>
+
+                <div id="tabRecettes" class="tab-content">
+                    <div id="recettesList" class="recettes-list">
+                        <p class="empty-state">Ajoutez des ingrédients pour voir les recettes possibles</p>
+                    </div>
+                </div>
+
+                <!-- Modal Ajout Ingrédient -->
+                <div id="modalIngredient" class="modal hidden">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Ajouter un ingrédient</h3>
+                            <button class="btn-close" data-close="modalIngredient">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" id="inputIngredientNom" placeholder="Nom de l'ingrédient" class="input-field">
+                            <select id="selectCategorie" class="input-field">
+                                <option value="">Catégorie...</option>
+                                <option value="fruits-legumes">🥕 Fruits & Légumes</option>
+                                <option value="produits-laitiers">🧀 Produits laitiers</option>
+                                <option value="viandes">🥩 Viandes & Poissons</option>
+                                <option value="autres">📦 Autres</option>
+                            </select>
+                            <label class="input-label">Date de péremption</label>
+                            <input type="date" id="inputDatePeremption" class="input-field">
+                            <input type="text" id="inputQuantite" placeholder="Quantité (ex: 500g, 2 pièces)" class="input-field">
+                            <button id="btnConfirmAddIngredient" class="btn-primary">Ajouter</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Recette -->
+                <div id="modalRecette" class="modal hidden">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="recetteTitle"></h3>
+                            <button class="btn-close" data-close="modalRecette">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="recetteContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-view="accueil">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Accueil</span>
+            </button>
+            <button class="nav-item" data-view="plantes">
+                <span class="nav-icon">🌱</span>
+                <span class="nav-label">Plantes</span>
+            </button>
+            <button class="nav-item" data-view="frigo">
+                <span class="nav-icon">🍽️</span>
+                <span class="nav-label">Frigo</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Notification Permission Banner -->
+    <div id="notifBanner" class="notif-banner hidden">
+        <p>Activer les notifications pour les rappels ?</p>
+        <div class="notif-actions">
+            <button id="btnEnableNotif" class="btn-small btn-primary">Activer</button>
+            <button id="btnDismissNotif" class="btn-small btn-secondary">Plus tard</button>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
