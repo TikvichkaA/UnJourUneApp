@@ -15,12 +15,12 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #fafafa;
             min-height: 100vh;
-            padding: 3rem 1.5rem;
+            padding: 2rem 1rem;
         }
 
         header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         h1 {
@@ -37,21 +37,21 @@
             font-weight: 300;
         }
 
+        /* Calendrier */
         .calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 0.5rem;
-            max-width: 700px;
-            margin: 0 auto;
+            gap: 0.4rem;
+            max-width: 650px;
+            margin: 0 auto 2rem;
         }
 
         .day-header {
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #999;
-            padding: 0.5rem;
+            padding: 0.3rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
         }
 
         .day {
@@ -66,7 +66,7 @@
             text-decoration: none;
             color: #333;
             transition: all 0.2s ease;
-            position: relative;
+            padding: 0.2rem;
         }
 
         .day:hover {
@@ -81,61 +81,29 @@
             pointer-events: none;
         }
 
-        .day.available {
-            cursor: pointer;
-        }
-
-        .day.available::after {
-            content: '';
-            position: absolute;
-            bottom: 6px;
-            width: 4px;
-            height: 4px;
-            background: #111;
-            border-radius: 50%;
-        }
-
-        .day.upcoming {
-            color: #ccc;
-            border-color: #f5f5f5;
-        }
-
-        .day.upcoming:hover {
-            transform: none;
-            box-shadow: none;
-            border-color: #f5f5f5;
-            cursor: default;
-        }
-
         .day-number {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 400;
         }
 
         .day-name {
-            font-size: 0.55rem;
-            margin-top: 0.25rem;
+            font-size: 0.5rem;
             color: #999;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            max-width: 90%;
+            letter-spacing: 0.02em;
+            max-width: 95%;
             text-align: center;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            margin-top: 0.15rem;
         }
 
-        footer {
-            text-align: center;
-            margin-top: 3rem;
-            color: #999;
-            font-size: 0.75rem;
-        }
-
+        /* Section contact */
         .contact {
-            max-width: 500px;
-            margin: 0 auto 3rem;
-            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            padding: 1.5rem;
             background: white;
             border: 1px solid #eee;
             border-radius: 8px;
@@ -146,13 +114,12 @@
             font-size: 1rem;
             font-weight: 400;
             color: #333;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
         }
 
         .contact p {
             font-size: 0.85rem;
             color: #666;
-            line-height: 1.6;
             margin-bottom: 1rem;
         }
 
@@ -163,7 +130,6 @@
             color: #0077b5;
             text-decoration: none;
             font-size: 0.85rem;
-            font-weight: 500;
             padding: 0.5rem 1rem;
             border: 1px solid #0077b5;
             border-radius: 4px;
@@ -175,15 +141,147 @@
             color: white;
         }
 
+        /* Section vote */
+        .vote-section {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .vote-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .vote-header h2 {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #111;
+            margin-bottom: 0.5rem;
+        }
+
+        .vote-header p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .vote-header a {
+            color: #e74c3c;
+            text-decoration: none;
+        }
+
+        .vote-header a:hover {
+            text-decoration: underline;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .app-card {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .app-card:hover {
+            border-color: #ddd;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-day {
+            width: 32px;
+            height: 32px;
+            background: #111;
+            color: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .app-name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #111;
+            text-decoration: none;
+        }
+
+        .app-name:hover {
+            text-decoration: underline;
+        }
+
+        .app-desc {
+            font-size: 0.8rem;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 0.75rem;
+        }
+
+        .app-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .vote-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+
+        .vote-btn:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .vote-btn.voted {
+            background: #fdf2f2;
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .vote-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .vote-count {
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #999;
+            font-size: 0.75rem;
+        }
+
         @media (max-width: 500px) {
-            .calendar {
-                gap: 0.3rem;
-            }
-            .day-number {
-                font-size: 0.9rem;
-            }
-            .day-name {
-                font-size: 0.5rem;
+            .apps-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -194,6 +292,52 @@
         <p class="subtitle">Janvier 2026</p>
     </header>
 
+    <!-- Calendrier -->
+    <nav class="calendar">
+        <div class="day-header">Lun</div>
+        <div class="day-header">Mar</div>
+        <div class="day-header">Mer</div>
+        <div class="day-header">Jeu</div>
+        <div class="day-header">Ven</div>
+        <div class="day-header">Sam</div>
+        <div class="day-header">Dim</div>
+        <div class="day empty"></div>
+        <div class="day empty"></div>
+        <div class="day empty"></div>
+        <a href="./01/NY-Forecast/?group=public" class="day"><span class="day-number">1</span><span class="day-name">Predictions</span></a>
+        <a href="./02/" class="day"><span class="day-number">2</span><span class="day-name">Toi vs Vie</span></a>
+        <a href="./03/" class="day"><span class="day-number">3</span><span class="day-name">Resolutions</span></a>
+        <a href="./04/dist/" class="day"><span class="day-number">4</span><span class="day-name">Micro-Cite</span></a>
+        <a href="./05/" class="day"><span class="day-number">5</span><span class="day-name">Mission</span></a>
+        <a href="./06/" class="day"><span class="day-number">6</span><span class="day-name">Qui a dit ?</span></a>
+        <a href="./07/" class="day"><span class="day-number">7</span><span class="day-name">Shu Aboie</span></a>
+        <a href="./08/" class="day"><span class="day-number">8</span><span class="day-name">EntreGraphe</span></a>
+        <a href="./09/" class="day"><span class="day-number">9</span><span class="day-name">Liens Interet</span></a>
+        <a href="./10/" class="day"><span class="day-number">10</span><span class="day-name">SubVeille</span></a>
+        <a href="./11/" class="day"><span class="day-number">11</span><span class="day-name">Dreamhouse</span></a>
+        <a href="./12/" class="day"><span class="day-number">12</span><span class="day-name">CHU Babinski</span></a>
+        <a href="./13/" class="day"><span class="day-number">13</span><span class="day-name">SecondMain</span></a>
+        <a href="./14/" class="day"><span class="day-number">14</span><span class="day-name">Muni 2026</span></a>
+        <a href="./15/" class="day"><span class="day-number">15</span><span class="day-name">GoRemodel</span></a>
+        <a href="./16/" class="day"><span class="day-number">16</span><span class="day-name">FocusGuard</span></a>
+        <a href="./17/" class="day"><span class="day-number">17</span><span class="day-name">CollecPro</span></a>
+        <a href="./18/" class="day"><span class="day-number">18</span><span class="day-name">DevisFacile</span></a>
+        <a href="./19/" class="day"><span class="day-number">19</span><span class="day-name">MaVille</span></a>
+        <a href="./20/" class="day"><span class="day-number">20</span><span class="day-name">EcoProfil</span></a>
+        <a href="./21bis/" class="day"><span class="day-number">21</span><span class="day-name">MathOral</span></a>
+        <a href="./22/ChessMaster3D/dist/" class="day"><span class="day-number">22</span><span class="day-name">ChessMaster</span></a>
+        <a href="./23/ElecPro/dist/" class="day"><span class="day-number">23</span><span class="day-name">ElecPro</span></a>
+        <a href="./24/" class="day"><span class="day-number">24</span><span class="day-name">Ping Pang</span></a>
+        <a href="./25/" class="day"><span class="day-number">25</span><span class="day-name">TS Compagnon</span></a>
+        <a href="./26/" class="day"><span class="day-number">26</span><span class="day-name">ReVie</span></a>
+        <a href="./27/" class="day"><span class="day-number">27</span><span class="day-name">Sol Vivant</span></a>
+        <a href="./28/" class="day"><span class="day-number">28</span><span class="day-name">KartApp</span></a>
+        <a href="./29/" class="day"><span class="day-number">29</span><span class="day-name">Antifasciste</span></a>
+        <a href="./30/" class="day"><span class="day-number">30</span><span class="day-name">Bomberg</span></a>
+        <a href="./31/" class="day"><span class="day-number">31</span><span class="day-name">HomeHelper</span></a>
+        <div class="day empty"></div>
+    </nav>
+
     <section class="contact">
         <h2>Besoin d'une app sur mesure ?</h2>
         <p>Apparemment maintenant je fais des apps - s'il vous en faut une aussi, contactez-moi.</p>
@@ -202,157 +346,156 @@
         </a>
     </section>
 
-    <main class="calendar">
-        <!-- En-têtes des jours -->
-        <div class="day-header">Lun</div>
-        <div class="day-header">Mar</div>
-        <div class="day-header">Mer</div>
-        <div class="day-header">Jeu</div>
-        <div class="day-header">Ven</div>
-        <div class="day-header">Sam</div>
-        <div class="day-header">Dim</div>
+    <!-- Section vote -->
+    <section class="vote-section">
+        <div class="vote-header">
+            <h2>Votez pour vos apps favorites</h2>
+            <p>Aidez-moi a choisir lesquelles approfondir - <a href="./votes.html">Voir le classement</a></p>
+        </div>
 
-        <!-- Semaine 1 : Janvier 2026 commence un jeudi -->
-        <div class="day empty"></div>
-        <div class="day empty"></div>
-        <div class="day empty"></div>
-        <a href="./01/NY-Forecast/?group=public" class="day available">
-            <span class="day-number">1</span>
-            <span class="day-name">Nouvel An</span>
-        </a>
-        <a href="./02/" class="day available">
-            <span class="day-number">2</span>
-            <span class="day-name">Toi vs Vie</span>
-        </a>
-        <a href="./03/" class="day available">
-            <span class="day-number">3</span>
-            <span class="day-name">Résolutions</span>
-        </a>
-        <a href="./04/dist/" class="day available">
-            <span class="day-number">4</span>
-            <span class="day-name">Micro-Cité</span>
-        </a>
-
-        <!-- Semaine 2 -->
-        <a href="./05/" class="day available">
-            <span class="day-number">5</span>
-            <span class="day-name">Mission</span>
-        </a>
-        <a href="./06/" class="day available">
-            <span class="day-number">6</span>
-            <span class="day-name">Qui a dit ?</span>
-        </a>
-        <a href="./07/" class="day available">
-            <span class="day-number">7</span>
-            <span class="day-name">Shu Aboie</span>
-        </a>
-        <a href="./08/" class="day available">
-            <span class="day-number">8</span>
-            <span class="day-name">EntreGraphe</span>
-        </a>
-        <a href="./09/" class="day available">
-            <span class="day-number">9</span>
-            <span class="day-name">Liens Intérêt</span>
-        </a>
-        <a href="./10/" class="day available">
-            <span class="day-number">10</span>
-            <span class="day-name">SubVeille</span>
-        </a>
-        <a href="./11/" class="day available">
-            <span class="day-number">11</span>
-            <span class="day-name">Dreamhouse</span>
-        </a>
-
-        <!-- Semaine 3 -->
-        <a href="./12/" class="day available" id="day-12">
-            <span class="day-number">12</span>
-            <span class="day-name">CHU Babinski</span>
-        </a>
-        <a href="./13/" class="day available">
-            <span class="day-number">13</span>
-            <span class="day-name">SecondMain</span>
-        </a>
-        <a href="./14/" class="day available">
-            <span class="day-number">14</span>
-            <span class="day-name">Muni 2026</span>
-        </a>
-        <a href="./15/" class="day available">
-            <span class="day-number">15</span>
-            <span class="day-name">GoRemodel</span>
-        </a>
-        <a href="./16/" class="day available">
-            <span class="day-number">16</span>
-            <span class="day-name">FocusGuard</span>
-        </a>
-        <a href="./17/" class="day available">
-            <span class="day-number">17</span>
-            <span class="day-name">CollecPro</span>
-        </a>
-        <a href="./18/" class="day available">
-            <span class="day-number">18</span>
-            <span class="day-name">DevisFacile</span>
-        </a>
-
-        <!-- Semaine 4 -->
-        <a href="./19/" class="day available">
-            <span class="day-number">19</span>
-            <span class="day-name">MaVille Signale</span>
-        </a>
-        <a href="./20/" class="day available">
-            <span class="day-number">20</span>
-            <span class="day-name">EcoProfil</span>
-        </a>
-        <a href="./21bis/" class="day available" id="day-21">
-            <span class="day-number">21</span>
-            <span class="day-name">MathOral</span>
-        </a>
-        <a href="./22/ChessMaster3D/dist/" class="day available">
-            <span class="day-number">22</span>
-            <span class="day-name">ChessMaster3D</span>
-        </a>
-        <a href="./23/ElecPro/dist/" class="day available">
-            <span class="day-number">23</span>
-            <span class="day-name">ElecPro</span>
-        </a>
-        <a href="./24/" class="day available">
-            <span class="day-number">24</span>
-            <span class="day-name">Ping Pang</span>
-        </a>
-        <a href="./25/" class="day available">
-            <span class="day-number">25</span>
-            <span class="day-name">TS Compagnon</span>
-        </a>
-
-        <!-- Semaine 5 -->
-        <a href="./26/" class="day available">
-            <span class="day-number">26</span>
-            <span class="day-name">ReVie</span>
-        </a>
-        <a href="./27/" class="day available">
-            <span class="day-number">27</span>
-            <span class="day-name">Sol Vivant</span>
-        </a>
-        <a href="./28/" class="day available">
-            <span class="day-number">28</span>
-            <span class="day-name">KartApp</span>
-        </a>
-        <a href="./29/" class="day available">
-            <span class="day-number">29</span>
-            <span class="day-name">TraductoFash</span>
-        </a>
-        <a href="./30/" class="day available">
-            <span class="day-number">30</span>
-            <span class="day-name">Bomberg Shuffle</span>
-        </a>
-        <div class="day upcoming"><span class="day-number">31</span></div>
-        <div class="day empty"></div>
-    </main>
+        <div class="apps-grid" id="apps-grid">
+            <!-- Les apps seront injectees par JS -->
+        </div>
+    </section>
 
     <footer>
         31 jours, 31 apps<span id="secret-dot">.</span>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        const SUPABASE_URL = 'https://hwunkojdzodcutewkfet.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3dW5rb2pkem9kY3V0ZXdrZmV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzOTMzNTAsImV4cCI6MjA4Mzk2OTM1MH0.Zpe-QqzKDIpx3pTa6_e9ysfI-Rprl3SXANM8b2pqXU0';
+
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const apps = [
+            { id: 1, name: "Predictions 2026", url: "./01/NY-Forecast/?group=public", desc: "Predictions collaboratives sur 2026 : votez sur des evenements probables et partagez vos resolutions." },
+            { id: 2, name: "Toi vs la Vie", url: "./02/", desc: "Assistant decale pour vos dilemmes avec 7 modules loufoques pour prendre des decisions... ou pas." },
+            { id: 3, name: "Resolutions 2026", url: "./03/", desc: "Journal simple pour tracker vos resolutions avec statistiques de progression." },
+            { id: 4, name: "Micro-Cite", url: "./04/dist/", desc: "Simulation urbaine interactive ou vous gerez population, energie et relations des habitants." },
+            { id: 5, name: "Mission", url: "./05/", desc: "Jeu narratif captivant : ramenez Lea chez Tom a travers mini-jeux et dialogues." },
+            { id: 6, name: "Qui a dit ?", url: "./06/", desc: "Quiz politique : retrouvez qui a prononce quelle citation avec un design officiel." },
+            { id: 7, name: "Shu Aboie", url: "./07/", desc: "Faites aboyer Shu et comparez ses aboiements avec d'autres animaux en duels loufoques." },
+            { id: 8, name: "EntreGraphe", url: "./08/", desc: "Visualisez les reseaux d'entreprises francaises : dirigeants, filiales, actionnaires via l'API Pappers." },
+            { id: 9, name: "Liens d'Interet", url: "./09/", desc: "Explorez les connexions entre politiciens francais : commissions, votes, entreprises." },
+            { id: 10, name: "SubVeille", url: "./10/", desc: "Veille complete pour associations : recherchez des appels a projets publics avec recommandations IA." },
+            { id: 11, name: "Dreamhouse", url: "./11/", desc: "Jeu de gestion maison : completez des missions de rangement et gagnez des badges." },
+            { id: 12, name: "CHU Babinski", url: "./12/", desc: "Gestion d'urgence pour l'hebergement social : suivi du personnel et des personnes hebergees." },
+            { id: 13, name: "SecondMain", url: "./13/", desc: "Extension Chrome pour trouver et signaler des produits de seconde main." },
+            { id: 14, name: "Muni 2026", url: "./14/", desc: "Analyse des candidatures et enjeux des elections municipales 2026 avec donnees gouvernementales." },
+            { id: 15, name: "GoRemodel", url: "./15/", desc: "Compteur de score interactif pour parties de Go avec analyse photo et calcul des territoires." },
+            { id: 16, name: "FocusGuard", url: "./16/", desc: "App Android pour bloquer les distractions et maintenir la concentration avec sessions minutees." },
+            { id: 17, name: "CollecPro", url: "./17/", desc: "Gestion des collectes et livraisons pour agents de logistique alimentaire." },
+            { id: 18, name: "DevisFacile", url: "./18/", desc: "Gestionnaire de devis simplifie pour generation rapide de devis professionnels." },
+            { id: 19, name: "MaVille Signale", url: "./19/", desc: "Plateforme municipale de signalement des problemes urbains pour agents municipaux." },
+            { id: 20, name: "EcoProfil", url: "./20/", desc: "Suivi personnel de l'empreinte ecologique et carbone avec profil personnalise." },
+            { id: 21, name: "MathOral", url: "./21bis/", desc: "Entrainement aux oraux de maths de concours : 25+ exercices, simulations et mode Express." },
+            { id: 22, name: "ChessMaster3D", url: "./22/ChessMaster3D/dist/", desc: "Apprenez les echecs avec une interface 3D interactive et des lecons progressives." },
+            { id: 23, name: "ElecPro", url: "./23/ElecPro/dist/", desc: "Plateforme pedagogique interactive pour l'apprentissage des travaux pratiques en electricite." },
+            { id: 24, name: "Ping Pang", url: "./24/", desc: "Gestion de matchs et tournois de tennis de table avec systeme ELO et historique." },
+            { id: 25, name: "TS Compagnon", url: "./25/", desc: "Assistant terrain pour travailleurs sociaux : fiches reflexes, glossaire, droits sociaux." },
+            { id: 26, name: "ReVie", url: "./26/", desc: "Localisateur interactif pour trouver ou reparer, donner ou recycler vos objets pres de chez vous." },
+            { id: 27, name: "Sol Vivant", url: "./27/", desc: "Simulation ecologique multijoueur : partagez un sol vivant virtuel et trouvez l'equilibre collectif." },
+            { id: 28, name: "KartApp", url: "./28/", desc: "Apprenez le georgien du niveau A0 a B2 : alphabet, lecons, vocabulaire, flashcards." },
+            { id: 29, name: "Traducteur Antifasciste", url: "./29/", desc: "Extension qui traduit les euphemismes autoritaires en formulations politiques explicites." },
+            { id: 30, name: "Bomberg Shuffle", url: "./30/", desc: "Puzzle interactif : reconstituez le tableau 'In the Hold' de David Bomberg." },
+            { id: 31, name: "HomeHelper", url: "./31/", desc: "Gestion plantes et anti-gaspi : arrosage, inventaire frigo, alertes peremption, recettes." }
+        ];
+
+        // Votes locaux (pour affichage immediat)
+        let localVotes = JSON.parse(localStorage.getItem('ujua-votes') || '{}');
+        let voteCounts = {};
+
+        // Charger les votes depuis Supabase
+        async function loadVotes() {
+            try {
+                const { data, error } = await db
+                    .from('app_votes')
+                    .select('app_id, votes');
+
+                if (error) throw error;
+
+                voteCounts = {};
+                data.forEach(row => {
+                    voteCounts[row.app_id] = row.votes;
+                });
+
+                renderApps();
+            } catch (e) {
+                console.error('Erreur chargement votes:', e);
+                renderApps();
+            }
+        }
+
+        // Voter pour une app
+        async function vote(appId) {
+            const btn = document.querySelector(`[data-app="${appId}"]`);
+            const hasVoted = localVotes[appId];
+
+            // Toggle vote local
+            if (hasVoted) {
+                delete localVotes[appId];
+                voteCounts[appId] = (voteCounts[appId] || 1) - 1;
+            } else {
+                localVotes[appId] = true;
+                voteCounts[appId] = (voteCounts[appId] || 0) + 1;
+            }
+
+            localStorage.setItem('ujua-votes', JSON.stringify(localVotes));
+            updateButton(btn, appId);
+
+            // Mettre a jour Supabase
+            try {
+                const { error } = await db.rpc('toggle_vote', {
+                    p_app_id: appId,
+                    p_increment: !hasVoted
+                });
+                if (error) console.error('Erreur vote:', error);
+            } catch (e) {
+                console.error('Erreur vote:', e);
+            }
+        }
+
+        function updateButton(btn, appId) {
+            const hasVoted = localVotes[appId];
+            const count = voteCounts[appId] || 0;
+
+            btn.classList.toggle('voted', hasVoted);
+            btn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="${hasVoted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                ${count}
+            `;
+        }
+
+        function renderApps() {
+            const grid = document.getElementById('apps-grid');
+            grid.innerHTML = apps.map(app => `
+                <div class="app-card">
+                    <div class="app-header">
+                        <span class="app-day">${app.id}</span>
+                        <a href="${app.url}" class="app-name">${app.name}</a>
+                    </div>
+                    <p class="app-desc">${app.desc}</p>
+                    <div class="app-footer">
+                        <button class="vote-btn ${localVotes[app.id] ? 'voted' : ''}" data-app="${app.id}" onclick="vote(${app.id})">
+                            <svg viewBox="0 0 24 24" fill="${localVotes[app.id] ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            ${voteCounts[app.id] || 0}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialisation - rendu immediat puis chargement des votes
+        renderApps();
+        loadVotes();
+
+        // Easter egg
         (function() {
             const dot = document.getElementById('secret-dot');
             let clicks = 0;
@@ -364,76 +507,12 @@
             dot.addEventListener('click', function(e) {
                 e.preventDefault();
                 clicks++;
-
                 if (timer) clearTimeout(timer);
-
                 if (clicks >= 3) {
                     window.location.href = './16bis/';
                     clicks = 0;
                 } else {
-                    timer = setTimeout(function() {
-                        clicks = 0;
-                    }, 1000);
-                }
-            });
-        })();
-
-        (function() {
-            const day21 = document.getElementById('day-21');
-            let clicks21 = 0;
-            let timer21 = null;
-            let navigateTimer = null;
-
-            day21.addEventListener('click', function(e) {
-                e.preventDefault();
-                clicks21++;
-
-                if (timer21) clearTimeout(timer21);
-                if (navigateTimer) clearTimeout(navigateTimer);
-
-                if (clicks21 >= 5) {
-                    // Easter egg: 5 clics rapides -> beta-traj
-                    window.location.href = './21/';
-                    clicks21 = 0;
-                } else {
-                    // Attendre un peu pour voir si d'autres clics arrivent
-                    navigateTimer = setTimeout(function() {
-                        // Clic simple -> MathOral
-                        window.location.href = './21bis/';
-                    }, 400);
-
-                    timer21 = setTimeout(function() {
-                        clicks21 = 0;
-                    }, 1500);
-                }
-            });
-        })();
-
-        // Easter egg jour 12: 5 clics -> version backup
-        (function() {
-            const day12 = document.getElementById('day-12');
-            let clicks12 = 0;
-            let timer12 = null;
-            let navigateTimer12 = null;
-
-            day12.addEventListener('click', function(e) {
-                e.preventDefault();
-                clicks12++;
-
-                if (timer12) clearTimeout(timer12);
-                if (navigateTimer12) clearTimeout(navigateTimer12);
-
-                if (clicks12 >= 5) {
-                    window.location.href = './12-backup/';
-                    clicks12 = 0;
-                } else {
-                    navigateTimer12 = setTimeout(function() {
-                        window.location.href = './12/';
-                    }, 400);
-
-                    timer12 = setTimeout(function() {
-                        clicks12 = 0;
-                    }, 1500);
+                    timer = setTimeout(() => clicks = 0, 1000);
                 }
             });
         })();

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classement des votes - Un Jour Une App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fafafa;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: #111;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .subtitle a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .subtitle a:hover {
+            text-decoration: underline;
+        }
+
+        .stats {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 1rem 1.5rem;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #e74c3c;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ranking {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .rank-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .rank-item:hover {
+            border-color: #ddd;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .rank-position {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .rank-1 .rank-position {
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+            color: white;
+        }
+
+        .rank-2 .rank-position {
+            background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+            color: white;
+        }
+
+        .rank-3 .rank-position {
+            background: linear-gradient(135deg, #cd7f32, #b5651d);
+            color: white;
+        }
+
+        .rank-position {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .rank-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .rank-name {
+            font-weight: 500;
+            color: #111;
+            text-decoration: none;
+            display: block;
+        }
+
+        .rank-name:hover {
+            text-decoration: underline;
+        }
+
+        .rank-day {
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        .rank-votes {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #e74c3c;
+            font-weight: 500;
+        }
+
+        .rank-votes svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .vote-bar {
+            height: 4px;
+            background: #f0f0f0;
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .vote-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        .no-votes {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        @media (max-width: 500px) {
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Classement des votes</h1>
+        <p class="subtitle"><a href="./">Retour a l'index</a></p>
+    </header>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-number" id="total-votes">-</div>
+            <div class="stat-label">Votes totaux</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" id="apps-voted">-</div>
+            <div class="stat-label">Apps avec votes</div>
+        </div>
+    </div>
+
+    <div class="ranking" id="ranking">
+        <div class="loading">Chargement des votes...</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://hwunkojdzodcutewkfet.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3dW5rb2pkem9kY3V0ZXdrZmV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzOTMzNTAsImV4cCI6MjA4Mzk2OTM1MH0.Zpe-QqzKDIpx3pTa6_e9ysfI-Rprl3SXANM8b2pqXU0';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const apps = {
+            1: { name: "Predictions 2026", url: "./01/NY-Forecast/?group=public" },
+            2: { name: "Toi vs la Vie", url: "./02/" },
+            3: { name: "Resolutions 2026", url: "./03/" },
+            4: { name: "Micro-Cite", url: "./04/dist/" },
+            5: { name: "Mission", url: "./05/" },
+            6: { name: "Qui a dit ?", url: "./06/" },
+            7: { name: "Shu Aboie", url: "./07/" },
+            8: { name: "EntreGraphe", url: "./08/" },
+            9: { name: "Liens d'Interet", url: "./09/" },
+            10: { name: "SubVeille", url: "./10/" },
+            11: { name: "Dreamhouse", url: "./11/" },
+            12: { name: "CHU Babinski", url: "./12/" },
+            13: { name: "SecondMain", url: "./13/" },
+            14: { name: "Muni 2026", url: "./14/" },
+            15: { name: "GoRemodel", url: "./15/" },
+            16: { name: "FocusGuard", url: "./16/" },
+            17: { name: "CollecPro", url: "./17/" },
+            18: { name: "DevisFacile", url: "./18/" },
+            19: { name: "MaVille Signale", url: "./19/" },
+            20: { name: "EcoProfil", url: "./20/" },
+            21: { name: "MathOral", url: "./21bis/" },
+            22: { name: "ChessMaster3D", url: "./22/ChessMaster3D/dist/" },
+            23: { name: "ElecPro", url: "./23/ElecPro/dist/" },
+            24: { name: "Ping Pang", url: "./24/" },
+            25: { name: "TS Compagnon", url: "./25/" },
+            26: { name: "ReVie", url: "./26/" },
+            27: { name: "Sol Vivant", url: "./27/" },
+            28: { name: "KartApp", url: "./28/" },
+            29: { name: "Traducteur Antifasciste", url: "./29/" },
+            30: { name: "Bomberg Shuffle", url: "./30/" },
+            31: { name: "HomeHelper", url: "./31/" }
+        };
+
+        async function loadRanking() {
+            try {
+                const { data, error } = await supabase
+                    .from('app_votes')
+                    .select('app_id, votes')
+                    .order('votes', { ascending: false });
+
+                if (error) throw error;
+
+                const totalVotes = data.reduce((sum, r) => sum + r.votes, 0);
+                const appsWithVotes = data.filter(r => r.votes > 0).length;
+                const maxVotes = data.length > 0 ? data[0].votes : 0;
+
+                document.getElementById('total-votes').textContent = totalVotes;
+                document.getElementById('apps-voted').textContent = appsWithVotes;
+
+                const ranking = document.getElementById('ranking');
+
+                if (totalVotes === 0) {
+                    ranking.innerHTML = '<div class="no-votes">Aucun vote pour le moment. <a href="./">Soyez le premier !</a></div>';
+                    return;
+                }
+
+                ranking.innerHTML = data.map((row, index) => {
+                    const app = apps[row.app_id] || { name: `App ${row.app_id}`, url: '#' };
+                    const barWidth = maxVotes > 0 ? (row.votes / maxVotes) * 100 : 0;
+                    const rankClass = index < 3 ? `rank-${index + 1}` : '';
+
+                    return `
+                        <div class="rank-item ${rankClass}">
+                            <div class="rank-position">${index + 1}</div>
+                            <div class="rank-info">
+                                <a href="${app.url}" class="rank-name">${app.name}</a>
+                                <span class="rank-day">Jour ${row.app_id}</span>
+                                <div class="vote-bar">
+                                    <div class="vote-bar-fill" style="width: ${barWidth}%"></div>
+                                </div>
+                            </div>
+                            <div class="rank-votes">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                                ${row.votes}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (e) {
+                console.error('Erreur:', e);
+                document.getElementById('ranking').innerHTML = '<div class="no-votes">Erreur de chargement</div>';
+            }
+        }
+
+        loadRanking();
+    </script>
+</body>
+</html>
