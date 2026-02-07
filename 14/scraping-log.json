@@ -1,0 +1,319 @@
+{
+  "meta": {
+    "description": "Log des URLs scrapées pour éviter les doublons",
+    "created": "2026-02-03",
+    "last_updated": "2026-02-03"
+  },
+  "sources_utilisees": [
+    {
+      "url": "https://www.streetpress.com/sujet/1758557171-municipales-dix-villes-pourraient-basculer-extreme-droite-electionsmunicipales2026-france",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "communes",
+        "candidats"
+      ],
+      "nb_communes": 10,
+      "nb_candidats": 6
+    },
+    {
+      "url": "https://basta.media/racistes-homophobes-complotistes-pro-poutine-antisemites-candidats-rn",
+      "date_scrape": "2026-02-03",
+      "type": "liste",
+      "donnees_extraites": [
+        "dingueries",
+        "candidats"
+      ],
+      "nb_dingueries": 8
+    },
+    {
+      "url": "https://fr.timesofisrael.com/les-candidats-du-rn-qui-font-tache-leurs-propos-antisemites-racistes-et-complotistes/",
+      "date_scrape": "2026-02-03",
+      "type": "liste",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 5
+    },
+    {
+      "url": "https://basta.media/La-carte-des-cinquante-villes-qui-pourraient-basculer-extreme-droite-elections-municipales",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "communes"
+      ],
+      "nb_communes": 12
+    },
+    {
+      "url": "https://www.francebleu.fr/provence-alpes-cote-d-azur/bouches-du-rhone-13/marseille/municipales-2026-a-marseille-le-rn-devoile-ses-tetes-de-listes-par-secteur-4904960",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "candidats"
+      ],
+      "nb_candidats": 8
+    },
+    {
+      "url": "https://france3-regions.franceinfo.fr/provence-alpes-cote-d-azur/alpes-maritimes/elections-municipales-2026-le-rassemblement-national-presente-ses-14-candidats-dans-les-alpes-maritimes-3266135.html",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "candidats"
+      ],
+      "nb_candidats": 5
+    },
+    {
+      "url": "https://lesjours.fr/obsessions/rn-derniere-marche-2/ep6-buisson-melin-joubert/",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 3
+    },
+    {
+      "url": "https://www.francebleu.fr/infos/politique/legislatives-2024-casquette-nazie-propos-racistes-ces-candidatures-du-rassemblement-national-qui-font-polemique-8443504",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 1
+    },
+    {
+      "url": "https://www.franceinfo.fr/elections/municipales/info-franceinfo-municipales-2026-83-deputes-se-lancent-dans-la-campagne-comme-tetes-de-liste_7738753.html",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "candidats"
+      ],
+      "nb_candidats": 10
+    },
+    {
+      "url": "https://www.europe1.fr/politique/municipales-2026-avec-plus-de-600-tetes-de-liste-deja-investis-le-rn-et-ludr-se-mettent-en-ordre-de-bataille-873522",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "stats"
+      ],
+      "notes": "600+ têtes de liste RN/UDR"
+    },
+    {
+      "url": "https://www.francebleu.fr/infos/politique/dijon-thierry-coudert-tete-de-liste-udr-rn-pour-les-elections-municipales-de-2026-presente-ses-premiers-colistiers-8199252",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "candidats"
+      ],
+      "nb_candidats": 1
+    },
+    {
+      "url": "https://municipales.streetpress.com/api/cities",
+      "date_scrape": "2026-02-03",
+      "type": "api",
+      "donnees_extraites": [
+        "communes"
+      ],
+      "nb_communes": 995,
+      "notes": "API complète StreetPress - 3495 communes total, 995 à risque D/E. Fichier: streetpress-communes-risque.json",
+      "champs": [
+        "code_insee",
+        "nom",
+        "departement",
+        "score",
+        "maire_actuel",
+        "population",
+        "lat",
+        "lon",
+        "municipales_2020",
+        "scenarios"
+      ]
+    },
+    {
+      "url": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "date_scrape": "2026-02-03",
+      "type": "liste",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 17
+    },
+    {
+      "url": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 19
+    },
+    {
+      "url": "https://www.streetpress.com/sujet/1719935581-caen-nouvelle-candidate-rassemblement-national-raciste-complotiste-josseline-liban-elections-legislatives-calvados",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 5
+    },
+    {
+      "url": "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 10
+    },
+    {
+      "url": "https://www.streetpress.com/sujet/1720017546-finistere-candidat-rassemblement-national-joueurs-equipe-france-clandestins-legislatives",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 7
+    },
+    {
+      "url": "https://www.streetpress.com/sujet/1746464175-attache-parlementaire-vire-tweets-racistes-deputee-rassemblement-national-var-laure-lavalette-nicolas-koutseff",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 9
+    },
+    {
+      "url": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 13
+    },
+    {
+      "url": "https://linsoumission.fr/2026/01/16/rn-saint-nazaire-municipales-racisme/",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 2
+    },
+    {
+      "url": "https://www.franceinfo.fr/elections/legislatives-2024-qui-sont-ces-candidats-rn-qualifies-de-racistes-ou-d-antisemites-par-gabriel-attal-lors-du-debat_6631557.html",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 5
+    },
+    {
+      "url": "https://lcp.fr/actualites/legislatives-2024-ces-candidats-qualifies-de-brebis-galeuses-par-jordan-bardella-qui",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 6
+    },
+    {
+      "url": "https://www.franceinfo.fr/politique/front-national/affaire-des-assistants-fn-au-parlement-europeen/marine-le-pen-louis-aliot-julien-odoul-on-a-liste-les-25-condamnations-a-l-issue-du-proces-des-assistants-parlementaires-du-fn_7162527.html",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 7,
+      "notes": "Condamnations assistants parlementaires mars 2025"
+    },
+    {
+      "url": "https://www.francebleu.fr/infos/politique/legislatives-2024-plainte-contre-un-suppleant-du-rn-dans-le-loiret-pour-des-propos-sexistes-racistes-et-antisemites-9061165",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 1
+    },
+    {
+      "url": "https://www.francebleu.fr/infos/societe/municipales-2026-la-colere-des-gens-du-voyage-apres-la-publication-du-programme-d-un-candidat-rn-en-isere-3472821",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 1,
+      "notes": "Municipales 2026 - signalement procureur"
+    },
+    {
+      "url": "https://www.revolutionpermanente.fr/Negationnistes-anti-IVG-xenophobes-qui-sont-les-candidats-RN-aux-legislatives",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 9
+    },
+    {
+      "url": "https://cartedelahonte.github.io/",
+      "date_scrape": "2026-02-03",
+      "type": "site",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 4,
+      "notes": "156 preuves selon le site"
+    },
+    {
+      "url": "https://france3-regions.franceinfo.fr/grand-est/moselle/metz/proces-du-depute-rn-laurent-jacobelli-condamne-a-300-euros-d-amende-une-parodie-de-justice-pour-belkhir-belhaddad-3210020.html",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 1,
+      "notes": "Condamnation Jacobelli"
+    },
+    {
+      "url": "https://www.francebleu.fr/infos/elections/municipales-2026-la-priorite-nationale-du-rn-attaquee-en-justice-9081203",
+      "date_scrape": "2026-02-03",
+      "type": "article",
+      "donnees_extraites": [
+        "dingueries"
+      ],
+      "nb_dingueries": 1,
+      "notes": "Plainte Thierry Mariani Paris 2026"
+    }
+  ],
+  "sources_a_scraper": [
+    {
+      "url": "https://www.mediapart.fr/journal/france/dossier/elections-municipales-2026",
+      "priorite": "moyenne",
+      "type": "dossier",
+      "notes": "Dossier Mediapart municipales - paywall probable"
+    },
+    {
+      "url": "https://www.interieur.gouv.fr/Elections/Les-resultats",
+      "priorite": "moyenne",
+      "type": "institution",
+      "notes": "Résultats électoraux officiels"
+    },
+    {
+      "url": "https://candidator.fr/",
+      "priorite": "haute",
+      "type": "api",
+      "notes": "Base de données des candidats aux municipales"
+    }
+  ],
+  "fichiers_donnees": [
+    {
+      "fichier": "streetpress-communes-risque.json",
+      "date": "2026-02-03",
+      "nb_entrees": 995,
+      "description": "Communes score D et E avec coordonnées GPS et résultats 2020"
+    }
+  ]
+}

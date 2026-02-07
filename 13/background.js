@@ -1,21 +1,34 @@
 // SecondMain - Service Worker (Background Script)
 // Gère les événements en arrière-plan
 
+// Configuration des sources de recherche
+const SOURCES = {
+  leboncoin: (query) => `https://www.leboncoin.fr/recherche?text=${encodeURIComponent(query)}`,
+  vinted: (query) => `https://www.vinted.fr/catalog?search_text=${encodeURIComponent(query)}`,
+  facebook: (query) => `https://www.facebook.com/marketplace/search/?query=${encodeURIComponent(query)}`,
+  paruvendu: (query) => `https://www.paruvendu.fr/pa/recherche/?kw=${encodeURIComponent(query)}`,
+  envie: (query) => `https://www.envie.org/acheter/?s=${encodeURIComponent(query)}`,
+  emmaus: (query) => `https://www.label-emmaus.co/fr/recherche/?q=${encodeURIComponent(query)}`
+};
+
 // Écouter les messages du content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'openSearch') {
-    // Stocker les infos du produit pour le popup
-    chrome.storage.local.set({
-      pendingSearch: {
-        productName: request.productName,
-        price: request.price,
-        timestamp: Date.now()
-      }
-    });
+    // Récupérer les sources sélectionnées et ouvrir les recherches
+    chrome.storage.local.get(['sources'], (prefs) => {
+      const selectedSources = prefs.sources || ['leboncoin', 'vinted', 'envie', 'emmaus'];
+      const query = request.productName;
 
-    // Ouvrir le popup n'est pas possible directement depuis le background
-    // On pourrait ouvrir une nouvelle fenêtre à la place
-    // Mais le mieux est que l'utilisateur clique sur l'icône de l'extension
+      // Ouvrir un onglet pour chaque source sélectionnée
+      selectedSources.forEach(source => {
+        if (SOURCES[source]) {
+          chrome.tabs.create({
+            url: SOURCES[source](query),
+            active: false
+          });
+        }
+      });
+    });
   }
 });
 
@@ -27,7 +40,7 @@ chrome.runtime.onInstalled.addListener((details) => {
       location: 'idf',
       radius: '30',
       minSavings: '20',
-      sources: ['leboncoin', 'vinted']
+      sources: ['leboncoin', 'vinted', 'envie', 'emmaus']
     });
 
     // Optionnel : ouvrir une page de bienvenue

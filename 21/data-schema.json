@@ -1,0 +1,465 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Adaptation Pathways Data Schema v2",
+  "description": "Format de données basé sur les templates BMT/DEECA Victoria et les travaux I4CE",
+  "version": "2.0.0",
+  "references": [
+    "Victoria's Resilient Coast - Adaptation Pathways Templates (BMT/DEECA 2023)",
+    "I4CE - Adaptation: plotting pathways is the next essential step",
+    "Werners et al. 2021 - Adaptation pathways: A review of approaches"
+  ],
+
+  "metadata": {
+    "territory": "",
+    "scale": "site-specific | local | regional",
+    "studyYear": 2025,
+    "horizonEnd": 2100,
+    "source": "",
+    "methodology": "DAPP | performance-threshold | multi-stakeholder | transformation-oriented",
+    "templateType": "1-simple | 2-medium | 3-detailed | 4-visual | 5-site-based | 6-functional | 7-color-matrix",
+    "authors": [],
+    "lastUpdated": ""
+  },
+
+  "timeAxis": {
+    "start": 2025,
+    "end": 2100,
+    "horizons": [
+      { "year": 2025, "label": "Present", "climateIndicator": "+1.2°C" },
+      { "year": 2040, "label": "2040", "climateIndicator": "" },
+      { "year": 2070, "label": "2070", "climateIndicator": "" },
+      { "year": 2100, "label": "2100", "climateIndicator": "" }
+    ]
+  },
+
+  "climateScenarios": [
+    {
+      "id": "RCP26",
+      "name": "Optimiste",
+      "description": "+1.5°C - Compatible Accord de Paris",
+      "color": "#22c55e",
+      "projections": {
+        "2040": { "temperature": 1.5, "seaLevel": 0.1, "precipitation": -5 },
+        "2070": { "temperature": 1.8, "seaLevel": 0.25, "precipitation": -8 },
+        "2100": { "temperature": 2.0, "seaLevel": 0.4, "precipitation": -10 }
+      }
+    },
+    {
+      "id": "RCP45",
+      "name": "Intermédiaire",
+      "description": "+2.7°C - Engagements actuels",
+      "color": "#f59e0b",
+      "projections": {
+        "2040": { "temperature": 1.8, "seaLevel": 0.15, "precipitation": -10 },
+        "2070": { "temperature": 2.5, "seaLevel": 0.4, "precipitation": -18 },
+        "2100": { "temperature": 3.2, "seaLevel": 0.6, "precipitation": -25 }
+      }
+    },
+    {
+      "id": "RCP85",
+      "name": "Pessimiste",
+      "description": "+4°C - Poursuite tendances",
+      "color": "#ef4444",
+      "projections": {
+        "2040": { "temperature": 2.0, "seaLevel": 0.2, "precipitation": -15 },
+        "2070": { "temperature": 3.2, "seaLevel": 0.5, "precipitation": -30 },
+        "2100": { "temperature": 4.5, "seaLevel": 0.8, "precipitation": -40 }
+      }
+    }
+  ],
+
+  "riskLevels": {
+    "description": "Niveaux de risque par horizon temporel (Template 3-4 BMT)",
+    "hazards": [
+      {
+        "id": "heat",
+        "name": "Canicules",
+        "levels": {
+          "2025": "medium",
+          "2040": "medium",
+          "2070": "significant",
+          "2100": "high"
+        }
+      },
+      {
+        "id": "drought",
+        "name": "Sécheresse",
+        "levels": {
+          "2025": "low",
+          "2040": "medium",
+          "2070": "significant",
+          "2100": "high"
+        }
+      },
+      {
+        "id": "flood",
+        "name": "Inondations",
+        "levels": {
+          "2025": "medium",
+          "2040": "medium",
+          "2070": "medium",
+          "2100": "significant"
+        }
+      }
+    ],
+    "colorScale": {
+      "low": "#22c55e",
+      "medium": "#f59e0b",
+      "significant": "#f97316",
+      "high": "#ef4444"
+    }
+  },
+
+  "actionCategories": {
+    "description": "Hiérarchie MACP (Marine and Coastal Policy) - Victoria Guidelines",
+    "categories": [
+      {
+        "id": "non-intervention",
+        "name": "Non-intervention",
+        "description": "Laisser les processus naturels se dérouler, assurer la sécurité publique",
+        "color": "#94a3b8",
+        "icon": "🌊",
+        "order": 1
+      },
+      {
+        "id": "avoid",
+        "name": "Éviter",
+        "description": "Limiter les nouveaux développements dans les zones à risque via la planification",
+        "color": "#fbbf24",
+        "icon": "🚫",
+        "order": 2
+      },
+      {
+        "id": "nature-based",
+        "name": "Solutions fondées sur la nature",
+        "description": "Construire ou restaurer des écosystèmes naturels protecteurs",
+        "color": "#22c55e",
+        "icon": "🌿",
+        "order": 3
+      },
+      {
+        "id": "accommodate",
+        "name": "Accommoder",
+        "description": "Adapter les structures pour réduire l'exposition et l'impact des aléas",
+        "color": "#fb923c",
+        "icon": "🏗️",
+        "order": 4
+      },
+      {
+        "id": "retreat",
+        "name": "Repli",
+        "description": "Relocaliser ou décommissionner les actifs hors des zones à risque",
+        "color": "#a855f7",
+        "icon": "🚚",
+        "order": 5
+      },
+      {
+        "id": "protect",
+        "name": "Protéger",
+        "description": "Construire des barrières physiques pour protéger les actifs",
+        "color": "#3b82f6",
+        "icon": "🛡️",
+        "order": 6
+      }
+    ]
+  },
+
+  "functionalTypes": {
+    "description": "Types fonctionnels (Template 6-7 BMT)",
+    "types": [
+      {
+        "id": "planning",
+        "name": "Aménagement, Planification & Conception",
+        "description": "PLU, SCOT, réglementations, études",
+        "color": "#e2e8f0"
+      },
+      {
+        "id": "nature",
+        "name": "Solutions fondées sur la nature",
+        "description": "Végétalisation, zones humides, renaturation",
+        "color": "#bbf7d0"
+      },
+      {
+        "id": "engineering",
+        "name": "Ingénierie & Infrastructure",
+        "description": "Ouvrages, réseaux, équipements",
+        "color": "#bfdbfe"
+      },
+      {
+        "id": "social",
+        "name": "Social & Gouvernance",
+        "description": "Concertation, communication, organisation",
+        "color": "#fde68a"
+      }
+    ]
+  },
+
+  "actionStatuses": {
+    "description": "Statuts d'action (Template 4 BMT/Alluvium)",
+    "statuses": [
+      { "id": "assess", "symbol": "?", "label": "À évaluer", "color": "#94a3b8" },
+      { "id": "monitor", "symbol": "●", "label": "Surveiller & Réviser", "color": "#3b82f6" },
+      { "id": "trigger", "symbol": "→", "label": "Déclencheur atteint", "color": "#f59e0b" },
+      { "id": "prepare", "symbol": "▬", "label": "Préparation", "color": "#a3a3a3" },
+      { "id": "implement", "symbol": "▬", "label": "Mise en œuvre", "color": "#22c55e" },
+      { "id": "not-feasible", "symbol": "✗", "label": "Non faisable", "color": "#ef4444" }
+    ]
+  },
+
+  "indicators": [
+    {
+      "id": "service_level",
+      "name": "Niveau de service",
+      "icon": "🏛️",
+      "unit": "%",
+      "baseline": 100,
+      "thresholds": {
+        "optimal": { "min": 90, "label": "Optimal", "color": "#22c55e" },
+        "acceptable": { "min": 75, "label": "Acceptable", "color": "#84cc16" },
+        "degraded": { "min": 50, "label": "Dégradé", "color": "#f59e0b" },
+        "critical": { "min": 25, "label": "Critique", "color": "#f97316" },
+        "failure": { "min": 0, "label": "Défaillant", "color": "#ef4444" }
+      }
+    },
+    {
+      "id": "resilience",
+      "name": "Résilience",
+      "icon": "🛡️",
+      "unit": "score 0-100",
+      "baseline": 50,
+      "description": "Capacité à absorber les chocs et se rétablir"
+    },
+    {
+      "id": "environmental",
+      "name": "Environnement",
+      "icon": "🌿",
+      "unit": "score 0-100",
+      "baseline": 50,
+      "description": "Qualité environnementale et co-bénéfices biodiversité"
+    },
+    {
+      "id": "social",
+      "name": "Acceptabilité sociale",
+      "icon": "👥",
+      "unit": "%",
+      "baseline": 70,
+      "description": "Niveau d'acceptation par la population"
+    },
+    {
+      "id": "economic",
+      "name": "Efficacité économique",
+      "icon": "💰",
+      "unit": "ratio B/C",
+      "baseline": 1.0,
+      "description": "Ratio bénéfices/coûts"
+    }
+  ],
+
+  "trajectories": [
+    {
+      "id": "M",
+      "name": "Maintien du service",
+      "shortName": "M",
+      "color": "#009B3A",
+      "lineStyle": "solid",
+      "description": "Maintenir 100% du niveau de service actuel",
+      "category": "protect",
+      "tippingPoints": [
+        {
+          "scenario": "RCP45",
+          "baseYear": 2065,
+          "climateSensitivity": 25,
+          "description": "Impossibilité technique/économique de maintenir le service"
+        }
+      ],
+      "costs": {
+        "total": { "value": 4.5, "unit": "Mds€", "uncertainty": "±30%" },
+        "annual": { "value": 180, "unit": "M€/an" },
+        "minViable": { "value": 3.0, "unit": "Mds€" }
+      }
+    }
+  ],
+
+  "actions": [
+    {
+      "id": "M1",
+      "trajectoryId": "M",
+      "category": "protect",
+      "functionalType": "planning",
+
+      "name": "Diagnostic vulnérabilité",
+      "description": "Audit complet des infrastructures et identification des points critiques",
+
+      "timing": {
+        "targetYear": 2026,
+        "preparationStart": 2025,
+        "preparationEnd": 2026,
+        "implementationStart": 2026,
+        "implementationEnd": 2028,
+        "effectiveUntil": 2100,
+        "reducingEffectivenessFrom": null
+      },
+
+      "optimalPeriod": {
+        "start": 2025,
+        "end": 2028,
+        "delayPenalty": 8
+      },
+
+      "cost": {
+        "value": 15,
+        "unit": "M€",
+        "uncertainty": "±20%",
+        "annualized": 7.5
+      },
+
+      "impacts": {
+        "service_level": { "value": 5, "delay": 1 },
+        "resilience": { "value": 15, "delay": 0 },
+        "environmental": { "value": 0, "delay": 0 },
+        "social": { "value": 5, "delay": 0 },
+        "economic": { "value": -2, "delay": 0 }
+      },
+
+      "effectiveness": {
+        "riskReduction": "effective",
+        "byScenario": {
+          "RCP26": 1.0,
+          "RCP45": 0.95,
+          "RCP85": 0.85
+        }
+      },
+
+      "dependencies": {
+        "prerequisites": [],
+        "unlocks": ["M2", "M3"],
+        "conflictsWith": []
+      },
+
+      "triggers": [
+        {
+          "type": "time",
+          "condition": "year >= 2025",
+          "description": "Démarrage immédiat recommandé"
+        }
+      ],
+
+      "risks": {
+        "ifSkipped": "Investissements mal ciblés, inefficacité des actions suivantes",
+        "implementation": ["Disponibilité données", "Compétences techniques"]
+      },
+
+      "stakeholders": ["Services techniques", "Bureau d'études"],
+      "references": [],
+
+      "visualPosition": {
+        "x": null,
+        "y": null,
+        "labelPosition": "right"
+      }
+    }
+  ],
+
+  "decisionPoints": [
+    {
+      "id": "DP1",
+      "year": 2030,
+      "name": "Premier bilan",
+      "type": "evaluation",
+      "description": "Évaluation et possibilité de réorientation",
+
+      "triggers": [
+        {
+          "indicator": "service_level",
+          "condition": "< 85",
+          "consequence": "Considérer trajectoire D ou T"
+        }
+      ],
+
+      "switchOptions": {
+        "from": ["M"],
+        "to": ["D", "T"],
+        "cost": { "value": 50, "unit": "M€", "description": "Coût de transition" }
+      },
+
+      "visualStyle": {
+        "symbol": "circle",
+        "size": "large",
+        "color": "accent"
+      }
+    }
+  ],
+
+  "pathways": {
+    "description": "Chemins recommandés et alternatifs (Template 2-3 BMT)",
+    "recommended": {
+      "id": "pathway-1",
+      "name": "Trajectoire recommandée",
+      "lineStyle": "solid",
+      "lineWidth": 3,
+      "sequence": ["M1", "DP1", "M2", "M3", "DP2"]
+    },
+    "alternatives": [
+      {
+        "id": "pathway-alt-1",
+        "name": "Alternative vers dégradation",
+        "lineStyle": "dashed",
+        "lineWidth": 2,
+        "branchFrom": "DP1",
+        "sequence": ["D1", "D2", "D3"]
+      }
+    ]
+  },
+
+  "constraints": {
+    "budget": {
+      "total": { "value": 2.5, "unit": "Mds€" },
+      "annual": { "value": 150, "unit": "M€/an" },
+      "sources": {
+        "collectivite": { "percent": 40, "label": "Budget collectivité" },
+        "etat": { "percent": 25, "label": "État (Fonds Vert, etc.)" },
+        "europe": { "percent": 20, "label": "Fonds européens" },
+        "agences": { "percent": 15, "label": "Agences (Eau, ADEME)" }
+      }
+    },
+    "technical": {
+      "parallelProjects": 3,
+      "requiredSkills": []
+    },
+    "social": {
+      "acceptabilityThreshold": 60
+    }
+  },
+
+  "legend": {
+    "description": "Éléments de légende pour la visualisation",
+    "symbols": [
+      { "symbol": "◆", "meaning": "Début d'action" },
+      { "symbol": "●", "meaning": "Point de décision" },
+      { "symbol": "▲", "meaning": "Tipping point" },
+      { "symbol": "→", "meaning": "Trajectoire continue" },
+      { "symbol": "⤳", "meaning": "Efficacité réduite" }
+    ],
+    "lines": [
+      { "style": "solid", "meaning": "Trajectoire recommandée" },
+      { "style": "dashed", "meaning": "Trajectoire alternative" },
+      { "style": "dotted", "meaning": "Non viable" }
+    ],
+    "bars": [
+      { "shade": "light", "meaning": "Temps de préparation" },
+      { "shade": "full", "meaning": "Période d'efficacité" },
+      { "shade": "gradient", "meaning": "Efficacité décroissante" }
+    ]
+  },
+
+  "_templateMapping": {
+    "description": "Correspondance avec les templates BMT Victoria",
+    "template1_simple": "Utiliser: actions.name, timing.targetYear, pathways.recommended",
+    "template2_medium": "Ajouter: timing.preparationStart/End, decisionPoints, triggers",
+    "template3_detailed": "Ajouter: riskLevels, triggers détaillés, multiple pathways",
+    "template4_visual": "Ajouter: actionStatuses, effectiveness.riskReduction, icons",
+    "template5_siteBased": "Grouper actions par: site/location plutôt que category",
+    "template6_functional": "Grouper actions par: functionalType",
+    "template7_colorMatrix": "Afficher: category.color sur timeline sans texte"
+  }
+}

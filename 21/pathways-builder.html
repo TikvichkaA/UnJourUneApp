@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructeur de Trajectoires | beta-traj</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="pathways-builder.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <a href="index.html" class="back-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </a>
+                <div class="app-title">
+                    <h1>Constructeur de Trajectoires</h1>
+                    <span class="app-subtitle">Exploration dynamique des chemins d'adaptation</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="trajectoires-adaptation.html" class="btn btn-secondary" style="text-decoration: none;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    Vue statique
+                </a>
+                <button class="btn btn-secondary" onclick="resetAll()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                        <path d="M3 3v5h5"/>
+                    </svg>
+                    Réinitialiser
+                </button>
+                <button class="btn btn-secondary" onclick="exportScenario()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Exporter
+                </button>
+                <button class="btn btn-primary" onclick="saveScenario()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17 21 17 13 7 13 7 21"/>
+                        <polyline points="7 3 7 8 15 8"/>
+                    </svg>
+                    Sauvegarder
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Left Panel: Constraints & Actions -->
+            <aside class="left-panel">
+                <!-- Constraints Section -->
+                <section class="panel-section constraints-section">
+                    <div class="section-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                            Contraintes
+                        </h2>
+                        <button class="collapse-btn" onclick="toggleSection('constraints')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="section-content" id="constraints-content">
+                        <!-- Budget constraint -->
+                        <div class="constraint-item">
+                            <div class="constraint-header">
+                                <label>Budget disponible</label>
+                                <span class="constraint-value" id="budget-value">2.5 Mds€</span>
+                            </div>
+                            <input type="range" class="constraint-slider" id="budget-slider"
+                                   min="0.5" max="6" step="0.1" value="2.5"
+                                   oninput="updateConstraint('budget', this.value)">
+                            <div class="constraint-range">
+                                <span>0.5 Mds€</span>
+                                <span>6 Mds€</span>
+                            </div>
+                        </div>
+
+                        <!-- Time horizon -->
+                        <div class="constraint-item">
+                            <div class="constraint-header">
+                                <label>Horizon temporel</label>
+                                <span class="constraint-value" id="horizon-value">2050</span>
+                            </div>
+                            <input type="range" class="constraint-slider" id="horizon-slider"
+                                   min="2030" max="2100" step="5" value="2050"
+                                   oninput="updateConstraint('horizon', this.value)">
+                            <div class="constraint-range">
+                                <span>2030</span>
+                                <span>2100</span>
+                            </div>
+                        </div>
+
+                        <!-- Climate scenario -->
+                        <div class="constraint-item">
+                            <div class="constraint-header">
+                                <label>Scénario climatique</label>
+                                <span class="constraint-value" id="climate-value">+2.7°C</span>
+                            </div>
+                            <input type="range" class="constraint-slider climate-slider" id="climate-slider"
+                                   min="1.5" max="4" step="0.1" value="2.7"
+                                   oninput="updateConstraint('climate', this.value)">
+                            <div class="constraint-range">
+                                <span>+1.5°C</span>
+                                <span>+4°C</span>
+                            </div>
+                        </div>
+
+                        <!-- Social acceptability -->
+                        <div class="constraint-item">
+                            <div class="constraint-header">
+                                <label>Acceptabilité sociale</label>
+                                <span class="constraint-value" id="social-value">Moyenne</span>
+                            </div>
+                            <input type="range" class="constraint-slider" id="social-slider"
+                                   min="1" max="5" step="1" value="3"
+                                   oninput="updateConstraint('social', this.value)">
+                            <div class="constraint-range">
+                                <span>Faible</span>
+                                <span>Forte</span>
+                            </div>
+                        </div>
+
+                        <!-- Technical capacity -->
+                        <div class="constraint-item">
+                            <div class="constraint-header">
+                                <label>Capacité technique</label>
+                                <span class="constraint-value" id="technical-value">Moyenne</span>
+                            </div>
+                            <input type="range" class="constraint-slider" id="technical-slider"
+                                   min="1" max="5" step="1" value="3"
+                                   oninput="updateConstraint('technical', this.value)">
+                            <div class="constraint-range">
+                                <span>Limitée</span>
+                                <span>Avancée</span>
+                            </div>
+                        </div>
+
+                        <!-- Risk tolerance -->
+                        <div class="constraint-item">
+                            <div class="constraint-header">
+                                <label>Tolérance au risque</label>
+                                <span class="constraint-value" id="risk-value">Modérée</span>
+                            </div>
+                            <input type="range" class="constraint-slider" id="risk-slider"
+                                   min="1" max="5" step="1" value="3"
+                                   oninput="updateConstraint('risk', this.value)">
+                            <div class="constraint-range">
+                                <span>Averse</span>
+                                <span>Tolérant</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Actions Library -->
+                <section class="panel-section actions-section">
+                    <div class="section-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="12" y1="8" x2="12" y2="16"/>
+                                <line x1="8" y1="12" x2="16" y2="12"/>
+                            </svg>
+                            Actions disponibles
+                        </h2>
+                        <button class="collapse-btn" onclick="toggleSection('actions')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="section-content" id="actions-content">
+                        <!-- Filter tabs -->
+                        <div class="action-filters">
+                            <button class="filter-btn active" data-filter="all" onclick="filterActions('all')">Toutes</button>
+                            <button class="filter-btn" data-filter="green" onclick="filterActions('green')">Vertes</button>
+                            <button class="filter-btn" data-filter="blue" onclick="filterActions('blue')">Bleues</button>
+                            <button class="filter-btn" data-filter="grey" onclick="filterActions('grey')">Grises</button>
+                            <button class="filter-btn" data-filter="org" onclick="filterActions('org')">Org.</button>
+                        </div>
+
+                        <!-- Actions list -->
+                        <div class="actions-list" id="actions-list">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Priority Services -->
+                <section class="panel-section priorities-section">
+                    <div class="section-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                            Services prioritaires
+                        </h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="priority-list" id="priority-list">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Center: Visualization Canvas -->
+            <main class="center-panel">
+                <!-- Toolbar -->
+                <div class="canvas-toolbar">
+                    <div class="toolbar-left">
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="pathways" onclick="switchView('pathways')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="6" y1="3" x2="6" y2="15"/>
+                                    <circle cx="18" cy="6" r="3"/>
+                                    <circle cx="6" cy="18" r="3"/>
+                                    <path d="M18 9a9 9 0 0 1-9 9"/>
+                                </svg>
+                                Pathways
+                            </button>
+                            <button class="view-btn" data-view="timeline" onclick="switchView('timeline')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="20" x2="12" y2="10"/>
+                                    <line x1="18" y1="20" x2="18" y2="4"/>
+                                    <line x1="6" y1="20" x2="6" y2="16"/>
+                                </svg>
+                                Timeline
+                            </button>
+                            <button class="view-btn" data-view="sankey" onclick="switchView('sankey')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 3v18h18"/>
+                                    <path d="M7 16c4-4 6-2 10-6"/>
+                                    <path d="M7 12c4-4 6-2 10-6"/>
+                                </svg>
+                                Flux
+                            </button>
+                        </div>
+                    </div>
+                    <div class="toolbar-center">
+                        <span class="current-scenario" id="scenario-name">Scénario personnalisé</span>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="tool-btn" onclick="zoomIn()" title="Zoom +">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                <line x1="11" y1="8" x2="11" y2="14"/>
+                                <line x1="8" y1="11" x2="14" y2="11"/>
+                            </svg>
+                        </button>
+                        <button class="tool-btn" onclick="zoomOut()" title="Zoom -">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                <line x1="8" y1="11" x2="14" y2="11"/>
+                            </svg>
+                        </button>
+                        <button class="tool-btn" onclick="fitToView()" title="Ajuster">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Canvas -->
+                <div class="canvas-container" id="canvas-container">
+                    <canvas id="pathways-canvas"></canvas>
+
+                    <!-- SVG Overlay for interactions -->
+                    <svg id="pathways-svg" class="pathways-svg">
+                        <!-- Dynamically rendered -->
+                    </svg>
+
+                    <!-- Drop zones for actions -->
+                    <div class="drop-zones" id="drop-zones">
+                        <!-- Dynamically created -->
+                    </div>
+
+                    <!-- Placed actions -->
+                    <div class="placed-actions" id="placed-actions">
+                        <!-- Dynamically created -->
+                    </div>
+                </div>
+
+                <!-- Time axis -->
+                <div class="time-axis" id="time-axis">
+                    <div class="time-marker" data-year="2025" style="left: 5%">
+                        <span class="year">2025</span>
+                        <span class="label">Actuel</span>
+                    </div>
+                    <div class="time-marker" data-year="2030" style="left: 20%">
+                        <span class="year">2030</span>
+                        <span class="label">Court terme</span>
+                    </div>
+                    <div class="time-marker" data-year="2040" style="left: 40%">
+                        <span class="year">2040</span>
+                    </div>
+                    <div class="time-marker" data-year="2050" style="left: 55%">
+                        <span class="year">2050</span>
+                        <span class="label">Moyen terme</span>
+                    </div>
+                    <div class="time-marker" data-year="2075" style="left: 77%">
+                        <span class="year">2075</span>
+                    </div>
+                    <div class="time-marker" data-year="2100" style="left: 95%">
+                        <span class="year">2100</span>
+                        <span class="label">Long terme</span>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Panel: Results & Analysis -->
+            <aside class="right-panel">
+                <!-- Trajectory Summary -->
+                <section class="panel-section summary-section">
+                    <div class="section-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+                                <path d="M22 12A10 10 0 0 0 12 2v10z"/>
+                            </svg>
+                            Résumé trajectoire
+                        </h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="summary-metrics">
+                            <div class="metric-card">
+                                <span class="metric-label">Coût total</span>
+                                <span class="metric-value" id="total-cost">0 M€</span>
+                                <div class="metric-bar">
+                                    <div class="bar-fill cost-bar" id="cost-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Réduction risque</span>
+                                <span class="metric-value" id="risk-reduction">0%</span>
+                                <div class="metric-bar">
+                                    <div class="bar-fill risk-bar" id="risk-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Niveau de service</span>
+                                <span class="metric-value" id="service-level">-</span>
+                                <div class="metric-bar">
+                                    <div class="bar-fill service-bar" id="service-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Viabilité</span>
+                                <span class="metric-value" id="viability">-</span>
+                                <div class="metric-bar">
+                                    <div class="bar-fill viability-bar" id="viability-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Active Trajectory -->
+                <section class="panel-section trajectory-section">
+                    <div class="section-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                            Trajectoire active
+                        </h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="trajectory-selector">
+                            <button class="traj-btn active" data-traj="custom" onclick="selectTrajectory('custom')">
+                                <span class="traj-color custom"></span>
+                                Personnalisée
+                            </button>
+                            <button class="traj-btn" data-traj="maintain" onclick="selectTrajectory('maintain')">
+                                <span class="traj-color maintain"></span>
+                                Maintien
+                            </button>
+                            <button class="traj-btn" data-traj="degrade" onclick="selectTrajectory('degrade')">
+                                <span class="traj-color degrade"></span>
+                                Dégradation
+                            </button>
+                            <button class="traj-btn" data-traj="transform" onclick="selectTrajectory('transform')">
+                                <span class="traj-color transform"></span>
+                                Transformation
+                            </button>
+                        </div>
+                        <div class="trajectory-description" id="trajectory-description">
+                            <p>Construisez votre propre trajectoire en plaçant des actions sur la timeline et en ajustant les contraintes.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Placed Actions List -->
+                <section class="panel-section placed-section">
+                    <div class="section-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="8" y1="6" x2="21" y2="6"/>
+                                <line x1="8" y1="12" x2="21" y2="12"/>
+                                <line x1="8" y1="18" x2="21" y2="18"/>
+                                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                                <line x1="3" y1="18" x2="3.01" y2="18"/>
+                            </svg>
+                            Actions placées
+                            <span class="count" id="actions-count">0</span>
+                        </h2>
+                        <button class="clear-btn" onclick="clearAllActions()" title="Tout supprimer">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="section-content">
+                        <div class="placed-list" id="placed-list">
+                            <div class="empty-state">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 5v14M5 12h14"/>
+                                </svg>
+                                <p>Glissez des actions sur la timeline</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Warnings & Alerts -->
+                <section class="panel-section alerts-section">
+                    <div class="section-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            Alertes
+                        </h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="alerts-list" id="alerts-list">
+                            <div class="alert-item info">
+                                <span class="alert-icon">i</span>
+                                <span class="alert-text">Ajustez les contraintes et placez des actions pour voir les alertes</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Decision Points -->
+                <section class="panel-section decisions-section">
+                    <div class="section-header">
+                        <h2>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Points de décision
+                        </h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="decisions-list" id="decisions-list">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+
+        <!-- Action Detail Modal -->
+        <div class="modal-overlay" id="action-modal" style="display: none;">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeActionModal()">&times;</button>
+                <div class="modal-header">
+                    <div class="action-icon-large" id="modal-icon"></div>
+                    <div class="modal-title">
+                        <h2 id="modal-action-name">Action</h2>
+                        <span class="modal-category" id="modal-category">Catégorie</span>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-description" id="modal-description"></div>
+                    <div class="modal-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Coût estimé</span>
+                            <span class="stat-value" id="modal-cost">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Délai mise en oeuvre</span>
+                            <span class="stat-value" id="modal-delay">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Impact risque</span>
+                            <span class="stat-value" id="modal-impact">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Co-bénéfices</span>
+                            <span class="stat-value" id="modal-cobenefits">-</span>
+                        </div>
+                    </div>
+                    <div class="modal-timing">
+                        <label>Période de mise en oeuvre</label>
+                        <div class="timing-inputs">
+                            <input type="number" id="modal-start-year" min="2025" max="2100" value="2025">
+                            <span>à</span>
+                            <input type="number" id="modal-end-year" min="2025" max="2100" value="2030">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeActionModal()">Annuler</button>
+                    <button class="btn btn-primary" onclick="confirmPlaceAction()">Placer l'action</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scenario Presets Modal -->
+        <div class="modal-overlay" id="presets-modal" style="display: none;">
+            <div class="modal-content modal-wide">
+                <button class="modal-close" onclick="closePresetsModal()">&times;</button>
+                <div class="modal-header">
+                    <h2>Scénarios prédéfinis</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="presets-grid" id="presets-grid">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="pathways-builder.js"></script>
+</body>
+</html>

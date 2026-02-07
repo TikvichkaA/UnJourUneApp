@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cahier des charges - Beta-Traj</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 12pt;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: white;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20mm;
+        }
+
+        h1 {
+            font-size: 22pt;
+            text-align: center;
+            margin-bottom: 8mm;
+            font-weight: normal;
+            border-bottom: 2px solid #000091;
+            padding-bottom: 5mm;
+        }
+
+        h2 {
+            font-size: 14pt;
+            margin-top: 10mm;
+            margin-bottom: 5mm;
+            color: #000091;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 2mm;
+        }
+
+        h3 {
+            font-size: 12pt;
+            margin-top: 6mm;
+            margin-bottom: 3mm;
+        }
+
+        p {
+            margin-bottom: 4mm;
+            text-align: justify;
+        }
+
+        .header-info {
+            text-align: center;
+            margin-bottom: 10mm;
+            font-size: 11pt;
+            color: #555;
+        }
+
+        .header-info strong {
+            color: #1a1a1a;
+        }
+
+        ul, ol {
+            margin-left: 8mm;
+            margin-bottom: 4mm;
+        }
+
+        li {
+            margin-bottom: 2mm;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 5mm 0;
+            font-size: 11pt;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 3mm;
+            text-align: left;
+        }
+
+        th {
+            background: #f5f5f5;
+        }
+
+        .note {
+            background: #f9f9f9;
+            border-left: 3px solid #000091;
+            padding: 4mm;
+            margin: 5mm 0;
+            font-style: italic;
+        }
+
+        .signature-block {
+            margin-top: 15mm;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature-box {
+            width: 45%;
+        }
+
+        .signature-line {
+            border-bottom: 1px solid #000;
+            height: 20mm;
+            margin-top: 10mm;
+        }
+
+        @media print {
+            body {
+                padding: 15mm;
+            }
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Cahier des charges<br>Application Beta-Traj</h1>
+
+    <div class="header-info">
+        <strong>Projet :</strong> Tableau de bord Trajectoire Climatique de Paris<br>
+        <strong>Commanditaire :</strong> Ville de Paris - Direction de la Transition Ecologique<br>
+        <strong>Version :</strong> 1.0 | <strong>Date :</strong> Janvier 2026
+    </div>
+
+    <h2>1. Contexte</h2>
+
+    <p>Dans le cadre du 3e Plan National d'Adaptation au Changement Climatique (PNACC) publie en 2025, l'Etat impose aux collectivites territoriales de planifier leur adaptation au changement climatique selon la Trajectoire de Rechauffement de Reference (TRACC).</p>
+
+    <p>Cette trajectoire definit trois horizons de rechauffement :</p>
+    <ul>
+        <li><strong>+2°C</strong> a l'horizon 2030</li>
+        <li><strong>+2,7°C</strong> a l'horizon 2050</li>
+        <li><strong>+4°C</strong> a l'horizon 2100</li>
+    </ul>
+
+    <p>La Ville de Paris doit elaborer sa strategie d'adaptation et souhaite disposer d'un outil numerique pour visualiser les projections climatiques, communiquer aupres des decideurs et du public, et accompagner la concertation territoriale.</p>
+
+    <h2>2. Objectifs du projet</h2>
+
+    <h3>2.1 Vision a court terme</h3>
+    <p>Dans un premier temps, l'application constituera un <strong>outil de travail interne</strong> destine a :</p>
+    <ul>
+        <li>Sensibiliser les agents et decideurs via une visualisation claire des donnees climatiques</li>
+        <li>Servir de support lors des reunions de travail et ateliers de concertation</li>
+        <li>Permettre une actualisation ponctuelle des contenus par les services</li>
+    </ul>
+
+    <h3>2.2 Vision a moyen-long terme (a confirmer)</h3>
+    <p>A terme, l'outil pourrait evoluer vers un <strong>outil d'information externe</strong>, voire a destination du grand public. Cette evolution impliquerait :</p>
+    <ul>
+        <li>Une reflexion sur l'hebergement (compatibilite avec paris.fr, souverainete des donnees...)</li>
+        <li>Une adaptation des contenus pour un public non-expert</li>
+        <li>Des exigences renforcees en matiere d'accessibilite et de performance</li>
+    </ul>
+
+    <h3>2.3 Objectifs fonctionnels</h3>
+    <p>L'application devra repondre aux objectifs suivants :</p>
+
+    <ol>
+        <li><strong>Vulgariser les donnees scientifiques</strong> : rendre accessibles les projections climatiques TRACC 2023 (Meteo-France) a un public non specialiste.</li>
+        <li><strong>Outiller les decideurs</strong> : fournir une synthese executive avec indicateurs cles, budgets et recommandations prioritaires.</li>
+        <li><strong>Accompagner la concertation</strong> : servir de support interactif lors des ateliers de co-construction de la strategie d'adaptation.</li>
+        <li><strong>Permettre l'autonomie des services</strong> : offrir un mode d'edition des contenus sans intervention technique.</li>
+    </ol>
+
+    <h2>3. Perimetre fonctionnel</h2>
+
+    <h3>3.1 Acces securise</h3>
+    <p>L'application devra etre protegee par mot de passe. En phase beta, l'acces sera restreint aux agents autorises et aux partenaires du projet.</p>
+
+    <h3>3.2 Navigation principale</h3>
+    <p>L'interface sera organisee en cinq onglets thematiques :</p>
+
+    <table>
+        <tr>
+            <th>Onglet</th>
+            <th>Contenu attendu</th>
+        </tr>
+        <tr>
+            <td>Aleas</td>
+            <td>Projections climatiques : temperatures, precipitations, jours de canicule, nuits tropicales, secheresses. Comparaison entre periode de reference (1976-2005) et scenarios futurs.</td>
+        </tr>
+        <tr>
+            <td>Impacts</td>
+            <td>Consequences sur le territoire : sante, ressources en eau, batiments, biodiversite, economie.</td>
+        </tr>
+        <tr>
+            <td>Trajectoire tendancielle</td>
+            <td>Etat des lieux des actions engagees et frises chronologiques des risques.</td>
+        </tr>
+        <tr>
+            <td>Trajectoire de Paris</td>
+            <td>Construction de la strategie d'adaptation avec jalons 2030, 2050, 2100.</td>
+        </tr>
+        <tr>
+            <td>Decideurs</td>
+            <td>Tableau de bord executif : KPIs, budget, recommandations prioritaires, alertes.</td>
+        </tr>
+    </table>
+
+    <h3>3.3 Visualisation des scenarios climatiques</h3>
+    <p>L'utilisateur pourra selectionner un niveau de rechauffement (+2°C, +2,7°C, +4°C) et visualiser l'evolution des indicateurs climatiques. Les donnees affichees s'actualiseront dynamiquement.</p>
+
+    <p>Indicateurs a integrer (liste non exhaustive) :</p>
+    <ul>
+        <li>Temperature moyenne annuelle</li>
+        <li>Nombre de jours superieurs a 30°C et 35°C</li>
+        <li>Nombre de nuits tropicales (>20°C)</li>
+        <li>Jours de gel</li>
+        <li>Precipitations ete/hiver</li>
+        <li>Jours de secheresse</li>
+        <li>Degres-jours de chauffage et climatisation</li>
+    </ul>
+
+    <h3>3.4 Graphiques dynamiques</h3>
+    <p>Des courbes d'evolution temporelle devront illustrer les trajectoires climatiques. L'utilisateur pourra basculer entre differents indicateurs (nuits tropicales, jours >30°C, besoins en climatisation, etc.).</p>
+
+    <h3>3.5 Points de bascule planetaires</h3>
+    <p>Une section pedagogique presentera les "tipping points" climatiques mondiaux : fonte de l'Arctique, ralentissement du Gulf Stream, deperissement de l'Amazonie, etc. Deux modes de visualisation seront proposes : vue graphique et vue cartographique.</p>
+
+    <h3>3.6 Equivalences climatiques</h3>
+    <p>Pour faciliter la comprehension, le climat futur de Paris sera compare au climat actuel de villes du sud de l'Europe (Lyon, Bordeaux, Seville selon le scenario).</p>
+
+    <div class="page-break"></div>
+
+    <h3>3.7 Tableau de bord decideurs</h3>
+    <p>L'onglet "Decideurs" presentera une synthese executive comprenant :</p>
+    <ul>
+        <li>Indicateurs cles (KPIs) : scenario retenu, horizon cible, budget, adhesion citoyenne</li>
+        <li>Comparatif des trajectoires : cout de l'inaction vs cout de l'adaptation</li>
+        <li>Top 5 des recommandations prioritaires avec niveau d'urgence, budget et avancement</li>
+        <li>Timeline des jalons (2025-2050)</li>
+        <li>Repartition budgetaire par poste</li>
+        <li>Barometre d'opinion publique</li>
+        <li>Alertes et points d'attention classes par criticite</li>
+        <li>Decisions attendues pour le trimestre en cours</li>
+    </ul>
+
+    <h3>3.8 Mode pedagogique</h3>
+    <p>Un mode alternatif "pedagogique" devra etre accessible via un bouton dans l'interface. Ce mode presentera les memes informations sous une forme plus didactique, avec :</p>
+    <ul>
+        <li>Explications sur l'origine des donnees (GIEC, Meteo-France, TRACC)</li>
+        <li>Presentation des trois scenarios futurs avec illustrations</li>
+        <li>Impacts concrets sur le quotidien (sante, eau, inondations, nature)</li>
+        <li>Explication des points de bascule avec metaphores</li>
+        <li>Distinction entre attenuation et adaptation</li>
+    </ul>
+
+    <h3>3.9 Mode edition administrateur</h3>
+    <p>Les agents habilites pourront modifier certains contenus (textes, valeurs cles) directement dans l'interface, sans toucher au code source. Les modifications seront :</p>
+    <ul>
+        <li>Sauvegardees localement dans le navigateur</li>
+        <li>Exportables par email pour integration ulterieure dans le code</li>
+    </ul>
+
+    <h3>3.10 Panneau de ressources</h3>
+    <p>Une barre laterale donnera acces a des contenus complementaires : sources et methodologie, suivi de la trajectoire, que dit la science, acteurs impliques.</p>
+
+    <h3>3.11 Niveaux de service et trajectoires d'adaptation</h3>
+    <p>L'application devra permettre de comparer plusieurs <strong>trajectoires d'adaptation</strong> selon le niveau de service que la collectivite souhaite maintenir. Trois trajectoires types seront proposees :</p>
+
+    <table>
+        <tr>
+            <th>Trajectoire</th>
+            <th>Description</th>
+            <th>Implications</th>
+        </tr>
+        <tr>
+            <td><strong>Trajectoire 1 : Maintien</strong></td>
+            <td>Maintenir le niveau de service, l'infrastructure et le cadre de vie au niveau actuel.</td>
+            <td>Investissements importants, anticipation maximale, arbitrages budgetaires forts.</td>
+        </tr>
+        <tr>
+            <td><strong>Trajectoire 2 : Degradation acceptee</strong></td>
+            <td>Accepter une degradation ponctuelle/faible a 2030, moyenne a 2050. Choix des systemes prioritaires (sante, education, transports collectifs...).</td>
+            <td>Priorisation des services essentiels, communication aupres des usagers.</td>
+        </tr>
+        <tr>
+            <td><strong>Trajectoire 3 : Baisse maitrisee</strong></td>
+            <td>Accepter une baisse perenne mais maitrisee : degradation faible a 2030, moyenne a 2050, dans un cadre planifie.</td>
+            <td>Transformation des attentes, accompagnement au changement.</td>
+        </tr>
+    </table>
+
+    <p>L'utilisateur pourra selectionner une trajectoire et visualiser les consequences sur les differents systemes (batiments, espaces verts, voirie, services publics...).</p>
+
+    <h3>3.12 Frise chronologique des actions</h3>
+    <p>Les actions d'adaptation seront representees sur une <strong>frise chronologique horizontale</strong> avec :</p>
+    <ul>
+        <li>Les actions positionnees <strong>sous la frise</strong> (et non sur le cote), par categorie (verte, bleue, grise, organisationnelle)</li>
+        <li>Les echeances cibles pour chaque action</li>
+        <li>Les jalons strategiques (2030, 2050, 2100)</li>
+        <li>Un code couleur indiquant l'etat d'avancement (prevu, en cours, realise)</li>
+    </ul>
+
+    <h3>3.13 Visualisation des dependances et contraintes</h3>
+    <p>L'application devra permettre de visualiser les <strong>dependances et points d'achoppement</strong> entre actions. Cette fonctionnalite mettra en evidence :</p>
+    <ul>
+        <li><strong>Les facteurs limitants</strong> : contraintes physiques, organisationnelles, reglementaires</li>
+        <li><strong>Les conflits de calendrier</strong> : par exemple, les renovations thermiques des ecoles ne peuvent avoir lieu qu'en ete (fermeture), mais les periodes de canicule limitent les travaux BTP</li>
+        <li><strong>Les ordres de grandeur temporels</strong> : duree de realisation estimee pour chaque type d'action</li>
+        <li><strong>Les leviers d'action</strong> : sur quels parametres la collectivite peut agir pour debloquer les situations</li>
+    </ul>
+
+    <div class="note">
+        <strong>Exemple :</strong> La renovation thermique d'une ecole necessite une fermeture estivale (contrainte organisationnelle), mais les episodes caniculaires limitent le travail des ouvriers du BTP (contrainte physique). L'outil devra permettre de visualiser ce type d'interdependance.
+    </div>
+
+    <h2>4. Exigences techniques</h2>
+
+    <h3>4.1 Technologies</h3>
+    <ul>
+        <li>Application web statique (HTML, CSS, JavaScript)</li>
+        <li>Aucune base de donnees requise (donnees embarquees)</li>
+        <li>Bibliotheque de graphiques : Chart.js ou equivalent</li>
+        <li>Hebergement : plateforme de type Netlify ou equivalent (CDN, HTTPS)</li>
+    </ul>
+
+    <h3>4.2 Compatibilite</h3>
+    <ul>
+        <li>Navigateurs : Chrome, Firefox, Edge, Safari (versions recentes)</li>
+        <li>Responsive : desktop, tablette, mobile</li>
+        <li>Accessibilite : respect des standards RGAA niveau AA souhaite</li>
+    </ul>
+
+    <h3>4.3 Charte graphique</h3>
+    <p>L'application respectera la charte graphique de l'Etat : police Marianne, couleurs officielles (bleu #000091, rouge #e1000f), pictogrammes coherents.</p>
+
+    <h3>4.4 Performance</h3>
+    <ul>
+        <li>Temps de chargement initial inferieur a 3 secondes</li>
+        <li>Interactions fluides sans delai perceptible</li>
+    </ul>
+
+    <h2>5. Livrables attendus</h2>
+
+    <ol>
+        <li>Code source complet (HTML, CSS, JavaScript)</li>
+        <li>Fichiers de configuration pour l'hebergement</li>
+        <li>Fonction serverless pour l'envoi d'emails (export modifications)</li>
+        <li>Documentation technique et guide d'utilisation du mode edition</li>
+        <li>Mise en production sur l'hebergement choisi</li>
+    </ol>
+
+    <h2>6. Contraintes et delais</h2>
+
+    <p>Le projet devra etre livre en version beta operationnelle pour la phase de concertation prevue au premier trimestre 2026.</p>
+
+    <div class="note">
+        <strong>Note :</strong> Ce cahier des charges pourra etre amende en cours de projet selon les retours des utilisateurs pilotes.
+    </div>
+
+    <h2>7. Validation</h2>
+
+    <div class="signature-block">
+        <div class="signature-box">
+            <strong>Le commanditaire</strong><br>
+            Ville de Paris<br>
+            Direction de la Transition Ecologique
+            <div class="signature-line"></div>
+            <small>Date et signature</small>
+        </div>
+        <div class="signature-box">
+            <strong>Le prestataire</strong><br>
+            <br>
+            <br>
+            <div class="signature-line"></div>
+            <small>Date et signature</small>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,7 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:www.candidator.fr)"
+      "WebFetch(domain:www.candidator.fr)",
+      "Bash(node -e \"\nconst fetch = require\\(''node-fetch''\\);\nconst url = ''https://hwunkojdzodcutewkfet.supabase.co/rest/v1/sources_scraping'';\nconst key = ''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3dW5rb2pkem9kY3V0ZXdrZmV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzOTMzNTAsImV4cCI6MjA4Mzk2OTM1MH0.Zpe-QqzKDIpx3pTa6_e9ysfI-Rprl3SXANM8b2pqXU0'';\nconst headers = { ''apikey'': key, ''Authorization'': ''Bearer '' + key, ''Content-Type'': ''application/json'' };\n\n// Mettre à jour les sources 3 et 4 \\(Basta et Times of Israel\\) comme vérifiées\nPromise.all\\([\n  fetch\\(url + ''?id=eq.3'', { method: ''PATCH'', headers, body: JSON.stringify\\({ derniere_verification: new Date\\(\\).toISOString\\(\\) }\\) }\\),\n  fetch\\(url + ''?id=eq.4'', { method: ''PATCH'', headers, body: JSON.stringify\\({ derniere_verification: new Date\\(\\).toISOString\\(\\) }\\) }\\)\n]\\).then\\(\\(\\) => console.log\\(''Sources 3 et 4 marquées comme vérifiées''\\)\\);\n\")",
+      "WebFetch(domain:municipales.streetpress.com)",
+      "Bash(node -e \"\nconst fetch = require\\(''node-fetch''\\);\nconst url = ''https://hwunkojdzodcutewkfet.supabase.co/rest/v1/communes?limit=1'';\nconst key = ''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3dW5rb2pkem9kY3V0ZXdrZmV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzOTMzNTAsImV4cCI6MjA4Mzk2OTM1MH0.Zpe-QqzKDIpx3pTa6_e9ysfI-Rprl3SXANM8b2pqXU0'';\nfetch\\(url, { headers: { ''apikey'': key, ''Authorization'': ''Bearer '' + key } }\\)\n  .then\\(r => r.json\\(\\)\\)\n  .then\\(d => {\n    console.log\\(''Structure table communes:''\\);\n    console.log\\(JSON.stringify\\(d[0], null, 2\\)\\);\n  }\\);\n\")",
+      "WebFetch(domain:candidator.fr)",
+      "WebFetch(domain:lesjours.fr)",
+      "WebFetch(domain:www.streetpress.com)",
+      "WebFetch(domain:www.blast-info.fr)",
+      "WebFetch(domain:cartedelahonte.github.io)"
     ]
   }
 }

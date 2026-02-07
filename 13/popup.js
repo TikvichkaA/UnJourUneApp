@@ -36,6 +36,20 @@ const SOURCES = {
     buildUrl: (query) => {
       return `https://www.paruvendu.fr/pa/recherche/?kw=${encodeURIComponent(query)}`;
     }
+  },
+  envie: {
+    name: 'Réseau Envie',
+    baseUrl: 'https://www.envie.org',
+    buildUrl: (query) => {
+      return `https://www.envie.org/acheter/?s=${encodeURIComponent(query)}`;
+    }
+  },
+  emmaus: {
+    name: 'Label Emmaüs',
+    baseUrl: 'https://www.label-emmaus.co',
+    buildUrl: (query) => {
+      return `https://www.label-emmaus.co/fr/recherche/?q=${encodeURIComponent(query)}`;
+    }
   }
 };
 

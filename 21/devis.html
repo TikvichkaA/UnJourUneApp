@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devis - Beta-Traj</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: white;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 15mm;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10mm;
+            padding-bottom: 5mm;
+            border-bottom: 3px solid #000091;
+        }
+
+        .company {
+            font-size: 10pt;
+        }
+
+        .company-name {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #000091;
+        }
+
+        .devis-title {
+            text-align: right;
+        }
+
+        .devis-title h1 {
+            font-size: 24pt;
+            color: #000091;
+            margin-bottom: 2mm;
+        }
+
+        .devis-number {
+            font-size: 12pt;
+            color: #666;
+        }
+
+        .parties {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10mm;
+        }
+
+        .party {
+            width: 48%;
+            background: #f8f8f8;
+            padding: 4mm;
+            border-radius: 2mm;
+        }
+
+        .party-label {
+            font-size: 9pt;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 2mm;
+        }
+
+        .party-name {
+            font-weight: bold;
+            font-size: 12pt;
+        }
+
+        h2 {
+            font-size: 12pt;
+            color: #000091;
+            margin-top: 8mm;
+            margin-bottom: 4mm;
+            padding-bottom: 2mm;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .project-desc {
+            background: #f0f4ff;
+            padding: 4mm;
+            border-left: 3px solid #000091;
+            margin-bottom: 6mm;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 4mm 0;
+        }
+
+        th, td {
+            padding: 3mm;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #000091;
+            color: white;
+            font-weight: 500;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .total-row {
+            background: #f0f4ff !important;
+            font-weight: bold;
+        }
+
+        .total-row td {
+            border-top: 2px solid #000091;
+        }
+
+        .grand-total {
+            background: #000091 !important;
+            color: white;
+        }
+
+        .totals-box {
+            width: 50%;
+            margin-left: auto;
+            margin-top: 5mm;
+        }
+
+        .totals-box table {
+            margin: 0;
+        }
+
+        .totals-box td {
+            padding: 2mm 3mm;
+        }
+
+        .conditions {
+            margin-top: 8mm;
+            font-size: 10pt;
+        }
+
+        .conditions h3 {
+            font-size: 11pt;
+            margin-bottom: 2mm;
+        }
+
+        .conditions ul {
+            margin-left: 5mm;
+            margin-bottom: 3mm;
+        }
+
+        .conditions li {
+            margin-bottom: 1mm;
+        }
+
+        .validity {
+            background: #fff8e6;
+            border: 1px solid #f0c040;
+            padding: 3mm;
+            margin-top: 5mm;
+            border-radius: 2mm;
+            text-align: center;
+        }
+
+        .signature-section {
+            margin-top: 10mm;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature-box {
+            width: 45%;
+            text-align: center;
+        }
+
+        .signature-box p {
+            margin-bottom: 15mm;
+            font-size: 10pt;
+        }
+
+        .signature-line {
+            border-top: 1px solid #000;
+            padding-top: 2mm;
+            font-size: 9pt;
+            color: #666;
+        }
+
+        .footer {
+            margin-top: 10mm;
+            padding-top: 5mm;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 9pt;
+            color: #666;
+        }
+
+        @media print {
+            body {
+                padding: 10mm;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #000091;
+            padding: 1mm 3mm;
+            border-radius: 2mm;
+            font-size: 9pt;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="company">
+            <div class="company-name">Emmanuel Pinglier</div>
+            Conseil en automatisation et développement<br>
+            39 rue Marceau, 94200 Ivry-sur-Seine<br>
+            em.pinglier@gmail.com<br>
+            SIRET : 942 385 311 00017
+        </div>
+        <div class="devis-title">
+            <h1>DEVIS</h1>
+            <div class="devis-number">N° 2026-001</div>
+            <div style="margin-top: 2mm; font-size: 10pt;">Date : 15 janvier 2026</div>
+        </div>
+    </div>
+
+    <div class="parties">
+        <div class="party">
+            <div class="party-label">Émetteur</div>
+            <div class="party-name">Emmanuel Pinglier</div>
+            39 rue Marceau<br>
+            94200 Ivry-sur-Seine
+        </div>
+        <div class="party">
+            <div class="party-label">Client</div>
+            <div class="party-name">Ville de Paris</div>
+            Direction de la Transition Écologique et du Climat<br>
+            103 Avenue de France<br>
+            75013 Paris
+        </div>
+    </div>
+
+    <h2>Objet du devis</h2>
+
+    <div class="project-desc">
+        <strong>Projet Beta-Traj</strong> – Application web de visualisation de la trajectoire climatique de Paris.
+    </div>
+
+    <h2>Prestations</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 50%">Désignation</th>
+                <th class="text-center" style="width: 15%">Quantité</th>
+                <th class="text-right" style="width: 17%">Prix unitaire</th>
+                <th class="text-right" style="width: 18%">Total HT</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <strong>Conception et intégration</strong><br>
+                    <small>Maquettes, charte graphique, structure responsive</small>
+                </td>
+                <td class="text-center">3 jours</td>
+                <td class="text-right">400,00 €</td>
+                <td class="text-right">1 200,00 €</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Développement et données</strong><br>
+                    <small>Graphiques, intégration données TRACC, interactivité</small>
+                </td>
+                <td class="text-center">4 jours</td>
+                <td class="text-right">400,00 €</td>
+                <td class="text-right">1 600,00 €</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Modules complémentaires</strong><br>
+                    <small>Tableau de bord décideurs, mode pédagogique, mode édition</small>
+                </td>
+                <td class="text-center">2 jours</td>
+                <td class="text-right">400,00 €</td>
+                <td class="text-right">800,00 €</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Visualisation des trajectoires</strong><br>
+                    <small>Graphiques multi-scénarios, frise chronologique des actions</small>
+                </td>
+                <td class="text-center">3 jours</td>
+                <td class="text-right">400,00 €</td>
+                <td class="text-right">1 200,00 €</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Finalisation</strong><br>
+                    <small>Tests, documentation, déploiement</small>
+                </td>
+                <td class="text-center">1 jour</td>
+                <td class="text-right">400,00 €</td>
+                <td class="text-right">400,00 €</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Audit accessibilité RGAA</strong><br>
+                    <small>Vérification conformité, corrections</small>
+                </td>
+                <td class="text-center">1 jour</td>
+                <td class="text-right">400,00 €</td>
+                <td class="text-right">400,00 €</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Formation utilisateurs</strong><br>
+                    <small>Prise en main, mode édition</small>
+                </td>
+                <td class="text-center">0,5 jour</td>
+                <td class="text-right">400,00 €</td>
+                <td class="text-right">200,00 €</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Maintenance annuelle</strong><br>
+                    <small>Interventions ponctuelles, mises à jour</small>
+                </td>
+                <td class="text-center">4 jours</td>
+                <td class="text-right">400,00 €</td>
+                <td class="text-right">1 600,00 €</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="totals-box">
+        <table>
+            <tr>
+                <td><strong>Total HT</strong></td>
+                <td class="text-right"><strong>7 400,00 €</strong></td>
+            </tr>
+            <tr>
+                <td>TVA 20%</td>
+                <td class="text-right">1 480,00 €</td>
+            </tr>
+            <tr class="grand-total">
+                <td><strong>Total TTC</strong></td>
+                <td class="text-right"><strong>8 880,00 €</strong></td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>Hébergement</h2>
+
+    <p>Plateforme cloud pour le développement et les usages internes. Coût inclus dans la prestation.</p>
+
+    <div class="conditions">
+        <h3>Conditions</h3>
+        <ul>
+            <li><strong>Propriété intellectuelle :</strong> code cédé au client</li>
+        </ul>
+    </div>
+
+    <div class="validity">
+        <strong>Validité du devis :</strong> 30 jours
+    </div>
+
+    <div class="signature-section">
+        <div class="signature-box">
+            <p><strong>Le prestataire</strong></p>
+            <div class="signature-line">Date et signature</div>
+        </div>
+        <div class="signature-box">
+            <p><strong>Bon pour accord</strong><br>Le client</p>
+            <div class="signature-line">Date, signature et cachet</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Emmanuel Pinglier – Entrepreneur individuel – SIRET 942 385 311 00017 – APE 63.11Z<br>
+        TVA intracommunautaire : FR56942385311
+    </div>
+
+</body>
+</html>

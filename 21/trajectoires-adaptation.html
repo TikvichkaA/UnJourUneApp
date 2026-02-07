@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trajectoires d'Adaptation | beta-traj</title>
+    <link href="https://fonts.googleapis.com/css2?family=Marianne:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="trajectoires-adaptation.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <a href="index.html" class="logo-link">
+                    <div class="logo-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+                            <path d="M16 6 L16 16 L22 22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">beta-traj</span>
+                        <span class="logo-subtitle">Trajectoires d'Adaptation</span>
+                    </div>
+                </a>
+            </div>
+            <div class="header-right">
+                <span class="beta-badge">MODULE TRAJECTOIRES</span>
+                <a href="pathways-builder.html" class="back-link builder-link">Constructeur dynamique</a>
+                <a href="index.html" class="back-link">Retour au tableau de bord</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pathways-main">
+        <!-- Hero Section -->
+        <section class="pathways-hero">
+            <div class="hero-content">
+                <h1>Visualisation des Trajectoires d'Adaptation</h1>
+                <p class="hero-subtitle">Explorez les choix stratégiques et leurs implications sur les niveaux de service du territoire</p>
+            </div>
+        </section>
+
+        <!-- Introduction / Explainer -->
+        <section class="pathways-intro">
+            <div class="intro-card">
+                <div class="intro-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 16v-4M12 8h.01"/>
+                    </svg>
+                </div>
+                <div class="intro-content">
+                    <h2>Comment lire cette visualisation ?</h2>
+                    <p>Cette carte de type "metro map" présente les <strong>trajectoires d'adaptation</strong> possibles pour le territoire. Chaque ligne représente une stratégie différente, avec ses implications sur les niveaux de service.</p>
+                    <ul class="intro-list">
+                        <li><strong>Axe horizontal :</strong> Le temps (2025 - 2100)</li>
+                        <li><strong>Lignes colorées :</strong> Les différentes trajectoires d'adaptation</li>
+                        <li><strong>Points de décision :</strong> Moments où l'on peut changer de trajectoire</li>
+                        <li><strong>Tipping points :</strong> Seuils au-delà desquels une trajectoire n'est plus viable</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls Panel -->
+        <section class="pathways-controls">
+            <div class="controls-group">
+                <label class="control-label">Domaine d'analyse</label>
+                <div class="domain-selector">
+                    <button class="domain-btn active" data-domain="global">Vue globale</button>
+                    <button class="domain-btn" data-domain="sante">Santé publique</button>
+                    <button class="domain-btn" data-domain="infra">Infrastructures</button>
+                    <button class="domain-btn" data-domain="biodiv">Biodiversité</button>
+                    <button class="domain-btn" data-domain="eau">Ressource en eau</button>
+                </div>
+            </div>
+            <div class="controls-group">
+                <label class="control-label">Scénario climatique</label>
+                <div class="scenario-toggle">
+                    <button class="scenario-btn" data-scenario="optimiste">+2°C (Optimiste)</button>
+                    <button class="scenario-btn active" data-scenario="tendanciel">+2.7°C (Tendanciel)</button>
+                    <button class="scenario-btn" data-scenario="pessimiste">+4°C (Pessimiste)</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Pathways Visualization -->
+        <section class="pathways-visualization">
+            <div class="viz-header">
+                <h2>Carte des Trajectoires</h2>
+                <div class="viz-legend">
+                    <div class="legend-item">
+                        <span class="legend-line traj-1"></span>
+                        <span>Trajectoire 1 : Maintien du niveau actuel</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-line traj-2"></span>
+                        <span>Trajectoire 2 : Dégradation ponctuelle acceptée</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-line traj-3"></span>
+                        <span>Trajectoire 3 : Dégradation maîtrisée</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-point decision"></span>
+                        <span>Point de décision</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-point tipping"></span>
+                        <span>Tipping point (seuil critique)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SVG Metro Map -->
+            <div class="metro-map-container">
+                <svg id="metro-map" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid meet">
+                    <!-- Background grid -->
+                    <defs>
+                        <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e5e7eb" stroke-width="0.5"/>
+                        </pattern>
+                        <!-- Markers for decision points -->
+                        <marker id="decision-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8">
+                            <circle cx="5" cy="5" r="4" fill="#fff" stroke="#1e40af" stroke-width="2"/>
+                        </marker>
+                        <!-- Tipping point marker -->
+                        <marker id="tipping-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10">
+                            <polygon points="5,0 10,10 0,10" fill="#ef4444" stroke="#fff" stroke-width="1"/>
+                        </marker>
+                        <!-- Gradient for uncertainty zones -->
+                        <linearGradient id="uncertainty-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#f3f4f6;stop-opacity:0"/>
+                            <stop offset="100%" style="stop-color:#f3f4f6;stop-opacity:0.8"/>
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Grid background -->
+                    <rect width="100%" height="100%" fill="url(#grid)"/>
+
+                    <!-- Time axis labels -->
+                    <g class="time-axis">
+                        <text x="100" y="480" class="axis-label">2025</text>
+                        <text x="270" y="480" class="axis-label">2030</text>
+                        <text x="520" y="480" class="axis-label">2050</text>
+                        <text x="850" y="480" class="axis-label">2075</text>
+                        <text x="1100" y="480" class="axis-label">2100</text>
+                        <!-- Vertical time markers -->
+                        <line x1="100" y1="40" x2="100" y2="460" class="time-marker"/>
+                        <line x1="270" y1="40" x2="270" y2="460" class="time-marker current"/>
+                        <line x1="520" y1="40" x2="520" y2="460" class="time-marker"/>
+                        <line x1="850" y1="40" x2="850" y2="460" class="time-marker"/>
+                        <line x1="1100" y1="40" x2="1100" y2="460" class="time-marker"/>
+                    </g>
+
+                    <!-- Temperature axis on the right -->
+                    <g class="temp-axis">
+                        <text x="1160" y="100" class="temp-label">+2°C</text>
+                        <text x="1160" y="220" class="temp-label">+2.7°C</text>
+                        <text x="1160" y="380" class="temp-label">+4°C</text>
+                    </g>
+
+                    <!-- Service level indicators on the left -->
+                    <g class="service-axis">
+                        <text x="20" y="100" class="service-label optimal">Optimal</text>
+                        <text x="20" y="180" class="service-label good">Bon</text>
+                        <text x="20" y="260" class="service-label degraded">Dégradé</text>
+                        <text x="20" y="340" class="service-label critical">Critique</text>
+                        <text x="20" y="420" class="service-label failure">Défaillance</text>
+                    </g>
+
+                    <!-- Uncertainty zone -->
+                    <rect x="850" y="40" width="300" height="420" fill="url(#uncertainty-gradient)" class="uncertainty-zone"/>
+
+                    <!-- TRAJECTOIRE 1: Maintien niveau actuel (vert) -->
+                    <g class="trajectory trajectory-1" data-trajectory="1">
+                        <!-- Main path -->
+                        <path class="traj-path traj-1-path" d="
+                            M 100,100
+                            C 150,100 200,100 270,110
+                            C 350,120 450,140 520,180
+                            C 600,220 700,320 750,380
+                        " fill="none" stroke="#10b981" stroke-width="6" stroke-linecap="round"/>
+
+                        <!-- Tipping point marker -->
+                        <g class="tipping-point" transform="translate(750, 380)">
+                            <polygon points="0,-12 10,8 -10,8" fill="#ef4444" stroke="#fff" stroke-width="2"/>
+                            <text y="25" class="tipping-label">Inviable</text>
+                        </g>
+
+                        <!-- Decision points -->
+                        <g class="decision-point" data-year="2030" transform="translate(270, 110)">
+                            <circle r="10" fill="#fff" stroke="#10b981" stroke-width="3"/>
+                            <circle r="4" fill="#10b981"/>
+                        </g>
+                        <g class="decision-point" data-year="2050" transform="translate(520, 180)">
+                            <circle r="10" fill="#fff" stroke="#10b981" stroke-width="3"/>
+                            <circle r="4" fill="#10b981"/>
+                        </g>
+
+                        <!-- Label -->
+                        <text x="110" y="85" class="traj-label">T1: Maintien intégral</text>
+                    </g>
+
+                    <!-- TRAJECTOIRE 2: Dégradation ponctuelle (orange) -->
+                    <g class="trajectory trajectory-2" data-trajectory="2">
+                        <!-- Branch from T1 at 2030 -->
+                        <path class="traj-path traj-2-path" d="
+                            M 100,100
+                            C 150,100 200,100 270,110
+                            L 270,110
+                            C 320,130 400,160 520,200
+                            C 620,240 750,280 850,300
+                            C 950,320 1050,340 1100,350
+                        " fill="none" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>
+
+                        <!-- Alternative branch at 2050 -->
+                        <path class="traj-path traj-2-alt" d="
+                            M 520,200
+                            C 580,180 650,170 750,160
+                            C 850,150 1000,140 1100,130
+                        " fill="none" stroke="#f59e0b" stroke-width="4" stroke-linecap="round" stroke-dasharray="10,5" opacity="0.6"/>
+
+                        <!-- Decision points -->
+                        <g class="decision-point" data-year="2030" transform="translate(270, 110)">
+                            <circle r="12" fill="#fff" stroke="#f59e0b" stroke-width="3"/>
+                            <circle r="5" fill="#f59e0b"/>
+                        </g>
+                        <g class="decision-point" data-year="2050" transform="translate(520, 200)">
+                            <circle r="12" fill="#fff" stroke="#f59e0b" stroke-width="3"/>
+                            <circle r="5" fill="#f59e0b"/>
+                        </g>
+                        <g class="decision-point" data-year="2075" transform="translate(850, 300)">
+                            <circle r="10" fill="#fff" stroke="#f59e0b" stroke-width="3"/>
+                            <circle r="4" fill="#f59e0b"/>
+                        </g>
+
+                        <!-- Label -->
+                        <text x="580" y="185" class="traj-label">T2: Dégradation ponctuelle</text>
+                    </g>
+
+                    <!-- TRAJECTOIRE 3: Dégradation maîtrisée (bleu) -->
+                    <g class="trajectory trajectory-3" data-trajectory="3">
+                        <!-- Main path with progressive degradation -->
+                        <path class="traj-path traj-3-path" d="
+                            M 100,100
+                            C 150,100 200,100 270,110
+                            L 270,110
+                            C 320,140 400,180 520,240
+                            C 600,280 700,310 850,340
+                            C 950,360 1050,380 1100,390
+                        " fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+
+                        <!-- Branch with priority services maintained -->
+                        <path class="traj-path traj-3-priority" d="
+                            M 520,240
+                            C 580,200 650,180 750,170
+                            C 850,160 1000,150 1100,145
+                        " fill="none" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" stroke-dasharray="10,5" opacity="0.6"/>
+
+                        <!-- Decision points -->
+                        <g class="decision-point" data-year="2030" transform="translate(270, 110)">
+                            <circle r="12" fill="#fff" stroke="#3b82f6" stroke-width="3"/>
+                            <circle r="5" fill="#3b82f6"/>
+                        </g>
+                        <g class="decision-point" data-year="2050" transform="translate(520, 240)">
+                            <circle r="12" fill="#fff" stroke="#3b82f6" stroke-width="3"/>
+                            <circle r="5" fill="#3b82f6"/>
+                            <text y="-20" class="decision-label">Choix services prioritaires</text>
+                        </g>
+                        <g class="decision-point" data-year="2075" transform="translate(850, 340)">
+                            <circle r="10" fill="#fff" stroke="#3b82f6" stroke-width="3"/>
+                            <circle r="4" fill="#3b82f6"/>
+                        </g>
+
+                        <!-- Label -->
+                        <text x="580" y="270" class="traj-label">T3: Dégradation maîtrisée</text>
+                    </g>
+
+                    <!-- Current position indicator -->
+                    <g class="current-position" transform="translate(100, 100)">
+                        <circle r="15" fill="#1e40af" stroke="#fff" stroke-width="3">
+                            <animate attributeName="r" values="15;18;15" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <text y="-25" class="current-label">Situation actuelle</text>
+                    </g>
+
+                    <!-- Priority services callout -->
+                    <g class="priority-callout" transform="translate(750, 155)">
+                        <rect x="-60" y="-25" width="120" height="50" rx="5" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+                        <text y="-5" class="callout-title">Services prioritaires</text>
+                        <text y="12" class="callout-detail">Santé, Éducation</text>
+                    </g>
+
+                    <!-- Interactive tooltip area (hidden by default) -->
+                    <g id="tooltip" class="tooltip" visibility="hidden">
+                        <rect x="0" y="0" width="200" height="100" rx="5" fill="#1f2937" opacity="0.95"/>
+                        <text id="tooltip-title" x="10" y="25" class="tooltip-title"></text>
+                        <text id="tooltip-year" x="10" y="45" class="tooltip-year"></text>
+                        <text id="tooltip-desc" x="10" y="65" class="tooltip-desc"></text>
+                        <text id="tooltip-action" x="10" y="85" class="tooltip-action"></text>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- Service Level Detail Panel -->
+            <div class="service-detail-panel">
+                <h3>Niveaux de service par trajectoire</h3>
+                <div class="service-grid">
+                    <div class="service-header">
+                        <span></span>
+                        <span>2030</span>
+                        <span>2050</span>
+                        <span>2075</span>
+                        <span>2100</span>
+                    </div>
+                    <div class="service-row traj-1">
+                        <span class="service-name">T1: Maintien</span>
+                        <span class="level level-optimal">Optimal</span>
+                        <span class="level level-good">Bon</span>
+                        <span class="level level-critical">Critique</span>
+                        <span class="level level-failure">X</span>
+                    </div>
+                    <div class="service-row traj-2">
+                        <span class="service-name">T2: Ponctuelle</span>
+                        <span class="level level-good">Bon</span>
+                        <span class="level level-degraded">Dégradé</span>
+                        <span class="level level-degraded">Dégradé</span>
+                        <span class="level level-degraded">Dégradé</span>
+                    </div>
+                    <div class="service-row traj-3">
+                        <span class="service-name">T3: Maîtrisée</span>
+                        <span class="level level-good">Bon</span>
+                        <span class="level level-degraded">Dégradé</span>
+                        <span class="level level-critical">Mixte*</span>
+                        <span class="level level-critical">Mixte*</span>
+                    </div>
+                </div>
+                <p class="service-note">* Mixte : Services prioritaires maintenus (Santé, Éducation, Transports collectifs), autres services dégradés</p>
+            </div>
+        </section>
+
+        <!-- Trajectories Detail Cards -->
+        <section class="trajectories-detail">
+            <h2>Détail des Trajectoires</h2>
+
+            <div class="trajectory-cards">
+                <!-- Trajectory 1 -->
+                <div class="trajectory-card traj-1-card" data-trajectory="1">
+                    <div class="card-header">
+                        <div class="card-line traj-1"></div>
+                        <div class="card-title">
+                            <h3>Trajectoire 1</h3>
+                            <span class="card-subtitle">Maintien intégral du niveau de service actuel</span>
+                        </div>
+                        <div class="card-badge badge-high-cost">Coût élevé</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-description">
+                            <p>Objectif de maintenir tous les services publics, infrastructures et cadre de vie au niveau actuel, quelles que soient les conditions climatiques.</p>
+                        </div>
+                        <div class="card-implications">
+                            <h4>Implications</h4>
+                            <ul>
+                                <li>Investissements massifs en adaptation</li>
+                                <li>Renforcement systématique des infrastructures</li>
+                                <li>Climatisation généralisée des bâtiments publics</li>
+                                <li>Plans d'urgence permanents</li>
+                            </ul>
+                        </div>
+                        <div class="card-viability">
+                            <h4>Viabilité</h4>
+                            <div class="viability-bar">
+                                <div class="viability-segment viable" style="width: 40%">
+                                    <span>2025-2050</span>
+                                </div>
+                                <div class="viability-segment difficult" style="width: 30%">
+                                    <span>2050-2075</span>
+                                </div>
+                                <div class="viability-segment impossible" style="width: 30%">
+                                    <span>Inviable</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-metrics">
+                            <div class="metric">
+                                <span class="metric-value">4-6 Mds€</span>
+                                <span class="metric-label">Coût estimé 2025-2050</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">~2050</span>
+                                <span class="metric-label">Tipping point</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trajectory 2 -->
+                <div class="trajectory-card traj-2-card" data-trajectory="2">
+                    <div class="card-header">
+                        <div class="card-line traj-2"></div>
+                        <div class="card-title">
+                            <h3>Trajectoire 2</h3>
+                            <span class="card-subtitle">Dégradation ponctuelle acceptée</span>
+                        </div>
+                        <div class="card-badge badge-medium-cost">Coût modéré</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-description">
+                            <p>Accepter une dégradation temporaire et limitée des niveaux de service lors des événements extrêmes, avec retour à la normale après la crise.</p>
+                        </div>
+                        <div class="card-implications">
+                            <h4>Implications</h4>
+                            <ul>
+                                <li>Dégradation faible acceptée à 2030</li>
+                                <li>Dégradation moyenne acceptée à 2050</li>
+                                <li>Plans de continuité renforcés</li>
+                                <li>Communication de crise adaptée</li>
+                            </ul>
+                        </div>
+                        <div class="card-degradation-timeline">
+                            <h4>Niveaux de dégradation acceptés</h4>
+                            <div class="degradation-steps">
+                                <div class="degradation-step">
+                                    <span class="step-year">2030</span>
+                                    <div class="step-level level-low">Faible</div>
+                                    <span class="step-desc">Perturbations ponctuelles</span>
+                                </div>
+                                <div class="degradation-step">
+                                    <span class="step-year">2050</span>
+                                    <div class="step-level level-medium">Moyenne</div>
+                                    <span class="step-desc">Dégradations récurrentes</span>
+                                </div>
+                                <div class="degradation-step">
+                                    <span class="step-year">2075+</span>
+                                    <div class="step-level level-medium">Moyenne</div>
+                                    <span class="step-desc">Stabilisation</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-metrics">
+                            <div class="metric">
+                                <span class="metric-value">2-3 Mds€</span>
+                                <span class="metric-label">Coût estimé 2025-2050</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">Viable</span>
+                                <span class="metric-label">Jusqu'en 2100</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trajectory 3 -->
+                <div class="trajectory-card traj-3-card" data-trajectory="3">
+                    <div class="card-header">
+                        <div class="card-line traj-3"></div>
+                        <div class="card-title">
+                            <h3>Trajectoire 3</h3>
+                            <span class="card-subtitle">Dégradation maîtrisée avec priorisation</span>
+                        </div>
+                        <div class="card-badge badge-low-cost">Coût optimisé</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-description">
+                            <p>Accepter une baisse pérenne mais maîtrisée des niveaux de service, en choisissant les systèmes à maintenir en priorité.</p>
+                        </div>
+                        <div class="card-implications">
+                            <h4>Implications</h4>
+                            <ul>
+                                <li>Choix stratégiques sur les priorités</li>
+                                <li>Services prioritaires maintenus (santé, éducation, transports)</li>
+                                <li>Autres services réduits mais fonctionnels</li>
+                                <li>Transformation des modes de vie</li>
+                            </ul>
+                        </div>
+                        <div class="card-priorities">
+                            <h4>Services prioritaires maintenus</h4>
+                            <div class="priority-tags">
+                                <span class="priority-tag priority-health">Santé</span>
+                                <span class="priority-tag priority-education">Éducation</span>
+                                <span class="priority-tag priority-transport">Transports collectifs</span>
+                                <span class="priority-tag priority-water">Eau potable</span>
+                                <span class="priority-tag priority-energy">Énergie (base)</span>
+                            </div>
+                            <h4>Services en dégradation acceptée</h4>
+                            <div class="degraded-tags">
+                                <span class="degraded-tag">Voirie secondaire</span>
+                                <span class="degraded-tag">Espaces verts</span>
+                                <span class="degraded-tag">Équipements sportifs</span>
+                                <span class="degraded-tag">Climatisation</span>
+                            </div>
+                        </div>
+                        <div class="card-metrics">
+                            <div class="metric">
+                                <span class="metric-value">1.5-2 Mds€</span>
+                                <span class="metric-label">Coût estimé 2025-2050</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">Viable</span>
+                                <span class="metric-label">Long terme</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scorecard Section -->
+        <section class="scorecard-section">
+            <h2>Scorecard comparatif</h2>
+            <p class="scorecard-intro">Évaluation multicritère des trajectoires pour guider la décision</p>
+
+            <div class="scorecard-container">
+                <table class="scorecard-table">
+                    <thead>
+                        <tr>
+                            <th>Critère</th>
+                            <th class="traj-1-col">T1: Maintien</th>
+                            <th class="traj-2-col">T2: Ponctuelle</th>
+                            <th class="traj-3-col">T3: Maîtrisée</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="criteria-cell">
+                                <span class="criteria-name">Coût total (2025-2050)</span>
+                                <span class="criteria-weight">Pondération: 25%</span>
+                            </td>
+                            <td class="score score-low">
+                                <span class="score-icon">---</span>
+                                <span class="score-detail">4-6 Mds€</span>
+                            </td>
+                            <td class="score score-medium">
+                                <span class="score-icon">-</span>
+                                <span class="score-detail">2-3 Mds€</span>
+                            </td>
+                            <td class="score score-high">
+                                <span class="score-icon">++</span>
+                                <span class="score-detail">1.5-2 Mds€</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="criteria-cell">
+                                <span class="criteria-name">Qualité de service maintenue</span>
+                                <span class="criteria-weight">Pondération: 20%</span>
+                            </td>
+                            <td class="score score-high">
+                                <span class="score-icon">+++</span>
+                                <span class="score-detail">Intégrale (court terme)</span>
+                            </td>
+                            <td class="score score-medium">
+                                <span class="score-icon">+</span>
+                                <span class="score-detail">Variable</span>
+                            </td>
+                            <td class="score score-medium">
+                                <span class="score-icon">+</span>
+                                <span class="score-detail">Priorités préservées</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="criteria-cell">
+                                <span class="criteria-name">Viabilité long terme</span>
+                                <span class="criteria-weight">Pondération: 20%</span>
+                            </td>
+                            <td class="score score-low">
+                                <span class="score-icon">---</span>
+                                <span class="score-detail">Inviable post-2050</span>
+                            </td>
+                            <td class="score score-high">
+                                <span class="score-icon">++</span>
+                                <span class="score-detail">Viable 2100</span>
+                            </td>
+                            <td class="score score-high">
+                                <span class="score-icon">+++</span>
+                                <span class="score-detail">Robuste</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="criteria-cell">
+                                <span class="criteria-name">Acceptabilité sociale</span>
+                                <span class="criteria-weight">Pondération: 15%</span>
+                            </td>
+                            <td class="score score-high">
+                                <span class="score-icon">+++</span>
+                                <span class="score-detail">Forte (court terme)</span>
+                            </td>
+                            <td class="score score-medium">
+                                <span class="score-icon">+</span>
+                                <span class="score-detail">Variable</span>
+                            </td>
+                            <td class="score score-low">
+                                <span class="score-icon">-</span>
+                                <span class="score-detail">Difficile</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="criteria-cell">
+                                <span class="criteria-name">Flexibilité / réversibilité</span>
+                                <span class="criteria-weight">Pondération: 10%</span>
+                            </td>
+                            <td class="score score-low">
+                                <span class="score-icon">--</span>
+                                <span class="score-detail">Rigide</span>
+                            </td>
+                            <td class="score score-high">
+                                <span class="score-icon">++</span>
+                                <span class="score-detail">Adaptable</span>
+                            </td>
+                            <td class="score score-high">
+                                <span class="score-icon">+++</span>
+                                <span class="score-detail">Très flexible</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="criteria-cell">
+                                <span class="criteria-name">Équité territoriale</span>
+                                <span class="criteria-weight">Pondération: 10%</span>
+                            </td>
+                            <td class="score score-medium">
+                                <span class="score-icon">+</span>
+                                <span class="score-detail">Uniforme</span>
+                            </td>
+                            <td class="score score-medium">
+                                <span class="score-icon">+</span>
+                                <span class="score-detail">Différenciée</span>
+                            </td>
+                            <td class="score score-low">
+                                <span class="score-icon">-</span>
+                                <span class="score-detail">Inégale</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td>Score global pondéré</td>
+                            <td class="total-score traj-1">45/100</td>
+                            <td class="total-score traj-2">68/100</td>
+                            <td class="total-score traj-3">72/100</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="scorecard-recommendation">
+                <div class="recommendation-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4"/>
+                        <circle cx="12" cy="12" r="10"/>
+                    </svg>
+                </div>
+                <div class="recommendation-content">
+                    <h4>Recommandation</h4>
+                    <p>Sur la base de cette analyse multicritère, la <strong>Trajectoire 3 (Dégradation maîtrisée)</strong> apparaît comme l'option la plus équilibrée, offrant le meilleur compromis entre coût, viabilité et flexibilité. Cependant, elle nécessite un travail approfondi sur l'acceptabilité sociale et les critères de priorisation des services.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Decision Points Timeline -->
+        <section class="decision-timeline-section">
+            <h2>Points de décision clés</h2>
+            <p class="section-intro">Les moments charnières où les choix de trajectoire doivent être actés</p>
+
+            <div class="decision-timeline">
+                <div class="timeline-line"></div>
+
+                <div class="decision-node" style="left: 10%">
+                    <div class="node-marker current"></div>
+                    <div class="node-content">
+                        <span class="node-year">2025</span>
+                        <span class="node-title">Diagnostic & choix initial</span>
+                        <span class="node-desc">Définition de la trajectoire cible et des premiers arbitrages</span>
+                        <span class="node-status status-current">En cours</span>
+                    </div>
+                </div>
+
+                <div class="decision-node" style="left: 25%">
+                    <div class="node-marker future"></div>
+                    <div class="node-content">
+                        <span class="node-year">2030</span>
+                        <span class="node-title">Premier bilan</span>
+                        <span class="node-desc">Évaluation des premiers impacts et ajustements possibles</span>
+                        <div class="node-options">
+                            <span class="option-badge">Maintenir T1</span>
+                            <span class="option-badge">Bifurquer vers T2</span>
+                            <span class="option-badge">Bifurquer vers T3</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="decision-node" style="left: 50%">
+                    <div class="node-marker future critical"></div>
+                    <div class="node-content">
+                        <span class="node-year">2050</span>
+                        <span class="node-title">Point critique T1</span>
+                        <span class="node-desc">Dernière possibilité de sortie de T1 avant inviabilité</span>
+                        <div class="node-options">
+                            <span class="option-badge warning">Tipping point T1</span>
+                            <span class="option-badge">Choix services prioritaires (T3)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="decision-node" style="left: 75%">
+                    <div class="node-marker future"></div>
+                    <div class="node-content">
+                        <span class="node-year">2075</span>
+                        <span class="node-title">Ajustement long terme</span>
+                        <span class="node-desc">Recalibrage en fonction des évolutions observées</span>
+                    </div>
+                </div>
+
+                <div class="decision-node" style="left: 95%">
+                    <div class="node-marker future"></div>
+                    <div class="node-content">
+                        <span class="node-year">2100</span>
+                        <span class="node-title">Horizon cible</span>
+                        <span class="node-desc">Évaluation finale des trajectoires</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Actions & Next Steps -->
+        <section class="actions-section">
+            <h2>Actions immédiates requises</h2>
+
+            <div class="actions-grid">
+                <div class="action-card">
+                    <div class="action-number">1</div>
+                    <div class="action-content">
+                        <h3>Définir les services prioritaires</h3>
+                        <p>Concertation avec les parties prenantes pour identifier les services à maintenir coûte que coûte</p>
+                        <span class="action-deadline">Échéance : Q2 2025</span>
+                    </div>
+                </div>
+                <div class="action-card">
+                    <div class="action-number">2</div>
+                    <div class="action-content">
+                        <h3>Chiffrer les trajectoires</h3>
+                        <p>Étude économique détaillée des coûts et bénéfices de chaque option</p>
+                        <span class="action-deadline">Échéance : Q3 2025</span>
+                    </div>
+                </div>
+                <div class="action-card">
+                    <div class="action-number">3</div>
+                    <div class="action-content">
+                        <h3>Définir les indicateurs de suivi</h3>
+                        <p>Métriques permettant de mesurer l'atteinte des objectifs et déclencher les changements de trajectoire</p>
+                        <span class="action-deadline">Échéance : Q4 2025</span>
+                    </div>
+                </div>
+                <div class="action-card">
+                    <div class="action-number">4</div>
+                    <div class="action-content">
+                        <h3>Préparer la communication</h3>
+                        <p>Stratégie de communication pour accompagner l'acceptabilité sociale des choix</p>
+                        <span class="action-deadline">Échéance : Q1 2026</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sources -->
+        <section class="sources-section">
+            <h2>Sources et méthodologie</h2>
+            <div class="sources-content">
+                <p>Cette visualisation s'inspire de l'approche <strong>"Adaptation Pathways"</strong> développée notamment pour le projet <a href="https://www.gov.uk/government/collections/thames-estuary-2100-te2100" target="_blank">Thames Estuary 2100</a> et formalisée dans la méthodologie <a href="https://www.deltares.nl/en/expertise/areas-of-expertise/sea-level-rise/dynamic-adaptive-policy-pathways" target="_blank">DAPP (Dynamic Adaptive Policy Pathways)</a> par Deltares.</p>
+                <div class="sources-list">
+                    <div class="source-item">
+                        <span class="source-type">Méthodologie</span>
+                        <a href="https://wires.onlinelibrary.wiley.com/doi/10.1002/wcc.883" target="_blank">Adaptation pathways for effective responses to climate change risks (2024)</a>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-type">Guide</span>
+                        <a href="https://publicwiki.deltares.nl/display/AP/Pathways+Generator" target="_blank">Deltares Pathways Generator</a>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-type">Exemple</span>
+                        <a href="https://resilientca.org/apg/adaptation-pathways/" target="_blank">California Adaptation Pathways Guide</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">
+                Module Trajectoires d'Adaptation | <a href="index.html">beta-traj</a>
+            </p>
+            <p class="footer-version">v1.0 - Version de travail</p>
+        </div>
+    </footer>
+
+    <script src="trajectoires-adaptation.js"></script>
+</body>
+</html>

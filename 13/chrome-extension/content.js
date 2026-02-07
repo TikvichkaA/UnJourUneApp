@@ -363,8 +363,20 @@
       const locationText = r.distance !== null
         ? `📍 ${r.distance} km`
         : (r.location ? `📍 ${r.location}` : '');
-      const sourceColor = r.source === 'vinted' ? '#09b1ba' : '#f56b2a';
-      const sourceName = r.source === 'vinted' ? 'Vinted' : 'LBC';
+      const sourceColors = {
+        'vinted': '#09b1ba',
+        'leboncoin': '#f56b2a',
+        'envie': '#22c55e',
+        'emmaus': '#dc2626'
+      };
+      const sourceNames = {
+        'vinted': 'Vinted',
+        'leboncoin': 'LBC',
+        'envie': 'Envie',
+        'emmaus': 'Emmaüs'
+      };
+      const sourceColor = sourceColors[r.source] || '#6b7280';
+      const sourceName = sourceNames[r.source] || r.source;
       return `
         <a href="${r.url}" target="_blank" style="
           display: flex;
@@ -395,12 +407,15 @@
       `;
     }).join('');
 
-    // Compter les sources
-    const lbcCount = savedResults.filter(r => r.source === 'leboncoin').length;
-    const vintedCount = savedResults.filter(r => r.source === 'vinted').length;
+    // Compter les sources (exclure les suggestions)
+    const realResults = savedResults.filter(r => !r.isSuggestion);
+    const lbcCount = realResults.filter(r => r.source === 'leboncoin').length;
+    const vintedCount = realResults.filter(r => r.source === 'vinted').length;
+    const hasSolidary = savedResults.some(r => r.source === 'envie' || r.source === 'emmaus');
     let sourcesText = [];
     if (lbcCount > 0) sourcesText.push(`${lbcCount} Le Bon Coin`);
     if (vintedCount > 0) sourcesText.push(`${vintedCount} Vinted`);
+    if (hasSolidary) sourcesText.push('+ Envie & Emmaüs');
 
     modal.innerHTML = `
       <div style="text-align: center; margin-bottom: 20px;">
@@ -409,7 +424,7 @@
           Et en occasion ?
         </h2>
         <p style="font-size: 14px; color: #64748b; margin: 0;">
-          ${savedResults.length} annonce${savedResults.length > 1 ? 's' : ''} trouvée${savedResults.length > 1 ? 's' : ''} (${sourcesText.join(', ')})
+          ${realResults.length} annonce${realResults.length > 1 ? 's' : ''} trouvée${realResults.length > 1 ? 's' : ''} (${sourcesText.join(', ')})
         </p>
       </div>
 
@@ -510,20 +525,35 @@
 
     if (!button || !badge || !preview) return;
 
-    // Afficher le badge avec le nombre de résultats
+    // Afficher le badge avec le nombre de résultats (hors suggestions)
+    const realResultsCount = results.filter(r => !r.isSuggestion).length;
     badge.style.display = 'flex';
-    badge.textContent = String(Math.min(results.length, 9));
+    badge.textContent = realResultsCount > 0 ? String(Math.min(realResultsCount, 9)) : '+';
 
     // Mettre à jour le contenu de l'aperçu avec les résultats
     const info = getProductInfo();
     const searchQuery = simplifyProductName(info?.productName || '');
 
-    let resultsHtml = results.map(r => {
+    // Filtrer les suggestions pour les afficher séparément
+    const apiResults = results.filter(r => !r.isSuggestion);
+    let resultsHtml = apiResults.map(r => {
       const locationText = r.distance !== null
         ? `📍 ${r.distance} km`
         : (r.location ? `📍 ${r.location}` : '');
-      const sourceColor = r.source === 'vinted' ? '#09b1ba' : '#f56b2a';
-      const sourceName = r.source === 'vinted' ? 'Vinted' : 'LBC';
+      const sourceColors = {
+        'vinted': '#09b1ba',
+        'leboncoin': '#f56b2a',
+        'envie': '#22c55e',
+        'emmaus': '#dc2626'
+      };
+      const sourceNames = {
+        'vinted': 'Vinted',
+        'leboncoin': 'LBC',
+        'envie': 'Envie',
+        'emmaus': 'Emmaüs'
+      };
+      const sourceColor = sourceColors[r.source] || '#6b7280';
+      const sourceName = sourceNames[r.source] || r.source;
       return `
         <a href="${r.url}" target="_blank" style="
           display: block;
@@ -546,13 +576,40 @@
       `;
     }).join('');
 
+    const suggestionResults = results.filter(r => r.isSuggestion);
+
     preview.innerHTML = `
-      <div style="font-size: 10px; color: #ef4444; font-weight: 600; text-transform: uppercase; margin-bottom: 10px;">
-        🎉 ${results.length} annonce${results.length > 1 ? 's' : ''} trouvée${results.length > 1 ? 's' : ''}
-      </div>
-      <div style="max-height: 200px; overflow-y: auto;">
-        ${resultsHtml}
-      </div>
+      ${apiResults.length > 0 ? `
+        <div style="font-size: 10px; color: #ef4444; font-weight: 600; text-transform: uppercase; margin-bottom: 10px;">
+          🎉 ${apiResults.length} annonce${apiResults.length > 1 ? 's' : ''} trouvée${apiResults.length > 1 ? 's' : ''}
+        </div>
+        <div style="max-height: 200px; overflow-y: auto;">
+          ${resultsHtml}
+        </div>
+      ` : `
+        <div style="font-size: 12px; color: #64748b; text-align: center; margin-bottom: 10px;">
+          😕 Pas d'annonce sur LBC/Vinted
+        </div>
+      `}
+      ${suggestionResults.length > 0 ? `
+        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
+          <div style="font-size: 10px; color: #22c55e; font-weight: 600; margin-bottom: 6px;">
+            ♻️ Sources solidaires
+          </div>
+          ${suggestionResults.map(s => `
+            <a href="${s.url}" target="_blank" style="
+              display: block;
+              padding: 6px 0;
+              font-size: 11px;
+              color: #64748b;
+              text-decoration: none;
+            ">
+              <span style="font-size: 9px; background: ${s.source === 'envie' ? '#22c55e' : '#dc2626'}; color: white; padding: 2px 5px; border-radius: 3px; font-weight: 600; margin-right: 6px;">${s.source === 'envie' ? 'Envie' : 'Emmaüs'}</span>
+              Chercher sur ${s.source === 'envie' ? 'Réseau Envie' : 'Label Emmaüs'} →
+            </a>
+          `).join('')}
+        </div>
+      ` : ''}
       <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
         <div style="font-size: 11px; color: #64748b; text-align: center;">
           Cliquez pour voir toutes les annonces

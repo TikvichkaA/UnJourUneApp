@@ -272,6 +272,25 @@
             color: #666;
         }
 
+        .shuffle-description {
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto 25px;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #f39c12;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #aaa;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.6rem;
@@ -330,6 +349,10 @@
         </div>
     </div>
 
+    <div class="shuffle-description" id="shuffleDescription">
+        Les caisses s'entrechoquent dans la penombre de la cale...
+    </div>
+
     <div class="puzzle-container">
         <div class="puzzle-wrapper">
             <div id="puzzle" class="loading">Chargement...</div>
@@ -365,6 +388,30 @@
         let img = null;
         let tileSize = 0;
 
+        const descriptions = [
+            "Les caisses s'entrechoquent dans la penombre de la cale...",
+            "Un marin siffle un air de Bristol tandis que les cordages grincent.",
+            "La sueur perle sur les fronts, les bras se tendent vers la lumiere.",
+            "Le contremaître hurle des ordres que la coque repercute en echos.",
+            "Des silhouettes anguleuses se decoupent dans la poussiere doree.",
+            "Le navire tangue, les hommes dansent avec les caisses.",
+            "Dans ce ventre de fer, le temps se fragmente comme la lumiere.",
+            "Les dockers assemblent le puzzle du commerce mondial.",
+            "Chaque caisse porte les reves d'un continent lointain.",
+            "Le ballet mecanique des corps et des marchandises.",
+            "Une symphonie de bois, de metal et de muscles.",
+            "Les ombres geantes des travailleurs hantent les parois.",
+            "Le soleil perce les ecoutilles en lames de lumiere.",
+            "Dans la cale, les hommes deviennent des formes pures.",
+            "Le chaos organise du chargement prend forme.",
+            "Entre deux mondes, les dockers tissent des liens invisibles.",
+            "La geometrie du labeur, la poesie de l'effort.",
+            "Chaque mouvement est un fragment de cette fresque vivante.",
+            "Le rugissement sourd des machines accompagne leur danse.",
+            "Dans l'obscurite, ils construisent la modernite."
+        ];
+        let lastDescriptionIndex = -1;
+
         const puzzle = document.getElementById('puzzle');
         const shuffleBtn = document.getElementById('shuffleBtn');
         const resetBtn = document.getElementById('resetBtn');
@@ -372,6 +419,7 @@
         const movesDisplay = document.getElementById('moves');
         const shufflesDisplay = document.getElementById('shuffles');
         const successMessage = document.getElementById('successMessage');
+        const descriptionEl = document.getElementById('shuffleDescription');
 
         function loadImage() {
             return new Promise((resolve, reject) => {
@@ -463,6 +511,20 @@
             }, 300);
         }
 
+        function updateDescription() {
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * descriptions.length);
+            } while (newIndex === lastDescriptionIndex && descriptions.length > 1);
+            lastDescriptionIndex = newIndex;
+
+            descriptionEl.style.opacity = '0';
+            setTimeout(() => {
+                descriptionEl.textContent = descriptions[newIndex];
+                descriptionEl.style.opacity = '1';
+            }, 150);
+        }
+
         function shuffle() {
             const n = gridSize * gridSize;
             const shuffleCount = n * 10;
@@ -479,6 +541,7 @@
             shufflesDisplay.textContent = shuffles;
             moves = 0;
             movesDisplay.textContent = moves;
+            updateDescription();
         }
 
         function swapTilesQuiet(tile1, tile2) {

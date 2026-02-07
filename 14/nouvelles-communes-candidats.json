@@ -1,0 +1,279 @@
+{
+  "_comment": "Nouvelles communes et candidats ED - Municipales 2026",
+  "_generated": "2026-02-03",
+  "_sources": [
+    "France Bleu",
+    "Nice Presse",
+    "Lyon People",
+    "Var Matin",
+    "Public Sénat",
+    "CNews",
+    "Lyon Mag"
+  ],
+  "communes": [
+    {
+      "nom": "Marseille",
+      "departement": "Bouches-du-Rhône",
+      "code_dept": "13",
+      "population": "870 000",
+      "score": "D",
+      "maire_actuel": "Benoît Payan (PS)",
+      "detail": "2e ville de France. RN présente des têtes de liste dans les 8 secteurs. Franck Allisio candidat à la mairie centrale."
+    },
+    {
+      "nom": "Lyon",
+      "departement": "Rhône",
+      "code_dept": "69",
+      "population": "522 000",
+      "score": "C",
+      "maire_actuel": "Grégory Doucet (EELV)",
+      "detail": "3e ville de France. Alliance RN-UDR menée par Alexandre Dupalais (UDR)."
+    },
+    {
+      "nom": "Nantes",
+      "departement": "Loire-Atlantique",
+      "code_dept": "44",
+      "population": "320 000",
+      "score": "C",
+      "maire_actuel": "Johanna Rolland (PS)",
+      "detail": "6e ville de France. Liste RN-UDR menée par Jean-Claude Hulot, conseiller de Marine Le Pen."
+    },
+    {
+      "nom": "Bordeaux",
+      "departement": "Gironde",
+      "code_dept": "33",
+      "population": "260 000",
+      "score": "C",
+      "maire_actuel": "Pierre Hurmic (EELV)",
+      "detail": "9e ville de France. Virginie Bonthoux Tournay (Reconquête) candidate. RN-UDR présents également."
+    },
+    {
+      "nom": "Troyes",
+      "departement": "Aube",
+      "code_dept": "10",
+      "population": "62 000",
+      "score": "C",
+      "maire_actuel": "François Baroin (LR)",
+      "detail": "Jean-Christophe Letierce candidat Reconquête."
+    },
+    {
+      "nom": "La Roche-sur-Yon",
+      "departement": "Vendée",
+      "code_dept": "85",
+      "population": "55 000",
+      "score": "C",
+      "maire_actuel": "Luc Bouard (DVD)",
+      "detail": "Freddy Roy (UDR) candidat avec soutien RN."
+    },
+    {
+      "nom": "Aix-en-Provence",
+      "departement": "Bouches-du-Rhône",
+      "code_dept": "13",
+      "population": "145 000",
+      "score": "C",
+      "maire_actuel": "Sophie Joissains (DVD)",
+      "detail": "Jean-Louis Geiger désigné par RN-UDR."
+    },
+    {
+      "nom": "Draguignan",
+      "departement": "Var",
+      "code_dept": "83",
+      "population": "42 000",
+      "score": "D",
+      "maire_actuel": "Richard Strambio (DVD)",
+      "detail": "Philippe Schreck mène liste RN-UDR. Var département très RN."
+    },
+    {
+      "nom": "Douai",
+      "departement": "Nord",
+      "code_dept": "59",
+      "population": "40 000",
+      "score": "D",
+      "maire_actuel": "Frédéric Chéreau (PS)",
+      "detail": "Thierry Tesson tête de liste RN-UDR."
+    },
+    {
+      "nom": "Annecy",
+      "departement": "Haute-Savoie",
+      "code_dept": "74",
+      "population": "130 000",
+      "score": "C",
+      "maire_actuel": "François Astorg (EELV)",
+      "detail": "Guillaume Roit-Levêque mène liste RN 'Retrouvons Annecy'."
+    },
+    {
+      "nom": "Vimoutiers",
+      "departement": "Orne",
+      "code_dept": "61",
+      "population": "3 000",
+      "score": "D",
+      "maire_actuel": "Yves Gourdelier",
+      "detail": "Première liste RN dans cette commune. Gérard Vienne (72 ans) candidat investi."
+    }
+  ],
+  "candidats": [
+    {
+      "nom": "Franck Allisio",
+      "commune": "Marseille",
+      "parti": "RN",
+      "role": "tete",
+      "detail": "Tête de liste RN pour la mairie centrale",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Clémence Parodi",
+      "commune": "Marseille",
+      "parti": "RN",
+      "role": "tete",
+      "secteur": "1er & 7e arr.",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Marie Bermejo",
+      "commune": "Marseille",
+      "parti": "RN",
+      "role": "tete",
+      "secteur": "2e & 3e arr.",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Thomas Battesti",
+      "commune": "Marseille",
+      "parti": "RN",
+      "role": "tete",
+      "secteur": "4e & 5e arr.",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Jean-Baptiste Rivoallan",
+      "commune": "Marseille",
+      "parti": "RN",
+      "role": "tete",
+      "secteur": "6e & 8e arr.",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Eléonore Bez",
+      "commune": "Marseille",
+      "parti": "RN",
+      "role": "tete",
+      "secteur": "9e & 10e arr.",
+      "detail": "Conseillère municipale",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Olivier Rioult",
+      "commune": "Marseille",
+      "parti": "RN",
+      "role": "tete",
+      "secteur": "11e & 12e arr.",
+      "detail": "Ancien membre cabinet Vassal",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Sandrine D'Angio",
+      "commune": "Marseille",
+      "parti": "RN",
+      "role": "tete",
+      "secteur": "13e & 14e arr.",
+      "detail": "Ex-maire de secteur 2017-2020",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Thibault Charpentier",
+      "commune": "Marseille",
+      "parti": "RN",
+      "role": "tete",
+      "secteur": "15e & 16e arr.",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Alexandre Dupalais",
+      "commune": "Lyon",
+      "parti": "UDR",
+      "role": "tete",
+      "detail": "Avocat, 34 ans. Mène liste 'Retrouver Lyon'",
+      "source": "Lyon People"
+    },
+    {
+      "nom": "Jean-Claude Hulot",
+      "commune": "Nantes",
+      "parti": "RN",
+      "role": "tete",
+      "detail": "Haut fonctionnaire, conseiller de Marine Le Pen",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Laure Lavalette",
+      "commune": "Toulon",
+      "parti": "RN",
+      "role": "tete",
+      "detail": "Députée RN. Liste sans étiquette mais soutenue RN. 30 colistiers non-RN sur 59.",
+      "source": "Var Matin"
+    },
+    {
+      "nom": "Virginie Bonthoux Tournay",
+      "commune": "Bordeaux",
+      "parti": "Reconquete",
+      "role": "tete",
+      "detail": "48 ans, ancienne LR, seule candidate de droite assumée",
+      "source": "CNews"
+    },
+    {
+      "nom": "Jean-Christophe Letierce",
+      "commune": "Troyes",
+      "parti": "Reconquete",
+      "role": "tete",
+      "detail": "Entrepreneur",
+      "source": "Reconquête"
+    },
+    {
+      "nom": "Freddy Roy",
+      "commune": "La Roche-sur-Yon",
+      "parti": "UDR",
+      "role": "tete",
+      "detail": "Soutenu par RN. Ancien conseiller du ministre Philippe Mestre",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Jean-Louis Geiger",
+      "commune": "Aix-en-Provence",
+      "parti": "RN",
+      "role": "tete",
+      "detail": "Ancien élu UDF/UMP/LR, désigné RN-UDR",
+      "source": "Made in Marseille"
+    },
+    {
+      "nom": "Philippe Schreck",
+      "commune": "Draguignan",
+      "parti": "RN",
+      "role": "tete",
+      "detail": "Liste RN-UDR",
+      "source": "Var Matin"
+    },
+    {
+      "nom": "Thierry Tesson",
+      "commune": "Douai",
+      "parti": "RN",
+      "role": "tete",
+      "detail": "Liste RN-UDR",
+      "source": "France Bleu"
+    },
+    {
+      "nom": "Guillaume Roit-Levêque",
+      "commune": "Annecy",
+      "parti": "RN",
+      "role": "tete",
+      "detail": "Liste 'Retrouvons Annecy'. Annoncé en septembre 2025",
+      "source": "Acteurs Annecy"
+    },
+    {
+      "nom": "Gérard Vienne",
+      "commune": "Vimoutiers",
+      "parti": "RN",
+      "role": "tete",
+      "detail": "72 ans. Première liste RN dans cette commune",
+      "source": "France Bleu"
+    }
+  ]
+}

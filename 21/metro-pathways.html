@@ -1,0 +1,2787 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metro Map - Trajectoires d'Adaptation | beta-traj</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Trajectory colors - Metro line style */
+            --line-maintain: #009B3A;      /* Green Line - Maintien */
+            --line-moderate: #FF6319;       /* Orange Line - Modéré */
+            --line-transform: #0039A6;      /* Blue Line - Transformation */
+            --line-priority: #996633;       /* Brown Line - Priorités */
+            --line-emergency: #EE352E;      /* Red Line - Urgence */
+
+            /* UI Colors */
+            --bg-dark: #1a1a2e;
+            --bg-panel: #16213e;
+            --bg-card: #1f3460;
+            --text-light: #eaeaea;
+            --text-muted: #8892a0;
+            --accent: #e94560;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-panel);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--accent);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--line-maintain), var(--line-transform));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .logo h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-light);
+        }
+
+        .btn-secondary:hover {
+            background: #2a4a7f;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 73px);
+        }
+
+        /* Side Panel */
+        .side-panel {
+            width: 320px;
+            background: var(--bg-panel);
+            padding: 1.5rem;
+            border-right: 1px solid rgba(255,255,255,0.1);
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .panel-section {
+            margin-bottom: 2rem;
+        }
+
+        .panel-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Metro Lines Legend */
+        .lines-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .line-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-card);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .line-item:hover {
+            transform: translateX(4px);
+        }
+
+        .line-item.active {
+            border-color: white;
+        }
+
+        .line-item.dimmed {
+            opacity: 0.4;
+        }
+
+        .line-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.875rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .line-info {
+            flex: 1;
+        }
+
+        .line-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .line-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.125rem;
+        }
+
+        /* Constraints */
+        .constraint-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .constraint-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.8125rem;
+        }
+
+        .constraint-value {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .constraint-slider {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-card);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .constraint-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        /* Metro Map Container */
+        .metro-container {
+            flex: 1;
+            padding: 2rem;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .metro-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .metro-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metro-header p {
+            color: var(--text-muted);
+        }
+
+        /* SVG Metro Map */
+        .metro-map-wrapper {
+            flex: 1;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .metro-svg {
+            width: 100%;
+            height: 100%;
+            min-height: 450px;
+        }
+
+        /* SVG Styles */
+        .metro-line {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.3s;
+        }
+
+        .metro-line.dimmed {
+            opacity: 0.2;
+        }
+
+        .metro-line.highlighted {
+            stroke-width: 12;
+            filter: drop-shadow(0 0 8px currentColor);
+        }
+
+        .station {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .station:hover {
+            transform: scale(1.2);
+        }
+
+        .station-circle {
+            fill: white;
+            stroke-width: 3;
+        }
+
+        .station-inner {
+            fill: currentColor;
+        }
+
+        .interchange {
+            cursor: pointer;
+        }
+
+        .interchange-outer {
+            fill: white;
+            stroke: #333;
+            stroke-width: 2;
+        }
+
+        .station-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            fill: var(--text-light);
+            font-weight: 500;
+        }
+
+        .year-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            fill: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .tipping-point {
+            cursor: pointer;
+        }
+
+        .tipping-marker {
+            fill: var(--line-emergency);
+            stroke: white;
+            stroke-width: 2;
+        }
+
+        /* Service Level Axis */
+        .service-axis text {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            fill: var(--text-muted);
+        }
+
+        .service-zone {
+            opacity: 0.1;
+        }
+
+        /* Info Panel */
+        .info-panel {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 280px;
+            background: var(--bg-panel);
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .info-panel.visible {
+            display: block;
+            animation: slideIn 0.2s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .info-panel-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .info-panel-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+        }
+
+        .info-panel-title {
+            font-weight: 600;
+        }
+
+        .info-panel-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .info-panel-body {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        .info-panel-close {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .info-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .info-stat {
+            background: var(--bg-card);
+            padding: 0.75rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .info-stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .info-stat-label {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Impact bars for actions */
+        .impact-bars {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .impact-bar-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .impact-bar-label {
+            width: 80px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .impact-bar-container {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .impact-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .impact-bar-fill.positive {
+            background: linear-gradient(90deg, #10b981, #22c55e);
+        }
+
+        .impact-bar-fill.negative {
+            background: linear-gradient(90deg, #ef4444, #f97316);
+        }
+
+        .impact-bar-value {
+            width: 35px;
+            text-align: right;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .impact-bar-value.positive { color: #22c55e; }
+        .impact-bar-value.negative { color: #f97316; }
+
+        /* Urgency indicators */
+        .urgency-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .urgency-badge.critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .urgency-badge.active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .urgency-badge.upcoming {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .urgency-badge.future {
+            background: rgba(100, 116, 139, 0.2);
+            color: #94a3b8;
+        }
+
+        /* Prerequisites and unlocks */
+        .action-links {
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .action-links-title {
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .action-link-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        .action-link-tag {
+            padding: 0.125rem 0.375rem;
+            background: var(--bg-card);
+            border-radius: 3px;
+            font-size: 0.6875rem;
+        }
+
+        /* Risk warning */
+        .risk-warning {
+            margin-top: 0.75rem;
+            padding: 0.5rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid #ef4444;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.75rem;
+            color: #fca5a5;
+        }
+
+        .risk-warning-title {
+            font-weight: 600;
+            color: #ef4444;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Action station styling */
+        .station-action {
+            cursor: pointer;
+        }
+
+        .station-action .station-ring {
+            fill: none;
+            stroke-width: 2;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .station-action:hover .station-ring {
+            opacity: 1;
+        }
+
+        .station-action.urgency-active .station-circle {
+            animation: pulse-active 2s infinite;
+        }
+
+        .station-action.urgency-critical .station-circle {
+            animation: pulse-critical 1s infinite;
+        }
+
+        @keyframes pulse-active {
+            0%, 100% { filter: drop-shadow(0 0 3px currentColor); }
+            50% { filter: drop-shadow(0 0 8px currentColor); }
+        }
+
+        @keyframes pulse-critical {
+            0%, 100% { filter: drop-shadow(0 0 5px #ef4444); }
+            50% { filter: drop-shadow(0 0 12px #ef4444); }
+        }
+
+        /* Zoom Controls */
+        .zoom-controls {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            z-index: 50;
+        }
+
+        .zoom-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-panel);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            color: var(--text-light);
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .zoom-btn:hover {
+            background: var(--bg-card);
+            border-color: var(--accent);
+        }
+
+        .zoom-btn:active {
+            transform: scale(0.95);
+        }
+
+        .zoom-level {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            padding: 0.25rem 0;
+        }
+
+        /* Zoomable SVG container */
+        .metro-svg-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            cursor: grab;
+            position: relative;
+        }
+
+        .metro-svg-container:active {
+            cursor: grabbing;
+        }
+
+        .metro-svg {
+            transform-origin: center center;
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Enhanced Impact Display */
+        .impact-section {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+
+        .impact-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .impact-card {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .impact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .impact-card.positive::before {
+            background: linear-gradient(90deg, #10b981, #22c55e);
+        }
+
+        .impact-card.negative::before {
+            background: linear-gradient(90deg, #ef4444, #f97316);
+        }
+
+        .impact-card.neutral::before {
+            background: var(--text-muted);
+        }
+
+        .impact-icon {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .impact-card-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .impact-card-value.positive { color: #22c55e; }
+        .impact-card-value.negative { color: #f97316; }
+        .impact-card-value.neutral { color: var(--text-muted); }
+
+        .impact-card-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* Full width impact for large values */
+        .impact-card.full-width {
+            grid-column: span 2;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+        }
+
+        .impact-card.full-width .impact-icon {
+            margin-bottom: 0;
+            margin-right: 0.5rem;
+        }
+
+        .impact-card.full-width .impact-card-label {
+            margin-top: 0;
+            flex: 1;
+        }
+
+        /* Effectiveness meter */
+        .effectiveness-meter {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-card);
+            border-radius: 8px;
+        }
+
+        .effectiveness-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .effectiveness-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .effectiveness-value {
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        .effectiveness-value.high { color: #22c55e; }
+        .effectiveness-value.medium { color: #f59e0b; }
+        .effectiveness-value.low { color: #ef4444; }
+
+        .effectiveness-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .effectiveness-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .effectiveness-fill.high { background: linear-gradient(90deg, #10b981, #22c55e); }
+        .effectiveness-fill.medium { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .effectiveness-fill.low { background: linear-gradient(90deg, #ef4444, #f97316); }
+
+        .effectiveness-hint {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        /* Info panel scrollable */
+        .info-panel {
+            max-height: calc(100% - 2rem);
+            overflow-y: auto;
+        }
+
+        /* Bottom Timeline */
+        .timeline-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 3rem;
+            margin-top: 1rem;
+        }
+
+        .timeline-point {
+            text-align: center;
+        }
+
+        .timeline-year {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .timeline-temp {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Right Summary Panel */
+        .summary-panel {
+            width: 300px;
+            background: var(--bg-panel);
+            padding: 1.5rem;
+            border-left: 1px solid rgba(255,255,255,0.1);
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .summary-card {
+            background: var(--bg-card);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .summary-card-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .summary-label {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        .trajectory-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .traj-compare-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+        }
+
+        .traj-compare-color {
+            width: 4px;
+            height: 40px;
+            border-radius: 2px;
+        }
+
+        .traj-compare-info {
+            flex: 1;
+        }
+
+        .traj-compare-name {
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+
+        .traj-compare-meta {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+        }
+
+        .traj-compare-score {
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .summary-panel {
+                display: none;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .side-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <a href="index.html" class="back-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </a>
+            <div class="logo">
+                <div class="logo-icon">M</div>
+                <div>
+                    <h1>Metro Map</h1>
+                    <span>Trajectoires d'Adaptation</span>
+                </div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <a href="pathways-builder.html" class="btn btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                Constructeur
+            </a>
+            <a href="trajectoires-adaptation.html" class="btn btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="3" y1="9" x2="21" y2="9"/>
+                    <line x1="9" y1="21" x2="9" y2="9"/>
+                </svg>
+                Vue détaillée
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Side Panel -->
+        <aside class="side-panel">
+            <!-- Metro Lines -->
+            <section class="panel-section">
+                <h3 class="panel-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="6" y1="3" x2="6" y2="15"/>
+                        <circle cx="18" cy="6" r="3"/>
+                        <circle cx="6" cy="18" r="3"/>
+                        <path d="M18 9a9 9 0 0 1-9 9"/>
+                    </svg>
+                    Lignes de trajectoire
+                </h3>
+                <div class="lines-legend">
+                    <div class="line-item active" data-line="M" onclick="toggleLine('M')">
+                        <div class="line-badge" style="background: var(--line-maintain)">M</div>
+                        <div class="line-info">
+                            <div class="line-name">Ligne Maintien</div>
+                            <div class="line-desc">Service actuel préservé</div>
+                        </div>
+                    </div>
+                    <div class="line-item active" data-line="D" onclick="toggleLine('D')">
+                        <div class="line-badge" style="background: var(--line-moderate)">D</div>
+                        <div class="line-info">
+                            <div class="line-name">Ligne Dégradation</div>
+                            <div class="line-desc">Acceptation ponctuelle</div>
+                        </div>
+                    </div>
+                    <div class="line-item active" data-line="T" onclick="toggleLine('T')">
+                        <div class="line-badge" style="background: var(--line-transform)">T</div>
+                        <div class="line-info">
+                            <div class="line-name">Ligne Transformation</div>
+                            <div class="line-desc">Adaptation profonde</div>
+                        </div>
+                    </div>
+                    <div class="line-item active" data-line="P" onclick="toggleLine('P')">
+                        <div class="line-badge" style="background: var(--line-priority)">P</div>
+                        <div class="line-info">
+                            <div class="line-name">Ligne Priorités</div>
+                            <div class="line-desc">Services essentiels</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Scenario -->
+            <section class="panel-section">
+                <h3 class="panel-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    Paramètres
+                </h3>
+                <div class="constraint-group">
+                    <div class="constraint-label">
+                        <span>Scénario climatique</span>
+                        <span class="constraint-value" id="climate-value">+2.7°C</span>
+                    </div>
+                    <input type="range" class="constraint-slider" id="climate-slider"
+                           min="1.5" max="4" step="0.1" value="2.7"
+                           oninput="updateClimate(this.value)">
+                </div>
+                <div class="constraint-group">
+                    <div class="constraint-label">
+                        <span>Budget disponible</span>
+                        <span class="constraint-value" id="budget-value">2.5 Mds€</span>
+                    </div>
+                    <input type="range" class="constraint-slider" id="budget-slider"
+                           min="0.5" max="5" step="0.1" value="2.5"
+                           oninput="updateBudget(this.value)">
+                </div>
+                <div class="constraint-group">
+                    <div class="constraint-label">
+                        <span>Horizon cible</span>
+                        <span class="constraint-value" id="horizon-value">2050</span>
+                    </div>
+                    <input type="range" class="constraint-slider" id="horizon-slider"
+                           min="2030" max="2100" step="5" value="2050"
+                           oninput="updateHorizon(this.value)">
+                </div>
+            </section>
+
+            <!-- Decision Points -->
+            <section class="panel-section">
+                <h3 class="panel-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Points de décision
+                </h3>
+                <div class="lines-legend">
+                    <div class="line-item" onclick="focusDecision(2030)" style="cursor: pointer;">
+                        <div class="line-badge" style="background: var(--bg-card); border: 2px solid var(--text-muted);">30</div>
+                        <div class="line-info">
+                            <div class="line-name">2030 - Premier bilan</div>
+                            <div class="line-desc">Évaluation & ajustements</div>
+                        </div>
+                    </div>
+                    <div class="line-item" onclick="focusDecision(2050)" style="cursor: pointer;">
+                        <div class="line-badge" style="background: var(--accent);">50</div>
+                        <div class="line-info">
+                            <div class="line-name">2050 - Point critique</div>
+                            <div class="line-desc">Révision majeure</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </aside>
+
+        <!-- Metro Map -->
+        <main class="metro-container">
+            <div class="metro-header">
+                <h2>Carte des Trajectoires d'Adaptation</h2>
+                <p>Cliquez sur les stations pour explorer les options. Les correspondances permettent de changer de trajectoire.</p>
+            </div>
+
+            <div class="metro-map-wrapper">
+                <!-- Zoom Controls -->
+                <div class="zoom-controls">
+                    <button class="zoom-btn" onclick="zoomIn()" title="Zoom +">+</button>
+                    <div class="zoom-level" id="zoom-level">100%</div>
+                    <button class="zoom-btn" onclick="zoomOut()" title="Zoom -">−</button>
+                    <button class="zoom-btn" onclick="resetZoom()" title="Reset" style="font-size: 0.75rem; margin-top: 0.25rem;">⟲</button>
+                </div>
+
+                <div class="metro-svg-container" id="svg-container">
+                <svg class="metro-svg" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet" id="metro-svg">
+                    <!-- Definitions -->
+                    <defs>
+                        <!-- Glow filter -->
+                        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                        <!-- Station marker -->
+                        <symbol id="station-marker" viewBox="0 0 20 20">
+                            <circle cx="10" cy="10" r="8" fill="white" stroke="currentColor" stroke-width="3"/>
+                        </symbol>
+                        <!-- Interchange marker -->
+                        <symbol id="interchange-marker" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" fill="white" stroke="#333" stroke-width="2"/>
+                            <circle cx="12" cy="12" r="4" fill="#333"/>
+                        </symbol>
+                    </defs>
+
+                    <!-- Service Level Zones (background) -->
+                    <g class="service-zones">
+                        <rect x="80" y="30" width="870" height="70" fill="#10b981" class="service-zone"/>
+                        <rect x="80" y="100" width="870" height="70" fill="#22c55e" class="service-zone"/>
+                        <rect x="80" y="170" width="870" height="70" fill="#f59e0b" class="service-zone"/>
+                        <rect x="80" y="240" width="870" height="70" fill="#f97316" class="service-zone"/>
+                        <rect x="80" y="310" width="870" height="60" fill="#ef4444" class="service-zone"/>
+                    </g>
+
+                    <!-- Service Level Labels -->
+                    <g class="service-axis">
+                        <text x="70" y="70" text-anchor="end" class="year-label" style="font-size: 9px;">Optimal</text>
+                        <text x="70" y="140" text-anchor="end" class="year-label" style="font-size: 9px;">Bon</text>
+                        <text x="70" y="210" text-anchor="end" class="year-label" style="font-size: 9px;">Dégradé</text>
+                        <text x="70" y="280" text-anchor="end" class="year-label" style="font-size: 9px;">Critique</text>
+                        <text x="70" y="345" text-anchor="end" class="year-label" style="font-size: 9px;">Défaillant</text>
+                    </g>
+
+                    <!-- Year Markers -->
+                    <g class="time-markers">
+                        <line x1="120" y1="25" x2="120" y2="375" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                        <line x1="280" y1="25" x2="280" y2="375" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="5,5"/>
+                        <line x1="520" y1="25" x2="520" y2="375" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="5,5"/>
+                        <line x1="760" y1="25" x2="760" y2="375" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                        <line x1="920" y1="25" x2="920" y2="375" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+
+                        <text x="120" y="390" class="year-label" text-anchor="middle">2025</text>
+                        <text x="280" y="390" class="year-label" text-anchor="middle">2030</text>
+                        <text x="520" y="390" class="year-label" text-anchor="middle">2050</text>
+                        <text x="760" y="390" class="year-label" text-anchor="middle">2075</text>
+                        <text x="920" y="390" class="year-label" text-anchor="middle">2100</text>
+                    </g>
+
+                    <!-- METRO LINES -->
+
+                    <!-- LINE M: Maintien (Green) -->
+                    <g id="line-M" class="metro-line-group">
+                        <path class="metro-line" id="path-M"
+                              d="M 120,65
+                                 C 180,65 220,70 280,80
+                                 C 350,95 450,130 520,180
+                                 C 600,240 680,300 720,330"
+                              stroke="var(--line-maintain)" />
+                        <!-- Tipping point marker -->
+                        <g class="tipping-point" transform="translate(720, 330)" onclick="showInfo('tipping-M')">
+                            <polygon class="tipping-marker" points="0,-15 12,10 -12,10"/>
+                            <text y="30" text-anchor="middle" class="station-label" style="fill: var(--line-emergency);">Inviable</text>
+                        </g>
+                    </g>
+
+                    <!-- LINE D: Dégradation modérée (Orange) -->
+                    <g id="line-D" class="metro-line-group">
+                        <path class="metro-line" id="path-D"
+                              d="M 120,65
+                                 C 180,65 220,70 280,80
+                                 L 280,80
+                                 C 350,100 420,140 520,170
+                                 C 620,200 720,220 800,235
+                                 C 860,245 900,250 920,255"
+                              stroke="var(--line-moderate)" />
+                    </g>
+
+                    <!-- LINE T: Transformation (Blue) -->
+                    <g id="line-T" class="metro-line-group">
+                        <path class="metro-line" id="path-T"
+                              d="M 120,65
+                                 C 180,65 220,70 280,80
+                                 L 280,80
+                                 C 350,110 420,160 520,200
+                                 C 620,240 720,270 800,285
+                                 C 860,295 900,300 920,305"
+                              stroke="var(--line-transform)" />
+                    </g>
+
+                    <!-- LINE P: Priorités (Brown) - branches from T at 2050 -->
+                    <g id="line-P" class="metro-line-group">
+                        <path class="metro-line" id="path-P"
+                              d="M 520,200
+                                 C 580,170 640,140 720,120
+                                 C 800,100 870,90 920,85"
+                              stroke="var(--line-priority)" stroke-dasharray="12,6"/>
+                        <text x="750" y="105" class="station-label" style="font-size: 10px;">Services prioritaires maintenus</text>
+                    </g>
+
+                    <!-- STATIONS & INTERCHANGES -->
+
+                    <!-- Origin Station (All lines) -->
+                    <g class="interchange" transform="translate(120, 65)" onclick="showInfo('origin')">
+                        <circle r="14" class="interchange-outer"/>
+                        <circle r="6" fill="#333"/>
+                        <text y="-22" text-anchor="middle" class="station-label" style="font-weight: 600;">Situation actuelle</text>
+                        <text y="-10" text-anchor="middle" class="station-label" style="font-size: 9px;">2025</text>
+                    </g>
+
+                    <!-- 2030 Interchange -->
+                    <g class="interchange" transform="translate(280, 80)" onclick="showInfo('2030')">
+                        <circle r="14" class="interchange-outer"/>
+                        <circle r="6" fill="#333"/>
+                        <text y="-22" text-anchor="middle" class="station-label" style="font-weight: 600;">Premier bilan</text>
+                        <text y="30" text-anchor="middle" class="station-label" style="font-size: 9px; fill: var(--text-muted);">Bifurcation possible</text>
+                    </g>
+
+                    <!-- 2050 Interchange (Critical) -->
+                    <g class="interchange" transform="translate(520, 185)" onclick="showInfo('2050')">
+                        <circle r="16" stroke="var(--accent)" stroke-width="3" class="interchange-outer"/>
+                        <circle r="6" fill="var(--accent)"/>
+                        <text y="-25" text-anchor="middle" class="station-label" style="font-weight: 700; fill: var(--accent);">Point critique</text>
+                        <text y="35" text-anchor="middle" class="station-label" style="font-size: 9px;">Choix priorités</text>
+                    </g>
+
+                    <!-- Action Stations Container (generated dynamically) -->
+                    <g id="action-stations-container">
+                        <!-- Will be populated by JavaScript -->
+                    </g>
+
+                    <!-- Current position indicator -->
+                    <g class="current-marker" transform="translate(120, 65)">
+                        <circle r="20" fill="none" stroke="white" stroke-width="2" opacity="0.5">
+                            <animate attributeName="r" values="14;22;14" dur="2s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                    </g>
+                </svg>
+                </div><!-- /metro-svg-container -->
+
+                <!-- Info Panel (enhanced for actions) -->
+                <div class="info-panel" id="info-panel">
+                    <button class="info-panel-close" onclick="hideInfo()">&times;</button>
+                    <div id="info-urgency-badge"></div>
+                    <div class="info-panel-header">
+                        <div class="info-panel-badge" id="info-badge">M</div>
+                        <div>
+                            <div class="info-panel-title" id="info-title">Station</div>
+                            <div class="info-panel-subtitle" id="info-subtitle">Description</div>
+                        </div>
+                    </div>
+                    <div class="info-panel-body" id="info-body">
+                        Contenu de l'information
+                    </div>
+                    <div class="impact-bars" id="info-impacts">
+                        <!-- Impact bars generated dynamically -->
+                    </div>
+                    <div class="info-stats" id="info-stats">
+                        <!-- Dynamic stats -->
+                    </div>
+                    <div id="info-links">
+                        <!-- Prerequisites and unlocks -->
+                    </div>
+                    <div id="info-risk">
+                        <!-- Risk warning -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Bar -->
+            <div class="timeline-bar">
+                <div class="timeline-point">
+                    <div class="timeline-year">2025</div>
+                    <div class="timeline-temp">Actuel</div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-year">2030</div>
+                    <div class="timeline-temp">+2°C</div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-year">2050</div>
+                    <div class="timeline-temp">+2.7°C</div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-year">2075</div>
+                    <div class="timeline-temp">+3.5°C</div>
+                </div>
+                <div class="timeline-point">
+                    <div class="timeline-year">2100</div>
+                    <div class="timeline-temp">+4°C</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Summary Panel -->
+        <aside class="summary-panel">
+            <section class="panel-section">
+                <h3 class="panel-title">Résumé</h3>
+                <div class="summary-card">
+                    <div class="summary-card-title">Trajectoire recommandée</div>
+                    <div class="summary-value" style="color: var(--line-moderate);">D</div>
+                    <div class="summary-label">Dégradation modérée</div>
+                </div>
+            </section>
+
+            <section class="panel-section">
+                <h3 class="panel-title">Comparaison</h3>
+                <div class="trajectory-comparison">
+                    <div class="traj-compare-item">
+                        <div class="traj-compare-color" style="background: var(--line-maintain);"></div>
+                        <div class="traj-compare-info">
+                            <div class="traj-compare-name">Maintien</div>
+                            <div class="traj-compare-meta">Viable jusqu'en ~2050</div>
+                        </div>
+                        <div class="traj-compare-score">45</div>
+                    </div>
+                    <div class="traj-compare-item" style="background: rgba(255,99,25,0.1);">
+                        <div class="traj-compare-color" style="background: var(--line-moderate);"></div>
+                        <div class="traj-compare-info">
+                            <div class="traj-compare-name">Dégradation</div>
+                            <div class="traj-compare-meta">Viable 2100</div>
+                        </div>
+                        <div class="traj-compare-score" style="color: var(--line-moderate);">72</div>
+                    </div>
+                    <div class="traj-compare-item">
+                        <div class="traj-compare-color" style="background: var(--line-transform);"></div>
+                        <div class="traj-compare-info">
+                            <div class="traj-compare-name">Transformation</div>
+                            <div class="traj-compare-meta">Robuste</div>
+                        </div>
+                        <div class="traj-compare-score">68</div>
+                    </div>
+                    <div class="traj-compare-item">
+                        <div class="traj-compare-color" style="background: var(--line-priority);"></div>
+                        <div class="traj-compare-info">
+                            <div class="traj-compare-name">Priorités</div>
+                            <div class="traj-compare-meta">Services essentiels</div>
+                        </div>
+                        <div class="traj-compare-score">75</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel-section">
+                <h3 class="panel-title">Légende</h3>
+                <div class="lines-legend" style="font-size: 0.75rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <svg width="24" height="24"><circle cx="12" cy="12" r="8" fill="white" stroke="#333" stroke-width="2"/></svg>
+                        <span>Station / Action</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <svg width="24" height="24"><circle cx="12" cy="12" r="10" fill="white" stroke="#333" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="#333"/></svg>
+                        <span>Correspondance</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <svg width="24" height="24"><polygon points="12,4 20,20 4,20" fill="var(--line-emergency)" stroke="white" stroke-width="2"/></svg>
+                        <span>Tipping point</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg width="24" height="4"><line x1="0" y1="2" x2="24" y2="2" stroke="var(--line-priority)" stroke-width="4" stroke-dasharray="6,3"/></svg>
+                        <span>Branche optionnelle</span>
+                    </div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <script>
+        // State
+        let state = {
+            activeLines: ['M', 'D', 'T', 'P'],
+            climate: 2.7,
+            budget: 2.5,
+            horizon: 2050,
+            zoom: 1,
+            panX: 0,
+            panY: 0,
+            isPanning: false,
+            startX: 0,
+            startY: 0
+        };
+
+        // ============================================================
+        // ZOOM & PAN FUNCTIONS
+        // ============================================================
+        function zoomIn() {
+            state.zoom = Math.min(3, state.zoom + 0.25);
+            updateZoom();
+        }
+
+        function zoomOut() {
+            state.zoom = Math.max(0.5, state.zoom - 0.25);
+            updateZoom();
+        }
+
+        function resetZoom() {
+            state.zoom = 1;
+            state.panX = 0;
+            state.panY = 0;
+            updateZoom();
+        }
+
+        function updateZoom() {
+            const svg = document.getElementById('metro-svg');
+            svg.style.transform = `scale(${state.zoom}) translate(${state.panX}px, ${state.panY}px)`;
+            document.getElementById('zoom-level').textContent = `${Math.round(state.zoom * 100)}%`;
+        }
+
+        function initZoomPan() {
+            const container = document.getElementById('svg-container');
+            const svg = document.getElementById('metro-svg');
+
+            // Mouse wheel zoom
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                state.zoom = Math.max(0.5, Math.min(3, state.zoom + delta));
+                updateZoom();
+            }, { passive: false });
+
+            // Pan with mouse drag
+            container.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.station, .interchange, .tipping-point')) return;
+                state.isPanning = true;
+                state.startX = e.clientX - state.panX;
+                state.startY = e.clientY - state.panY;
+                container.style.cursor = 'grabbing';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!state.isPanning) return;
+                state.panX = (e.clientX - state.startX) / state.zoom;
+                state.panY = (e.clientY - state.startY) / state.zoom;
+                updateZoom();
+            });
+
+            document.addEventListener('mouseup', () => {
+                state.isPanning = false;
+                const container = document.getElementById('svg-container');
+                if (container) container.style.cursor = 'grab';
+            });
+
+            // Touch support
+            container.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    state.isPanning = true;
+                    state.startX = e.touches[0].clientX - state.panX;
+                    state.startY = e.touches[0].clientY - state.panY;
+                }
+            }, { passive: true });
+
+            container.addEventListener('touchmove', (e) => {
+                if (!state.isPanning || e.touches.length !== 1) return;
+                state.panX = (e.touches[0].clientX - state.startX) / state.zoom;
+                state.panY = (e.touches[0].clientY - state.startY) / state.zoom;
+                updateZoom();
+            }, { passive: true });
+
+            container.addEventListener('touchend', () => {
+                state.isPanning = false;
+            });
+
+            // Double-click to zoom
+            container.addEventListener('dblclick', (e) => {
+                if (e.target.closest('.station, .interchange, .tipping-point')) return;
+                if (state.zoom < 2) {
+                    state.zoom = 2;
+                } else {
+                    state.zoom = 1;
+                    state.panX = 0;
+                    state.panY = 0;
+                }
+                updateZoom();
+            });
+        }
+
+        // Configuration des trajectoires avec leurs caractéristiques
+        const trajectoryConfig = {
+            M: {
+                name: 'Maintien',
+                color: 'var(--line-maintain)',
+                // Tipping point: année de base où la trajectoire devient inviable
+                baseTippingYear: 2065,
+                // Sensibilité au climat (plus c'est sensible, plus le tipping point avance vite)
+                climateSensitivity: 25, // années perdues par °C au-dessus de 2°C
+                // Coût total en Mds€
+                totalCost: 4.5,
+                // Coût minimal pour viabilité partielle
+                minCost: 3.0,
+                // Score de base sans contraintes
+                baseScore: 85,
+                // Pénalités
+                climatePenalty: 15, // par °C au-dessus de 2°C
+                budgetPenalty: 10,  // si budget < minCost
+                horizonBonus: 10    // si horizon < tipping point
+            },
+            D: {
+                name: 'Dégradation',
+                color: 'var(--line-moderate)',
+                baseTippingYear: 2100, // Pas de vrai tipping point (robuste)
+                climateSensitivity: 8,
+                totalCost: 1.8,
+                minCost: 1.0,
+                baseScore: 75,
+                climatePenalty: 5,
+                budgetPenalty: 5,
+                horizonBonus: 5
+            },
+            T: {
+                name: 'Transformation',
+                color: 'var(--line-transform)',
+                baseTippingYear: 2110, // Très robuste
+                climateSensitivity: 5,
+                totalCost: 2.8,
+                minCost: 1.5,
+                baseScore: 70,
+                climatePenalty: 3,
+                budgetPenalty: 8,
+                horizonBonus: 8
+            },
+            P: {
+                name: 'Priorités',
+                color: 'var(--line-priority)',
+                baseTippingYear: 2120, // Le plus robuste
+                climateSensitivity: 2,
+                totalCost: 2.0,
+                minCost: 0.8,
+                baseScore: 65,
+                climatePenalty: 2,
+                budgetPenalty: 3,
+                horizonBonus: 12
+            }
+        };
+
+        // Calcul du tipping point ajusté selon le scénario climatique
+        function calculateTippingPoint(trajectoryId) {
+            const config = trajectoryConfig[trajectoryId];
+            const climateExcess = Math.max(0, state.climate - 2.0);
+            const yearsLost = climateExcess * config.climateSensitivity;
+            return Math.max(2030, config.baseTippingYear - yearsLost);
+        }
+
+        // Calcul du score d'une trajectoire selon les contraintes
+        function calculateScore(trajectoryId) {
+            const config = trajectoryConfig[trajectoryId];
+            let score = config.baseScore;
+
+            // Pénalité climat
+            const climateExcess = Math.max(0, state.climate - 2.0);
+            score -= climateExcess * config.climatePenalty;
+
+            // Pénalité budget
+            if (state.budget < config.minCost) {
+                score -= config.budgetPenalty * 2; // Inviable économiquement
+            } else if (state.budget < config.totalCost) {
+                score -= config.budgetPenalty * ((config.totalCost - state.budget) / config.totalCost);
+            }
+
+            // Bonus/malus horizon
+            const tippingYear = calculateTippingPoint(trajectoryId);
+            if (state.horizon > tippingYear) {
+                score -= 30; // Grosse pénalité si horizon dépasse tipping point
+            } else if (state.horizon < tippingYear - 20) {
+                score += config.horizonBonus; // Bonus si bien en avance
+            }
+
+            return Math.max(0, Math.min(100, Math.round(score)));
+        }
+
+        // Vérifier si une trajectoire est viable
+        function isViable(trajectoryId) {
+            const config = trajectoryConfig[trajectoryId];
+            const tippingYear = calculateTippingPoint(trajectoryId);
+
+            // Non viable si: pas assez de budget OU horizon dépasse tipping point
+            if (state.budget < config.minCost) return false;
+            if (state.horizon > tippingYear) return false;
+
+            return true;
+        }
+
+        // Déterminer la trajectoire recommandée
+        function getRecommendedTrajectory() {
+            let bestTrajectory = null;
+            let bestScore = -1;
+
+            ['M', 'D', 'T', 'P'].forEach(id => {
+                if (isViable(id)) {
+                    const score = calculateScore(id);
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestTrajectory = id;
+                    }
+                }
+            });
+
+            return bestTrajectory || 'P'; // P par défaut (le plus résilient)
+        }
+
+        // ============================================================
+        // BASE DE DONNÉES DES ACTIONS CONCRÈTES
+        // ============================================================
+        const actionsDB = {
+            // === LIGNE M - MAINTIEN ===
+            'M1': {
+                id: 'M1',
+                line: 'M',
+                name: 'Diagnostic vulnérabilité',
+                description: 'Audit complet des infrastructures et identification des points de vulnérabilité climatique.',
+                year: 2026,
+                optimalPeriod: { start: 2025, end: 2028 },
+                cost: 15, // M€
+                duration: 2, // années
+                // Indicateurs d'impact (0-100)
+                impacts: {
+                    serviceLevel: 5,      // Maintien du niveau de service
+                    resilience: 15,       // Capacité à résister aux chocs
+                    environmental: 0,     // Impact environnemental
+                    social: 5,            // Acceptabilité sociale
+                    economic: -2          // Coût/bénéfice économique (négatif = coût)
+                },
+                // Dégradation de l'efficacité si retardé (% perdu par an de retard)
+                delayPenalty: 8,
+                // Prérequis (autres actions)
+                requires: [],
+                // Actions débloquées
+                unlocks: ['M2', 'M3'],
+                // Risques si non fait
+                riskIfSkipped: 'Investissements mal ciblés, inefficacité des actions suivantes'
+            },
+            'M2': {
+                id: 'M2',
+                line: 'M',
+                name: 'Renforcement réseaux',
+                description: 'Renforcement des réseaux d\'eau, électricité et assainissement contre les événements extrêmes.',
+                year: 2028,
+                optimalPeriod: { start: 2027, end: 2032 },
+                cost: 280,
+                duration: 5,
+                impacts: {
+                    serviceLevel: 25,
+                    resilience: 30,
+                    environmental: -5,
+                    social: 10,
+                    economic: -15
+                },
+                delayPenalty: 12,
+                requires: ['M1'],
+                unlocks: ['M4'],
+                riskIfSkipped: 'Ruptures de service lors des canicules et inondations'
+            },
+            'M3': {
+                id: 'M3',
+                line: 'M',
+                name: 'Climatisation bâtiments publics',
+                description: 'Installation de systèmes de refroidissement dans les écoles, EHPAD et équipements publics.',
+                year: 2029,
+                optimalPeriod: { start: 2027, end: 2033 },
+                cost: 120,
+                duration: 4,
+                impacts: {
+                    serviceLevel: 20,
+                    resilience: 10,
+                    environmental: -15,
+                    social: 25,
+                    economic: -10
+                },
+                delayPenalty: 15,
+                requires: ['M1'],
+                unlocks: [],
+                riskIfSkipped: 'Surmortalité lors des canicules, fermetures d\'équipements'
+            },
+            'M4': {
+                id: 'M4',
+                line: 'M',
+                name: 'Redondance systèmes critiques',
+                description: 'Doublement des alimentations et systèmes de secours pour hôpitaux et services essentiels.',
+                year: 2035,
+                optimalPeriod: { start: 2032, end: 2040 },
+                cost: 350,
+                duration: 6,
+                impacts: {
+                    serviceLevel: 30,
+                    resilience: 40,
+                    environmental: -8,
+                    social: 15,
+                    economic: -20
+                },
+                delayPenalty: 10,
+                requires: ['M2'],
+                unlocks: [],
+                riskIfSkipped: 'Défaillances en cascade lors d\'événements majeurs'
+            },
+
+            // === LIGNE D - DÉGRADATION ACCEPTÉE ===
+            'D1': {
+                id: 'D1',
+                line: 'D',
+                name: 'Plans de continuité',
+                description: 'Élaboration de protocoles de fonctionnement dégradé pour chaque service public.',
+                year: 2027,
+                optimalPeriod: { start: 2025, end: 2030 },
+                cost: 8,
+                duration: 2,
+                impacts: {
+                    serviceLevel: -5,     // Accepte une légère baisse
+                    resilience: 20,
+                    environmental: 0,
+                    social: -10,          // Difficile à accepter au début
+                    economic: 10          // Économies par rapport au maintien
+                },
+                delayPenalty: 5,
+                requires: [],
+                unlocks: ['D2', 'D3'],
+                riskIfSkipped: 'Gestion de crise improvisée, chaos organisationnel'
+            },
+            'D2': {
+                id: 'D2',
+                line: 'D',
+                name: 'Communication citoyenne',
+                description: 'Campagne de sensibilisation et préparation des citoyens aux épisodes de dégradation.',
+                year: 2028,
+                optimalPeriod: { start: 2026, end: 2032 },
+                cost: 12,
+                duration: 3,
+                impacts: {
+                    serviceLevel: 0,
+                    resilience: 15,
+                    environmental: 5,
+                    social: 30,           // Meilleure acceptation
+                    economic: 5
+                },
+                delayPenalty: 3,
+                requires: ['D1'],
+                unlocks: ['D4'],
+                riskIfSkipped: 'Rejet politique des mesures, tensions sociales'
+            },
+            'D3': {
+                id: 'D3',
+                line: 'D',
+                name: 'Systèmes d\'alerte',
+                description: 'Mise en place d\'alertes précoces et systèmes de prévision pour anticiper les dégradations.',
+                year: 2030,
+                optimalPeriod: { start: 2028, end: 2035 },
+                cost: 25,
+                duration: 3,
+                impacts: {
+                    serviceLevel: 5,
+                    resilience: 25,
+                    environmental: 0,
+                    social: 15,
+                    economic: 8
+                },
+                delayPenalty: 7,
+                requires: ['D1'],
+                unlocks: ['D4'],
+                riskIfSkipped: 'Dégradations subies sans préparation'
+            },
+            'D4': {
+                id: 'D4',
+                line: 'D',
+                name: 'Ajustements saisonniers',
+                description: 'Adaptation des horaires et services selon les saisons (fermetures estivales, horaires décalés).',
+                year: 2035,
+                optimalPeriod: { start: 2032, end: 2045 },
+                cost: 20,
+                duration: 4,
+                impacts: {
+                    serviceLevel: -10,
+                    resilience: 30,
+                    environmental: 15,
+                    social: 5,
+                    economic: 20
+                },
+                delayPenalty: 4,
+                requires: ['D2', 'D3'],
+                unlocks: [],
+                riskIfSkipped: 'Épuisement des ressources et du personnel'
+            },
+
+            // === LIGNE T - TRANSFORMATION ===
+            'T1': {
+                id: 'T1',
+                line: 'T',
+                name: 'Révision PLU climat',
+                description: 'Intégration de critères climatiques stricts dans le Plan Local d\'Urbanisme.',
+                year: 2027,
+                optimalPeriod: { start: 2025, end: 2030 },
+                cost: 5,
+                duration: 2,
+                impacts: {
+                    serviceLevel: 0,
+                    resilience: 10,
+                    environmental: 20,
+                    social: -5,
+                    economic: 0
+                },
+                delayPenalty: 15,         // Très pénalisant car verrouille les choix
+                requires: [],
+                unlocks: ['T2', 'T3'],
+                riskIfSkipped: 'Construction de vulnérabilités futures, maladaptation'
+            },
+            'T2': {
+                id: 'T2',
+                line: 'T',
+                name: 'Désimperméabilisation',
+                description: 'Programme massif de désimperméabilisation des sols et création d\'espaces verts.',
+                year: 2030,
+                optimalPeriod: { start: 2028, end: 2040 },
+                cost: 150,
+                duration: 10,
+                impacts: {
+                    serviceLevel: 5,
+                    resilience: 35,
+                    environmental: 45,
+                    social: 20,
+                    economic: -5
+                },
+                delayPenalty: 8,
+                requires: ['T1'],
+                unlocks: ['T4'],
+                riskIfSkipped: 'Îlots de chaleur, inondations urbaines'
+            },
+            'T3': {
+                id: 'T3',
+                line: 'T',
+                name: 'Relocalisation services',
+                description: 'Déplacement progressif des services des zones à risque vers des zones sécurisées.',
+                year: 2032,
+                optimalPeriod: { start: 2030, end: 2045 },
+                cost: 200,
+                duration: 15,
+                impacts: {
+                    serviceLevel: -5,
+                    resilience: 40,
+                    environmental: 10,
+                    social: -15,
+                    economic: -10
+                },
+                delayPenalty: 6,
+                requires: ['T1'],
+                unlocks: ['T4'],
+                riskIfSkipped: 'Services exposés aux risques croissants'
+            },
+            'T4': {
+                id: 'T4',
+                line: 'T',
+                name: 'Économie circulaire locale',
+                description: 'Développement de circuits courts et autonomie territoriale pour les ressources essentielles.',
+                year: 2040,
+                optimalPeriod: { start: 2035, end: 2055 },
+                cost: 80,
+                duration: 15,
+                impacts: {
+                    serviceLevel: 10,
+                    resilience: 50,
+                    environmental: 40,
+                    social: 25,
+                    economic: 15
+                },
+                delayPenalty: 3,
+                requires: ['T2', 'T3'],
+                unlocks: [],
+                riskIfSkipped: 'Dépendance aux approvisionnements extérieurs vulnérables'
+            },
+
+            // === LIGNE P - PRIORISATION ===
+            'P1': {
+                id: 'P1',
+                line: 'P',
+                name: 'Définition priorités',
+                description: 'Processus participatif pour définir les services essentiels à maintenir en priorité.',
+                year: 2028,
+                optimalPeriod: { start: 2025, end: 2035 },
+                cost: 3,
+                duration: 2,
+                impacts: {
+                    serviceLevel: -15,    // Accepte abandon de certains services
+                    resilience: 10,
+                    environmental: 5,
+                    social: -20,          // Choix difficiles
+                    economic: 15
+                },
+                delayPenalty: 2,
+                requires: [],
+                unlocks: ['P2', 'P3'],
+                riskIfSkipped: 'Décisions arbitraires en urgence, conflits'
+            },
+            'P2': {
+                id: 'P2',
+                line: 'P',
+                name: 'Sanctuarisation santé',
+                description: 'Protection maximale des services de santé avec ressources dédiées et autonomes.',
+                year: 2035,
+                optimalPeriod: { start: 2030, end: 2050 },
+                cost: 180,
+                duration: 10,
+                impacts: {
+                    serviceLevel: 15,     // Santé à 100%
+                    resilience: 45,
+                    environmental: -5,
+                    social: 35,
+                    economic: -5
+                },
+                delayPenalty: 10,
+                requires: ['P1'],
+                unlocks: ['P4'],
+                riskIfSkipped: 'Système de santé défaillant lors des crises'
+            },
+            'P3': {
+                id: 'P3',
+                line: 'P',
+                name: 'Éducation adaptative',
+                description: 'Transformation du système éducatif avec flexibilité calendaire et lieux alternatifs.',
+                year: 2038,
+                optimalPeriod: { start: 2032, end: 2050 },
+                cost: 60,
+                duration: 8,
+                impacts: {
+                    serviceLevel: 5,
+                    resilience: 30,
+                    environmental: 10,
+                    social: 20,
+                    economic: 5
+                },
+                delayPenalty: 5,
+                requires: ['P1'],
+                unlocks: ['P4'],
+                riskIfSkipped: 'Discontinuité éducative, inégalités accrues'
+            },
+            'P4': {
+                id: 'P4',
+                line: 'P',
+                name: 'Solidarité renforcée',
+                description: 'Réseau d\'entraide et filets de sécurité pour les populations vulnérables.',
+                year: 2045,
+                optimalPeriod: { start: 2040, end: 2060 },
+                cost: 40,
+                duration: 10,
+                impacts: {
+                    serviceLevel: 0,
+                    resilience: 35,
+                    environmental: 5,
+                    social: 45,
+                    economic: 10
+                },
+                delayPenalty: 4,
+                requires: ['P2', 'P3'],
+                unlocks: [],
+                riskIfSkipped: 'Fractures sociales, populations abandonnées'
+            }
+        };
+
+        // Calculer l'efficacité d'une action selon l'année d'implémentation
+        function calculateActionEffectiveness(actionId, implementationYear) {
+            const action = actionsDB[actionId];
+            if (!action) return 0;
+
+            const { optimalPeriod, delayPenalty } = action;
+
+            // Dans la période optimale = 100%
+            if (implementationYear >= optimalPeriod.start && implementationYear <= optimalPeriod.end) {
+                return 100;
+            }
+
+            // Trop tôt (rare mais possible) = 90%
+            if (implementationYear < optimalPeriod.start) {
+                return 90;
+            }
+
+            // En retard = pénalité croissante
+            const yearsLate = implementationYear - optimalPeriod.end;
+            const effectiveness = Math.max(0, 100 - (yearsLate * delayPenalty));
+            return effectiveness;
+        }
+
+        // Obtenir le statut d'urgence d'une action
+        function getActionUrgency(actionId) {
+            const action = actionsDB[actionId];
+            if (!action) return 'unknown';
+
+            const currentYear = 2025;
+            const { optimalPeriod } = action;
+
+            if (currentYear > optimalPeriod.end) {
+                return 'critical';  // En retard
+            } else if (currentYear >= optimalPeriod.start) {
+                return 'active';    // À faire maintenant
+            } else if (optimalPeriod.start - currentYear <= 3) {
+                return 'upcoming';  // À préparer
+            }
+            return 'future';        // Plus tard
+        }
+
+        // Générer les infos dynamiques d'une action
+        function generateActionInfo(actionId) {
+            const action = actionsDB[actionId];
+            if (!action) return null;
+
+            const config = trajectoryConfig[action.line];
+            const effectiveness = calculateActionEffectiveness(actionId, 2025);
+            const urgency = getActionUrgency(actionId);
+
+            // Calculer l'impact total pondéré
+            const totalImpact = Object.values(action.impacts).reduce((sum, v) => sum + v, 0);
+
+            return {
+                badge: action.line,
+                badgeColor: config.color,
+                title: action.name,
+                subtitle: `${action.year} • ${action.cost} M€ • ${action.duration} ans`,
+                body: action.description,
+                impacts: action.impacts,
+                effectiveness,
+                urgency,
+                optimalPeriod: action.optimalPeriod,
+                requires: action.requires,
+                unlocks: action.unlocks,
+                riskIfSkipped: action.riskIfSkipped,
+                stats: [
+                    { value: `${action.cost} M€`, label: 'Coût' },
+                    { value: `${effectiveness}%`, label: 'Efficacité actuelle' },
+                    { value: totalImpact > 0 ? `+${totalImpact}` : totalImpact, label: 'Impact total' },
+                    { value: `${action.optimalPeriod.start}-${action.optimalPeriod.end}`, label: 'Période optimale' }
+                ]
+            };
+        }
+
+        // Station/Info data (données statiques pour les points spéciaux)
+        const infoData = {
+            'origin': {
+                badge: '●',
+                badgeColor: '#333',
+                title: 'Situation actuelle',
+                subtitle: '2025 - Point de départ',
+                body: 'Toutes les trajectoires partent de ce point. Le choix de la direction dépend des contraintes et objectifs définis.',
+                stats: [
+                    { value: '+1.2°C', label: 'Réchauffement actuel' },
+                    { value: '4', label: 'Trajectoires possibles' }
+                ]
+            },
+            '2030': {
+                badge: '30',
+                badgeColor: 'var(--bg-card)',
+                title: 'Premier bilan - 2030',
+                subtitle: 'Point de décision',
+                body: 'Première évaluation des actions engagées. Possibilité de bifurquer vers une autre trajectoire si les résultats ne sont pas satisfaisants.',
+                stats: [
+                    { value: '+2°C', label: 'Température prévue' },
+                    { value: '3', label: 'Options disponibles' }
+                ]
+            },
+            '2050': {
+                badge: '50',
+                badgeColor: 'var(--accent)',
+                title: 'Point critique - 2050',
+                subtitle: 'Décision majeure',
+                body: 'Moment charnière de la trajectoire. La ligne Maintien (M) devient inviable au-delà. Choix nécessaire entre dégradation acceptée ou priorisation des services essentiels.',
+                stats: [
+                    { value: '+2.7°C', label: 'Température prévue' },
+                    { value: 'Critique', label: 'Niveau décision' }
+                ]
+            },
+            'tipping-M': {
+                badge: '!',
+                badgeColor: 'var(--line-emergency)',
+                title: 'Tipping Point - Ligne M',
+                subtitle: 'Seuil d\'inviabilité',
+                body: 'Au-delà de ce point, maintenir le niveau de service actuel devient techniquement et économiquement impossible avec le scénario climatique retenu.',
+                stats: [
+                    { value: '~2060', label: 'Année estimée' },
+                    { value: 'Irréversible', label: 'Caractère' }
+                ]
+            }
+        };
+
+        // Toggle line visibility
+        function toggleLine(lineId) {
+            const index = state.activeLines.indexOf(lineId);
+            if (index > -1) {
+                state.activeLines.splice(index, 1);
+            } else {
+                state.activeLines.push(lineId);
+            }
+            updateLineVisibility();
+        }
+
+        function updateLineVisibility() {
+            ['M', 'D', 'T', 'P'].forEach(lineId => {
+                const lineGroup = document.getElementById(`line-${lineId}`);
+                const legendItem = document.querySelector(`.line-item[data-line="${lineId}"]`);
+
+                if (state.activeLines.includes(lineId)) {
+                    lineGroup?.classList.remove('dimmed');
+                    legendItem?.classList.remove('dimmed');
+                    legendItem?.classList.add('active');
+                } else {
+                    lineGroup?.classList.add('dimmed');
+                    legendItem?.classList.add('dimmed');
+                    legendItem?.classList.remove('active');
+                }
+            });
+
+            // Also dim/show stations
+            document.querySelectorAll('.station, .tipping-point').forEach(el => {
+                const color = el.style.color;
+                let shouldShow = false;
+                if (color.includes('maintain') && state.activeLines.includes('M')) shouldShow = true;
+                if (color.includes('moderate') && state.activeLines.includes('D')) shouldShow = true;
+                if (color.includes('transform') && state.activeLines.includes('T')) shouldShow = true;
+                if (color.includes('priority') && state.activeLines.includes('P')) shouldShow = true;
+
+                el.style.opacity = shouldShow ? '1' : '0.2';
+            });
+        }
+
+        // Show info panel
+        // Afficher les infos d'une station ou action
+        function showInfo(id) {
+            // Vérifier si c'est une action de la DB
+            const action = actionsDB[id];
+            let info;
+
+            if (action) {
+                info = generateActionInfo(id);
+            } else {
+                info = infoData[id];
+            }
+
+            if (!info) return;
+
+            const panel = document.getElementById('info-panel');
+
+            // Badge et header
+            document.getElementById('info-badge').textContent = info.badge;
+            document.getElementById('info-badge').style.background = info.badgeColor;
+            document.getElementById('info-title').textContent = info.title;
+            document.getElementById('info-subtitle').textContent = info.subtitle;
+            document.getElementById('info-body').textContent = info.body;
+
+            // Urgency badge (pour les actions)
+            const urgencyBadgeEl = document.getElementById('info-urgency-badge');
+            if (info.urgency) {
+                const urgencyLabels = {
+                    critical: '⚠️ En retard',
+                    active: '✓ À lancer maintenant',
+                    upcoming: '⏳ À préparer',
+                    future: '📅 Plus tard'
+                };
+                urgencyBadgeEl.innerHTML = `<span class="urgency-badge ${info.urgency}">${urgencyLabels[info.urgency]}</span>`;
+            } else {
+                urgencyBadgeEl.innerHTML = '';
+            }
+
+            // Impact cards (pour les actions)
+            const impactsEl = document.getElementById('info-impacts');
+            if (info.impacts) {
+                const impactConfig = {
+                    serviceLevel: { icon: '🏛️', label: 'Niveau de service' },
+                    resilience: { icon: '🛡️', label: 'Résilience' },
+                    environmental: { icon: '🌿', label: 'Environnement' },
+                    social: { icon: '👥', label: 'Social' },
+                    economic: { icon: '💰', label: 'Économique' }
+                };
+
+                let impactsHtml = `
+                    <div class="impact-section">
+                        <div class="impact-section-title">
+                            <span>📊</span> Impacts de l'action
+                        </div>
+                        <div class="impact-grid">
+                `;
+
+                for (const [key, value] of Object.entries(info.impacts)) {
+                    const config = impactConfig[key];
+                    const isPositive = value > 0;
+                    const isNegative = value < 0;
+                    const statusClass = isPositive ? 'positive' : (isNegative ? 'negative' : 'neutral');
+                    const displayValue = isPositive ? `+${value}` : value;
+
+                    impactsHtml += `
+                        <div class="impact-card ${statusClass}">
+                            <div class="impact-icon">${config.icon}</div>
+                            <div class="impact-card-value ${statusClass}">${displayValue}</div>
+                            <div class="impact-card-label">${config.label}</div>
+                        </div>
+                    `;
+                }
+
+                impactsHtml += `
+                        </div>
+                    </div>
+                `;
+
+                // Effectiveness meter
+                if (info.effectiveness !== undefined) {
+                    const effClass = info.effectiveness >= 80 ? 'high' : (info.effectiveness >= 50 ? 'medium' : 'low');
+                    const hint = info.effectiveness === 100
+                        ? 'Période optimale - impact maximal'
+                        : (info.effectiveness >= 80
+                            ? 'Encore temps d\'agir efficacement'
+                            : (info.effectiveness >= 50
+                                ? 'Retard - efficacité réduite'
+                                : 'Retard critique - action urgente'));
+
+                    impactsHtml += `
+                        <div class="effectiveness-meter">
+                            <div class="effectiveness-header">
+                                <span class="effectiveness-label">⏱️ Efficacité si lancé maintenant</span>
+                                <span class="effectiveness-value ${effClass}">${info.effectiveness}%</span>
+                            </div>
+                            <div class="effectiveness-bar">
+                                <div class="effectiveness-fill ${effClass}" style="width: ${info.effectiveness}%"></div>
+                            </div>
+                            <div class="effectiveness-hint">${hint}</div>
+                        </div>
+                    `;
+                }
+
+                impactsEl.innerHTML = impactsHtml;
+                impactsEl.style.display = 'block';
+            } else {
+                impactsEl.style.display = 'none';
+            }
+
+            // Stats
+            const statsHtml = info.stats.map(stat => `
+                <div class="info-stat">
+                    <div class="info-stat-value">${stat.value}</div>
+                    <div class="info-stat-label">${stat.label}</div>
+                </div>
+            `).join('');
+            document.getElementById('info-stats').innerHTML = statsHtml;
+
+            // Links (prérequis et débloque)
+            const linksEl = document.getElementById('info-links');
+            if (info.requires || info.unlocks) {
+                let linksHtml = '';
+
+                if (info.requires && info.requires.length > 0) {
+                    linksHtml += `
+                        <div class="action-links">
+                            <div class="action-links-title">Prérequis:</div>
+                            <div class="action-link-tags">
+                                ${info.requires.map(reqId => {
+                                    const req = actionsDB[reqId];
+                                    return req ? `<span class="action-link-tag">${req.name}</span>` : '';
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (info.unlocks && info.unlocks.length > 0) {
+                    linksHtml += `
+                        <div class="action-links">
+                            <div class="action-links-title">Débloque:</div>
+                            <div class="action-link-tags">
+                                ${info.unlocks.map(unlockId => {
+                                    const unlock = actionsDB[unlockId];
+                                    return unlock ? `<span class="action-link-tag">${unlock.name}</span>` : '';
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                linksEl.innerHTML = linksHtml;
+            } else {
+                linksEl.innerHTML = '';
+            }
+
+            // Risk warning
+            const riskEl = document.getElementById('info-risk');
+            if (info.riskIfSkipped) {
+                riskEl.innerHTML = `
+                    <div class="risk-warning">
+                        <div class="risk-warning-title">⚠ Risque si non réalisé</div>
+                        ${info.riskIfSkipped}
+                    </div>
+                `;
+            } else {
+                riskEl.innerHTML = '';
+            }
+
+            panel.classList.add('visible');
+        }
+
+        function hideInfo() {
+            document.getElementById('info-panel').classList.remove('visible');
+        }
+
+        // Génération dynamique des stations d'action sur le SVG
+        function generateActionStations() {
+            const container = document.getElementById('action-stations-container');
+            if (!container) return;
+
+            const ns = 'http://www.w3.org/2000/svg';
+
+            // Configuration des positions Y par ligne (offset vertical)
+            const lineYOffsets = {
+                M: -25,  // Au-dessus de la ligne
+                D: 0,    // Sur la ligne
+                T: 20,   // Légèrement en-dessous
+                P: -10   // Entre M et D
+            };
+
+            // Configuration des couleurs par ligne
+            const lineColors = {
+                M: 'var(--line-maintain)',
+                D: 'var(--line-moderate)',
+                T: 'var(--line-transform)',
+                P: 'var(--line-priority)'
+            };
+
+            // Pour chaque action dans la DB
+            Object.values(actionsDB).forEach(action => {
+                const x = yearToX(action.year);
+                const baseY = getYForLine(action.line, x);
+                const y = baseY + lineYOffsets[action.line];
+                const urgency = getActionUrgency(action.id);
+                const color = lineColors[action.line];
+
+                // Créer le groupe station
+                const g = document.createElementNS(ns, 'g');
+                g.setAttribute('class', `station station-action urgency-${urgency}`);
+                g.setAttribute('transform', `translate(${x}, ${y})`);
+                g.setAttribute('data-action', action.id);
+                g.style.color = color;
+                g.onclick = () => showInfo(action.id);
+
+                // Cercle de fond (ring pour hover)
+                const ring = document.createElementNS(ns, 'circle');
+                ring.setAttribute('r', '14');
+                ring.setAttribute('class', 'station-ring');
+                ring.setAttribute('stroke', color);
+                g.appendChild(ring);
+
+                // Cercle principal
+                const circle = document.createElementNS(ns, 'circle');
+                circle.setAttribute('r', '8');
+                circle.setAttribute('fill', 'white');
+                circle.setAttribute('stroke', color);
+                circle.setAttribute('stroke-width', '3');
+                circle.setAttribute('class', 'station-circle');
+                g.appendChild(circle);
+
+                // Indicateur de coût (petit cercle interne)
+                const costIndicator = document.createElementNS(ns, 'circle');
+                const costSize = Math.min(6, 2 + action.cost / 50); // Taille selon le coût
+                costIndicator.setAttribute('r', costSize);
+                costIndicator.setAttribute('fill', color);
+                g.appendChild(costIndicator);
+
+                // Label
+                const text = document.createElementNS(ns, 'text');
+                text.setAttribute('class', 'station-label');
+                text.textContent = action.name;
+
+                // Positionner le label en fonction de la position
+                if (x > 700) {
+                    // À droite: label à gauche
+                    text.setAttribute('x', '-15');
+                    text.setAttribute('y', '4');
+                    text.setAttribute('text-anchor', 'end');
+                } else if (action.line === 'M' || action.line === 'P') {
+                    // Lignes du haut: label au-dessus
+                    text.setAttribute('x', '0');
+                    text.setAttribute('y', '-15');
+                    text.setAttribute('text-anchor', 'middle');
+                } else {
+                    // Autres: label à droite
+                    text.setAttribute('x', '15');
+                    text.setAttribute('y', '4');
+                    text.setAttribute('text-anchor', 'start');
+                }
+                g.appendChild(text);
+
+                // Année
+                const yearText = document.createElementNS(ns, 'text');
+                yearText.setAttribute('class', 'station-label');
+                yearText.setAttribute('font-size', '8');
+                yearText.setAttribute('fill', 'var(--text-muted)');
+                yearText.textContent = action.year;
+
+                if (x > 700) {
+                    yearText.setAttribute('x', '-15');
+                    yearText.setAttribute('y', '15');
+                    yearText.setAttribute('text-anchor', 'end');
+                } else {
+                    yearText.setAttribute('x', '15');
+                    yearText.setAttribute('y', '15');
+                }
+                g.appendChild(yearText);
+
+                container.appendChild(g);
+            });
+        }
+
+        // Obtenir la position Y de base pour une ligne à une position X donnée
+        function getYForLine(lineId, x) {
+            switch(lineId) {
+                case 'M':
+                    return getYOnLineM(x);
+                case 'D':
+                    // Ligne D: part de (120,65) et descend vers (920, 255)
+                    if (x < 280) return 65 + (x - 120) * 0.09;
+                    if (x < 520) return 80 + (x - 280) * 0.375;
+                    return 170 + (x - 520) * 0.21;
+                case 'T':
+                    // Ligne T: similaire à D mais descend plus
+                    if (x < 280) return 65 + (x - 120) * 0.09;
+                    if (x < 520) return 80 + (x - 280) * 0.5;
+                    return 200 + (x - 520) * 0.26;
+                case 'P':
+                    // Ligne P: branche depuis 2050, remonte
+                    if (x < 520) return 200; // Avant la branche
+                    return 200 - (x - 520) * 0.29;
+                default:
+                    return 200;
+            }
+        }
+
+        // Update constraints
+        function updateClimate(value) {
+            state.climate = parseFloat(value);
+            document.getElementById('climate-value').textContent = `+${value}°C`;
+            updateVisualization();
+        }
+
+        function updateBudget(value) {
+            state.budget = parseFloat(value);
+            document.getElementById('budget-value').textContent = `${value} Mds€`;
+            updateVisualization();
+        }
+
+        function updateHorizon(value) {
+            state.horizon = parseInt(value);
+            document.getElementById('horizon-value').textContent = value;
+            updateVisualization();
+        }
+
+        function updateVisualization() {
+            updateTippingPoints();
+            updateLineViability();
+            updateScores();
+            updateRecommendation();
+            updateTimeline();
+            updateHorizonFocus();
+        }
+
+        // Mettre à jour les positions des tipping points selon le climat
+        function updateTippingPoints() {
+            const tippingPoint = document.querySelector('.tipping-point');
+            if (tippingPoint) {
+                const tippingYear = calculateTippingPoint('M');
+                // Convertir l'année en position X (2025=120, 2100=920)
+                const xPos = yearToX(tippingYear);
+                // Calculer Y sur la courbe de la ligne M
+                const yPos = getYOnLineM(xPos);
+                tippingPoint.setAttribute('transform', `translate(${xPos}, ${yPos})`);
+
+                // Mettre à jour le texte du tipping point dans info
+                if (infoData['tipping-M']) {
+                    infoData['tipping-M'].stats[0].value = `~${Math.round(tippingYear)}`;
+                }
+            }
+
+            // Mettre à jour le chemin de la ligne M pour s'arrêter au tipping point
+            const pathM = document.getElementById('path-M');
+            if (pathM) {
+                const tippingYear = calculateTippingPoint('M');
+                const tippingX = yearToX(tippingYear);
+                const tippingY = getYOnLineM(tippingX);
+
+                pathM.setAttribute('d', `M 120,65
+                     C 180,65 220,70 280,80
+                     C 350,95 450,130 520,180
+                     C ${Math.min(600, tippingX - 50)},${Math.min(240, tippingY - 30)} ${Math.min(680, tippingX - 20)},${Math.min(300, tippingY - 10)} ${tippingX},${tippingY}`);
+            }
+        }
+
+        // Convertir une année en position X
+        function yearToX(year) {
+            // 2025 = 120, 2100 = 920
+            const minYear = 2025, maxYear = 2100;
+            const minX = 120, maxX = 920;
+            return minX + ((year - minYear) / (maxYear - minYear)) * (maxX - minX);
+        }
+
+        // Obtenir Y sur la ligne M pour une position X donnée
+        function getYOnLineM(x) {
+            // Approximation de la courbe M
+            // La ligne part de (120, 65) et descend progressivement
+            if (x < 280) {
+                return 65 + (x - 120) * 0.09;
+            } else if (x < 520) {
+                return 80 + (x - 280) * 0.42;
+            } else {
+                return 180 + (x - 520) * 0.75;
+            }
+        }
+
+        // Mettre à jour la viabilité visuelle des lignes
+        function updateLineViability() {
+            ['M', 'D', 'T', 'P'].forEach(lineId => {
+                const lineGroup = document.getElementById(`line-${lineId}`);
+                const path = document.getElementById(`path-${lineId}`);
+                const viable = isViable(lineId);
+                const config = trajectoryConfig[lineId];
+
+                if (lineGroup && path) {
+                    if (!viable) {
+                        // Trajectoire non viable: grisée et en pointillés
+                        path.style.opacity = '0.3';
+                        path.style.strokeDasharray = '10,5';
+                        lineGroup.classList.add('non-viable');
+                    } else if (state.budget < config.totalCost) {
+                        // Viable mais budget serré: légèrement atténuée
+                        path.style.opacity = '0.7';
+                        path.style.strokeDasharray = 'none';
+                        lineGroup.classList.remove('non-viable');
+                    } else {
+                        // Pleinement viable
+                        path.style.opacity = '1';
+                        path.style.strokeDasharray = 'none';
+                        lineGroup.classList.remove('non-viable');
+                    }
+                }
+
+                // Mettre à jour l'item de légende
+                const legendItem = document.querySelector(`.line-item[data-line="${lineId}"]`);
+                if (legendItem) {
+                    const descEl = legendItem.querySelector('.line-desc');
+                    if (!viable) {
+                        descEl.innerHTML = `<span style="color: var(--line-emergency);">⚠ Non viable</span>`;
+                    } else {
+                        // Restaurer la description originale
+                        const descriptions = {
+                            M: 'Service actuel préservé',
+                            D: 'Acceptation ponctuelle',
+                            T: 'Adaptation profonde',
+                            P: 'Services essentiels'
+                        };
+                        descEl.textContent = descriptions[lineId];
+                    }
+                }
+            });
+        }
+
+        // Mettre à jour les scores dans le panneau de comparaison
+        function updateScores() {
+            const items = document.querySelectorAll('.traj-compare-item');
+            const lineIds = ['M', 'D', 'T', 'P'];
+
+            items.forEach((item, index) => {
+                const lineId = lineIds[index];
+                if (!lineId) return;
+
+                const score = calculateScore(lineId);
+                const viable = isViable(lineId);
+                const tippingYear = calculateTippingPoint(lineId);
+                const config = trajectoryConfig[lineId];
+
+                const scoreEl = item.querySelector('.traj-compare-score');
+                const metaEl = item.querySelector('.traj-compare-meta');
+
+                if (scoreEl) {
+                    scoreEl.textContent = score;
+                    scoreEl.style.color = viable ? config.color : 'var(--text-muted)';
+                }
+
+                if (metaEl) {
+                    if (!viable) {
+                        if (state.budget < config.minCost) {
+                            metaEl.innerHTML = `<span style="color: var(--line-emergency);">Budget insuffisant</span>`;
+                        } else {
+                            metaEl.innerHTML = `<span style="color: var(--line-emergency);">Dépasse ${Math.round(tippingYear)}</span>`;
+                        }
+                    } else if (lineId === 'M') {
+                        metaEl.textContent = `Viable jusqu'en ~${Math.round(tippingYear)}`;
+                    } else if (tippingYear >= 2100) {
+                        metaEl.textContent = 'Viable 2100+';
+                    } else {
+                        metaEl.textContent = `Viable jusqu'en ~${Math.round(tippingYear)}`;
+                    }
+                }
+
+                // Highlight/dim based on viability
+                item.style.opacity = viable ? '1' : '0.5';
+            });
+        }
+
+        // Mettre à jour la recommandation
+        function updateRecommendation() {
+            const recommended = getRecommendedTrajectory();
+            const config = trajectoryConfig[recommended];
+
+            const valueEl = document.querySelector('.summary-card .summary-value');
+            const labelEl = document.querySelector('.summary-card .summary-label');
+
+            if (valueEl) {
+                valueEl.textContent = recommended;
+                valueEl.style.color = config.color;
+            }
+            if (labelEl) {
+                labelEl.textContent = config.name;
+            }
+
+            // Highlight la trajectoire recommandée dans la comparaison
+            document.querySelectorAll('.traj-compare-item').forEach(item => {
+                item.style.background = 'rgba(255,255,255,0.05)';
+            });
+
+            const lineIds = ['M', 'D', 'T', 'P'];
+            const recIndex = lineIds.indexOf(recommended);
+            if (recIndex >= 0) {
+                const items = document.querySelectorAll('.traj-compare-item');
+                if (items[recIndex]) {
+                    items[recIndex].style.background = `rgba(${getColorRGB(config.color)}, 0.15)`;
+                }
+            }
+        }
+
+        // Obtenir RGB d'une couleur CSS
+        function getColorRGB(cssColor) {
+            if (cssColor.includes('maintain')) return '0, 155, 58';
+            if (cssColor.includes('moderate')) return '255, 99, 25';
+            if (cssColor.includes('transform')) return '0, 57, 166';
+            if (cssColor.includes('priority')) return '153, 102, 51';
+            return '255, 255, 255';
+        }
+
+        // Mettre à jour la timeline selon le scénario climatique
+        function updateTimeline() {
+            const timelinePoints = document.querySelectorAll('.timeline-point');
+            const years = [2025, 2030, 2050, 2075, 2100];
+
+            // Projections de température basées sur le scénario
+            // Le slider va de 1.5°C à 4°C (réchauffement en 2100)
+            const finalTemp = state.climate;
+            const currentTemp = 1.2;
+
+            timelinePoints.forEach((point, index) => {
+                const tempEl = point.querySelector('.timeline-temp');
+                if (tempEl && years[index]) {
+                    if (years[index] === 2025) {
+                        tempEl.textContent = 'Actuel';
+                    } else {
+                        // Interpolation linéaire simple
+                        const progress = (years[index] - 2025) / (2100 - 2025);
+                        const temp = currentTemp + progress * (finalTemp - currentTemp);
+                        tempEl.textContent = `+${temp.toFixed(1)}°C`;
+                    }
+                }
+            });
+        }
+
+        // Mettre à jour le focus visuel selon l'horizon
+        function updateHorizonFocus() {
+            const horizonX = yearToX(state.horizon);
+
+            // Ajouter/mettre à jour une ligne verticale pour l'horizon
+            let horizonLine = document.getElementById('horizon-line');
+            if (!horizonLine) {
+                const svg = document.getElementById('metro-svg');
+                const ns = 'http://www.w3.org/2000/svg';
+
+                // Créer le groupe horizon
+                const g = document.createElementNS(ns, 'g');
+                g.id = 'horizon-line';
+
+                const line = document.createElementNS(ns, 'line');
+                line.setAttribute('y1', '25');
+                line.setAttribute('y2', '375');
+                line.setAttribute('stroke', 'var(--accent)');
+                line.setAttribute('stroke-width', '2');
+                line.setAttribute('stroke-dasharray', '8,4');
+                line.setAttribute('opacity', '0.7');
+                g.appendChild(line);
+
+                const text = document.createElementNS(ns, 'text');
+                text.setAttribute('y', '20');
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('class', 'year-label');
+                text.setAttribute('fill', 'var(--accent)');
+                text.setAttribute('font-weight', '700');
+                g.appendChild(text);
+
+                svg.appendChild(g);
+                horizonLine = g;
+            }
+
+            const line = horizonLine.querySelector('line');
+            const text = horizonLine.querySelector('text');
+
+            line.setAttribute('x1', horizonX);
+            line.setAttribute('x2', horizonX);
+            text.setAttribute('x', horizonX);
+            text.textContent = `Horizon ${state.horizon}`;
+
+            // Atténuer visuellement ce qui est après l'horizon
+            const overlay = document.getElementById('horizon-overlay') || createHorizonOverlay();
+            overlay.setAttribute('x', horizonX);
+            overlay.setAttribute('width', 920 - horizonX + 50);
+        }
+
+        // Créer l'overlay post-horizon
+        function createHorizonOverlay() {
+            const svg = document.getElementById('metro-svg');
+            const ns = 'http://www.w3.org/2000/svg';
+
+            const rect = document.createElementNS(ns, 'rect');
+            rect.id = 'horizon-overlay';
+            rect.setAttribute('y', '25');
+            rect.setAttribute('height', '350');
+            rect.setAttribute('fill', 'rgba(26, 26, 46, 0.6)');
+            rect.setAttribute('pointer-events', 'none');
+
+            // Insérer avant les lignes pour ne pas masquer les éléments interactifs
+            const firstLine = document.getElementById('line-M');
+            svg.insertBefore(rect, firstLine);
+
+            return rect;
+        }
+
+        function focusDecision(year) {
+            // Highlight the decision point
+            const interchange = document.querySelector(`.interchange[transform*="${year === 2030 ? '280' : '520'}"]`);
+            if (interchange) {
+                interchange.querySelector('circle').style.filter = 'drop-shadow(0 0 10px white)';
+                setTimeout(() => {
+                    interchange.querySelector('circle').style.filter = '';
+                }, 1500);
+            }
+            showInfo(year.toString());
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initZoomPan();
+            generateActionStations();
+            updateLineVisibility();
+            updateVisualization();
+        });
+    </script>
+</body>
+</html>

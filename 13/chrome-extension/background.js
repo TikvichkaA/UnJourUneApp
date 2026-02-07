@@ -6,7 +6,15 @@ console.log('SecondMain: Service Worker démarré');
 // Sources de recherche
 const SOURCES = {
   LEBONCOIN: 'leboncoin',
-  VINTED: 'vinted'
+  VINTED: 'vinted',
+  ENVIE: 'envie',
+  EMMAUS: 'emmaus'
+};
+
+// URLs de recherche pour les sources sans API
+const SEARCH_URLS = {
+  envie: (query) => `https://www.envie.org/acheter/?s=${encodeURIComponent(query)}`,
+  emmaus: (query) => `https://www.label-emmaus.co/fr/recherche/?q=${encodeURIComponent(query)}`
 };
 
 // Écouter les messages du content script
@@ -50,8 +58,33 @@ async function searchAllSources(productName, referencePrice, tabId, userLocation
     searchVinted(searchQuery, searchWords)
   ]);
 
-  // Combiner les résultats
+  // Combiner les résultats des API
   let allResults = [...lbcResults, ...vintedResults];
+
+  // Ajouter les sources solidaires (Envie, Emmaüs) comme suggestions
+  // Ces sources n'ont pas d'API, on ajoute juste un lien de recherche
+  const solidarySources = [
+    {
+      title: 'Voir sur Réseau Envie (électroménager reconditionné)',
+      price: null,
+      url: SEARCH_URLS.envie(searchQuery),
+      image: null,
+      location: 'France',
+      distance: null,
+      source: SOURCES.ENVIE,
+      isSuggestion: true
+    },
+    {
+      title: 'Voir sur Label Emmaüs',
+      price: null,
+      url: SEARCH_URLS.emmaus(searchQuery),
+      image: null,
+      location: 'France',
+      distance: null,
+      source: SOURCES.EMMAUS,
+      isSuggestion: true
+    }
+  ];
 
   // Trier par distance si disponible, sinon mélanger les sources
   if (userLocation) {
@@ -62,8 +95,11 @@ async function searchAllSources(productName, referencePrice, tabId, userLocation
     });
   }
 
-  // Limiter à 5 résultats
+  // Limiter à 5 résultats API puis ajouter les sources solidaires
   allResults = allResults.slice(0, 5);
+
+  // Ajouter les sources solidaires à la fin (toujours visibles)
+  allResults = [...allResults, ...solidarySources];
 
   console.log('SecondMain: Résultats combinés:', allResults.length);
 

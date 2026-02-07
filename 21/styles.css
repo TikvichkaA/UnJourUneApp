@@ -5933,6 +5933,36 @@ body:not(.pedagogy-mode)::after {
     background: linear-gradient(135deg, #6d28d9, #7c3aed) !important;
 }
 
+/* Bouton navigation Trajectoires d'Adaptation */
+.nav-tab-pathways {
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4) !important;
+    color: white !important;
+    border: none !important;
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav-tab-pathways:hover {
+    opacity: 0.9;
+    background: linear-gradient(135deg, #0284c7, #0891b2) !important;
+}
+
+/* Bouton navigation Metro Map */
+.nav-tab-metro {
+    background: linear-gradient(135deg, #1e40af, #3b82f6) !important;
+    color: white !important;
+    border: none !important;
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav-tab-metro:hover {
+    opacity: 0.9;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb) !important;
+}
+
 /* Responsive Décideurs */
 @media (max-width: 1200px) {
     .decideurs-grid {

@@ -1,0 +1,200 @@
+{
+  "_meta": {
+    "description": "Propos problématiques de candidats - Veille Municipales 2026",
+    "generated": "2026-02-03T17:26:03.561Z",
+    "total": 15,
+    "sources": [
+      "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "https://linsoumission.fr/2026/01/16/rn-saint-nazaire-municipales-racisme/"
+    ]
+  },
+  "stats": {
+    "by_type": {
+      "revisionniste": 6,
+      "autre": 7,
+      "antisemite": 2,
+      "raciste": 2,
+      "sexiste": 1,
+      "violent": 1
+    },
+    "by_auteur": {
+      "Ludivine Daoudi": 5,
+      "émite Parti": 3,
+      "Elle était": 2,
+      "Saïd Ennjimi": 3,
+      "David Rachline": 1,
+      "Ursula Von Der": 1
+    }
+  },
+  "dingueries": [
+    {
+      "auteur": "Ludivine Daoudi",
+      "citation": "On ne peut que constater que malgré leurs tentatives de dédiabolisation, les candidats du RN sont dans la droite ligne du FN, fondé par un Waffen SS",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": "le Calvados",
+      "contexte": "Les électeurs du Calvados ne savaient pas qui était Ludivine Daoudi. Elle n’a donné aucune interview, n’a fait aucune réunion publique et n’a pas participé au débat organisé par France 3. Ni communica",
+      "scraped_at": "2026-02-03T17:25:54.070Z"
+    },
+    {
+      "auteur": "Ludivine Daoudi",
+      "citation": "deux militantes du Parti de la France",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Ludivine Daoudi est même membre du Parti de la France (PdF), un mouvement pétainiste, connu pour son antisémitisme et ses déclarations suprémacistes ou racistes, confirme à StreetPress son président T",
+      "scraped_at": "2026-02-03T17:25:54.073Z"
+    },
+    {
+      "auteur": "Ludivine Daoudi",
+      "citation": "parvenues à passer sous les fourches caudines de la commission d’investiture du RN",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Ludivine Daoudi est même membre du Parti de la France (PdF), un mouvement pétainiste, connu pour son antisémitisme et ses déclarations suprémacistes ou racistes, confirme à StreetPress son président T",
+      "scraped_at": "2026-02-03T17:25:54.073Z"
+    },
+    {
+      "auteur": "Ludivine Daoudi",
+      "citation": "victime d’une cabale médiatique",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Ludivine Daoudi est même membre du Parti de la France (PdF), un mouvement pétainiste, connu pour son antisémitisme et ses déclarations suprémacistes ou racistes, confirme à StreetPress son président T",
+      "scraped_at": "2026-02-03T17:25:54.073Z"
+    },
+    {
+      "auteur": "Ludivine Daoudi",
+      "citation": "maintenir coûte que coûte sa candidature",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Ludivine Daoudi est même membre du Parti de la France (PdF), un mouvement pétainiste, connu pour son antisémitisme et ses déclarations suprémacistes ou racistes, confirme à StreetPress son président T",
+      "scraped_at": "2026-02-03T17:25:54.073Z"
+    },
+    {
+      "auteur": "émite Parti",
+      "citation": "Je me souviens très bien d’une fois où elle avait mis cette casquette. Ce n’était pas du tout dans l’esprit de la soirée. Je lui avais dit : “Tu déconnes” mais comme elle était tout le temps dans la provocation, j’avoue que j’avais mis ça sur le compte d’une énième provoc’.",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "« Je me souviens très bien d’une fois où elle avait mis cette casquette. Ce n’était pas du tout dans l’esprit de la soirée. Je lui avais dit : “Tu déconnes” mais comme elle était tout le temps dans la",
+      "scraped_at": "2026-02-03T17:25:54.075Z"
+    },
+    {
+      "auteur": "Elle était",
+      "citation": "En soirée, elle cachait de moins en moins ses idées xénophobes et antisémites. Elle était devenue complètement obsédée par les juifs et par Israël. Elle se vantait de participer à des conférences de Alain Soral et Dieudonné ou aux cortèges de Jeanne d’Arc avec l’Action française. Je me suis éloigné",
+      "types": [
+        "antisemite"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Au fil du temps, et en particulier après son retour d’Angleterre où elle a passé plusieurs années, ses amis constatent que la provocation a cédé place à une profonde haine des juifs et des étrangers. ",
+      "scraped_at": "2026-02-03T17:25:54.075Z"
+    },
+    {
+      "auteur": "Elle était",
+      "citation": "Elle venait pour se prendre la tête avec les gens en assénant ses discours antiféministes ou racistes. C’était du pur jus Le Pen-père, d’avant l’opération de lissage du RN. C’était tellement caricatural que pour qui ne la connaissait pas bien, il était difficile de savoir si elle pensait vraiment ce qu’elle disait",
+      "types": [
+        "raciste",
+        "sexiste",
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Au fil du temps, et en particulier après son retour d’Angleterre où elle a passé plusieurs années, ses amis constatent que la provocation a cédé place à une profonde haine des juifs et des étrangers. ",
+      "scraped_at": "2026-02-03T17:25:54.075Z"
+    },
+    {
+      "auteur": "Saïd Ennjimi",
+      "citation": "quand t’essaies des déguisements pour la prochaine arbrazik",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Ses comportements la reconduisent parfois à la porte. La photo d’elle souriante, une casquette nazie sur la tête, la candidate du RN l’aurait justement postée accompagnée du message « quand t’essaies ",
+      "scraped_at": "2026-02-03T17:25:54.076Z"
+    },
+    {
+      "auteur": "Saïd Ennjimi",
+      "citation": "On avait pris l’habitude de faire des captures d’écrans de ses posts et de se les partager parce qu’on était atterrés par la violence de ses propos",
+      "types": [
+        "violent"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Ses comportements la reconduisent parfois à la porte. La photo d’elle souriante, une casquette nazie sur la tête, la candidate du RN l’aurait justement postée accompagnée du message « quand t’essaies ",
+      "scraped_at": "2026-02-03T17:25:54.076Z"
+    },
+    {
+      "auteur": "Saïd Ennjimi",
+      "citation": "On n’a pas tout gardé, car on n’aurait jamais pensé qu’elle pourrait être candidate aux législatives",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Ses comportements la reconduisent parfois à la porte. La photo d’elle souriante, une casquette nazie sur la tête, la candidate du RN l’aurait justement postée accompagnée du message « quand t’essaies ",
+      "scraped_at": "2026-02-03T17:25:54.076Z"
+    },
+    {
+      "auteur": "émite Parti",
+      "citation": "Ça me fait vraiment bizarre de parler comme ça d’une personne avec qui j’ai partagé une partie de ma vie, mais je ne peux pas imaginer que sa haine, son racisme, son antisémitisme puisse l’amener à l’Assemblée nationale, à gagner 6.000 balles par mois et à prendre des décisions pour nous, pour les autres",
+      "types": [
+        "raciste",
+        "antisemite",
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Anciens amis ou potes de soirées, tous et toutes font part de leur stupéfaction lorsqu’ils ont découvert la candidature de « Lulu ». « Ça me fait vraiment bizarre de parler comme ça d’une personne ave",
+      "scraped_at": "2026-02-03T17:25:54.076Z"
+    },
+    {
+      "auteur": "émite Parti",
+      "citation": "Le RN veut soigner son image mais nous, Ludivine, on sait qui elle est et ce qu’elle pense vraiment.",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "« Le RN veut soigner son image mais nous, Ludivine, on sait qui elle est et ce qu’elle pense vraiment. »",
+      "scraped_at": "2026-02-03T17:25:54.077Z"
+    },
+    {
+      "auteur": "David Rachline",
+      "citation": "premier couille molle",
+      "types": [
+        "autre"
+      ],
+      "source": "https://linsoumission.fr/2026/01/16/rn-saint-nazaire-municipales-racisme/",
+      "lieu": null,
+      "contexte": "En effet, tout comme David Rachline, ancien vice-président du RN, les municipales viennent faire la lumière sur un passé sombre. De nombreux tweets à caractère raciste, sexiste, xénophobe et homophobe",
+      "scraped_at": "2026-02-03T17:26:02.030Z"
+    },
+    {
+      "auteur": "Ursula Von Der",
+      "citation": "Blondasse de l’Union Européenne",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://linsoumission.fr/2026/01/16/rn-saint-nazaire-municipales-racisme/",
+      "lieu": null,
+      "contexte": "Ensuite, il y a le fond des insultes. Car aussi vide politiquement qu’une insulte en réaction à un positionnement politique puisse être, c’est son existence même qui lui donne un sens. Tout d’abord to",
+      "scraped_at": "2026-02-03T17:26:02.030Z"
+    }
+  ]
+}

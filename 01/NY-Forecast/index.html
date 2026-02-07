@@ -3,49 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prédictions 2026</title>
+    <title>Between Friends - Paris entre amis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
             <div id="mascot-container" class="mascot-container"></div>
-            <h1>🔮 Prédictions 2026</h1>
-            <p class="subtitle">Que va-t-il se passer cette année ?</p>
-            <p style="color: rgba(255, 255, 255, 0.4); font-size: 0.85rem; margin-top: 10px;">Développé par Emmanuel Pinglier (Of course)</p>
+            <h1>🎲 Between Friends</h1>
+            <p class="subtitle">Parie sur l'avenir avec tes amis</p>
         </header>
 
-        <!-- Écran de sélection d'utilisateur -->
-        <section id="user-selection" class="screen">
+        <!-- Écran d'accueil - Liste des groupes -->
+        <section id="home-screen" class="screen">
+            <div id="my-groups-list" class="groups-list">
+                <!-- Les groupes seront ajoutés ici dynamiquement -->
+            </div>
+            <p id="no-groups" class="empty-message">Tu n'as rejoint aucun groupe pour l'instant.</p>
+            <div class="home-actions">
+                <button id="create-group-btn" class="btn btn-primary">Créer un groupe</button>
+                <button id="join-group-btn" class="btn btn-secondary">Rejoindre un groupe</button>
+            </div>
+        </section>
+
+        <!-- Modal création groupe -->
+        <div id="create-group-modal" class="modal-overlay hidden">
+            <div class="modal">
+                <h3>Créer un groupe</h3>
+                <input type="text" id="group-name-input" placeholder="Nom du groupe" maxlength="30">
+                <input type="text" id="creator-name-input" placeholder="Ton prénom" maxlength="20">
+                <div class="modal-actions">
+                    <button id="cancel-create-group" class="btn btn-secondary">Annuler</button>
+                    <button id="confirm-create-group" class="btn btn-primary">Créer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal rejoindre groupe -->
+        <div id="join-group-modal" class="modal-overlay hidden">
+            <div class="modal">
+                <h3>Rejoindre un groupe</h3>
+                <input type="text" id="group-code-input" placeholder="Code à 6 caractères" maxlength="6" style="text-transform: uppercase;">
+                <input type="text" id="joiner-name-input" placeholder="Ton prénom" maxlength="20">
+                <div class="modal-actions">
+                    <button id="cancel-join-group" class="btn btn-secondary">Annuler</button>
+                    <button id="confirm-join-group" class="btn btn-primary">Rejoindre</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal partage groupe -->
+        <div id="share-group-modal" class="modal-overlay hidden">
+            <div class="modal">
+                <h3>Groupe créé !</h3>
+                <p class="share-info">Partage ce code avec tes amis :</p>
+                <div class="share-code" id="share-code-display">XXXXXX</div>
+                <p class="share-link-label">Ou ce lien :</p>
+                <input type="text" id="share-link-input" class="share-link" readonly>
+                <div class="modal-actions">
+                    <button id="copy-link-btn" class="btn btn-secondary">Copier le lien</button>
+                    <button id="close-share-modal" class="btn btn-primary">C'est parti !</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Écran de sélection d'utilisateur (pour groupes existants) -->
+        <section id="user-selection" class="screen hidden">
             <h2>Qui es-tu ?</h2>
             <div id="user-list" class="user-list">
                 <!-- Les utilisateurs seront ajoutés ici dynamiquement -->
             </div>
             <div class="add-user-form">
                 <input type="text" id="new-user-name" placeholder="Ou ajoute ton prénom..." maxlength="20">
-                <button id="add-user-btn" class="btn btn-secondary">Ajouter</button>
+                <button id="add-user-btn" class="btn btn-secondary">Rejoindre</button>
             </div>
+            <button id="back-to-home" class="btn btn-small" style="margin-top: 20px;">← Retour aux groupes</button>
         </section>
 
         <!-- Écran principal des prédictions -->
         <section id="predictions-screen" class="screen hidden">
-            <div class="user-header">
-                <span>Connecté en tant que : <strong id="current-user-name"></strong></span>
-                <button id="change-user-btn" class="btn btn-small">Changer</button>
+            <div class="group-header">
+                <div class="group-info">
+                    <span class="group-name-display" id="current-group-name">Mon Groupe</span>
+                    <span class="group-code-display" id="current-group-code">ABC123</span>
+                </div>
+                <button id="back-to-groups-btn" class="btn btn-small">← Groupes</button>
             </div>
 
-            <div id="countdown-banner" class="countdown-banner"></div>
+            <div class="balance-header">
+                <div class="balance-info">
+                    <span class="balance-amount" id="user-balance">1000</span>
+                    <span class="balance-label">coins</span>
+                </div>
+                <div class="user-info">
+                    <span id="current-user-name"></span>
+                    <button id="change-user-btn" class="btn btn-tiny">Changer</button>
+                </div>
+            </div>
 
             <div class="tabs">
-                <button class="tab active" data-tab="vote">Voter</button>
-                <button class="tab" data-tab="market">Marché</button>
-                <button class="tab" data-tab="results">Résultats</button>
-                <button class="tab" data-tab="resolutions">Résolutions</button>
-                <button class="tab" data-tab="add">+ Ajouter</button>
+                <button class="tab active" data-tab="bet">Parier</button>
+                <button class="tab" data-tab="portfolio">Portfolio</button>
+                <button class="tab" data-tab="leaderboard">Classement</button>
+                <button class="tab" data-tab="add">+ Créer</button>
             </div>
 
-            <!-- Onglet Vote -->
-            <div id="tab-vote" class="tab-content active">
+            <!-- Onglet Parier -->
+            <div id="tab-bet" class="tab-content active">
                 <div class="category-filter">
                     <button class="category-btn active" data-category="all">Toutes</button>
                     <button class="category-btn" data-category="politique">Politique</button>
@@ -57,67 +124,40 @@
                 <div id="predictions-list" class="predictions-list">
                     <!-- Les prédictions seront ajoutées ici -->
                 </div>
-                <p id="no-predictions" class="empty-message hidden">Aucune prédiction pour le moment. Ajoute-en une !</p>
+                <p id="no-predictions" class="empty-message hidden">Aucune prédiction pour le moment. Crée-en une !</p>
             </div>
 
-            <!-- Onglet Marché (Trading) -->
-            <div id="tab-market" class="tab-content hidden">
-                <div class="market-header">
-                    <div class="market-index">
-                        <span class="index-label">📊 INDICE GLOBAL</span>
-                        <span id="market-index-value" class="index-value">--</span>
-                        <span id="market-index-change" class="index-change">--</span>
+            <!-- Onglet Portfolio -->
+            <div id="tab-portfolio" class="tab-content hidden">
+                <div class="portfolio-summary">
+                    <div class="portfolio-stat">
+                        <span class="portfolio-stat-value" id="portfolio-total-value">0</span>
+                        <span class="portfolio-stat-label">Valeur totale</span>
+                    </div>
+                    <div class="portfolio-stat">
+                        <span class="portfolio-stat-value" id="portfolio-pnl">+0</span>
+                        <span class="portfolio-stat-label">P&L</span>
                     </div>
                 </div>
-
-                <div class="market-stats-row">
-                    <div class="market-stat">
-                        <span class="market-stat-value" id="stat-total-volume">--</span>
-                        <span class="market-stat-label">Volume total</span>
-                    </div>
-                    <div class="market-stat">
-                        <span class="market-stat-value" id="stat-avg-sentiment">--</span>
-                        <span class="market-stat-label">Sentiment</span>
-                    </div>
-                    <div class="market-stat">
-                        <span class="market-stat-value" id="stat-volatility">--</span>
-                        <span class="market-stat-label">Volatilité</span>
-                    </div>
+                <h3 class="section-title">Mes positions</h3>
+                <div id="positions-list" class="positions-list">
+                    <!-- Les positions seront affichées ici -->
                 </div>
-
-                <div class="market-section">
-                    <h3 class="market-section-title">🔥 Top Movers</h3>
-                    <div id="top-movers" class="top-movers">
-                        <!-- Rempli dynamiquement -->
-                    </div>
-                </div>
-
-                <div class="market-section">
-                    <h3 class="market-section-title">📈 Toutes les positions</h3>
-                    <div class="market-filter">
-                        <button class="market-filter-btn active" data-sort="price">Prix</button>
-                        <button class="market-filter-btn" data-sort="change">Variation</button>
-                        <button class="market-filter-btn" data-sort="volume">Volume</button>
-                        <button class="market-filter-btn" data-sort="volatility">Volatilité</button>
-                    </div>
-                    <div id="market-list" class="market-list">
-                        <!-- Liste des prédictions style trading -->
-                    </div>
-                </div>
+                <p id="no-positions" class="empty-message">Tu n'as pas encore parié.</p>
             </div>
 
-            <!-- Onglet Résultats -->
-            <div id="tab-results" class="tab-content hidden">
-                <div id="results-list" class="predictions-list">
-                    <!-- Les résultats seront affichés ici -->
+            <!-- Onglet Classement -->
+            <div id="tab-leaderboard" class="tab-content hidden">
+                <div id="leaderboard-list" class="leaderboard">
+                    <!-- Le classement sera affiché ici -->
                 </div>
             </div>
 
             <!-- Onglet Ajouter -->
             <div id="tab-add" class="tab-content hidden">
-                <h3>Ajouter une prédiction</h3>
-                <p class="hint">Formule ta prédiction comme une affirmation (ex: "La France gagnera l'Euro 2026")</p>
-                <textarea id="new-prediction-text" placeholder="Ta prédiction..." maxlength="200"></textarea>
+                <h3>Créer une prédiction</h3>
+                <p class="hint">Formule ta prédiction comme une affirmation. Les autres pourront parier dessus !</p>
+                <textarea id="new-prediction-text" placeholder="Ex: La France gagnera l'Euro 2026" maxlength="200"></textarea>
                 <div class="category-select">
                     <label>Catégorie :</label>
                     <select id="new-prediction-category">
@@ -128,26 +168,76 @@
                         <option value="autre" selected>Autre</option>
                     </select>
                 </div>
-                <button id="add-prediction-btn" class="btn btn-primary">Ajouter la prédiction</button>
-            </div>
-
-            <!-- Onglet Résolutions -->
-            <div id="tab-resolutions" class="tab-content hidden">
-                <div class="resolutions-header">
-                    <h3>🎯 Bonnes résolutions 2026</h3>
-                    <p class="hint">Ajoute tes bonnes résolutions pour l'année et découvre celles de tes amis !</p>
+                <div class="deadline-select">
+                    <label>Date limite :</label>
+                    <input type="date" id="new-prediction-deadline">
                 </div>
-
-                <div class="add-resolution-form">
-                    <input type="text" id="new-resolution-text" placeholder="Ma bonne résolution..." maxlength="150">
-                    <button id="add-resolution-btn" class="btn btn-primary">Ajouter</button>
-                </div>
-
-                <div id="resolutions-list" class="resolutions-list">
-                    <!-- Les résolutions seront affichées ici par utilisateur -->
-                </div>
+                <button id="add-prediction-btn" class="btn btn-primary">Créer la prédiction</button>
             </div>
         </section>
+
+        <!-- Modal de pari -->
+        <div id="bet-modal" class="modal-overlay hidden">
+            <div class="modal bet-modal">
+                <h3 id="bet-modal-title">Parier</h3>
+                <p id="bet-modal-prediction" class="bet-prediction-text"></p>
+
+                <div class="bet-prices">
+                    <button class="price-btn yes" id="bet-yes-btn">
+                        <span class="price-label">OUI</span>
+                        <span class="price-value" id="bet-yes-price">50%</span>
+                        <span class="price-odds" id="bet-yes-odds">x2.00</span>
+                    </button>
+                    <button class="price-btn no" id="bet-no-btn">
+                        <span class="price-label">NON</span>
+                        <span class="price-value" id="bet-no-price">50%</span>
+                        <span class="price-odds" id="bet-no-odds">x2.00</span>
+                    </button>
+                </div>
+
+                <div class="bet-input-section">
+                    <label>Mise :</label>
+                    <div class="bet-amount-row">
+                        <input type="number" id="bet-amount-input" class="bet-amount-input" placeholder="0" min="1">
+                        <span class="bet-currency">coins</span>
+                    </div>
+                    <div class="bet-quick-amounts">
+                        <button class="quick-amount-btn" data-amount="10">10</button>
+                        <button class="quick-amount-btn" data-amount="50">50</button>
+                        <button class="quick-amount-btn" data-amount="100">100</button>
+                        <button class="quick-amount-btn" data-amount="all">MAX</button>
+                    </div>
+                </div>
+
+                <div class="bet-preview">
+                    <div class="bet-preview-row">
+                        <span>Gain potentiel :</span>
+                        <span id="bet-potential-win" class="bet-potential-win">0 coins</span>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button id="cancel-bet" class="btn btn-secondary">Annuler</button>
+                    <button id="confirm-bet" class="btn btn-primary" disabled>Parier</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal résolution -->
+        <div id="resolve-modal" class="modal-overlay hidden">
+            <div class="modal">
+                <h3>Résoudre la prédiction</h3>
+                <p id="resolve-modal-prediction" class="bet-prediction-text"></p>
+                <p class="hint">Qu'est-ce qui s'est passé ?</p>
+                <div class="resolve-buttons">
+                    <button class="resolve-btn yes" id="resolve-yes-btn">OUI - C'est arrivé</button>
+                    <button class="resolve-btn no" id="resolve-no-btn">NON - Pas arrivé</button>
+                </div>
+                <div class="modal-actions">
+                    <button id="cancel-resolve" class="btn btn-secondary">Annuler</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Firebase SDK -->

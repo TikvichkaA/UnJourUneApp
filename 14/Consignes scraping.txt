@@ -1,0 +1,171 @@
+1. Sources prioritaires à intégrer (fiables, structurantes)
+🗞️ Presse d’investigation & data-journalisme
+
+À privilégier car sourcées, factuelles, et souvent déjà hiérarchisées.
+
+StreetPress (municipales, extrême droite, élus locaux)
+
+Basta! (cartographies, dossiers municipaux)
+
+Mediapart (sections politique locale, enquêtes)
+
+Les Jours (obsessions RN, élus, réseaux)
+
+Disclose (plus rare localement, mais très qualitatif)
+
+👉 Méthode :
+Scraping par dossiers ou tags, pas par homepage.
+
+🏛️ Sources institutionnelles / administratives
+
+Utile pour fiabiliser les données “neutres”.
+
+Ministère de l’Intérieur – résultats électoraux passés
+
+data.gouv.fr :
+
+résultats municipales 2014 / 2020
+
+données INSEE (population, CSP, âge)
+
+Sites officiels des mairies (pages “Le Maire”, “Conseil municipal”)
+
+👉 Méthode :
+API ou CSV quand possible, scraping HTML en dernier recours.
+
+🌐 Réseaux sociaux (à manier avec précaution)
+
+Pas pour “prouver”, mais pour détecter.
+
+Facebook (pages officielles de candidats / listes)
+
+X / Twitter (anciens tweets, citations)
+
+YouTube (meetings, interviews locales)
+
+👉 Méthode :
+
+scraping descriptions, bios, posts épinglés
+
+jamais d’analyse hors contexte → toujours lier à une source publique
+
+2. Méthodes de scraping recommandées (à donner à Claude Code)
+Stack suggérée (cohérente avec ton projet)
+
+Node.js
+
+Cheerio (HTML statique)
+
+Playwright uniquement si JS obligatoire
+
+node-fetch / axios
+
+cron + scripts idempotents
+
+Bonnes pratiques essentielles
+
+À expliciter clairement à Claude Code :
+
+- Scraping incrémental (ne jamais tout recharger)
+- Stocker la source brute (URL, date, extrait HTML ou texte)
+- Hash de contenu pour éviter les doublons
+- Timeout + retry + user-agent clair
+
+Pattern recommandé
+
+Table sources_scraping
+
+url
+
+type (presse / institution / social)
+
+fréquence de vérification
+
+dernier_scrape_at
+
+Pipeline :
+
+source → extraction brute → normalisation → enrichissement → insertion
+
+3. Normalisation & dédoublonnage (clé pour éviter le chaos)
+Identifiants forts
+
+Commune : code_insee
+
+Candidat : nom_normalisé + commune_id
+
+Dinguerie : hash(citation + auteur + source)
+
+Normalisation minimale à automatiser
+
+Noms propres (majuscules / accents)
+
+Partis (RN, Reconquête, UDR → enum)
+
+Dates (ISO 8601)
+
+Citations : toujours texte exact + source
+
+👉 Claude Code doit refuser toute insertion sans source.
+
+4. Enrichissement intelligent (sans halluciner)
+Enrichissement “safe”
+
+Croisement :
+
+score électoral passé
+
+population de la commune
+
+présence de sortant ED
+
+Typologie des propos :
+
+raciste
+
+antisémite
+
+complotiste
+
+violent
+
+révisionniste
+
+👉 Pas de NLP génératif libre, uniquement :
+
+classification assistée
+
+jamais d’invention de propos
+
+Calcul de score (exemple logique)
+Score = 
++ présence candidat RN/allié
++ score RN > X% aux précédentes élections
++ propos documentés
++ commune < 20k habitants
+- sortant non-ED solide
+
+
+(Claude Code peut formaliser ça en fonction SQL ou JS)
+
+5. Automatisation & veille continue
+Ce que Claude Code peut mettre en place
+
+Script hebdo :
+
+re-scrape uniquement les sources actives
+
+Alertes :
+
+nouveau candidat ED détecté
+
+nouvelle “dinguerie” liée à une commune existante
+
+Export Markdown automatique (déjà prévu 👍)
+
+6. Ce que tu peux lui dire explicitement (texte prêt à copier)
+
+Objectif : continuer le scraping de manière incrémentale, fiable et sourcée, sans jamais inventer d’information.
+Chaque donnée doit être traçable à une source publique.
+Le système doit privilégier les sources journalistiques et institutionnelles, normaliser les données, éviter les doublons, et enrichir uniquement par croisement de faits existants.
+Aucune analyse politique non sourcée ne doit être produite.

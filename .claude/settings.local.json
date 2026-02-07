@@ -12,7 +12,9 @@
       "WebFetch(domain:www.vuedensemble.fr)",
       "WebFetch(domain:bretagne-environnement.fr)",
       "WebFetch(domain:pingpang.paris)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "WebFetch(domain:www.linkedin.com)",
+      "WebFetch(domain:www.clapp.team)"
     ]
   }
 }

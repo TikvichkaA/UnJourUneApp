@@ -1,0 +1,760 @@
+{
+  "_meta": {
+    "description": "Base complète des dingueries - Veille Municipales 2026",
+    "generated": "2026-02-03T17:46:30.067Z",
+    "total": 62,
+    "sources": [
+      "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "https://www.streetpress.com/sujet/1719935581-caen-nouvelle-candidate-rassemblement-national-raciste-complotiste-josseline-liban-elections-legislatives-calvados",
+      "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "https://www.streetpress.com/sujet/1720017546-finistere-candidat-rassemblement-national-joueurs-equipe-france-clandestins-legislatives",
+      "https://www.streetpress.com/sujet/1746464175-attache-parlementaire-vire-tweets-racistes-deputee-rassemblement-national-var-laure-lavalette-nicolas-koutseff",
+      "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "https://linsoumission.fr/2026/01/16/rn-saint-nazaire-municipales-racisme/"
+    ]
+  },
+  "stats": {
+    "by_type": {
+      "raciste": 8,
+      "homophobe": 4,
+      "antisemite": 6,
+      "complotiste": 1,
+      "revisionniste": 14,
+      "autre": 30,
+      "violent": 2,
+      "sexiste": 1
+    },
+    "by_auteur": {
+      "Daniel Grenon": 1,
+      "Jacques Myard": 2,
+      "Thomas Lutz": 1,
+      "Christian Perez": 1,
+      "Julie Apricena": 2,
+      "José Gonzalez": 1,
+      "Frédéric Boccaletti": 1,
+      "Tony Bihouée": 2,
+      "Christophe Bentz": 2,
+      "Gilles Bourdouleix": 1,
+      "René Lioret": 1,
+      "Louis-Joseph Pecher": 8,
+      "Zoé Sagan": 1,
+      "Si Louis": 1,
+      "Pascal Gannat": 1,
+      "Sur Facebook": 1,
+      "Arthur Delaporte": 1,
+      "Josseline Liban": 2,
+      "Brice Bernard": 10,
+      "Christian Pérez": 6,
+      "Daniel Craig": 1,
+      "Nicolas Koutseff": 5,
+      "Laure Lavalette": 3,
+      "Ludivine Daoudi": 5,
+      "David Rachline": 1,
+      "Ursula Von Der": 1
+    }
+  },
+  "dingueries": [
+    {
+      "auteur": "Daniel Grenon",
+      "citation": "Des Maghrébins sont arrivés au pouvoir en 2016, ces gens-là n’ont pas leur place dans les hauts lieux.",
+      "types": [
+        "raciste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": "les hauts lieux",
+      "lieu": null,
+      "contexte": "Il a déclaré lors d’un débat avec la candidate du Nouveau Front populaire, le 2 juillet 2024 : « Des Maghrébins sont arrivés au pouvoir en 2016, ces gens-là n’ont pas leur place dans les hauts lieux. ",
+      "scraped_at": "2026-02-03T17:20:55.434Z"
+    },
+    {
+      "auteur": "Jacques Myard",
+      "citation": "Je ne m’occupe pas des homos mais ce que je leur reproche c’est d’être devenus un lobby, une secte, de pratiquer le terrorisme intellectuel…",
+      "types": [
+        "homophobe"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "En janvier 2011, il a assimilé l’homosexualité à une « perversion sexuelle », et avait déclaré : « Je ne m’occupe pas des homos mais ce que je leur reproche c’est d’être devenus un lobby, une secte, d",
+      "scraped_at": "2026-02-03T17:20:55.439Z"
+    },
+    {
+      "auteur": "Jacques Myard",
+      "citation": "Jusqu’à nouvel ordre, ce n’est ni les juifs, ni les catholiques qui ont déposé des bombes et massacré des concitoyens",
+      "types": [
+        "antisemite",
+        "complotiste",
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "En janvier 2011, il a assimilé l’homosexualité à une « perversion sexuelle », et avait déclaré : « Je ne m’occupe pas des homos mais ce que je leur reproche c’est d’être devenus un lobby, une secte, d",
+      "scraped_at": "2026-02-03T17:20:55.440Z"
+    },
+    {
+      "auteur": "Thomas Lutz",
+      "citation": "Les untermenschen, ça suffit !",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "En avril dernier, lors d’une Assemblée plénière à Dijon, il a crié : « Les untermenschen, ça suffit ! ». Un mot allemand qui signifie « sous-hommes ». Une expression notamment utilisée par les nazis p",
+      "scraped_at": "2026-02-03T17:20:55.440Z"
+    },
+    {
+      "auteur": "Christian Perez",
+      "citation": "J’ai cru voir des clandestins repartir chez eux et là paf, c’était que la pseudo-équipe de France qui partait au Qatar.",
+      "types": [
+        "raciste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "Il a longtemps frayé avec des négationnistes et des pétainistes. Il publie également des messages à caractère raciste sur son compte Facebook. La veille de la Coupe du Monde de football, le 19 novembr",
+      "scraped_at": "2026-02-03T17:20:55.441Z"
+    },
+    {
+      "auteur": "Julie Apricena",
+      "citation": "White Pride Worldwide",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "Elle posait il y a quelques années avec des skinheads néonazis, et un t-shirt floqué « White Pride Worldwide », un slogan suprémaciste blanc.",
+      "scraped_at": "2026-02-03T17:20:55.442Z"
+    },
+    {
+      "auteur": "Julie Apricena",
+      "citation": "Juif qui parle bouche qui ment.",
+      "types": [
+        "antisemite"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "Candidat promu par Eric Ciotti et soutenu par le RN en Meurthe-et-Moselle, il a perdu l’investiture LR-RN suite à nos révélations. Louis-Joseph Pecher a enchaîné les tweets antisémites, racistes, sexi",
+      "scraped_at": "2026-02-03T17:20:55.443Z"
+    },
+    {
+      "auteur": "José Gonzalez",
+      "citation": "Je ne pas là pour juger si l’OAS a commis des crimes.",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "Il a adhéré au FN à la fin des années 70, juste après sa création par d’anciens Waffen-SS. Il a aussi relativisé les crimes de l’OAS, et a déclaré : « Je ne pas là pour juger si l’OAS a commis des cri",
+      "scraped_at": "2026-02-03T17:20:55.444Z"
+    },
+    {
+      "auteur": "Frédéric Boccaletti",
+      "citation": "violences en réunion avec arme",
+      "types": [
+        "violent"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": "la caisse de son ancien parti",
+      "lieu": null,
+      "contexte": "Le candidat a des casseroles. Beaucoup. Il a été condamné pour « violences en réunion avec arme », a pioché dans la caisse de son ancien parti, a tenu une librairie négationniste… Dernièrement, son ex",
+      "scraped_at": "2026-02-03T17:20:55.444Z"
+    },
+    {
+      "auteur": "Tony Bihouée",
+      "citation": "Les merdes migrantes dans l’avion",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "Il a notamment écrit sur Twitter-X : « Les merdes migrantes dans l’avion » ou « Dehors les merdes et avec les parents qui sont incapables de les éduquer ! Facile d’écarter les cuisses pour pondre des ",
+      "scraped_at": "2026-02-03T17:20:55.445Z"
+    },
+    {
+      "auteur": "Tony Bihouée",
+      "citation": "Dehors les merdes et avec les parents qui sont incapables de les éduquer ! Facile d’écarter les cuisses pour pondre des racailles, plus dur de s’en occuper !",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "Il a notamment écrit sur Twitter-X : « Les merdes migrantes dans l’avion » ou « Dehors les merdes et avec les parents qui sont incapables de les éduquer ! Facile d’écarter les cuisses pour pondre des ",
+      "scraped_at": "2026-02-03T17:20:55.445Z"
+    },
+    {
+      "auteur": "Christophe Bentz",
+      "citation": "c’est notamment bien de l’apologie de la race dont il va s’agir",
+      "types": [
+        "raciste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "Fervent opposant au droit à l’avortement, il a qualifié l’IVG de « génocide de masse », il y a quelques années. Dans son livre Décrypter l’antiracisme en une heure, publié en 2011, il y introduit son ",
+      "scraped_at": "2026-02-03T17:20:55.445Z"
+    },
+    {
+      "auteur": "Christophe Bentz",
+      "citation": "Alors réhabilitons la race pour restaurer la liberté de penser",
+      "types": [
+        "raciste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "Fervent opposant au droit à l’avortement, il a qualifié l’IVG de « génocide de masse », il y a quelques années. Dans son livre Décrypter l’antiracisme en une heure, publié en 2011, il y introduit son ",
+      "scraped_at": "2026-02-03T17:20:55.445Z"
+    },
+    {
+      "auteur": "Gilles Bourdouleix",
+      "citation": "Comme quoi, Hitler n’en a peut-être pas tué assez.",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": null,
+      "lieu": null,
+      "contexte": "Il avait déclaré en 2013 à propos d’une mission évangélique de voyageurs : « Comme quoi, Hitler n’en a peut-être pas tué assez. » À l’époque, la sortie raciste avait fait réagir Marine Le Pen, qui le ",
+      "scraped_at": "2026-02-03T17:20:55.446Z"
+    },
+    {
+      "auteur": "René Lioret",
+      "citation": "4 ou 5 candidats problématiques",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720200623-propos-racistes-homophobes-complotistes-liste-candidats-rassemblement-national-epingles-extreme-droite-bardella-deputes-assemblee",
+      "source_originale": "Jordan Bardella",
+      "lieu": null,
+      "contexte": "Selon Jordan Bardella, il n'y aurait que « 4 ou 5 candidats problématiques ». \nAvec plusieurs médias, on en a recensé plus d’une centaine.\n\nRacisme, homophobie, complotisme… voici la liste (interminab",
+      "scraped_at": "2026-02-03T17:20:55.446Z"
+    },
+    {
+      "auteur": "Louis-Joseph Pecher",
+      "citation": "Le RN est un parti dirigé par des médiocres et des rentiers qui ont renié tout ce qui avait présidé au FN. Du patriotisme couché à la Meloni. Un attrape-nigaud, un défouloir pour sèche-couillons",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "lieu": null,
+      "contexte": "« Le RN est un parti dirigé par des médiocres et des rentiers qui ont renié tout ce qui avait présidé au FN. Du patriotisme couché à la Meloni. Un attrape-nigaud, un défouloir pour sèche-couillons », ",
+      "scraped_at": "2026-02-03T17:20:57.126Z"
+    },
+    {
+      "auteur": "Louis-Joseph Pecher",
+      "citation": "​​À Droite les amis d’Eric Ciotti",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "lieu": null,
+      "contexte": "« Le RN est un parti dirigé par des médiocres et des rentiers qui ont renié tout ce qui avait présidé au FN. Du patriotisme couché à la Meloni. Un attrape-nigaud, un défouloir pour sèche-couillons », ",
+      "scraped_at": "2026-02-03T17:20:57.126Z"
+    },
+    {
+      "auteur": "Louis-Joseph Pecher",
+      "citation": "c’était un compte sur lequel [il] pouvait exprimer certaines idées personnelles, pas forcément raccord avec les lignes officielles de la campagne même s’il n’y avait pas grand-chose à cacher",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "lieu": null,
+      "contexte": "La diatribe n’est plus visible en ligne, et pour cause : le compte sur lequel elle a été publiée, @Elgie2108, a été entièrement effacé le 18 juin. Un compte dont le candidat a confirmé être le proprié",
+      "scraped_at": "2026-02-03T17:20:57.126Z"
+    },
+    {
+      "auteur": "Louis-Joseph Pecher",
+      "citation": "Tu as fait carrière à quatre pattes ou en braillant. Garde tes conseils.",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "lieu": null,
+      "contexte": "\n            Le 11 juin, le candidat Ciotti-RN Louis-Joseph Pecher vise la ministre de la Culture Rachida Dati avec des propos sexistes alors qu’elle communique sur les élections législatives à venir ",
+      "scraped_at": "2026-02-03T17:20:57.127Z"
+    },
+    {
+      "auteur": "Louis-Joseph Pecher",
+      "citation": "Juif qui parle bouche qui ment disait Voltaire. Pourquoi tant d’antisémitisme et de haine dans les Lumières.",
+      "types": [
+        "antisemite"
+      ],
+      "source": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "lieu": null,
+      "contexte": "\n            Le 9 avril, Louis-Joseph Pecher répond à un tweet de Julien Dray : « Juif qui parle bouche qui ment disait Voltaire. Pourquoi tant d’antisémitisme et de haine dans les Lumières. » / \n    ",
+      "scraped_at": "2026-02-03T17:20:57.130Z"
+    },
+    {
+      "auteur": "Zoé Sagan",
+      "citation": "Le bois de Boulogne retient son souffle. Franky dit la pompe ou la turlutte pourrait s’y reconvertir.",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "lieu": null,
+      "contexte": "Quand il ne propage pas les thèses complotistes de Zoé Sagan ou du « média alternatif » Verity France, Louis-Joseph Pecher verse aussi dans l’injure sexiste et homophobe. Le 7 mai, il se lâche : « Le ",
+      "scraped_at": "2026-02-03T17:20:57.131Z"
+    },
+    {
+      "auteur": "Louis-Joseph Pecher",
+      "citation": "Le porc inutile et engraissé à nos frais aurait dû faire les frais d’une battue.",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "lieu": null,
+      "contexte": "« Le porc inutile et engraissé à nos frais aurait dû faire les frais d’une battue. »",
+      "scraped_at": "2026-02-03T17:20:57.132Z"
+    },
+    {
+      "auteur": "Louis-Joseph Pecher",
+      "citation": "afflux de migrants dégénérés et racistes",
+      "types": [
+        "raciste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "lieu": null,
+      "contexte": "Si sa haine vise principalement la majorité présidentielle et la gauche, il n’hésite pas à s’en prendre à son propre camp. En mars dernier, il a par exemple qualifié le président du Rassemblement nati",
+      "scraped_at": "2026-02-03T17:20:57.132Z"
+    },
+    {
+      "auteur": "Si Louis",
+      "citation": "pour des raisons sentimentales",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "lieu": null,
+      "contexte": "Si Louis-Joseph Pecher était inconnu jusqu’à dimanche soir, c’est qu’il a pris le nom de sa femme il y a quelques années « pour des raisons sentimentales », explique-t-il à Mediapart. Un changement qu",
+      "scraped_at": "2026-02-03T17:20:57.132Z"
+    },
+    {
+      "auteur": "Pascal Gannat",
+      "citation": "à la violence et à la discrimination",
+      "types": [
+        "violent"
+      ],
+      "source": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "lieu": null,
+      "contexte": "Son père, Pascal Gannat, est une ancienne figure du Front national, époque Jean-Marie Le Pen, dont il est un proche après avoir été son directeur de cabinet de 1988 à 1992. Il a également été membre d",
+      "scraped_at": "2026-02-03T17:20:57.133Z"
+    },
+    {
+      "auteur": "Louis-Joseph Pecher",
+      "citation": "#Taubira #LaPesteCestEux #partisocialiste #FN #LePen Toutes les #guenons ne sont pas égales.",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1718813377-louis-joseph-pecher-ciotti-juif-antisemite-racisme-sexisme-homophobe-candidat-rassemblement-national-rn-bardella",
+      "lieu": null,
+      "contexte": "Contacté une nouvelle fois pour répondre de ses récents tweets et insultes, Louis-Joseph Pecher a indiqué qu’il ne « voyait pas » à quoi StreetPress faisait référence et qu’il « réfute ces propos », a",
+      "scraped_at": "2026-02-03T17:20:57.133Z"
+    },
+    {
+      "auteur": "Sur Facebook",
+      "citation": "Jocelyne Liban-Gesrzkourez",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719935581-caen-nouvelle-candidate-rassemblement-national-raciste-complotiste-josseline-liban-elections-legislatives-calvados",
+      "lieu": null,
+      "contexte": "Sur Facebook, où elle est très active, Josseline Liban se prénomme « Jocelyne Liban-Gesrzkourez ». Ces quelques lettres changées à son prénom lui ont permis de publier des contenus racistes depuis des",
+      "scraped_at": "2026-02-03T17:20:58.751Z"
+    },
+    {
+      "auteur": "Arthur Delaporte",
+      "citation": "https://t.co/5vgsTZrvmJ",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719935581-caen-nouvelle-candidate-rassemblement-national-raciste-complotiste-josseline-liban-elections-legislatives-calvados",
+      "lieu": null,
+      "contexte": " Après le retrait de la candidate nazie sur Caen 1 ce matin, voici les publications racistes et haineuses de la candidate fantôme du RN face à moi sur la 2e circonscription du Calvados. Le RN la débra",
+      "scraped_at": "2026-02-03T17:20:58.752Z"
+    },
+    {
+      "auteur": "Josseline Liban",
+      "citation": "abus de confiance, faux et usage de faux, exercice illégal de la médecine, exercice illégal de la pharmacie, pratiques commerciales trompeuses, abus de biens sociaux, blanchiment et abus de faiblesse",
+      "types": [
+        "raciste",
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719935581-caen-nouvelle-candidate-rassemblement-national-raciste-complotiste-josseline-liban-elections-legislatives-calvados",
+      "lieu": "Miviludes",
+      "contexte": "Sur son compte Facebook, Josseline Liban s’illustre également par son penchant pour les contenus complotistes. Elle relaie des vidéos du Youtubeur antivax et gourou du crudivorisme, Thierry Casasnovas",
+      "scraped_at": "2026-02-03T17:20:58.752Z"
+    },
+    {
+      "auteur": "Josseline Liban",
+      "citation": "transformeraient les patients en antennes réceptrices 5G",
+      "types": [
+        "homophobe"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719935581-caen-nouvelle-candidate-rassemblement-national-raciste-complotiste-josseline-liban-elections-legislatives-calvados",
+      "lieu": null,
+      "contexte": "Josseline Liban aussi est résolument antivax. Pendant la crise du Covid-19, elle partage à ses abonnés des vidéos aux théories aussi alarmistes que farfelues. Par exemple, les vaccins « transformeraie",
+      "scraped_at": "2026-02-03T17:20:58.752Z"
+    },
+    {
+      "auteur": "Brice Bernard",
+      "citation": "aucune connotation antisémite de [sa] part",
+      "types": [
+        "antisemite"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "lieu": null,
+      "contexte": "Contacté, Brice Bernard assure qu’il n’y avait « aucune connotation antisémite de [sa] part » et qu’il n’a « aucune sympathie pour Dieudonné ». Il tient même désormais à souligner sa « proximité depui",
+      "scraped_at": "2026-02-03T17:21:00.349Z"
+    },
+    {
+      "auteur": "Brice Bernard",
+      "citation": "aucune sympathie pour Dieudonné",
+      "types": [
+        "antisemite"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "lieu": null,
+      "contexte": "Contacté, Brice Bernard assure qu’il n’y avait « aucune connotation antisémite de [sa] part » et qu’il n’a « aucune sympathie pour Dieudonné ». Il tient même désormais à souligner sa « proximité depui",
+      "scraped_at": "2026-02-03T17:21:00.349Z"
+    },
+    {
+      "auteur": "Brice Bernard",
+      "citation": "proximité depuis 2021 avec les autorités religieuses juives sur Chambéry et Aix",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "lieu": null,
+      "contexte": "Contacté, Brice Bernard assure qu’il n’y avait « aucune connotation antisémite de [sa] part » et qu’il n’a « aucune sympathie pour Dieudonné ». Il tient même désormais à souligner sa « proximité depui",
+      "scraped_at": "2026-02-03T17:21:00.349Z"
+    },
+    {
+      "auteur": "Brice Bernard",
+      "citation": "“Le racisme” et la caricature",
+      "types": [
+        "raciste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "lieu": null,
+      "contexte": "Contacté, Brice Bernard assure qu’il n’y avait « aucune connotation antisémite de [sa] part » et qu’il n’a « aucune sympathie pour Dieudonné ». Il tient même désormais à souligner sa « proximité depui",
+      "scraped_at": "2026-02-03T17:21:00.349Z"
+    },
+    {
+      "auteur": "Brice Bernard",
+      "citation": "À l’âge de la transformation des photos par l’IA, impossible de contrôler ce que font les autres ou ce que disent les autres.",
+      "types": [
+        "homophobe",
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "lieu": null,
+      "contexte": "Contacté, Brice Bernard assure qu’il n’y avait « aucune connotation antisémite de [sa] part » et qu’il n’a « aucune sympathie pour Dieudonné ». Il tient même désormais à souligner sa « proximité depui",
+      "scraped_at": "2026-02-03T17:21:00.349Z"
+    },
+    {
+      "auteur": "Brice Bernard",
+      "citation": "à l’âge de la transformation des photos par l’IA",
+      "types": [
+        "homophobe"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "lieu": null,
+      "contexte": "\n            Brice Bernard a aussi fait une pose raciste sur une photo publiée sur Facebook par son acolyte David Berton, où il parodie une personne asiatique. Contacté, Brice Bernard a répondu que la",
+      "scraped_at": "2026-02-03T17:21:00.350Z"
+    },
+    {
+      "auteur": "Brice Bernard",
+      "citation": "Je ne connais pas personnellement M. Chatillon. J’avoue ne pas avoir vu qu’il était sur mes réseaux",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "lieu": "Gud",
+      "contexte": "Le candidat fricote aussi avec des radicaux. En février dernier, Libération pointait déjà le cas de Brice Bernard et évoquait son « amitié » sur Instagram avec Frédéric Chatillon – l’ancien chef néofa",
+      "scraped_at": "2026-02-03T17:21:00.350Z"
+    },
+    {
+      "auteur": "Brice Bernard",
+      "citation": "proposé son aide pour tracter lors d’actions militantes",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "lieu": null,
+      "contexte": "Bastien C. aurait aussi « proposé son aide pour tracter lors d’actions militantes », selon Brice Bernard pour expliquer son amitié sur Instagram avec le militant. « Je ne le connais pas plus. J’ignora",
+      "scraped_at": "2026-02-03T17:21:00.350Z"
+    },
+    {
+      "auteur": "Brice Bernard",
+      "citation": "Je ne le connais pas plus. J’ignorais ce que vous me dites autant pour Edelweiss que pour le Bastion",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "lieu": null,
+      "contexte": "Bastien C. aurait aussi « proposé son aide pour tracter lors d’actions militantes », selon Brice Bernard pour expliquer son amitié sur Instagram avec le militant. « Je ne le connais pas plus. J’ignora",
+      "scraped_at": "2026-02-03T17:21:00.350Z"
+    },
+    {
+      "auteur": "Brice Bernard",
+      "citation": "Je ne suis pas ces groupuscules, je ne m’y intéresse pas.",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719574820-brice-bernard-candidat-rassemblement-national-quenelle-racisme-neofasciste-chatillon-extreme-droite",
+      "lieu": null,
+      "contexte": "« Je ne suis pas ces groupuscules, je ne m’y intéresse pas. »",
+      "scraped_at": "2026-02-03T17:21:00.350Z"
+    },
+    {
+      "auteur": "Christian Pérez",
+      "citation": "J’ai cru voir des clandestins repartir chez eux et là paf, c’était que la pseudo-équipe de France qui partait au Qatar.",
+      "types": [
+        "raciste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720017546-finistere-candidat-rassemblement-national-joueurs-equipe-france-clandestins-legislatives",
+      "lieu": "8e circonscription du Finistère",
+      "contexte": "« J’ai cru voir des clandestins repartir chez eux et là paf, c’était que la pseudo-équipe de France qui partait au Qatar. » Ce message raciste a été publié sur les réseaux sociaux par Christian Pérez ",
+      "scraped_at": "2026-02-03T17:21:02.003Z"
+    },
+    {
+      "auteur": "Christian Pérez",
+      "citation": "conserves à base de porc",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720017546-finistere-candidat-rassemblement-national-joueurs-equipe-france-clandestins-legislatives",
+      "lieu": "8e circonscription du Finistère",
+      "contexte": "« J’ai cru voir des clandestins repartir chez eux et là paf, c’était que la pseudo-équipe de France qui partait au Qatar. » Ce message raciste a été publié sur les réseaux sociaux par Christian Pérez ",
+      "scraped_at": "2026-02-03T17:21:02.003Z"
+    },
+    {
+      "auteur": "Christian Pérez",
+      "citation": "les initiés comprendront",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720017546-finistere-candidat-rassemblement-national-joueurs-equipe-france-clandestins-legislatives",
+      "lieu": "8e circonscription du Finistère",
+      "contexte": "« J’ai cru voir des clandestins repartir chez eux et là paf, c’était que la pseudo-équipe de France qui partait au Qatar. » Ce message raciste a été publié sur les réseaux sociaux par Christian Pérez ",
+      "scraped_at": "2026-02-03T17:21:02.003Z"
+    },
+    {
+      "auteur": "Daniel Craig",
+      "citation": "Je n’ai rien contre la chasse et ne supporte pas les attaques contre cette tradition. Je n’ai juste plus envie de la pratiquer, je rêve d’une autre chasse impossible à nommer ici.",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720017546-finistere-candidat-rassemblement-national-joueurs-equipe-france-clandestins-legislatives",
+      "lieu": null,
+      "contexte": "\n            En 2019, il publie une image de Daniel Craig, fusil en main, tirée du film Skyfall. En commentaire, il écrit : « Je n’ai rien contre la chasse et ne supporte pas les attaques contre cette",
+      "scraped_at": "2026-02-03T17:21:02.004Z"
+    },
+    {
+      "auteur": "Christian Pérez",
+      "citation": "antisémite et anti-juif",
+      "types": [
+        "antisemite"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720017546-finistere-candidat-rassemblement-national-joueurs-equipe-france-clandestins-legislatives",
+      "lieu": null,
+      "contexte": "Retour en arrière, 13 ans plus tôt, en octobre 2011. Christian Pérez est en milieu de table pour le 14e Forum de la nation, qui se déroule dans le parc de la Tête d’or, à Lyon (69). Cette journée annu",
+      "scraped_at": "2026-02-03T17:21:02.004Z"
+    },
+    {
+      "auteur": "Christian Pérez",
+      "citation": "Comment combattre l’invasion ?",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720017546-finistere-candidat-rassemblement-national-joueurs-equipe-france-clandestins-legislatives",
+      "lieu": null,
+      "contexte": "Et quand il n’invite pas, Christian Pérez se rend, par exemple, le 11 novembre 2010, à la 4e journée de Synthèse nationale, revue identitaire qui fait la liaison entre toutes les chapelles de l’extrêm",
+      "scraped_at": "2026-02-03T17:21:02.004Z"
+    },
+    {
+      "auteur": "Christian Pérez",
+      "citation": "l’invasion migratoire",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1720017546-finistere-candidat-rassemblement-national-joueurs-equipe-france-clandestins-legislatives",
+      "lieu": null,
+      "contexte": "Et quand il n’invite pas, Christian Pérez se rend, par exemple, le 11 novembre 2010, à la 4e journée de Synthèse nationale, revue identitaire qui fait la liaison entre toutes les chapelles de l’extrêm",
+      "scraped_at": "2026-02-03T17:21:02.005Z"
+    },
+    {
+      "auteur": "Nicolas Koutseff",
+      "citation": "en tant qu’attaché parlementaire de Laure Lavalette",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1746464175-attache-parlementaire-vire-tweets-racistes-deputee-rassemblement-national-var-laure-lavalette-nicolas-koutseff",
+      "lieu": null,
+      "contexte": "Toulon (83) – Elle s’est pincée pour y croire. En cette matinée du 27 mars, Zohra (1), membre de l’équipe d’agents municipaux en charge de l’espace Beaucaire, voit Nicolas Koutseff entrer dans ce lieu",
+      "scraped_at": "2026-02-03T17:21:03.850Z"
+    },
+    {
+      "auteur": "Nicolas Koutseff",
+      "citation": "faire un tour dans les locaux et rencontrer les gens qui y travaillent",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1746464175-attache-parlementaire-vire-tweets-racistes-deputee-rassemblement-national-var-laure-lavalette-nicolas-koutseff",
+      "lieu": null,
+      "contexte": "Toulon (83) – Elle s’est pincée pour y croire. En cette matinée du 27 mars, Zohra (1), membre de l’équipe d’agents municipaux en charge de l’espace Beaucaire, voit Nicolas Koutseff entrer dans ce lieu",
+      "scraped_at": "2026-02-03T17:21:03.850Z"
+    },
+    {
+      "auteur": "Nicolas Koutseff",
+      "citation": "Le Val-de-Marne c’est l’Afrique ?",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1746464175-attache-parlementaire-vire-tweets-racistes-deputee-rassemblement-national-var-laure-lavalette-nicolas-koutseff",
+      "lieu": "mairie de Toulon lors des élections de mars prochain",
+      "contexte": "Sur le papier, tout roule. Mais il y a quand même un gros point qui interroge Zohra et Nordine : Nicolas Koutseff n’est plus censé travailler depuis octobre pour la députée Lavalette, étoile montante ",
+      "scraped_at": "2026-02-03T17:21:03.850Z"
+    },
+    {
+      "auteur": "Nicolas Koutseff",
+      "citation": "la colonisation ça a du bon",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1746464175-attache-parlementaire-vire-tweets-racistes-deputee-rassemblement-national-var-laure-lavalette-nicolas-koutseff",
+      "lieu": "mairie de Toulon lors des élections de mars prochain",
+      "contexte": "Sur le papier, tout roule. Mais il y a quand même un gros point qui interroge Zohra et Nordine : Nicolas Koutseff n’est plus censé travailler depuis octobre pour la députée Lavalette, étoile montante ",
+      "scraped_at": "2026-02-03T17:21:03.851Z"
+    },
+    {
+      "auteur": "Nicolas Koutseff",
+      "citation": "c’est bon d’être une pute",
+      "types": [
+        "sexiste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1746464175-attache-parlementaire-vire-tweets-racistes-deputee-rassemblement-national-var-laure-lavalette-nicolas-koutseff",
+      "lieu": "mairie de Toulon lors des élections de mars prochain",
+      "contexte": "Sur le papier, tout roule. Mais il y a quand même un gros point qui interroge Zohra et Nordine : Nicolas Koutseff n’est plus censé travailler depuis octobre pour la députée Lavalette, étoile montante ",
+      "scraped_at": "2026-02-03T17:21:03.851Z"
+    },
+    {
+      "auteur": "Laure Lavalette",
+      "citation": "Ça a été une entrevue très brève et j’ai prévenu, ainsi que j’en ai l’obligation, mon supérieur pour qu’il soit présent le lendemain afin d’accueillir la députée.",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1746464175-attache-parlementaire-vire-tweets-racistes-deputee-rassemblement-national-var-laure-lavalette-nicolas-koutseff",
+      "lieu": null,
+      "contexte": "Alors qu’est-ce que faisait cet ancien assistant parlementaire RN à l’espace Beaucaire en costume et flanqué selon nos informations du tout aussi endimanché Antoine di Martino. Ce dernier est l’un des",
+      "scraped_at": "2026-02-03T17:21:03.851Z"
+    },
+    {
+      "auteur": "Laure Lavalette",
+      "citation": "Elle a choisi la fin du Ramadan pour venir, du coup les rues étaient désertes. Mais ça ne l’a pas empêché de faire déplacer deux fourgons de policiers et une voiture banalisée pour encadrer sa visite à La Beaucaire. C’est bien la seule élue à faire ça, tout parti confondu",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1746464175-attache-parlementaire-vire-tweets-racistes-deputee-rassemblement-national-var-laure-lavalette-nicolas-koutseff",
+      "lieu": "faire ça",
+      "contexte": "La venue de cet ex-assistant parlementaire, mais qui semble donc toujours faire le job à l’espace Beaucaire a d’ailleurs été suivie d’effets : Laure Lavalette et ses collaborateurs y ont bien passé un",
+      "scraped_at": "2026-02-03T17:21:03.852Z"
+    },
+    {
+      "auteur": "Laure Lavalette",
+      "citation": "En même temps, elle n’a plus Koutseff pour lui servir de garde du corps",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1746464175-attache-parlementaire-vire-tweets-racistes-deputee-rassemblement-national-var-laure-lavalette-nicolas-koutseff",
+      "lieu": "faire ça",
+      "contexte": "La venue de cet ex-assistant parlementaire, mais qui semble donc toujours faire le job à l’espace Beaucaire a d’ailleurs été suivie d’effets : Laure Lavalette et ses collaborateurs y ont bien passé un",
+      "scraped_at": "2026-02-03T17:21:03.852Z"
+    },
+    {
+      "auteur": "Ludivine Daoudi",
+      "citation": "On ne peut que constater que malgré leurs tentatives de dédiabolisation, les candidats du RN sont dans la droite ligne du FN, fondé par un Waffen SS",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": "le Calvados",
+      "contexte": "Les électeurs du Calvados ne savaient pas qui était Ludivine Daoudi. Elle n’a donné aucune interview, n’a fait aucune réunion publique et n’a pas participé au débat organisé par France 3. Ni communica",
+      "scraped_at": "2026-02-03T17:25:54.070Z"
+    },
+    {
+      "auteur": "Ludivine Daoudi",
+      "citation": "deux militantes du Parti de la France",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Ludivine Daoudi est même membre du Parti de la France (PdF), un mouvement pétainiste, connu pour son antisémitisme et ses déclarations suprémacistes ou racistes, confirme à StreetPress son président T",
+      "scraped_at": "2026-02-03T17:25:54.073Z"
+    },
+    {
+      "auteur": "Ludivine Daoudi",
+      "citation": "parvenues à passer sous les fourches caudines de la commission d’investiture du RN",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Ludivine Daoudi est même membre du Parti de la France (PdF), un mouvement pétainiste, connu pour son antisémitisme et ses déclarations suprémacistes ou racistes, confirme à StreetPress son président T",
+      "scraped_at": "2026-02-03T17:25:54.073Z"
+    },
+    {
+      "auteur": "Ludivine Daoudi",
+      "citation": "victime d’une cabale médiatique",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Ludivine Daoudi est même membre du Parti de la France (PdF), un mouvement pétainiste, connu pour son antisémitisme et ses déclarations suprémacistes ou racistes, confirme à StreetPress son président T",
+      "scraped_at": "2026-02-03T17:25:54.073Z"
+    },
+    {
+      "auteur": "Ludivine Daoudi",
+      "citation": "maintenir coûte que coûte sa candidature",
+      "types": [
+        "autre"
+      ],
+      "source": "https://www.streetpress.com/sujet/1719915854-rn-casquette-nazie-membre-parti-france-raciste-antisemite-petainiste-rassemblement-national-le-pen-bardella-calvados",
+      "lieu": null,
+      "contexte": "Ludivine Daoudi est même membre du Parti de la France (PdF), un mouvement pétainiste, connu pour son antisémitisme et ses déclarations suprémacistes ou racistes, confirme à StreetPress son président T",
+      "scraped_at": "2026-02-03T17:25:54.073Z"
+    },
+    {
+      "auteur": "David Rachline",
+      "citation": "premier couille molle",
+      "types": [
+        "autre"
+      ],
+      "source": "https://linsoumission.fr/2026/01/16/rn-saint-nazaire-municipales-racisme/",
+      "lieu": null,
+      "contexte": "En effet, tout comme David Rachline, ancien vice-président du RN, les municipales viennent faire la lumière sur un passé sombre. De nombreux tweets à caractère raciste, sexiste, xénophobe et homophobe",
+      "scraped_at": "2026-02-03T17:26:02.030Z"
+    },
+    {
+      "auteur": "Ursula Von Der",
+      "citation": "Blondasse de l’Union Européenne",
+      "types": [
+        "revisionniste"
+      ],
+      "source": "https://linsoumission.fr/2026/01/16/rn-saint-nazaire-municipales-racisme/",
+      "lieu": null,
+      "contexte": "Ensuite, il y a le fond des insultes. Car aussi vide politiquement qu’une insulte en réaction à un positionnement politique puisse être, c’est son existence même qui lui donne un sens. Tout d’abord to",
+      "scraped_at": "2026-02-03T17:26:02.030Z"
+    }
+  ]
+}
