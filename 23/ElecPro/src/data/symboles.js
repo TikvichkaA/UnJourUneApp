@@ -150,6 +150,33 @@ export const symbolesData = {
       normeRef: "NF C 15-100"
     },
     {
+      id: "sonnerie",
+      category: "eclairage",
+      nom: "Sonnerie",
+      description: "Avertisseur sonore électrique",
+      utilisation: "Entrée, portillon, signalisation",
+      astuce: "Symbole en demi-cercle évoquant une cloche",
+      normeRef: "NF C 15-100"
+    },
+    {
+      id: "voyant",
+      category: "eclairage",
+      nom: "Voyant lumineux",
+      description: "Témoin lumineux de signalisation",
+      utilisation: "Indication d'état (marche/arrêt), signalisation tableau",
+      astuce: "Petit cercle plein ou symbole lampe barré de flèches",
+      normeRef: "NF C 15-100"
+    },
+    {
+      id: "chauffage-electrique",
+      category: "eclairage",
+      nom: "Chauffage électrique",
+      description: "Radiateur ou convecteur électrique",
+      utilisation: "Chauffage des pièces, circuit dédié par radiateur ou zone",
+      astuce: "Symbole rectangulaire avec zigzag de résistance",
+      normeRef: "NF C 15-100"
+    },
+    {
       id: "hublot",
       category: "eclairage",
       nom: "Hublot",
@@ -194,6 +221,24 @@ export const symbolesData = {
       description: "Alimentation directe pour plaque de cuisson",
       utilisation: "Plaque de cuisson, câble 6mm²",
       astuce: "Pas de prise, câble en attente avec domino",
+      normeRef: "NF C 15-100"
+    },
+    {
+      id: "bloc-3-prises",
+      category: "prises",
+      nom: "Bloc de 3 prises 16A",
+      description: "3 prises de courant regroupées dans un même boîtier",
+      utilisation: "Plan de travail cuisine, bureau, multimédia",
+      astuce: "Montées en dérivation, un seul circuit protégé par 20A",
+      normeRef: "NF C 15-100"
+    },
+    {
+      id: "bloc-4-prises",
+      category: "prises",
+      nom: "Bloc de 4 prises 16A",
+      description: "4 prises de courant regroupées dans un même boîtier",
+      utilisation: "Bureau, multimédia, plan de travail",
+      astuce: "Montées en dérivation, comptent pour 1 socle dans le calcul NF C 15-100",
       normeRef: "NF C 15-100"
     },
     {
@@ -250,6 +295,33 @@ export const symbolesData = {
       description: "Contact momentané (retour automatique)",
       utilisation: "Avec télérupteur, minuterie, sonnette",
       astuce: "Symbole avec flèche indiquant le rappel",
+      normeRef: "NF C 15-100"
+    },
+    {
+      id: "interrupteur-voyant",
+      category: "commandes",
+      nom: "Interrupteur simple allumage avec voyant",
+      description: "Interrupteur avec témoin lumineux intégré",
+      utilisation: "Indique l'état de la lumière dans une pièce éloignée (cave, grenier)",
+      astuce: "Cercle avec trait oblique et un point lumineux",
+      normeRef: "NF C 15-100"
+    },
+    {
+      id: "bouton-poussoir-lumineux",
+      category: "commandes",
+      nom: "Bouton poussoir lumineux",
+      description: "Bouton poussoir avec voyant de signalisation",
+      utilisation: "Repérage dans l'obscurité (couloirs, escaliers)",
+      astuce: "Comme le bouton poussoir avec un point lumineux en plus",
+      normeRef: "NF C 15-100"
+    },
+    {
+      id: "interrupteur-bipolaire",
+      category: "commandes",
+      nom: "Interrupteur bipolaire",
+      description: "Coupe simultanément la phase et le neutre",
+      utilisation: "Chauffe-eau, radiateurs, sécurité renforcée",
+      astuce: "2 pôles coupés ensemble, trait reliant les 2 leviers",
       normeRef: "NF C 15-100"
     },
     {
@@ -335,8 +407,35 @@ export const symbolesData = {
       astuce: "Gère les priorités entre circuits",
       normeRef: "NF C 15-100"
     },
+    {
+      id: "thermostat",
+      category: "appareillage",
+      nom: "Thermostat",
+      description: "Régulation de la température ambiante",
+      utilisation: "Commande du chauffage central ou électrique",
+      astuce: "Symbole avec θ (thêta) pour la température",
+      normeRef: "NF C 15-100"
+    },
+    {
+      id: "transformateur",
+      category: "appareillage",
+      nom: "Transformateur",
+      description: "Convertit la tension (ex: 230V vers 12V ou 24V)",
+      utilisation: "Sonnerie, éclairage basse tension, circuits de commande",
+      astuce: "2 bobines couplées, symbolisées par 2 enroulements face à face",
+      normeRef: "NF C 15-100"
+    },
 
     // === CÂBLAGE ET REPÉRAGE ===
+    {
+      id: "arrivee-reseau",
+      category: "cablage",
+      nom: "Arrivée du réseau électrique",
+      description: "Point d'entrée de l'alimentation EDF dans l'installation",
+      utilisation: "En amont du disjoncteur de branchement (AGCP)",
+      astuce: "3 traits obliques pour Ph, N, PE",
+      normeRef: "NF C 14-100"
+    },
     {
       id: "terre",
       category: "cablage",

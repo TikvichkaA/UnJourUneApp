@@ -424,6 +424,9 @@ export const symbolsMap = {
   'applique': SymbolApplique,
   'spot-encastre': SymbolSpotEncastre,
   'detecteur-presence': SymbolDetecteurPresence,
+  'sonnerie': SymbolSonnerie,
+  'voyant': SymbolVoyant,
+  'chauffage-electrique': SymbolChauffageElectrique,
   'hublot': SymbolHublot,
 
   // Prises
@@ -431,6 +434,8 @@ export const symbolsMap = {
   'prise-commandee': SymbolPriseCommandee,
   'prise-20a': SymbolPrise2PT,
   'prise-32a': SymbolPrise2PT,
+  'bloc-3-prises': SymbolBloc3Prises,
+  'bloc-4-prises': SymbolBloc4Prises,
   'prise-rj45': SymbolPriseRJ45,
   'prise-tv': SymbolPriseTV,
 
@@ -439,6 +444,9 @@ export const symbolsMap = {
   'interrupteur-double': SymbolInterrupteurDouble,
   'va-et-vient': SymbolVaEtVient,
   'bouton-poussoir': SymbolBoutonPoussoir,
+  'interrupteur-voyant': SymbolInterrupteurVoyant,
+  'bouton-poussoir-lumineux': SymbolBoutonPoussoirLumineux,
+  'interrupteur-bipolaire': SymbolInterrupteurBipolaire,
   'interrupteur-vmc': SymbolInterrupteurSimple,
   'interrupteur-volet': SymbolInterrupteurDouble,
   'variateur': SymbolVariateur,
@@ -450,8 +458,11 @@ export const symbolsMap = {
   'contacteur-jour-nuit': SymbolContacteurJourNuit,
   'horloge': SymbolHorloge,
   'delesteur': SymbolDelesteur,
+  'thermostat': SymbolThermostat,
+  'transformateur': SymbolTransformateur,
 
   // Câblage
+  'arrivee-reseau': SymbolArriveeReseau,
   'terre': SymbolTerre,
   'liaison-equipotentielle': SymbolLiaisonEquipotentielle,
   'boite-derivation': SymbolBoiteDerivation,
@@ -548,6 +559,220 @@ export function SymbolHublot({ size = 80, className = "" }) {
       <circle cx="30" cy="30" r="20" fill="none" stroke="currentColor" strokeWidth="3"/>
       <line x1="30" y1="15" x2="30" y2="45" stroke="currentColor" strokeWidth="2"/>
       <line x1="15" y1="30" x2="45" y2="30" stroke="currentColor" strokeWidth="2"/>
+    </svg>
+  )
+}
+
+// === NOUVEAUX SYMBOLES (PDF "Tableau des symboles électriques") ===
+
+// Interrupteur simple allumage avec voyant
+export function SymbolInterrupteurVoyant({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 60 60" width={size} height={size} className={className}>
+      {/* Point central */}
+      <circle cx="30" cy="45" r="5" fill="currentColor"/>
+      {/* Levier */}
+      <line x1="30" y1="45" x2="50" y2="15" stroke="currentColor" strokeWidth="3"/>
+      {/* Borne haute */}
+      <circle cx="50" cy="15" r="4" fill="none" stroke="currentColor" strokeWidth="2"/>
+      {/* Voyant */}
+      <circle cx="15" cy="20" r="5" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="15" cy="20" r="2" fill="currentColor"/>
+    </svg>
+  )
+}
+
+// Bouton poussoir lumineux
+export function SymbolBoutonPoussoirLumineux({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 60 60" width={size} height={size} className={className}>
+      {/* Point central */}
+      <circle cx="30" cy="45" r="5" fill="currentColor"/>
+      {/* Levier avec rappel */}
+      <line x1="30" y1="45" x2="50" y2="15" stroke="currentColor" strokeWidth="3"/>
+      <circle cx="50" cy="15" r="4" fill="none" stroke="currentColor" strokeWidth="2"/>
+      {/* Flèche de rappel */}
+      <path d="M40 25 L45 20 L43 28 Z" fill="currentColor"/>
+      {/* Voyant */}
+      <circle cx="15" cy="20" r="5" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="15" cy="20" r="2" fill="currentColor"/>
+    </svg>
+  )
+}
+
+// Interrupteur bipolaire
+export function SymbolInterrupteurBipolaire({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 80 60" width={size} height={size * 0.75} className={className}>
+      {/* Pôle 1 */}
+      <circle cx="20" cy="50" r="4" fill="currentColor"/>
+      <line x1="20" y1="50" x2="35" y2="15" stroke="currentColor" strokeWidth="3"/>
+      <circle cx="35" cy="15" r="3" fill="none" stroke="currentColor" strokeWidth="2"/>
+      {/* Pôle 2 */}
+      <circle cx="45" cy="50" r="4" fill="currentColor"/>
+      <line x1="45" y1="50" x2="60" y2="15" stroke="currentColor" strokeWidth="3"/>
+      <circle cx="60" cy="15" r="3" fill="none" stroke="currentColor" strokeWidth="2"/>
+      {/* Barre de liaison */}
+      <line x1="28" y1="32" x2="53" y2="32" stroke="currentColor" strokeWidth="2" strokeDasharray="3"/>
+    </svg>
+  )
+}
+
+// Bloc de 3 prises 16A
+export function SymbolBloc3Prises({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 100 60" width={size} height={size * 0.6} className={className}>
+      {/* Prise 1 */}
+      <path d="M5 50 A15 15 0 0 1 35 50" fill="none" stroke="currentColor" strokeWidth="2.5"/>
+      <line x1="5" y1="50" x2="35" y2="50" stroke="currentColor" strokeWidth="2.5"/>
+      <line x1="14" y1="40" x2="14" y2="50" stroke="currentColor" strokeWidth="2"/>
+      <line x1="26" y1="40" x2="26" y2="50" stroke="currentColor" strokeWidth="2"/>
+      <line x1="20" y1="28" x2="20" y2="40" stroke="currentColor" strokeWidth="2"/>
+      {/* Prise 2 */}
+      <path d="M35 50 A15 15 0 0 1 65 50" fill="none" stroke="currentColor" strokeWidth="2.5"/>
+      <line x1="35" y1="50" x2="65" y2="50" stroke="currentColor" strokeWidth="2.5"/>
+      <line x1="44" y1="40" x2="44" y2="50" stroke="currentColor" strokeWidth="2"/>
+      <line x1="56" y1="40" x2="56" y2="50" stroke="currentColor" strokeWidth="2"/>
+      <line x1="50" y1="28" x2="50" y2="40" stroke="currentColor" strokeWidth="2"/>
+      {/* Prise 3 */}
+      <path d="M65 50 A15 15 0 0 1 95 50" fill="none" stroke="currentColor" strokeWidth="2.5"/>
+      <line x1="65" y1="50" x2="95" y2="50" stroke="currentColor" strokeWidth="2.5"/>
+      <line x1="74" y1="40" x2="74" y2="50" stroke="currentColor" strokeWidth="2"/>
+      <line x1="86" y1="40" x2="86" y2="50" stroke="currentColor" strokeWidth="2"/>
+      <line x1="80" y1="28" x2="80" y2="40" stroke="currentColor" strokeWidth="2"/>
+    </svg>
+  )
+}
+
+// Bloc de 4 prises 16A
+export function SymbolBloc4Prises({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 120 60" width={size} height={size * 0.5} className={className}>
+      {/* Prise 1 */}
+      <path d="M3 50 A13 13 0 0 1 27 50" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <line x1="3" y1="50" x2="27" y2="50" stroke="currentColor" strokeWidth="2"/>
+      <line x1="10" y1="42" x2="10" y2="50" stroke="currentColor" strokeWidth="1.5"/>
+      <line x1="20" y1="42" x2="20" y2="50" stroke="currentColor" strokeWidth="1.5"/>
+      <line x1="15" y1="30" x2="15" y2="42" stroke="currentColor" strokeWidth="1.5"/>
+      {/* Prise 2 */}
+      <path d="M33 50 A13 13 0 0 1 57 50" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <line x1="33" y1="50" x2="57" y2="50" stroke="currentColor" strokeWidth="2"/>
+      <line x1="40" y1="42" x2="40" y2="50" stroke="currentColor" strokeWidth="1.5"/>
+      <line x1="50" y1="42" x2="50" y2="50" stroke="currentColor" strokeWidth="1.5"/>
+      <line x1="45" y1="30" x2="45" y2="42" stroke="currentColor" strokeWidth="1.5"/>
+      {/* Prise 3 */}
+      <path d="M63 50 A13 13 0 0 1 87 50" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <line x1="63" y1="50" x2="87" y2="50" stroke="currentColor" strokeWidth="2"/>
+      <line x1="70" y1="42" x2="70" y2="50" stroke="currentColor" strokeWidth="1.5"/>
+      <line x1="80" y1="42" x2="80" y2="50" stroke="currentColor" strokeWidth="1.5"/>
+      <line x1="75" y1="30" x2="75" y2="42" stroke="currentColor" strokeWidth="1.5"/>
+      {/* Prise 4 */}
+      <path d="M93 50 A13 13 0 0 1 117 50" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <line x1="93" y1="50" x2="117" y2="50" stroke="currentColor" strokeWidth="2"/>
+      <line x1="100" y1="42" x2="100" y2="50" stroke="currentColor" strokeWidth="1.5"/>
+      <line x1="110" y1="42" x2="110" y2="50" stroke="currentColor" strokeWidth="1.5"/>
+      <line x1="105" y1="30" x2="105" y2="42" stroke="currentColor" strokeWidth="1.5"/>
+    </svg>
+  )
+}
+
+// Chauffage électrique
+export function SymbolChauffageElectrique({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 80 60" width={size} height={size * 0.75} className={className}>
+      {/* Cadre rectangulaire */}
+      <rect x="10" y="10" width="60" height="40" fill="none" stroke="currentColor" strokeWidth="3" rx="2"/>
+      {/* Zigzag résistance */}
+      <path d="M20 30 L28 18 L36 42 L44 18 L52 42 L60 30" fill="none" stroke="currentColor" strokeWidth="2.5"/>
+    </svg>
+  )
+}
+
+// Transformateur
+export function SymbolTransformateur({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 80 60" width={size} height={size * 0.75} className={className}>
+      {/* Bobine primaire */}
+      <path d="M15 10 Q25 10 25 17 Q25 24 15 24 Q25 24 25 31 Q25 38 15 38 Q25 38 25 45 Q25 52 15 52" fill="none" stroke="currentColor" strokeWidth="2.5"/>
+      {/* Bobine secondaire */}
+      <path d="M55 10 Q45 10 45 17 Q45 24 55 24 Q45 24 45 31 Q45 38 55 38 Q45 38 45 45 Q45 52 55 52" fill="none" stroke="currentColor" strokeWidth="2.5"/>
+      {/* Noyau (2 traits verticaux) */}
+      <line x1="32" y1="8" x2="32" y2="54" stroke="currentColor" strokeWidth="2"/>
+      <line x1="38" y1="8" x2="38" y2="54" stroke="currentColor" strokeWidth="2"/>
+      {/* Bornes */}
+      <line x1="0" y1="15" x2="15" y2="15" stroke="currentColor" strokeWidth="2"/>
+      <line x1="0" y1="47" x2="15" y2="47" stroke="currentColor" strokeWidth="2"/>
+      <line x1="55" y1="15" x2="70" y2="15" stroke="currentColor" strokeWidth="2"/>
+      <line x1="55" y1="47" x2="70" y2="47" stroke="currentColor" strokeWidth="2"/>
+    </svg>
+  )
+}
+
+// Sonnerie
+export function SymbolSonnerie({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 60 60" width={size} height={size} className={className}>
+      {/* Cloche - demi-cercle */}
+      <path d="M15 35 Q15 10 30 10 Q45 10 45 35" fill="none" stroke="currentColor" strokeWidth="3"/>
+      {/* Base de la cloche */}
+      <line x1="12" y1="35" x2="48" y2="35" stroke="currentColor" strokeWidth="3"/>
+      {/* Battant */}
+      <line x1="30" y1="35" x2="30" y2="45" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="30" cy="47" r="3" fill="currentColor"/>
+      {/* Ondes sonores */}
+      <path d="M48 20 Q55 25 48 30" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <path d="M52 16 Q62 25 52 34" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+    </svg>
+  )
+}
+
+// Voyant lumineux
+export function SymbolVoyant({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 60 60" width={size} height={size} className={className}>
+      {/* Cercle */}
+      <circle cx="30" cy="30" r="18" fill="none" stroke="currentColor" strokeWidth="3"/>
+      {/* Croix intérieure */}
+      <line x1="30" y1="16" x2="30" y2="44" stroke="currentColor" strokeWidth="2"/>
+      <line x1="16" y1="30" x2="44" y2="30" stroke="currentColor" strokeWidth="2"/>
+      {/* Flèches de rayonnement */}
+      <line x1="48" y1="12" x2="55" y2="5" stroke="currentColor" strokeWidth="2"/>
+      <path d="M52 5 L55 5 L55 8" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+      <line x1="48" y1="20" x2="56" y2="16" stroke="currentColor" strokeWidth="2"/>
+      <path d="M53 14 L56 16 L54 19" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+    </svg>
+  )
+}
+
+// Arrivée du réseau électrique
+export function SymbolArriveeReseau({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 80 60" width={size} height={size * 0.75} className={className}>
+      {/* 3 traits obliques Ph, N, PE */}
+      <line x1="15" y1="10" x2="15" y2="55" stroke="currentColor" strokeWidth="3"/>
+      <line x1="30" y1="10" x2="30" y2="55" stroke="currentColor" strokeWidth="3"/>
+      <line x1="45" y1="10" x2="45" y2="55" stroke="currentColor" strokeWidth="3"/>
+      {/* Traits obliques (arrivée) */}
+      <line x1="10" y1="20" x2="20" y2="15" stroke="currentColor" strokeWidth="2"/>
+      <line x1="25" y1="20" x2="35" y2="15" stroke="currentColor" strokeWidth="2"/>
+      <line x1="40" y1="20" x2="50" y2="15" stroke="currentColor" strokeWidth="2"/>
+      {/* Labels */}
+      <text x="15" y="8" textAnchor="middle" fontSize="7" fill="currentColor">Ph</text>
+      <text x="30" y="8" textAnchor="middle" fontSize="7" fill="currentColor">N</text>
+      <text x="45" y="8" textAnchor="middle" fontSize="7" fill="currentColor">PE</text>
+    </svg>
+  )
+}
+
+// Thermostat
+export function SymbolThermostat({ size = 80, className = "" }) {
+  return (
+    <svg viewBox="0 0 60 60" width={size} height={size} className={className}>
+      {/* Boîtier */}
+      <rect x="10" y="10" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="3" rx="3"/>
+      {/* Symbole theta θ */}
+      <circle cx="30" cy="30" r="12" fill="none" stroke="currentColor" strokeWidth="2.5"/>
+      <line x1="20" y1="30" x2="40" y2="30" stroke="currentColor" strokeWidth="2"/>
     </svg>
   )
 }
