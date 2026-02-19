@@ -147,6 +147,21 @@ const Auth = (function() {
     return currentUser !== null;
   }
 
+  /**
+   * Verifie si l'utilisateur a un abonnement actif
+   */
+  function checkSubscription() {
+    if (!currentProfile) return { tier: 'free', active: false, limit: 5 };
+    var tier = currentProfile.subscription_tier || 'free';
+    var expires = currentProfile.subscription_expires_at;
+    var active = tier !== 'free' && expires && new Date(expires) > new Date();
+    return {
+      tier: tier,
+      active: active,
+      limit: active ? Infinity : 5
+    };
+  }
+
   return {
     init,
     signUp,
@@ -156,6 +171,7 @@ const Auth = (function() {
     getProfile,
     updateProfile,
     onAuthChange,
-    isLoggedIn
+    isLoggedIn,
+    checkSubscription
   };
 })();

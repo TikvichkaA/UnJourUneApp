@@ -280,7 +280,36 @@ function generateEmailHTML(items, stats) {
 </html>`;
 }
 
-// Envoyer l'email via Resend
+// Pause utilitaire
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Envoyer un email via Resend (une tentative)
+function sendEmailRequest(payload) {
+    return new Promise((resolve) => {
+        const req = https.request({
+            hostname: 'api.resend.com',
+            path: '/emails',
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${CONFIG.resendApiKey}`,
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(payload)
+            }
+        }, (res) => {
+            let data = '';
+            res.on('data', chunk => data += chunk);
+            res.on('end', () => resolve({ statusCode: res.statusCode, body: data }));
+        });
+
+        req.on('error', (err) => resolve({ statusCode: 0, body: err.message, networkError: true }));
+        req.write(payload);
+        req.end();
+    });
+}
+
+// Envoyer l'email via Resend avec retry + backoff exponentiel
 async function sendEmail(html, itemCount, recipientEmail) {
     if (!CONFIG.resendApiKey) {
         console.log('\n⚠️  Pas de clé API Resend configurée.');
@@ -300,38 +329,37 @@ async function sendEmail(html, itemCount, recipientEmail) {
         html
     });
 
-    return new Promise((resolve) => {
-        const req = https.request({
-            hostname: 'api.resend.com',
-            path: '/emails',
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${CONFIG.resendApiKey}`,
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(payload)
-            }
-        }, (res) => {
-            let data = '';
-            res.on('data', chunk => data += chunk);
-            res.on('end', () => {
-                if (res.statusCode === 200) {
-                    console.log(`   ✅ Email envoyé à ${recipientEmail}`);
-                    resolve(true);
-                } else {
-                    console.log(`   ❌ Erreur envoi à ${recipientEmail}: ${data}`);
-                    resolve(false);
-                }
-            });
-        });
+    const maxRetries = 3;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        const result = await sendEmailRequest(payload);
 
-        req.on('error', (err) => {
-            console.log(`   ❌ Erreur réseau: ${err.message}`);
-            resolve(false);
-        });
+        if (result.statusCode === 200) {
+            console.log(`   ✅ Email envoyé à ${recipientEmail}`);
+            return true;
+        }
 
-        req.write(payload);
-        req.end();
-    });
+        if (result.statusCode === 429) {
+            // Rate limited - attendre avec backoff exponentiel
+            const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+            console.log(`   ⏳ Rate limit (429) pour ${recipientEmail} - retry ${attempt}/${maxRetries} dans ${delay / 1000}s...`);
+            await sleep(delay);
+            continue;
+        }
+
+        if (result.networkError) {
+            const delay = attempt * 1000;
+            console.log(`   ⚠️  Erreur réseau pour ${recipientEmail}: ${result.body} - retry ${attempt}/${maxRetries} dans ${delay / 1000}s...`);
+            await sleep(delay);
+            continue;
+        }
+
+        // Autre erreur HTTP (400, 401, 403, 500...) - pas de retry
+        console.log(`   ❌ Erreur envoi à ${recipientEmail} (${result.statusCode}): ${result.body}`);
+        return false;
+    }
+
+    console.log(`   ❌ Échec après ${maxRetries} tentatives pour ${recipientEmail}`);
+    return false;
 }
 
 // Programme principal
@@ -383,11 +411,12 @@ async function main() {
         return;
     }
 
-    // Envoyer aux abonnés
+    // Envoyer aux abonnés (avec délai entre chaque pour éviter le rate limit Resend)
     console.log('Envoi des emails...');
     let successCount = 0;
-    for (const subscriber of subscribers) {
-        const success = await sendEmail(emailHTML, allItems.length, subscriber.email);
+    for (let i = 0; i < subscribers.length; i++) {
+        if (i > 0) await sleep(600); // 600ms entre chaque envoi (~1.5/sec, sous la limite Resend)
+        const success = await sendEmail(emailHTML, allItems.length, subscribers[i].email);
         if (success) successCount++;
     }
 

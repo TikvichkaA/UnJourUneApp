@@ -1,0 +1,189 @@
+/* ============================================
+   Financeurs - CRM directory cards
+   ============================================ */
+
+.financeurs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.financeur-card {
+  cursor: pointer;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.financeur-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.financeur-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.financeur-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.avatar-blue   { background: #3b82f6; }
+.avatar-green  { background: #059669; }
+.avatar-purple { background: #8b5cf6; }
+.avatar-orange { background: #f97316; }
+.avatar-teal   { background: #14b8a6; }
+.avatar-indigo { background: #6366f1; }
+.avatar-pink   { background: #ec4899; }
+.avatar-amber  { background: #f59e0b; }
+.avatar-gray   { background: #9ca3af; }
+
+.financeur-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.financeur-card-name {
+  font-weight: 600;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.25rem;
+}
+
+.financeur-card-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.financeur-stat {
+  text-align: center;
+}
+
+.financeur-stat-value {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.financeur-stat-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.financeur-card-link {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+}
+
+.financeur-card-link a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.financeur-card-link a:hover {
+  text-decoration: underline;
+}
+
+/* ---- Autocomplete dropdown ---- */
+
+.autocomplete-wrap {
+  position: relative;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 100;
+  margin-top: 2px;
+}
+
+.autocomplete-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+  background: var(--bg-secondary);
+}
+
+.autocomplete-item-name {
+  font-weight: 500;
+  flex: 1;
+}
+
+.autocomplete-item-type {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.autocomplete-item-create {
+  color: var(--accent-primary);
+  font-weight: 500;
+}
+
+.autocomplete-selected-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.82rem;
+  margin-top: 0.35rem;
+}
+
+.autocomplete-selected-tag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  padding: 0;
+  line-height: 1;
+}
+
+.autocomplete-selected-tag button:hover {
+  color: var(--color-red);
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 640px) {
+  .financeurs-grid {
+    grid-template-columns: 1fr;
+  }
+}

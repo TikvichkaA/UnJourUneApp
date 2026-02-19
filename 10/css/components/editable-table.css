@@ -1,0 +1,206 @@
+/* ============================================
+   SubTracker - Editable Table (spreadsheet)
+   ============================================ */
+
+.editable-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+}
+
+.editable-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.editable-table th {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: var(--bg-tertiary);
+  border-bottom: 2px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  white-space: nowrap;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.editable-table th:last-child {
+  border-right: none;
+}
+
+.editable-table th.sortable {
+  cursor: pointer;
+}
+
+.editable-table th.sortable:hover {
+  color: var(--text-primary);
+  background: var(--border-color);
+}
+
+.editable-table td {
+  padding: 0;
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  vertical-align: middle;
+  height: 38px;
+}
+
+.editable-table td:last-child {
+  border-right: none;
+}
+
+.editable-table tr:last-child td {
+  border-bottom: none;
+}
+
+.editable-table tr:hover td {
+  background: rgba(5, 150, 105, 0.03);
+}
+
+/* Editable cell */
+.editable-cell {
+  padding: 0.45rem 0.75rem;
+  cursor: text;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  transition: background 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.editable-cell:hover {
+  background: rgba(5, 150, 105, 0.06);
+}
+
+/* Editing state */
+.editable-cell.editing {
+  padding: 0;
+}
+
+.editable-cell.editing input,
+.editable-cell.editing select {
+  width: 100%;
+  height: 38px;
+  padding: 0.4rem 0.7rem;
+  border: 2px solid var(--accent-primary);
+  border-radius: 0;
+  font-size: 0.85rem;
+  font-family: inherit;
+  background: #fff;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.editable-cell.editing select {
+  cursor: pointer;
+}
+
+/* Saving state */
+.editable-cell.saving {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Saved flash */
+@keyframes flashSaved {
+  0% { background: rgba(5, 150, 105, 0.2); }
+  100% { background: transparent; }
+}
+
+.editable-cell.saved {
+  animation: flashSaved 0.8s ease-out;
+}
+
+/* Error flash */
+@keyframes flashError {
+  0% { background: rgba(239, 68, 68, 0.2); }
+  100% { background: transparent; }
+}
+
+.editable-cell.error {
+  animation: flashError 1s ease-out;
+}
+
+/* Readonly cell */
+.editable-cell.readonly {
+  background: var(--bg-tertiary);
+  cursor: default;
+  color: var(--text-secondary);
+}
+
+.editable-cell.readonly:hover {
+  background: var(--bg-tertiary);
+}
+
+/* Delete column */
+.editable-table .cell-actions {
+  text-align: center;
+  padding: 0.3rem;
+}
+
+.editable-table .btn-delete-row {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.15s;
+  line-height: 1;
+}
+
+.editable-table .btn-delete-row:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-red);
+}
+
+/* Tab pills for tableview */
+.tableview-tabs {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--bg-tertiary);
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  width: fit-content;
+  margin-bottom: 1.25rem;
+}
+
+.tableview-tab {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  background: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 0.375rem;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.tableview-tab:hover {
+  color: var(--text-primary);
+}
+
+.tableview-tab.active {
+  background: #fff;
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.tableview-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-left: 0.35rem;
+}
