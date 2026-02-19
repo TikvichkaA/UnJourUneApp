@@ -986,8 +986,8 @@ body {
 .vocab-card {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 16px;
+    gap: 12px;
+    padding: 14px 16px;
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-md);
@@ -1000,8 +1000,28 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+.vocab-card.due {
+    border-left: 3px solid var(--warning);
+}
+
+.vocab-mastery-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
 .vocab-main {
+    min-width: 0;
+    flex-shrink: 0;
+}
+
+.vocab-right {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
 }
 
 .vocab-geo {
@@ -1019,6 +1039,11 @@ body {
 .vocab-meaning {
     color: var(--text-secondary);
     font-size: 0.9375rem;
+}
+
+.vocab-mastery-label {
+    font-size: 0.6875rem;
+    font-weight: 500;
 }
 
 .vocab-audio {
@@ -2227,24 +2252,77 @@ input:checked + .slider::before {
     height: 32px;
 }
 
+/* SRS 4-button layout */
+.flashcard-actions.srs-actions {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px;
+}
+
+.flashcard-actions.srs-actions .flashcard-action-btn {
+    padding: 10px 6px;
+    font-size: 0.8125rem;
+}
+
+.flashcard-actions.srs-actions .flashcard-action-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.srs-interval {
+    font-size: 0.6875rem;
+    opacity: 0.7;
+    font-weight: 400;
+}
+
+.flashcard-action-btn.again {
+    background: var(--error-bg);
+    color: var(--error);
+}
+
+.flashcard-action-btn.again:hover {
+    background: var(--error);
+    color: white;
+}
+
+.flashcard-action-btn.hard {
+    background: var(--warning-bg);
+    color: var(--warning);
+}
+
+.flashcard-action-btn.hard:hover {
+    background: var(--warning);
+    color: white;
+}
+
+.flashcard-action-btn.good {
+    background: var(--success-bg);
+    color: var(--success);
+}
+
+.flashcard-action-btn.good:hover {
+    background: var(--success);
+    color: white;
+}
+
+.flashcard-action-btn.easy {
+    background: var(--info-bg);
+    color: var(--info);
+}
+
+.flashcard-action-btn.easy:hover {
+    background: var(--info);
+    color: white;
+}
+
+/* Legacy compat */
 .flashcard-action-btn.wrong {
     background: var(--error-bg);
     color: var(--error);
 }
 
-.flashcard-action-btn.wrong:hover {
-    background: var(--error);
-    color: white;
-}
-
 .flashcard-action-btn.correct {
     background: var(--success-bg);
     color: var(--success);
-}
-
-.flashcard-action-btn.correct:hover {
-    background: var(--success);
-    color: white;
 }
 
 /* Flashcard Results */
@@ -2421,6 +2499,60 @@ input:checked + .slider::before {
     position: relative;
 }
 
+/* SRS Review Section */
+.srs-review-section {
+    margin-bottom: 20px;
+}
+
+.srs-review-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, var(--warning-bg) 0%, #FFF8E1 100%);
+    border: 1px solid #FFE082;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.srs-review-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.srs-review-icon svg {
+    width: 32px;
+    height: 32px;
+    color: var(--warning);
+}
+
+.srs-review-info {
+    flex: 1;
+}
+
+.srs-review-info h4 {
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.srs-review-info p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.srs-review-info #srsReviewCount {
+    font-weight: 700;
+    color: var(--warning);
+}
+
+.srs-review-arrow svg {
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+}
+
 /* Responsive */
 @media (max-width: 480px) {
     .main-content {
@@ -2441,6 +2573,15 @@ input:checked + .slider::before {
 
     .exercise-prompt {
         font-size: 1.5rem;
+    }
+
+    .flashcard-actions.srs-actions {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .flashcard-actions.srs-actions .flashcard-action-btn {
+        padding: 10px 8px;
     }
 }
 

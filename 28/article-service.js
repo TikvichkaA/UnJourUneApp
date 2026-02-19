@@ -183,13 +183,12 @@ function cleanHtml(text) {
         .trim();
 }
 
-// Find vocabulary words in text
-function findVocabularyInText(text, userLevel = 3) {
+// Find vocabulary words in text, excluding already-known words
+function findVocabularyInText(text, userLevel = 3, excludeWords = []) {
     const foundWords = [];
-    const textLower = text.toLowerCase();
 
     for (const [word, info] of Object.entries(VOCABULARY_DICTIONARY)) {
-        if (info.level <= userLevel + 1 && text.includes(word)) {
+        if (info.level <= userLevel + 1 && text.includes(word) && !excludeWords.includes(word)) {
             // Find position in text
             const index = text.indexOf(word);
 
@@ -216,7 +215,7 @@ function findVocabularyInText(text, userLevel = 3) {
 }
 
 // Fetch articles from all sources and find vocabulary
-async function fetchDailyArticle(userLevel = 1) {
+async function fetchDailyArticle(userLevel = 1, excludeWords = []) {
     const errors = [];
 
     for (const source of NEWS_SOURCES) {
@@ -227,12 +226,12 @@ async function fetchDailyArticle(userLevel = 1) {
 
             if (articles.length === 0) continue;
 
-            // Find article with most vocabulary matches
+            // Find article with most NEW vocabulary matches
             let bestArticle = null;
             let bestWords = [];
 
             for (const article of articles.slice(0, 10)) { // Check first 10 articles
-                const words = findVocabularyInText(article.content, userLevel);
+                const words = findVocabularyInText(article.content, userLevel, excludeWords);
 
                 if (words.length >= 3 && words.length > bestWords.length) {
                     bestArticle = article;
@@ -261,11 +260,11 @@ async function fetchDailyArticle(userLevel = 1) {
     }
 
     // Fallback: return a curated article if no live articles found
-    return getFallbackArticle(userLevel);
+    return getFallbackArticle(userLevel, excludeWords);
 }
 
 // Fallback articles when live fetch fails
-function getFallbackArticle(userLevel) {
+function getFallbackArticle(userLevel, excludeWords = []) {
     const fallbackArticles = [
         {
             title: 'საქართველოში ტურიზმი იზრდება',
@@ -293,7 +292,7 @@ function getFallbackArticle(userLevel) {
     // Pick article based on day
     const dayIndex = new Date().getDay() % fallbackArticles.length;
     const article = fallbackArticles[dayIndex];
-    const words = findVocabularyInText(article.title + ' ' + article.description, userLevel);
+    const words = findVocabularyInText(article.title + ' ' + article.description, userLevel, excludeWords);
 
     return {
         success: true,

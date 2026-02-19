@@ -273,7 +273,9 @@ app.get('/api/themes', (req, res) => {
 app.get('/api/daily-article', async (req, res) => {
     try {
         const userLevel = parseInt(req.query.level) || 1;
-        const result = await fetchDailyArticle(userLevel);
+        // Mots déjà appris à exclure (passés en query string, séparés par des virgules)
+        const excludeWords = req.query.exclude ? req.query.exclude.split(',').filter(Boolean) : [];
+        const result = await fetchDailyArticle(userLevel, excludeWords);
         res.json(result);
     } catch (error) {
         console.error('Error fetching daily article:', error);

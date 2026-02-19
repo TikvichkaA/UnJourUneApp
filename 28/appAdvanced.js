@@ -912,35 +912,33 @@ KartApp.prototype.showVocabFlashcard = function() {
     document.getElementById('flashcardProgressFill').style.width = `${progress}%`;
     document.getElementById('flashcardProgressText').textContent = `${this.flashcardIndex + 1}/${this.flashcardWords.length}`;
 
+    // Afficher les intervalles SRS prévisionnels
+    if (this.updateSRSIntervalLabels) {
+        this.updateSRSIntervalLabels(word.geo);
+    }
+
     // Add click to flip
     card.onclick = () => card.classList.toggle('flipped');
 };
 
-// Override flashcardResponse to work with vocab flashcards
+// Override flashcardResponse to work with vocab flashcards (SRS: quality 1-4)
 const originalFlashcardResponse = KartApp.prototype.flashcardResponse;
-KartApp.prototype.flashcardResponse = function(correct) {
+KartApp.prototype.flashcardResponse = function(quality) {
     const word = this.flashcardWords[this.flashcardIndex];
+    const correct = quality >= 2;
 
     this.flashcardResults.push({
         word: word,
-        correct: correct
+        correct: correct,
+        quality: quality
     });
 
-    if (correct) {
-        // Mark as learned
-        if (!this.progress.learnedWords.includes(word.geo)) {
-            this.progress.learnedWords.push(word.geo);
-        }
-        // Remove from review list if present
-        const reviewIdx = this.progress.wordsToReview.indexOf(word.geo);
-        if (reviewIdx > -1) {
-            this.progress.wordsToReview.splice(reviewIdx, 1);
-        }
-    } else {
-        // Add to review list
-        if (!this.progress.wordsToReview.includes(word.geo)) {
-            this.progress.wordsToReview.push(word.geo);
-        }
+    // Mettre à jour le SRS
+    this.calculateSRS(word.geo, quality);
+
+    // Si oublié, remettre le mot à la fin
+    if (quality === 1) {
+        this.flashcardWords.push(word);
     }
 
     this.saveProgress();

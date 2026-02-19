@@ -244,6 +244,28 @@
                     </div>
                 </div>
 
+                <!-- SRS Review Section -->
+                <div class="srs-review-section" id="srsReviewSection" style="display:none;">
+                    <div class="srs-review-card" onclick="app.startSRSReview()">
+                        <div class="srs-review-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 4v6h-6"/>
+                                <path d="M1 20v-6h6"/>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                            </svg>
+                        </div>
+                        <div class="srs-review-info">
+                            <h4>Révision du jour</h4>
+                            <p><span id="srsReviewCount">0</span> mots à réviser</p>
+                        </div>
+                        <div class="srs-review-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Daily Article Section -->
                 <div class="daily-article-section" id="dailyArticleSection">
                     <div class="article-header">
@@ -437,20 +459,39 @@
                         <p class="flashcard-hint">Touchez pour retourner</p>
                     </div>
 
-                    <div class="flashcard-actions">
-                        <button class="flashcard-action-btn wrong" onclick="app.flashcardResponse(false)">
+                    <div class="flashcard-actions srs-actions">
+                        <button class="flashcard-action-btn again" onclick="app.flashcardResponse(1)">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="10"/>
                                 <path d="M15 9l-6 6M9 9l6 6"/>
                             </svg>
-                            <span>À revoir</span>
+                            <span>Oublié</span>
+                            <small class="srs-interval">&lt;1j</small>
                         </button>
-                        <button class="flashcard-action-btn correct" onclick="app.flashcardResponse(true)">
+                        <button class="flashcard-action-btn hard" onclick="app.flashcardResponse(2)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12h8"/>
+                            </svg>
+                            <span>Difficile</span>
+                            <small class="srs-interval" id="srsHardInterval"></small>
+                        </button>
+                        <button class="flashcard-action-btn good" onclick="app.flashcardResponse(3)">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="10"/>
                                 <path d="M9 12l2 2 4-4"/>
                             </svg>
-                            <span>Je sais</span>
+                            <span>Bien</span>
+                            <small class="srs-interval" id="srsGoodInterval"></small>
+                        </button>
+                        <button class="flashcard-action-btn easy" onclick="app.flashcardResponse(4)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M9 12l2 2 4-4"/>
+                                <path d="M20 6l-11 11"/>
+                            </svg>
+                            <span>Facile</span>
+                            <small class="srs-interval" id="srsEasyInterval"></small>
                         </button>
                     </div>
                 </div>

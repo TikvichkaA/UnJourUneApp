@@ -35,6 +35,7 @@ class KartApp {
         this.updateProgressDisplay();
         this.loadSettings();
         this.registerServiceWorker();
+        this.migrateLegacyProgress();
         this.checkOnboarding();
         this.loadDailyArticle();
     }
@@ -356,14 +357,248 @@ class KartApp {
         this.showToast('Bienvenue dans KartApp !');
     }
 
+    // ========== SRS Engine (Spaced Repetition System) ==========
+
+    // Niveaux de maîtrise
+    getMasteryInfo(level) {
+        const levels = {
+            0: { label: 'Nouveau', color: '#9E9E9E', key: 'new' },
+            1: { label: 'Découvert', color: '#F44336', key: 'learning' },
+            2: { label: 'Familier', color: '#FF9800', key: 'familiar' },
+            3: { label: 'En progrès', color: '#FFC107', key: 'practiced' },
+            4: { label: 'Appris', color: '#4CAF50', key: 'learned' },
+            5: { label: 'Maîtrisé', color: '#FFD700', key: 'mastered' }
+        };
+        return levels[level] || levels[0];
+    }
+
+    // Obtenir les données SRS d'un mot (ou les créer)
+    getWordSRS(wordGeo) {
+        if (!this.progress.srsData) {
+            this.progress.srsData = {};
+        }
+        if (!this.progress.srsData[wordGeo]) {
+            this.progress.srsData[wordGeo] = {
+                easeFactor: 2.5,
+                interval: 0,
+                consecutiveCorrect: 0,
+                nextReviewDate: null,
+                totalReviews: 0,
+                totalCorrect: 0,
+                lastReviewedDate: null
+            };
+        }
+        return this.progress.srsData[wordGeo];
+    }
+
+    // Calculer le prochain intervalle SRS (basé sur SM-2)
+    // quality: 1=oublié, 2=difficile, 3=bien, 4=facile
+    calculateSRS(wordGeo, quality) {
+        const card = this.getWordSRS(wordGeo);
+        const today = new Date().toISOString().split('T')[0];
+
+        card.totalReviews++;
+        card.lastReviewedDate = today;
+
+        if (quality === 1) {
+            // OUBLIÉ : reset
+            card.consecutiveCorrect = 0;
+            card.interval = 0;
+            card.easeFactor = Math.max(1.3, card.easeFactor - 0.2);
+            // Revoir dans 10 minutes (même session), puis demain
+            card.nextReviewDate = today;
+        } else if (quality === 2) {
+            // DIFFICILE : petit progrès
+            card.consecutiveCorrect++;
+            card.totalCorrect++;
+            card.easeFactor = Math.max(1.3, card.easeFactor - 0.15);
+            if (card.consecutiveCorrect <= 1) {
+                card.interval = 1;
+            } else {
+                card.interval = Math.max(1, Math.round(card.interval * 1.2));
+            }
+            card.nextReviewDate = this.addDays(today, card.interval);
+        } else if (quality === 3) {
+            // BIEN : progrès standard
+            card.consecutiveCorrect++;
+            card.totalCorrect++;
+            if (card.consecutiveCorrect === 1) {
+                card.interval = 1;
+            } else if (card.consecutiveCorrect === 2) {
+                card.interval = 3;
+            } else {
+                card.interval = Math.round(card.interval * card.easeFactor);
+            }
+            card.nextReviewDate = this.addDays(today, card.interval);
+        } else if (quality === 4) {
+            // FACILE : progrès rapide
+            card.consecutiveCorrect++;
+            card.totalCorrect++;
+            card.easeFactor = Math.min(3.0, card.easeFactor + 0.15);
+            if (card.consecutiveCorrect === 1) {
+                card.interval = 3;
+            } else if (card.consecutiveCorrect === 2) {
+                card.interval = 7;
+            } else {
+                card.interval = Math.round(card.interval * card.easeFactor * 1.3);
+            }
+            card.nextReviewDate = this.addDays(today, card.interval);
+        }
+
+        // Intervalle minimum de 1 jour (sauf oublié = même jour)
+        if (quality > 1) {
+            card.interval = Math.max(1, card.interval);
+        }
+
+        this.progress.srsData[wordGeo] = card;
+
+        // Mettre à jour learnedWords (rétro-compatibilité)
+        if (quality >= 2 && !this.progress.learnedWords.includes(wordGeo)) {
+            this.progress.learnedWords.push(wordGeo);
+        }
+
+        this.saveProgress();
+        return card;
+    }
+
+    // Calculer le niveau de maîtrise d'un mot
+    getMasteryLevel(wordGeo) {
+        const card = this.getWordSRS(wordGeo);
+        if (card.totalReviews === 0) return 0;             // Nouveau
+        if (card.consecutiveCorrect < 3) return 1;          // Découvert
+        if (card.consecutiveCorrect < 5) return 2;          // Familier
+        if (card.consecutiveCorrect < 8 || card.interval < 14) return 3;  // En progrès
+        if (card.consecutiveCorrect < 10 || card.interval < 30) return 4; // Appris
+        return 5;                                            // Maîtrisé
+    }
+
+    // Obtenir les mots à réviser aujourd'hui
+    getDueWords() {
+        if (!this.progress.srsData) return [];
+        const today = new Date().toISOString().split('T')[0];
+        const dueWords = [];
+
+        for (const [wordGeo, card] of Object.entries(this.progress.srsData)) {
+            if (card.nextReviewDate && card.nextReviewDate <= today && card.totalReviews > 0) {
+                dueWords.push({
+                    geo: wordGeo,
+                    ...card,
+                    mastery: this.getMasteryLevel(wordGeo)
+                });
+            }
+        }
+
+        // Trier : les plus en retard d'abord, puis par niveau de maîtrise (plus faible d'abord)
+        dueWords.sort((a, b) => {
+            if (a.nextReviewDate !== b.nextReviewDate) {
+                return a.nextReviewDate.localeCompare(b.nextReviewDate);
+            }
+            return a.mastery - b.mastery;
+        });
+
+        return dueWords;
+    }
+
+    // Ajouter des jours à une date ISO
+    addDays(dateStr, days) {
+        const date = new Date(dateStr);
+        date.setDate(date.getDate() + days);
+        return date.toISOString().split('T')[0];
+    }
+
+    // Migration : convertir les anciens learnedWords en données SRS
+    migrateLegacyProgress() {
+        if (!this.progress.srsData) {
+            this.progress.srsData = {};
+        }
+        // Migrer les mots déjà appris qui n'ont pas de données SRS
+        const today = new Date().toISOString().split('T')[0];
+        let migrated = false;
+        for (const wordGeo of (this.progress.learnedWords || [])) {
+            if (!this.progress.srsData[wordGeo]) {
+                this.progress.srsData[wordGeo] = {
+                    easeFactor: 2.5,
+                    interval: 3,
+                    consecutiveCorrect: 2,
+                    nextReviewDate: today,
+                    totalReviews: 2,
+                    totalCorrect: 2,
+                    lastReviewedDate: today
+                };
+                migrated = true;
+            }
+        }
+        if (migrated) this.saveProgress();
+    }
+
+    // Lancer une session de révision SRS
+    startSRSReview() {
+        const dueWords = this.getDueWords();
+        if (dueWords.length === 0) {
+            this.showToast('Aucun mot à réviser pour le moment !');
+            return;
+        }
+
+        // Trouver les infos complètes des mots à réviser
+        const dictionary = this.getVocabularyDictionary();
+        const articleWords = this.progress.articleLearnedWords || [];
+
+        this.flashcardWords = dueWords.slice(0, 20).map(dueWord => {
+            // Chercher dans le dictionnaire
+            if (dictionary[dueWord.geo]) {
+                const info = dictionary[dueWord.geo];
+                return { geo: dueWord.geo, meaning: info.meaning, translit: info.translit, level: info.level, theme: 'review' };
+            }
+            // Chercher dans les mots d'articles
+            const artWord = articleWords.find(w => w.geo === dueWord.geo);
+            if (artWord) {
+                return { geo: artWord.geo, meaning: artWord.meaning, translit: artWord.translit, level: artWord.level, theme: 'review' };
+            }
+            // Chercher dans GEO_DATA.vocabulary
+            for (const category of Object.values(GEO_DATA.vocabulary)) {
+                const found = category.find(w => w.geo === dueWord.geo);
+                if (found) return { ...found, theme: 'review' };
+            }
+            return { geo: dueWord.geo, meaning: '?', translit: '', level: 1, theme: 'review' };
+        });
+
+        this.flashcardIndex = 0;
+        this.flashcardResults = [];
+        this.flashcardMode = 'srs';
+        this.showFlashcard();
+        this.navigateTo('flashcardView');
+    }
+
     // ========== Daily Words & Flashcards ==========
 
     async loadDailyArticle() {
+        const today = new Date().toISOString().split('T')[0];
+        const cacheKey = 'kartapp_daily_article';
+        const learnedWords = this.progress.learnedWords || [];
+
+        // Vérifier le cache du jour
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+            try {
+                const cachedData = JSON.parse(cached);
+                if (cachedData.date === today) {
+                    // Re-filtrer les mots déjà appris (a pu changer depuis le cache)
+                    if (cachedData.originalWords) {
+                        cachedData.words = cachedData.originalWords.filter(w => !learnedWords.includes(w.geo));
+                    }
+                    this.dailyArticle = cachedData;
+                    this.renderDailyArticle();
+                    return;
+                }
+            } catch (e) { /* cache invalide, on continue */ }
+        }
+
         const apiUrl = this.getApiUrl();
         const userLevel = this.getUserLevelNumber();
+        const excludeParam = learnedWords.length > 0 ? `&exclude=${encodeURIComponent(learnedWords.join(','))}` : '';
 
         try {
-            const response = await fetch(`${apiUrl}/api/daily-article?level=${userLevel}`);
+            const response = await fetch(`${apiUrl}/api/daily-article?level=${userLevel}${excludeParam}`);
             if (response.ok) {
                 this.dailyArticle = await response.json();
             } else {
@@ -373,6 +608,17 @@ class KartApp {
             console.log('Using local article (offline mode)');
             this.dailyArticle = this.generateLocalArticle();
         }
+
+        // Sauvegarder les mots originaux pour pouvoir re-filtrer plus tard
+        if (this.dailyArticle && this.dailyArticle.words) {
+            this.dailyArticle.originalWords = [...this.dailyArticle.words];
+            // Filtrer les mots déjà connus
+            this.dailyArticle.words = this.dailyArticle.words.filter(w => !learnedWords.includes(w.geo));
+        }
+
+        // Mettre en cache avec la date
+        this.dailyArticle.date = today;
+        localStorage.setItem(cacheKey, JSON.stringify(this.dailyArticle));
 
         this.renderDailyArticle();
     }
@@ -386,74 +632,175 @@ class KartApp {
         return levels[this.userProfile.level] || 1;
     }
 
+    getArticlePool() {
+        return [
+            { title: 'საქართველოში ტურიზმი იზრდება', description: 'თბილისი - საქართველოში ტურიზმი სწრაფად ვითარდება. ქვეყანა პოპულარული ხდება ტურისტებში. მთავრობა ახალ პროგრამებს ამზადებს. სასტუმრო და რესტორანი იხსნება ყოველდღე.' },
+            { title: 'თბილისში ახალი მუზეუმი გაიხსნა', description: 'დღეს თბილისში ახალი მუზეუმი გაიხსნა. ქალაქი ცენტრში მდებარე მუზეუმი ქართულ კულტურა და ხელოვნება წარმოადგენს. ბევრი ადამიანი მოვიდა.' },
+            { title: 'სპორტი საქართველოში', description: 'ფეხბურთი საქართველოში პოპულარულია. გუნდი კარგი თამაში აჩვენა და გამარჯვება მოიპოვა. ხალხი სტადიონზე ბედნიერია.' },
+            { title: 'კარგი ამინდი მოდის', description: 'ამინდი საქართველოში კარგი იქნება ამ კვირა. მზე ანათებს. ზღვა და მთა ბევრ ადამიანი იზიდავს. ტყე ლამაზია.' },
+            { title: 'ეკონომიკა იზრდება', description: 'საქართველოში ეკონომიკა კარგი ტემპით ვითარდება. ბიზნესი და ბანკი ახალ პროგრამებს ქმნის. ფული ქვეყანა ეკონომიკაში ბრუნდება.' },
+            { title: 'სტუდენტი თბილისში', description: 'უნივერსიტეტი თბილისში ახალ წელი იწყებს. სტუდენტი სკოლა და უნივერსიტეტი ბრუნდება. მუშაობა და სწავლა ერთად მიდის.' },
+            { title: 'მუსიკა და კულტურა', description: 'დღეს თბილისში დიდი მუსიკა ფესტივალი გაიმართა. ხალხი ახალი ფილმი ნახა და წიგნი იყიდა. კულტურა საქართველოში საინტერესო და მნიშვნელოვანი.' },
+            { title: 'ახალი სახლი სოფელში', description: 'სოფელი საქართველოში ლამაზია. ადამიანი ახალ სახლი აშენებს. ძველი სახლი რეკონსტრუქციას გადის. პატარა სოფელი დიდი ისტორიით.' },
+            { title: 'მშვიდობა და თანამშრომლობა', description: 'საქართველო მშვიდობა სურს მეზობლებთან. თურქეთი და სომხეთი მნიშვნელოვანი პარტნიორებია. ევროპა თან თანამშრომლობა იზრდება. შეხვედრა გაიმართა.' },
+            { title: 'პარლამენტი ახალ კანონი იღებს', description: 'პარლამენტი დღეს ახალ კანონი მიიღო. მინისტრი ინფორმაცია გააცნო ხალხი. პრეზიდენტი გადაწყვეტილება მიიღო.' },
+            { title: 'ტრანსპორტი საქართველოში', description: 'მანქანა, ავტობუსი და მატარებელი - ტრანსპორტი საქართველოში ვითარდება. აეროპორტი თბილისში ახალ ტერმინალს იღებს. ქალაქი უკეთესი ხდება.' },
+            { title: 'წვიმა და თოვლი მოდის', description: 'ამინდი იცვლება. წვიმა მოდის ქალაქში და თოვლი მთა ფარავს. მზე ხვალ გამოვა. კვირა ბოლოს კარგი ამინდი იქნება.' },
+            { title: 'ფეხბურთი: დიდი თამაში', description: 'ფეხბურთი გუნდი დიდი თამაში ითამაშა. გამარჯვება მოიპოვეს. სპორტი საქართველოში პოპულარულია. ხალხი ბედნიერია.' },
+            { title: 'ბაზრობა თბილისში', description: 'დღეს მაღაზია და ბაზარი სავსეა. ხალხი ფული ხარჯავს. ახალი პროდუქტები გამოჩნდა. ფასი კარგი.' },
+            { title: 'მდინარე მტკვარი', description: 'მდინარე მტკვარი თბილისში გადის. ქალაქი ლამაზია მდინარე პირას. ძველი და ახალი ხიდები აკავშირებს. ტყე და ბუნება ახლოსაა.' },
+            { title: 'კონფერენცია თბილისში', description: 'კონფერენცია თბილისში გაიმართა. ევროპა და საქართველო თანამშრომლობაზე ისაუბრეს. ინფორმაცია გაცვალეს. შეხვედრა საინტერესო იყო.' },
+            { title: 'ექიმი და ჯანმრთელობა', description: 'ახალი საავადმყოფო გაიხსნა. ექიმი კარგი მუშაობა ასრულებს. ადამიანი ჯანმრთელობას უფრთხილდება. პრობლემა მცირდება.' },
+            { title: 'პოლიცია და უსაფრთხოება', description: 'პოლიცია ქალაქში კარგად მუშაობს. ახალი მანქანა მიიღეს. უსაფრთხოება მნიშვნელოვანი. ადამიანი თავს დაცულად გრძნობს.' },
+            { title: 'ზღვა და დასვენება', description: 'ზღვა ბათუმში ლამაზია. სასტუმრო სავსეა ტურისტებით. რესტორანი გემრიელ საჭმელს გთავაზობს. მზე ანათებს და ამინდი კარგი.' },
+            { title: 'მთა ყაზბეგი', description: 'მთა ყაზბეგი საქართველოში ერთ-ერთი ყველაზე ლამაზია. ტურიზმი აქ ძალიან პოპულარულია. თოვლი მწვერვალზე ყოველთვის არის. ადამიანი ბევრი მოდის.' },
+            { title: 'ახალი ფილმი', description: 'ახალი ქართული ფილმი გამოვიდა. კულტურა და ხელოვნება ვითარდება. მუსიკა ფილმში კარგი. ხალხი კინოთეატრში მიდის.' },
+            { title: 'წიგნი ფესტივალი', description: 'წიგნი ფესტივალი თბილისში გაიმართა. ახალი წიგნი გამოვიდა. სტუდენტი და ადამიანი ბევრი მოვიდა. კულტურა და განათლება მნიშვნელოვანი.' },
+            { title: 'ბიზნესი საქართველოში', description: 'ახალი ბიზნესი იხსნება ყოველდღე. ბანკი ახალ პროგრამას სთავაზობს. ეკონომიკა იზრდება. ფული ქვეყანაში ბრუნდება.' },
+            { title: 'არჩევნები მოახლოვდა', description: 'არჩევნები ქვეყანაში მოახლოვდა. პარლამენტი მზად არის. ხალხი გადაწყვეტილება მიიღებს. ინფორმაცია ყველასთვის ხელმისაწვდომია.' },
+            { title: 'სკოლა ახალ წელს იწყებს', description: 'სკოლა ახალ სასწავლო წელი იწყებს. პატარა ბავშვები სკოლაში მიდიან. სახლი დან სკოლა მანქანა ან ავტობუსი მიდიან.' },
+            { title: 'საქართველო და ევროპა', description: 'საქართველო ევროპა ინტეგრაციას აგრძელებს. მთავრობა ახალ გადაწყვეტილება მიიღო. კონფერენცია გაიმართა. მნიშვნელოვანი თვე დადგა.' },
+            { title: 'გუშინ და ხვალ', description: 'გუშინ ცუდი ამინდი იყო. დღეს კარგი. ხვალ მზე იქნება. კვირა საინტერესო იქნება ყველასთვის.' },
+            { title: 'დიდი შეხვედრა', description: 'დიდი შეხვედრა გაიმართა თბილისში. მინისტრი და პრეზიდენტი ისაუბრეს. პრობლემა განიხილეს. გადაწყვეტილება მიიღეს.' },
+            { title: 'ტყე და ბუნება', description: 'ტყე საქართველოში ლამაზია. მდინარე ტყეში მიედინება. მთა და ტყე ადამიანი იზიდავს. ბუნება მნიშვნელოვანი ქვეყანა.' },
+            { title: 'მატარებელი თბილისი-ბათუმი', description: 'ახალი მატარებელი თბილისი-ბათუმი დაინიშნა. ავტობუსი და მანქანა ალტერნატივაა. აეროპორტი თან კავშირი კარგი. ზღვა სწრაფად მისვლა შეიძლება.' },
+            { title: 'ძველი თბილისი', description: 'ძველი თბილისი ძალიან ლამაზია. ქალაქი ისტორიით სავსეა. მუზეუმი და რესტორანი ყველგან არის. ტურიზმი აქ აყვავდა.' }
+        ];
+    }
+
+    getDayOfYear(date = new Date()) {
+        const start = new Date(date.getFullYear(), 0, 0);
+        const diff = date - start;
+        return Math.floor(diff / (1000 * 60 * 60 * 24));
+    }
+
     generateLocalArticle() {
         const today = new Date().toISOString().split('T')[0];
+        const articles = this.getArticlePool();
+        const dayOfYear = this.getDayOfYear();
+        const articleIndex = dayOfYear % articles.length;
+        const article = articles[articleIndex];
 
-        const fallbackArticles = [
-            {
-                title: 'საქართველოში ტურიზმი იზრდება',
-                description: 'თბილისი - საქართველოში ტურიზმი სწრაფად ვითარდება. ქვეყანა პოპულარული ხდება ტურისტებში. მთავრობა ახალ პროგრამებს ამზადებს. სასტუმროები და რესტორნები იხსნება ყოველდღე.',
-                source: 'Article local'
-            },
-            {
-                title: 'თბილისში ახალი მუზეუმი გაიხსნა',
-                description: 'დღეს თბილისში ახალი მუზეუმი გაიხსნა. ქალაქის ცენტრში მდებარე მუზეუმი ქართულ კულტურას წარმოადგენს. ბევრი ადამიანი მოვიდა გახსნაზე.',
-                source: 'Article local'
-            },
-            {
-                title: 'სპორტი საქართველოში',
-                description: 'ფეხბურთი საქართველოში პოპულარულია. გუნდი კარგად თამაშობს. გამარჯვება გვინდა! სტადიონი სავსეა და ხალხი ბედნიერია.',
-                source: 'Article local'
+        // Filtrer les mots déjà appris
+        const learnedWords = this.progress.learnedWords || [];
+        const allWords = this.findVocabularyInText(article.title + ' ' + article.description, learnedWords);
+
+        // Si tous les mots de cet article sont déjà connus, chercher un article avec des mots nouveaux
+        if (allWords.length === 0) {
+            for (let offset = 1; offset < articles.length; offset++) {
+                const altIndex = (articleIndex + offset) % articles.length;
+                const altArticle = articles[altIndex];
+                const altWords = this.findVocabularyInText(altArticle.title + ' ' + altArticle.description, learnedWords);
+                if (altWords.length > 0) {
+                    return {
+                        success: true,
+                        source: 'Article du jour',
+                        fallback: true,
+                        article: { title: altArticle.title, description: altArticle.description, link: null, date: today },
+                        words: altWords.slice(0, 5),
+                        totalWordsFound: altWords.length
+                    };
+                }
             }
-        ];
-
-        const dayIndex = new Date().getDay() % fallbackArticles.length;
-        const article = fallbackArticles[dayIndex];
-        const words = this.findVocabularyInText(article.title + ' ' + article.description);
+        }
 
         return {
             success: true,
-            source: article.source,
+            source: 'Article du jour',
             fallback: true,
-            article: {
-                title: article.title,
-                description: article.description,
-                link: null,
-                date: today
-            },
-            words: words.slice(0, 5),
-            totalWordsFound: words.length
+            article: { title: article.title, description: article.description, link: null, date: today },
+            words: allWords.slice(0, 5),
+            totalWordsFound: allWords.length
         };
     }
 
-    findVocabularyInText(text) {
-        const dictionary = {
+    // Dictionnaire global de vocabulaire pour la détection dans les articles
+    getVocabularyDictionary() {
+        return {
             'საქართველო': { meaning: 'Géorgie', translit: 'sakartvelo', level: 1 },
             'თბილისი': { meaning: 'Tbilissi', translit: 'tbilisi', level: 1 },
             'მთავრობა': { meaning: 'gouvernement', translit: 'mtavroba', level: 2 },
+            'პრეზიდენტი': { meaning: 'président', translit: 'prezidenti', level: 2 },
+            'პარლამენტი': { meaning: 'parlement', translit: 'parlamenti', level: 2 },
+            'მინისტრი': { meaning: 'ministre', translit: 'ministri', level: 2 },
+            'კანონი': { meaning: 'loi', translit: 'kanoni', level: 3 },
+            'არჩევნები': { meaning: 'élections', translit: 'archevnebi', level: 3 },
             'ტურიზმი': { meaning: 'tourisme', translit: 'turizmi', level: 2 },
             'ქვეყანა': { meaning: 'pays', translit: 'kveqana', level: 2 },
             'ქალაქი': { meaning: 'ville', translit: 'kalaki', level: 2 },
+            'სოფელი': { meaning: 'village', translit: 'sopeli', level: 2 },
             'მუზეუმი': { meaning: 'musée', translit: 'muzeumi', level: 2 },
             'კულტურა': { meaning: 'culture', translit: 'kultura', level: 2 },
             'ადამიანი': { meaning: 'personne', translit: 'adamiani', level: 2 },
             'სასტუმრო': { meaning: 'hôtel', translit: 'sastumro', level: 2 },
             'რესტორანი': { meaning: 'restaurant', translit: 'restorani', level: 1 },
             'დღეს': { meaning: "aujourd'hui", translit: 'dghes', level: 1 },
+            'ხვალ': { meaning: 'demain', translit: 'khval', level: 1 },
+            'გუშინ': { meaning: 'hier', translit: 'gushin', level: 1 },
+            'წელი': { meaning: 'année', translit: 'tseli', level: 2 },
+            'თვე': { meaning: 'mois', translit: 'tve', level: 2 },
+            'კვირა': { meaning: 'semaine', translit: 'kvira', level: 2 },
             'ახალი': { meaning: 'nouveau', translit: 'akhali', level: 1 },
+            'ძველი': { meaning: 'ancien', translit: 'dzveli', level: 2 },
             'კარგი': { meaning: 'bon', translit: 'kargi', level: 1 },
+            'ცუდი': { meaning: 'mauvais', translit: 'tsudi', level: 1 },
+            'დიდი': { meaning: 'grand', translit: 'didi', level: 1 },
+            'პატარა': { meaning: 'petit', translit: 'patara', level: 1 },
+            'მნიშვნელოვანი': { meaning: 'important', translit: 'mnishvnelovani', level: 3 },
+            'საინტერესო': { meaning: 'intéressant', translit: 'saintereso', level: 2 },
+            'სახლი': { meaning: 'maison', translit: 'sakhli', level: 1 },
+            'სკოლა': { meaning: 'école', translit: 'skola', level: 1 },
+            'უნივერსიტეტი': { meaning: 'université', translit: 'universiteti', level: 2 },
+            'სტუდენტი': { meaning: 'étudiant', translit: 'studenti', level: 2 },
+            'ექიმი': { meaning: 'médecin', translit: 'ekimi', level: 2 },
+            'მუშაობა': { meaning: 'travail', translit: 'mushaoba', level: 2 },
+            'ეკონომიკა': { meaning: 'économie', translit: 'ekonomika', level: 3 },
+            'ბიზნესი': { meaning: 'business', translit: 'biznesi', level: 2 },
+            'ფული': { meaning: 'argent', translit: 'puli', level: 1 },
+            'ბანკი': { meaning: 'banque', translit: 'banki', level: 2 },
+            'მაღაზია': { meaning: 'magasin', translit: 'maghazia', level: 1 },
+            'აეროპორტი': { meaning: 'aéroport', translit: 'aeroporti', level: 2 },
+            'მანქანა': { meaning: 'voiture', translit: 'mankana', level: 1 },
+            'ავტობუსი': { meaning: 'bus', translit: 'avtobusi', level: 1 },
+            'მატარებელი': { meaning: 'train', translit: 'matarebeli', level: 2 },
+            'ზღვა': { meaning: 'mer', translit: 'zghva', level: 1 },
+            'მთა': { meaning: 'montagne', translit: 'mta', level: 1 },
+            'მდინარე': { meaning: 'rivière', translit: 'mdinare', level: 2 },
+            'ტყე': { meaning: 'forêt', translit: 'tqe', level: 2 },
+            'ამინდი': { meaning: 'météo', translit: 'amindi', level: 2 },
+            'მზე': { meaning: 'soleil', translit: 'mze', level: 1 },
+            'წვიმა': { meaning: 'pluie', translit: 'tsvima', level: 2 },
+            'თოვლი': { meaning: 'neige', translit: 'tovli', level: 2 },
+            'ხელოვნება': { meaning: 'art', translit: 'khelovneba', level: 3 },
+            'მუსიკა': { meaning: 'musique', translit: 'musika', level: 1 },
+            'ფილმი': { meaning: 'film', translit: 'pilmi', level: 1 },
+            'წიგნი': { meaning: 'livre', translit: 'tsigni', level: 1 },
             'სპორტი': { meaning: 'sport', translit: 'sporti', level: 1 },
             'ფეხბურთი': { meaning: 'football', translit: 'pekhburti', level: 1 },
             'გუნდი': { meaning: 'équipe', translit: 'gundi', level: 2 },
+            'თამაში': { meaning: 'jeu/match', translit: 'tamashi', level: 2 },
             'გამარჯვება': { meaning: 'victoire', translit: 'gamarjveba', level: 2 },
-            'ხალხი': { meaning: 'peuple', translit: 'khalkhi', level: 2 }
+            'ხალხი': { meaning: 'peuple', translit: 'khalkhi', level: 2 },
+            'მშვიდობა': { meaning: 'paix', translit: 'mshvidoba', level: 2 },
+            'შეხვედრა': { meaning: 'rencontre', translit: 'shekhvedra', level: 2 },
+            'ინფორმაცია': { meaning: 'information', translit: 'inpormatsia', level: 2 },
+            'პრობლემა': { meaning: 'problème', translit: 'problema', level: 2 },
+            'ევროპა': { meaning: 'Europe', translit: 'evropa', level: 2 },
+            'თურქეთი': { meaning: 'Turquie', translit: 'turketi', level: 2 },
+            'სომხეთი': { meaning: 'Arménie', translit: 'somkheti', level: 2 },
+            'პოლიცია': { meaning: 'police', translit: 'politsia', level: 2 },
+            'კონფერენცია': { meaning: 'conférence', translit: 'konperentsia', level: 3 },
+            'გადაწყვეტილება': { meaning: 'décision', translit: 'gadatsqvetileba', level: 3 }
         };
+    }
 
+    findVocabularyInText(text, excludeWords = []) {
+        const dictionary = this.getVocabularyDictionary();
         const foundWords = [];
         const userLevel = this.getUserLevelNumber();
 
         for (const [word, info] of Object.entries(dictionary)) {
-            if (info.level <= userLevel + 1 && text.includes(word)) {
+            if (info.level <= userLevel + 1 && text.includes(word) && !excludeWords.includes(word)) {
                 foundWords.push({
                     geo: word,
                     meaning: info.meaning,
@@ -518,8 +865,9 @@ class KartApp {
             learnBtn.style.display = 'flex';
             document.getElementById('articleVocabulary').style.display = 'block';
         } else {
-            vocabListEl.innerHTML = '<p style="color: var(--text-muted);">Aucun vocabulaire trouvé.</p>';
+            vocabListEl.innerHTML = '<p style="color: var(--text-muted);">Tous les mots de cet article sont déjà appris !</p>';
             learnBtn.style.display = 'none';
+            document.getElementById('articleVocabulary').style.display = 'block';
         }
 
         contentEl.querySelectorAll('.vocab-highlight').forEach(el => {
@@ -603,12 +951,40 @@ class KartApp {
         document.getElementById('flashcardTheme').textContent = this.getThemeLabel(word.theme);
 
         // Update progress
-        const progress = ((this.flashcardIndex) / this.flashcardWords.length) * 100;
+        const total = this.flashcardWords.length;
+        const progress = ((this.flashcardIndex) / total) * 100;
         document.getElementById('flashcardProgressFill').style.width = `${progress}%`;
-        document.getElementById('flashcardProgressText').textContent = `${this.flashcardIndex + 1}/${this.flashcardWords.length}`;
+        document.getElementById('flashcardProgressText').textContent = `${this.flashcardIndex + 1}/${total}`;
+
+        // Afficher les intervalles SRS prévisionnels sur les boutons
+        this.updateSRSIntervalLabels(word.geo);
 
         // Add click to flip
         card.onclick = () => card.classList.toggle('flipped');
+    }
+
+    // Prévisualiser les intervalles SRS pour chaque bouton
+    updateSRSIntervalLabels(wordGeo) {
+        const card = this.getWordSRS(wordGeo);
+        const formatInterval = (days) => {
+            if (days <= 0) return '<1j';
+            if (days === 1) return '1j';
+            if (days < 7) return `${days}j`;
+            if (days < 30) return `${Math.round(days / 7)}sem`;
+            return `${Math.round(days / 30)}mois`;
+        };
+
+        // Simuler les intervalles pour chaque qualité
+        const simHard = card.consecutiveCorrect <= 0 ? 1 : Math.max(1, Math.round(card.interval * 1.2));
+        const simGood = card.consecutiveCorrect === 0 ? 1 : card.consecutiveCorrect === 1 ? 3 : Math.round(card.interval * card.easeFactor);
+        const simEasy = card.consecutiveCorrect === 0 ? 3 : card.consecutiveCorrect === 1 ? 7 : Math.round(card.interval * card.easeFactor * 1.3);
+
+        const hardEl = document.getElementById('srsHardInterval');
+        const goodEl = document.getElementById('srsGoodInterval');
+        const easyEl = document.getElementById('srsEasyInterval');
+        if (hardEl) hardEl.textContent = formatInterval(simHard);
+        if (goodEl) goodEl.textContent = formatInterval(simGood);
+        if (easyEl) easyEl.textContent = formatInterval(simEasy);
     }
 
     getThemeLabel(theme) {
@@ -639,13 +1015,19 @@ class KartApp {
         }
     }
 
-    flashcardResponse(correct) {
+    // quality: 1=oublié, 2=difficile, 3=bien, 4=facile
+    flashcardResponse(quality) {
         const word = this.flashcardWords[this.flashcardIndex];
+        const correct = quality >= 2;
 
         this.flashcardResults.push({
             word: word,
-            correct: correct
+            correct: correct,
+            quality: quality
         });
+
+        // Mettre à jour le SRS
+        this.calculateSRS(word.geo, quality);
 
         if (correct) {
             // Mark as learned for today
@@ -660,12 +1042,28 @@ class KartApp {
                 this.progress.dailyWordsCompleted[today].push(word.geo);
             }
 
-            // Also add to general learned words
-            if (!this.progress.learnedWords.includes(word.geo)) {
-                this.progress.learnedWords.push(word.geo);
+            // Sauvegarder le mot complet dans la base d'articles appris
+            if (!this.progress.articleLearnedWords) {
+                this.progress.articleLearnedWords = [];
+            }
+            const alreadySaved = this.progress.articleLearnedWords.some(w => w.geo === word.geo);
+            if (!alreadySaved) {
+                this.progress.articleLearnedWords.push({
+                    geo: word.geo,
+                    meaning: word.meaning,
+                    translit: word.translit,
+                    level: word.level || 1,
+                    learnedDate: today,
+                    source: 'article'
+                });
             }
 
             this.saveProgress();
+        }
+
+        // Si oublié, remettre le mot à la fin du paquet
+        if (quality === 1) {
+            this.flashcardWords.push(word);
         }
 
         // Next card
@@ -713,8 +1111,16 @@ class KartApp {
         }
 
         this.navigateTo('flashcardResultsView');
-        this.renderDailyWordsPreview();
         this.updateProgressDisplay();
+
+        // Rafraîchir l'article pour mettre à jour les mots restants
+        if (this.dailyArticle && this.dailyArticle.originalWords) {
+            const learnedWords = this.progress.learnedWords || [];
+            this.dailyArticle.words = this.dailyArticle.originalWords.filter(w => !learnedWords.includes(w.geo));
+            // Mettre à jour le cache
+            localStorage.setItem('kartapp_daily_article', JSON.stringify(this.dailyArticle));
+            this.renderDailyArticle();
+        }
     }
 
     retryFlashcards() {
@@ -1269,12 +1675,31 @@ class KartApp {
         const levelMap = { 'beginner': 1, 'elementary': 2, 'intermediate': 3 };
         const userLevelNum = levelMap[this.userProfile.level] || 1;
 
-        // Flatten all vocabulary
+        // Flatten all vocabulary from GEO_DATA
         let allWords = [];
+        const seenGeo = new Set();
         Object.keys(GEO_DATA.vocabulary).forEach(category => {
             GEO_DATA.vocabulary[category].forEach(word => {
-                allWords.push({ ...word, category });
+                if (!seenGeo.has(word.geo)) {
+                    seenGeo.add(word.geo);
+                    allWords.push({ ...word, category });
+                }
             });
+        });
+
+        // Ajouter les mots appris via les articles (qui ne sont pas déjà dans GEO_DATA)
+        const articleWords = this.progress.articleLearnedWords || [];
+        articleWords.forEach(word => {
+            if (!seenGeo.has(word.geo)) {
+                seenGeo.add(word.geo);
+                allWords.push({
+                    geo: word.geo,
+                    meaning: word.meaning,
+                    translit: word.translit,
+                    level: word.level || 1,
+                    category: 'articles'
+                });
+            }
         });
 
         // Apply level filter for 'all' and 'new' (filter out too basic vocabulary)
@@ -1297,14 +1722,26 @@ class KartApp {
         }
 
         allWords.forEach(word => {
+            const isFromArticle = word.category === 'articles';
+            const mastery = this.getMasteryLevel(word.geo);
+            const masteryInfo = this.getMasteryInfo(mastery);
+            const srsData = this.getWordSRS(word.geo);
+            const nextReview = srsData.nextReviewDate;
+            const today = new Date().toISOString().split('T')[0];
+            const isDue = nextReview && nextReview <= today && srsData.totalReviews > 0;
+
             const card = document.createElement('div');
-            card.className = 'vocab-card';
+            card.className = 'vocab-card' + (mastery >= 4 ? ' learned' : '') + (isDue ? ' due' : '');
             card.innerHTML = `
+                <div class="vocab-mastery-dot" style="background:${masteryInfo.color}" title="${masteryInfo.label}"></div>
                 <div class="vocab-main">
                     <span class="vocab-geo">${word.geo}</span>
                     <span class="vocab-translit">${word.translit}</span>
                 </div>
-                <span class="vocab-meaning">${word.meaning}</span>
+                <div class="vocab-right">
+                    <span class="vocab-meaning">${word.meaning}${isFromArticle ? ' <small style="opacity:0.6">📰</small>' : ''}</span>
+                    <span class="vocab-mastery-label" style="color:${masteryInfo.color}">${masteryInfo.label}${isDue ? ' · à réviser' : ''}</span>
+                </div>
                 <button class="vocab-audio" onclick="event.stopPropagation(); app.playWord('${word.geo}')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
@@ -1398,14 +1835,19 @@ class KartApp {
     loadProgress() {
         const saved = localStorage.getItem('kartapp_progress');
         if (saved) {
-            return JSON.parse(saved);
+            const progress = JSON.parse(saved);
+            if (!progress.articleLearnedWords) progress.articleLearnedWords = [];
+            if (!progress.srsData) progress.srsData = {};
+            return progress;
         }
         return {
             learnedLetters: [],
             learnedWords: [],
             wordsToReview: [],
             completedUnits: [],
-            unitProgress: {}
+            unitProgress: {},
+            articleLearnedWords: [],
+            srsData: {}
         };
     }
 
@@ -1420,9 +1862,13 @@ class KartApp {
             learnedWords: [],
             wordsToReview: [],
             completedUnits: [],
-            unitProgress: {}
+            unitProgress: {},
+            articleLearnedWords: [],
+            srsData: {}
         };
         this.saveProgress();
+        // Supprimer le cache d'article quotidien
+        localStorage.removeItem('kartapp_daily_article');
 
         // Reset profile and show onboarding again
         this.userProfile = {
@@ -1465,6 +1911,19 @@ class KartApp {
 
         document.getElementById('overallProgress').textContent = `${percentage}%`;
         document.getElementById('wordsLearned').textContent = this.progress.learnedWords.length;
+
+        // Afficher la section de révision SRS si des mots sont à réviser
+        const dueWords = this.getDueWords();
+        const srsSection = document.getElementById('srsReviewSection');
+        const srsCount = document.getElementById('srsReviewCount');
+        if (srsSection && srsCount) {
+            if (dueWords.length > 0) {
+                srsSection.style.display = 'block';
+                srsCount.textContent = dueWords.length;
+            } else {
+                srsSection.style.display = 'none';
+            }
+        }
     }
 
     // ========== Settings ==========
