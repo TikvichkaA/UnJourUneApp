@@ -18,71 +18,171 @@ navLinks?.querySelectorAll('a').forEach(link => {
 });
 
 // ============================================
-// Header au scroll
+// Header au scroll (class-based)
 // ============================================
 const header = document.querySelector('.header');
-let lastScroll = 0;
 
 window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll > 100) {
-        header.style.boxShadow = '0 4px 6px -1px rgb(0 0 0 / 0.1)';
+    if (window.pageYOffset > 50) {
+        header.classList.add('scrolled');
     } else {
-        header.style.boxShadow = 'none';
+        header.classList.remove('scrolled');
     }
+}, { passive: true });
 
-    lastScroll = currentScroll;
+// ============================================
+// Dark Mode Toggle
+// ============================================
+const darkToggle = document.getElementById('dark-toggle');
+
+function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+}
+
+// Init from saved preference or system preference
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+    setTheme(savedTheme);
+} else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    setTheme('dark');
+}
+
+darkToggle?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    setTheme(current === 'dark' ? 'light' : 'dark');
 });
 
 // ============================================
-// Animations au scroll (Intersection Observer)
+// Cursor Glow Effect (desktop only)
 // ============================================
-const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1
-};
+const cursorGlow = document.querySelector('.cursor-glow');
 
-const animateOnScroll = (entries, observer) => {
+if (cursorGlow && window.matchMedia('(pointer: fine)').matches) {
+    let mouseX = 0, mouseY = 0;
+    let glowX = 0, glowY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorGlow.classList.add('active');
+    });
+
+    document.addEventListener('mouseleave', () => {
+        cursorGlow.classList.remove('active');
+    });
+
+    // Smooth follow with requestAnimationFrame
+    function animateGlow() {
+        glowX += (mouseX - glowX) * 0.08;
+        glowY += (mouseY - glowY) * 0.08;
+        cursorGlow.style.left = glowX + 'px';
+        cursorGlow.style.top = glowY + 'px';
+        requestAnimationFrame(animateGlow);
+    }
+    animateGlow();
+}
+
+// ============================================
+// Scroll Reveal System (data-reveal + data-delay)
+// ============================================
+const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.classList.add('animate-in');
-            observer.unobserve(entry.target);
+            const delay = entry.target.dataset.delay;
+            if (delay !== undefined) {
+                entry.target.style.transitionDelay = `${parseInt(delay) * 0.15}s`;
+            }
+            entry.target.classList.add('revealed');
+            revealObserver.unobserve(entry.target);
         }
     });
-};
-
-const scrollObserver = new IntersectionObserver(animateOnScroll, observerOptions);
-
-// Éléments à animer
-const animatedElements = document.querySelectorAll('.service-card, .temoignage-card, .approche-point');
-
-animatedElements.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    scrollObserver.observe(el);
+}, {
+    root: null,
+    rootMargin: '0px 0px -80px 0px',
+    threshold: 0.1
 });
 
-// Ajouter la classe d'animation
-document.head.insertAdjacentHTML('beforeend', `
-    <style>
-        .animate-in {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
+document.querySelectorAll('[data-reveal]').forEach(el => {
+    revealObserver.observe(el);
+});
+
+// ============================================
+// Parallax Effects (multi-layer)
+// ============================================
+const heroBg = document.querySelector('.hero-bg');
+const shapes = document.querySelectorAll('.shape');
+let ticking = false;
+
+function updateParallax() {
+    const scroll = window.pageYOffset;
+    const heroHeight = window.innerHeight;
+
+    if (scroll < heroHeight * 1.5) {
+        // Hero background parallax
+        if (heroBg) {
+            heroBg.style.transform = `translate3d(0, ${scroll * 0.3}px, 0)`;
         }
-    </style>
-`);
 
-// Délai progressif pour les cartes
-document.querySelectorAll('.services-grid .service-card').forEach((card, index) => {
-    card.style.transitionDelay = `${index * 0.1}s`;
-});
+        // Floating shapes parallax (different speeds)
+        shapes.forEach((shape, index) => {
+            const speed = 0.1 + (index * 0.08);
+            const yOffset = scroll * speed;
+            const currentTransform = getComputedStyle(shape).transform;
+            shape.style.transform = `translate3d(0, ${yOffset}px, 0)`;
+        });
+    }
 
-document.querySelectorAll('.temoignages-grid .temoignage-card').forEach((card, index) => {
-    card.style.transitionDelay = `${index * 0.1}s`;
-});
+    ticking = false;
+}
+
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+    }
+}, { passive: true });
+
+// ============================================
+// Tilt Effect on Service Cards (desktop only)
+// ============================================
+if (window.matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll('.service-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = (y - centerY) / centerY * -4;
+            const rotateY = (x - centerX) / centerX * 4;
+
+            card.style.transform = `translateY(-12px) scale(1.02) perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+}
+
+// ============================================
+// Magnetic Buttons (subtle pull toward cursor)
+// ============================================
+if (window.matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll('.btn-primary, .btn-nav').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) scale(1.02)`;
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = '';
+        });
+    });
+}
 
 // ============================================
 // Gestion du formulaire
@@ -93,32 +193,26 @@ contactForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const formData = new FormData(contactForm);
-    const data = Object.fromEntries(formData);
-
-    // Afficher un état de chargement
     const submitBtn = contactForm.querySelector('button[type="submit"]');
     const originalText = submitBtn.textContent;
     submitBtn.textContent = 'Envoi en cours...';
     submitBtn.disabled = true;
 
-    // Simulation d'envoi (à remplacer par votre backend)
     try {
-        // Ici vous pouvez intégrer Formspree, Netlify Forms, ou votre propre API
-        // Exemple avec Formspree:
-        // const response = await fetch('https://formspree.io/f/VOTRE_ID', {
-        //     method: 'POST',
-        //     body: formData,
-        //     headers: { 'Accept': 'application/json' }
-        // });
-
-        // Simulation d'un délai
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Afficher un message de succès
-        showNotification('Message envoyé avec succès ! Je vous répondrai rapidement.', 'success');
-        contactForm.reset();
-
+        const response = await fetch(contactForm.action || '/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData).toString()
+        });
+        if (response.ok) {
+            showNotification('Message envoyé avec succès ! Je vous répondrai rapidement.', 'success');
+            contactForm.reset();
+        } else {
+            console.error('Form submission failed:', response.status, response.statusText);
+            throw new Error(`Erreur ${response.status}`);
+        }
     } catch (error) {
+        console.error('Form error:', error);
         showNotification('Une erreur est survenue. Veuillez réessayer.', 'error');
     } finally {
         submitBtn.textContent = originalText;
@@ -130,7 +224,6 @@ contactForm?.addEventListener('submit', async (e) => {
 // Notifications
 // ============================================
 function showNotification(message, type = 'success') {
-    // Supprimer les notifications existantes
     document.querySelectorAll('.notification').forEach(n => n.remove());
 
     const notification = document.createElement('div');
@@ -140,32 +233,31 @@ function showNotification(message, type = 'success') {
         <button onclick="this.parentElement.remove()">&times;</button>
     `;
 
-    // Styles inline pour la notification
     Object.assign(notification.style, {
         position: 'fixed',
         bottom: '20px',
         right: '20px',
         padding: '1rem 1.5rem',
-        borderRadius: '12px',
+        borderRadius: '16px',
         display: 'flex',
         alignItems: 'center',
         gap: '1rem',
-        boxShadow: '0 10px 25px rgb(0 0 0 / 0.15)',
+        boxShadow: '0 10px 40px rgb(0 0 0 / 0.2)',
         zIndex: '10000',
-        animation: 'slideIn 0.3s ease',
-        background: type === 'success' ? '#0d9488' : '#ef4444',
+        animation: 'slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+        background: type === 'success' ? 'linear-gradient(135deg, #0d9488, #0f766e)' : 'linear-gradient(135deg, #ef4444, #dc2626)',
         color: 'white',
-        fontWeight: '500'
+        fontWeight: '500',
+        backdropFilter: 'blur(10px)'
     });
 
-    // Ajouter l'animation
     if (!document.getElementById('notification-styles')) {
         const styles = document.createElement('style');
         styles.id = 'notification-styles';
         styles.textContent = `
             @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
+                from { transform: translate3d(100%, 0, 0); opacity: 0; }
+                to { transform: translate3d(0, 0, 0); opacity: 1; }
             }
             .notification button {
                 background: none;
@@ -175,6 +267,11 @@ function showNotification(message, type = 'success') {
                 cursor: pointer;
                 padding: 0;
                 line-height: 1;
+                opacity: 0.8;
+                transition: opacity 0.2s ease;
+            }
+            .notification button:hover {
+                opacity: 1;
             }
         `;
         document.head.appendChild(styles);
@@ -182,10 +279,9 @@ function showNotification(message, type = 'success') {
 
     document.body.appendChild(notification);
 
-    // Auto-suppression après 5 secondes
     setTimeout(() => {
-        notification.style.animation = 'slideIn 0.3s ease reverse';
-        setTimeout(() => notification.remove(), 300);
+        notification.style.animation = 'slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) reverse forwards';
+        setTimeout(() => notification.remove(), 500);
     }, 5000);
 }
 
@@ -212,33 +308,70 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-// Counter Animation (optionnel)
+// Counter Animation (triggered on scroll)
 // ============================================
-function animateCounter(element, target, duration = 2000) {
+function animateCounter(element, target, suffix = '', duration = 1500) {
     let start = 0;
-    const increment = target / (duration / 16);
+    const startTime = performance.now();
 
-    const timer = setInterval(() => {
-        start += increment;
-        if (start >= target) {
-            element.textContent = target;
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(start);
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(eased * target);
+
+        element.textContent = current + suffix;
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
         }
-    }, 16);
+    }
+
+    requestAnimationFrame(update);
 }
 
-// ============================================
-// Effet parallax léger sur le hero (optionnel)
-// ============================================
-const heroBg = document.querySelector('.hero-bg');
-
-if (heroBg) {
-    window.addEventListener('scroll', () => {
-        const scroll = window.pageYOffset;
-        if (scroll < window.innerHeight) {
-            heroBg.style.transform = `translateY(${scroll * 0.3}px)`;
+// Observe hero stats for counter animation
+const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseInt(el.dataset.counter);
+            const suffix = el.dataset.suffix || '';
+            if (!isNaN(target)) {
+                animateCounter(el, target, suffix);
+            }
+            statsObserver.unobserve(el);
         }
     });
-}
+}, { threshold: 0.5 });
+
+document.querySelectorAll('[data-counter]').forEach(el => {
+    statsObserver.observe(el);
+});
+
+// ============================================
+// UTM Tracking
+// ============================================
+(function() {
+    const UTM_PARAMS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    const url = new URL(window.location.href);
+    const hasUtm = UTM_PARAMS.some(p => url.searchParams.has(p));
+
+    // Store UTM params from URL into sessionStorage
+    if (hasUtm) {
+        UTM_PARAMS.forEach(p => {
+            const val = url.searchParams.get(p);
+            if (val) sessionStorage.setItem(p, val);
+        });
+    }
+
+    // Inject stored UTM values into hidden form fields
+    document.querySelectorAll('form').forEach(form => {
+        UTM_PARAMS.forEach(p => {
+            const field = form.querySelector(`input[name="${p}"]`);
+            const val = sessionStorage.getItem(p);
+            if (field && val) field.value = val;
+        });
+    });
+})();
